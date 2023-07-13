@@ -1,0 +1,26 @@
+:py:mod:`ivcap_client.utils`
+============================
+
+.. py:module:: ivcap_client.utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.utils.process_error
+   ivcap_client.utils.set_page
+
+
+
+.. py:function:: process_error(method: str, r: ivcap_client.types.Response, verbose: bool = True)
+
+
+.. py:function:: set_page(next: str)
+
+

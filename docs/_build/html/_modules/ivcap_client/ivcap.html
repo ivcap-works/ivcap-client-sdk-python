@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivcap_client.ivcap &mdash; ivcap_client  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ivcap_client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ivcap_client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ivcap_client.ivcap</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ivcap_client.ivcap</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span> <span class="c1"># postpone evaluation of annotations </span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">IO</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">quote</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.api.artifact</span> <span class="kn">import</span> <span class="n">artifact_upload</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.artifact</span> <span class="kn">import</span> <span class="n">Artifact</span><span class="p">,</span> <span class="n">ArtifactIter</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.models</span> <span class="kn">import</span> <span class="n">metadata_list_item_rt</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.models.artifact_status_rt</span> <span class="kn">import</span> <span class="n">ArtifactStatusRT</span> 
+<span class="kn">from</span> <span class="nn">tusclient.client</span> <span class="kn">import</span> <span class="n">TusClient</span>
+<span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">maxsize</span> <span class="k">as</span> <span class="n">MAXSIZE</span>
+<span class="kn">import</span> <span class="nn">mimetypes</span>
+
+<span class="kn">from</span> <span class="nn">ivcap_client.api.metadata</span> <span class="kn">import</span> <span class="n">metadata_add</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.client.client</span> <span class="kn">import</span> <span class="n">AuthenticatedClient</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.excpetions</span> <span class="kn">import</span> <span class="n">MissingParameterValue</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.metadata</span> <span class="kn">import</span> <span class="n">Metadata</span><span class="p">,</span> <span class="n">MetadataIter</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.models.add_meta_rt</span> <span class="kn">import</span> <span class="n">AddMetaRT</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.order</span> <span class="kn">import</span> <span class="n">Order</span><span class="p">,</span> <span class="n">OrderIter</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.service</span> <span class="kn">import</span> <span class="n">Service</span><span class="p">,</span> <span class="n">ServiceIter</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.utils</span> <span class="kn">import</span> <span class="n">process_error</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.models.metadata_list_item_rt</span> <span class="kn">import</span> <span class="n">MetadataListItemRT</span>
+
+<div class="viewcode-block" id="IVCAP"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP">[docs]</a><span class="k">class</span> <span class="nc">IVCAP</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class to represent a particular IVCAP deployment and it&#39;s capabilities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">account_id</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new IVCAP instance through which to interact with </span>
+<span class="sd">        a specific IVCAP deployment identified by &#39;url&#39;. Access is authorized</span>
+<span class="sd">        by &#39;token&#39;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url (Optional[str], optional): _description_. Defaults to [env: IVCAP_URL].</span>
+<span class="sd">            token (Optional[str], optional): _description_. Defaults to [env: IVCAP_JWT].</span>
+<span class="sd">            account_id (Optional[str], optional): _description_. Defaults to [env: IVCAP_ACCOUNT_ID].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">:</span>
+            <span class="n">url</span><span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;IVCAP_URL&#39;</span><span class="p">,</span> <span class="s1">&#39;https://api.ivcap.net&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+            <span class="n">token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;IVCAP_JWT&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">account_id</span><span class="p">:</span>
+            <span class="n">account_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;IVCAP_ACCOUNT_ID&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="o">=</span> <span class="n">token</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">AuthenticatedClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_account_id</span> <span class="o">=</span> <span class="n">account_id</span>
+
+<div class="viewcode-block" id="IVCAP.list_services"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.list_services">[docs]</a>    <span class="k">def</span> <span class="nf">list_services</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+            <span class="nb">filter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">order_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">order_desc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">at_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Service</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over all the available services fulfilling certain constraints.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filter Optional[str]: Allows clients to  filter a collection of</span>
+<span class="sd">                                        resources that are addressed by a request URL. The expression specified with &#39;filter&#39;</span>
+<span class="sd">                                        is evaluated for each resource in the collection, and only items where the expression</span>
+<span class="sd">                                        evaluates to true are included in the response. </span>
+<span class="sd">                                        Example: filter=FirstName eq &#39;Scott&#39;.. Defaults to None.</span>
+<span class="sd">            order_by Optional[str]: _description_. Defaults to None.</span>
+<span class="sd">            order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).</span>
+<span class="sd">            at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to &#39;Now&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Iterator[Service]: An iterator over a list of services</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            Service: A Service object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;filter_&quot;</span><span class="p">:</span> <span class="nb">filter</span><span class="p">,</span>
+            <span class="s2">&quot;order_by&quot;</span><span class="p">:</span> <span class="n">order_by</span><span class="p">,</span>
+            <span class="s2">&quot;order_desc&quot;</span><span class="p">:</span> <span class="n">order_desc</span><span class="p">,</span>
+            <span class="s2">&quot;at_time&quot;</span><span class="p">:</span> <span class="n">at_time</span><span class="p">,</span>
+            <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ServiceIter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IVCAP.get_service"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.get_service">[docs]</a>    <span class="k">def</span> <span class="nf">get_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Service</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Service</span><span class="p">(</span><span class="n">service_id</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+    
+    <span class="c1">### ORDERS</span>
+
+<div class="viewcode-block" id="IVCAP.list_orders"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.list_orders">[docs]</a>    <span class="k">def</span> <span class="nf">list_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+            <span class="nb">filter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">order_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">order_desc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">at_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Order</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over all the available orders fulfilling certain constraints.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filter Optional[str]: Allows clients to  filter a collection of</span>
+<span class="sd">                                        resources that are addressed by a request URL. The expression specified with &#39;filter&#39;</span>
+<span class="sd">                                        is evaluated for each resource in the collection, and only items where the expression</span>
+<span class="sd">                                        evaluates to true are included in the response. </span>
+<span class="sd">                                        Example: filter=FirstName eq &#39;Scott&#39;.. Defaults to None.</span>
+<span class="sd">            order_by Optional[str]: _description_. Defaults to None.</span>
+<span class="sd">            order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).</span>
+<span class="sd">            at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to &#39;Now&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Iterator[Order]: An iterator over a list of orders</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            Order: An order object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;filter_&quot;</span><span class="p">:</span> <span class="nb">filter</span><span class="p">,</span>
+            <span class="s2">&quot;order_by&quot;</span><span class="p">:</span> <span class="n">order_by</span><span class="p">,</span>
+            <span class="s2">&quot;order_desc&quot;</span><span class="p">:</span> <span class="n">order_desc</span><span class="p">,</span>
+            <span class="s2">&quot;at_time&quot;</span><span class="p">:</span> <span class="n">at_time</span><span class="p">,</span>
+            <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">OrderIter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>    </div>
+    
+<div class="viewcode-block" id="IVCAP.get_order"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.get_order">[docs]</a>    <span class="k">def</span> <span class="nf">get_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Order</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Order</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+
+    <span class="c1">#### METADATA</span>
+
+<div class="viewcode-block" id="IVCAP.add_metadata"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.add_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">add_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">aspect</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">any</span><span class="p">],</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Metadata</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a metadata &#39;aspect&#39; to &#39;entity&#39;. The &#39;schema&#39; of the aspect, if not defined</span>
+<span class="sd">        is expected to found in the &#39;aspect&#39; under the &#39;$schema&#39; key.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity (str): URN of the entity to attach the aspect to</span>
+<span class="sd">            aspect (dict): The aspect to be attached</span>
+<span class="sd">            schema (Optional[str], optional): Schema of the aspect. Defaults to &#39;aspect[&quot;$schema&quot;]&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            metadata: The created metadata record</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">schema</span><span class="p">:</span>
+            <span class="n">schema</span> <span class="o">=</span> <span class="n">aspect</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;$schema&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">schema</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">MissingParameterValue</span><span class="p">(</span><span class="s2">&quot;Missing schema (also not in aspect &#39;$schema&#39;)&quot;</span><span class="p">)</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;entity_id&quot;</span><span class="p">:</span> <span class="n">quote</span><span class="p">(</span><span class="n">entity</span><span class="p">),</span>
+            <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">quote</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">),</span>
+            <span class="s2">&quot;json_body&quot;</span><span class="p">:</span> <span class="n">aspect</span><span class="p">,</span>
+            <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
+            <span class="s2">&quot;content_type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">metadata_add</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;add_metadata&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+        
+        <span class="n">res</span><span class="p">:</span><span class="n">AddMetaRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;entity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;schema&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schema</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;aspect&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspect</span>
+        <span class="n">li</span> <span class="o">=</span> <span class="n">MetadataListItemRT</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Metadata</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">record_id</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">li</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="IVCAP.search_metadata"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.search_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">search_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+        <span class="n">entity</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">schema_prefix</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">aspect_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">filter_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">order_desc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">at_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Metadata</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over all the metadata records fulfilling certain constraints.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity Optional[str]: The entity URN for which to restrict the returend metadata records</span>
+<span class="sd">            schema_prefix Optional[str]: A prefix (using Postgres &#39;like&#39; patterns) to restrict the </span>
+<span class="sd">                                        returend metadata records</span>
+<span class="sd">            aspect_path: Optional[str]: When defined also return a specific sub tree of the record&#39;s aspect</span>
+<span class="sd">            filter Optional[str]: Allows clients to  filter a collection of</span>
+<span class="sd">                                        resources that are addressed by a request URL. The expression specified with &#39;filter&#39;</span>
+<span class="sd">                                        is evaluated for each resource in the collection, and only items where the expression</span>
+<span class="sd">                                        evaluates to true are included in the response. </span>
+<span class="sd">                                        Example: filter=FirstName eq &#39;Scott&#39;.. Defaults to None.</span>
+<span class="sd">            order_by Optional[str]: _description_. Defaults to None.</span>
+<span class="sd">            order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).</span>
+<span class="sd">            at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to &#39;Now&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Iterator[Metadata]: An iterator over a list of metadata records</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            Metadata: A metadata object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;entity_id&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
+            <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">schema_prefix</span><span class="p">,</span>
+            <span class="s2">&quot;aspect_path&quot;</span><span class="p">:</span> <span class="n">aspect_path</span><span class="p">,</span>
+            <span class="s2">&quot;filter_&quot;</span><span class="p">:</span> <span class="n">filter_</span><span class="p">,</span>
+            <span class="s2">&quot;order_by&quot;</span><span class="p">:</span> <span class="n">order_by</span><span class="p">,</span>
+            <span class="s2">&quot;order_desc&quot;</span><span class="p">:</span> <span class="n">order_desc</span><span class="p">,</span>
+            <span class="s2">&quot;at_time&quot;</span><span class="p">:</span> <span class="n">at_time</span><span class="p">,</span>
+            <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">MetadataIter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>   </div>
+
+    <span class="c1">#### ARTIFACTS</span>
+
+<div class="viewcode-block" id="IVCAP.list_artifacts"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.list_artifacts">[docs]</a>    <span class="k">def</span> <span class="nf">list_artifacts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+            <span class="nb">filter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">order_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">order_desc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">at_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over all the available artifacts fulfilling certain constraints.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filter Optional[str]: Allows clients to  filter a collection of</span>
+<span class="sd">                                        resources that are addressed by a request URL. The expression specified with &#39;filter&#39;</span>
+<span class="sd">                                        is evaluated for each resource in the collection, and only items where the expression</span>
+<span class="sd">                                        evaluates to true are included in the response. </span>
+<span class="sd">                                        Example: filter=FirstName eq &#39;Scott&#39;.. Defaults to None.</span>
+<span class="sd">            order_by Optional[str]: _description_. Defaults to None.</span>
+<span class="sd">            order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).</span>
+<span class="sd">            at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to &#39;Now&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Iterator[Service]: An iterator over a list of services</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            Artifact: An artifact object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;filter_&quot;</span><span class="p">:</span> <span class="nb">filter</span><span class="p">,</span>
+            <span class="s2">&quot;order_by&quot;</span><span class="p">:</span> <span class="n">order_by</span><span class="p">,</span>
+            <span class="s2">&quot;order_desc&quot;</span><span class="p">:</span> <span class="n">order_desc</span><span class="p">,</span>
+            <span class="s2">&quot;at_time&quot;</span><span class="p">:</span> <span class="n">at_time</span><span class="p">,</span>
+            <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ArtifactIter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="IVCAP.upload_artifact"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.upload_artifact">[docs]</a>    <span class="k">def</span> <span class="nf">upload_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                        <span class="o">*</span><span class="p">,</span>
+                        <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">io_stream</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IO</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">content_type</span><span class="p">:</span>  <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                        <span class="n">content_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> 
+                        <span class="n">chunk_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">MAXSIZE</span><span class="p">,</span> 
+                        <span class="n">retries</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> 
+                        <span class="n">retry_delay</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Artifact</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Uploads content which is either identified as a `file_path` or `io_stream`. In the</span>
+<span class="sd">        latter case, content type need to be provided.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (Optional[str]): File to upload</span>
+<span class="sd">            io_stream (Optional[IO]): Content as IO stream. </span>
+<span class="sd">            content_type (Optional[str]): Content type - needs to be declared for `io_stream`.</span>
+<span class="sd">            content_size (Optional[int]): Overall size of content to be uploaded. Defaults to -1 (don&#39;t know).</span>
+<span class="sd">            chunk_size (Optional[int]): Chunk size to use for each individual upload. Defaults to MAXSIZE.</span>
+<span class="sd">            retries (Optional[int]): The number of attempts should be made in the case of a failed upload. Defaults to 0.</span>
+<span class="sd">            retry_delay (Optional[int], optional): How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">file_path</span> <span class="ow">or</span> <span class="n">io_stream</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;require either &#39;file_path&#39; or &#39;io_stream&#39;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">content_type</span> <span class="ow">and</span> <span class="n">file_path</span><span class="p">:</span>
+            <span class="n">content_type</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> 
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">content_type</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;missing &#39;content-type&#39;&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">content_size</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">file_path</span><span class="p">:</span>
+            <span class="c1"># generate size of file from file_path</span>
+            <span class="n">content_size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;x_content_type&#39;</span><span class="p">:</span> <span class="n">content_type</span><span class="p">,</span>
+            <span class="s1">&#39;x_content_length&#39;</span><span class="p">:</span> <span class="n">content_size</span><span class="p">,</span>
+            <span class="s1">&#39;tus_resumable&#39;</span><span class="p">:</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;x_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">artifact_upload</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;upload_artifact&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+        <span class="n">res</span><span class="p">:</span><span class="n">ArtifactStatusRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+
+        <span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+        <span class="n">data_url</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">self_</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">TusClient</span><span class="p">(</span><span class="n">data_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">h</span><span class="p">)</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;file_path&#39;</span><span class="p">:</span> <span class="n">file_path</span><span class="p">,</span>
+            <span class="s1">&#39;file_stream&#39;</span><span class="p">:</span> <span class="n">io_stream</span><span class="p">,</span>
+            <span class="s1">&#39;chunk_size&#39;</span><span class="p">:</span> <span class="n">chunk_size</span><span class="p">,</span> 
+            <span class="s1">&#39;retries&#39;</span><span class="p">:</span> <span class="n">retries</span><span class="p">,</span> 
+            <span class="s1">&#39;retry_delay&#39;</span><span class="p">:</span> <span class="n">retry_delay</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">uploader</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">uploader</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">uploader</span><span class="o">.</span><span class="n">set_url</span><span class="p">(</span><span class="n">data_url</span><span class="p">)</span> <span class="c1"># not sure why I need to set it here again</span>
+        <span class="n">uploader</span><span class="o">.</span><span class="n">upload</span><span class="p">()</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">Artifact</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">status</span> <span class="c1"># status will have changed after upload</span>
+        <span class="k">return</span> <span class="n">a</span></div>
+
+<div class="viewcode-block" id="IVCAP.get_artifact"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.get_artifact">[docs]</a>    <span class="k">def</span> <span class="nf">get_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Artifact</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Artifact</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span>
+
+<div class="viewcode-block" id="IVCAP.__repr__"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;IVCAP url=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CSIRO.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

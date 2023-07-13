@@ -1,0 +1,69 @@
+:py:mod:`ivcap_client.order`
+============================
+
+.. py:module:: ivcap_client.order
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.order.Order
+   ivcap_client.order.OrderIter
+
+
+
+
+.. py:class:: Order(order_id: str, ivcap: IVCAP, status: Optional[ivcap_client.models.order_status_rt.OrderStatusRT] = None)
+
+
+   This class represents a particular order placed
+   at a particular IVCAP deployment
+
+   .. py:property:: urn
+      :type: str
+
+
+   .. py:method:: status(refresh=True) -> ivcap_client.models.order_status_rt.OrderStatusRT
+
+
+   .. py:method:: metadata() -> List[ivcap_client.metadata.Metadata]
+
+
+   .. py:method:: add_metadata(aspect: Dict[str, any], schema: Optional[str] = None) -> Order
+
+      Add a metadata 'aspect' to this order. The 'schema' of the aspect, if not defined
+      is expected to found in the 'aspect' under the '$schema' key.
+
+      :param aspect: The aspect to be attached
+      :type aspect: dict
+      :param schema: Schema of the aspect. Defaults to 'aspect["$schema"]'.
+      :type schema: Optional[str], optional
+
+      :returns: The metadata record created
+      :rtype: metadata
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: OrderIter(ivcap: IVCAP, **kwargs)
+
+
+   .. py:method:: __iter__()
+
+
+   .. py:method:: __next__()
+
+
+   .. py:method:: _fill() -> List[ivcap_client.models.order_list_item.OrderListItem]
+
+
+

@@ -75,8 +75,9 @@ jobs:
           git config user.email github-actions@github.com
           cp -r -r docs/_build/html /tmp
           git checkout gh-pages
+          rm -rf *
           cp -r /tmp/html/* .
-          touch BOO
+          touch .nojekyll
           git add .
           git commit -m "docs update"
           git push

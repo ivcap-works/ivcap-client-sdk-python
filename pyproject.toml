@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "ivcap_client"
+version = "0.23"
+description = "A client library for accessing an IVCAP cluster"
+
+authors = ["Max Ott <max.ott@csiro.au>", 
+            "openapi-python-client <https://github.com/openapi-generators/openapi-python-client>"]
+
+readme = "README.md"
+
+include = ["CHANGELOG.md", "src/ivcap_sdk_client/py.typed"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+httpx = ">=0.15.4,<0.24.0"
+attrs = ">=21.3.0"
+python-dateutil = "^2.8.0"
+tuspy = ">=1.0.0"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.1.3"
+pytest-cov = "^4.1.0"
+Sphinx = "^5.2.3"
+myst-nb = "^0.17.1"
+autoapi = "^2.0.1"
+sphinx-autoapi = "^2.0.0"
+sphinx-rtd-theme = "^1.0.0"
+licenseheaders = "^0.8.8"
+
+[tool.semantic_release]
+version_variable = "pyproject.toml:version" # version location
+branch = "main"                             # branch to make releases of
+changelog_file = "CHANGELOG.md"             # changelog file
+build_command = "poetry build"              # build dists
+dist_path = "dist/"                         # where to put dists
+upload_to_release = true                    # auto-create GitHub release
+upload_to_pypi = false                      # don't auto-upload to PyPI
+remove_dist = false                         # don't remove dists
+patch_without_tag = true                    # patch release by default
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

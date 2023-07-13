@@ -1,0 +1,51 @@
+:py:mod:`ivcap_client.excpetions`
+=================================
+
+.. py:module:: ivcap_client.excpetions
+
+
+Module Contents
+---------------
+
+.. py:exception:: NotAuthorizedException
+
+
+   Bases: :py:obj:`BaseException`
+
+   Common base class for all exceptions
+
+
+.. py:exception:: ResourceNotFound
+
+
+   Bases: :py:obj:`BaseException`
+
+   Common base class for all exceptions
+
+
+.. py:exception:: MissingParameterValue
+
+
+   Bases: :py:obj:`Exception`
+
+   Common base class for all non-exit exceptions.
+
+
+.. py:exception:: HttpException
+
+
+   Bases: :py:obj:`Exception`
+
+   Common base class for all non-exit exceptions.
+
+   .. py:attribute:: status_code
+      :type: int
+
+      
+
+   .. py:attribute:: msg
+      :type: str
+
+      
+
+

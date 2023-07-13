@@ -1,0 +1,235 @@
+:py:mod:`ivcap_client.service`
+==============================
+
+.. py:module:: ivcap_client.service
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.service.Service
+   ivcap_client.service.ServiceIter
+   ivcap_client.service.PType
+   ivcap_client.service.Parameter
+   ivcap_client.service.POption
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.service._unset
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.service._verifier
+
+
+.. py:class:: Service(id: str, ivcap: IVCAP, listItem: Optional[ivcap_client.models.service_list_item.ServiceListItem] = None)
+
+
+   This clas represents a particular service available
+   in a particular IVCAP deployment
+
+   .. py:property:: urn
+      :type: str
+
+
+   .. py:property:: name
+      :type: str
+
+
+   .. py:property:: description
+      :type: str
+
+
+   .. py:property:: status
+      :type: str
+
+
+   .. py:property:: parameters
+      :type: Dict[str, Parameter]
+
+
+   .. py:method:: place_order(**kwargs) -> ivcap_client.order.Order
+
+
+   .. py:method:: _mandatory_parameters() -> Set[str]
+
+
+   .. py:method:: _refresh()
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: ServiceIter(ivcap: IVCAP, **kwargs)
+
+
+   .. py:method:: __iter__()
+
+
+   .. py:method:: __next__()
+
+
+   .. py:method:: _fill() -> List[ivcap_client.models.service_list_item.ServiceListItem]
+
+
+
+.. py:class:: PType
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: STRING
+      :value: 'string'
+
+      
+
+   .. py:attribute:: INT
+      :value: 'int'
+
+      
+
+   .. py:attribute:: FLOAT
+      :value: 'float'
+
+      
+
+   .. py:attribute:: BOOL
+      :value: 'bool'
+
+      
+
+   .. py:attribute:: OPTION
+      :value: 'option'
+
+      
+
+   .. py:attribute:: ARTIFACT
+      :value: 'artifact'
+
+      
+
+   .. py:attribute:: COLLECTION
+      :value: 'collection'
+
+      
+
+
+.. py:data:: _verifier
+
+   
+
+.. py:class:: Parameter(p: ivcap_client.models.parameter_def_t.ParameterDefT)
+
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:attribute:: type
+      :type: PType
+
+      
+
+   .. py:attribute:: unit
+      :type: str
+
+      
+
+   .. py:attribute:: is_constant
+      :type: bool
+      :value: False
+
+      
+
+   .. py:attribute:: default
+      :type: str
+
+      
+
+   .. py:attribute:: description
+      :type: str
+
+      
+
+   .. py:attribute:: label
+      :type: str
+
+      
+
+   .. py:attribute:: is_optional
+      :type: bool
+      :value: False
+
+      
+
+   .. py:attribute:: options
+      :type: field(default_factory=list)
+
+      
+
+   .. py:method:: verify(value: Any)
+
+      Verify if value is within the constraints and types defined
+      for this parameter
+
+
+   .. py:method:: _verify_option(value: Any) -> bool
+
+
+   .. py:method:: _verify_artifact(v: Any) -> bool
+
+
+   .. py:method:: _verify_collection(v: Any) -> bool
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: POption(p: ivcap_client.models.parameter_opt_t.ParameterOptT)
+
+
+   .. py:attribute:: value
+      :type: str
+
+      
+
+   .. py:attribute:: description
+      :type: str
+
+      
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:function:: _unset(v)
+
+

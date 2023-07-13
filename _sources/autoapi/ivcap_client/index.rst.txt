@@ -1,0 +1,345 @@
+:py:mod:`ivcap_client`
+======================
+
+.. py:module:: ivcap_client
+
+.. autoapi-nested-parse::
+
+   A client library for accessing IVCAP
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   artifact/index.rst
+   errors/index.rst
+   excpetions/index.rst
+   ivcap/index.rst
+   metadata/index.rst
+   order/index.rst
+   service/index.rst
+   types/index.rst
+   utils/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.IVCAP
+   ivcap_client.Service
+   ivcap_client.Order
+   ivcap_client.Artifact
+   ivcap_client.Metadata
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.__version__
+
+
+.. py:data:: __version__
+
+   
+
+.. py:class:: IVCAP(url: Optional[str] = None, token: Optional[str] = None, account_id: Optional[str] = None)
+
+
+   A class to represent a particular IVCAP deployment and it's capabilities
+
+
+   .. py:property:: url
+      :type: str
+
+
+   .. py:method:: list_services(filter: Optional[str] = None, order_by: Optional[str] = None, order_desc: Optional[bool] = False, at_time: Optional[datetime.datetime.datetime] = None) -> Iterator[ivcap_client.service.Service]
+
+      Return an iterator over all the available services fulfilling certain constraints.
+
+      :param filter Optional[str]: Allows clients to  filter a collection of
+                                   resources that are addressed by a request URL. The expression specified with 'filter'
+                                   is evaluated for each resource in the collection, and only items where the expression
+                                   evaluates to true are included in the response.
+                                   Example: filter=FirstName eq 'Scott'.. Defaults to None.
+      :param order_by Optional[str]: _description_. Defaults to None.
+      :param order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
+      :param at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+
+      :returns: An iterator over a list of services
+      :rtype: Iterator[Service]
+
+      :Yields: *Service* -- A Service object
+
+
+   .. py:method:: get_service(service_id: str) -> ivcap_client.service.Service
+
+
+   .. py:method:: list_orders(filter: Optional[str] = None, order_by: Optional[str] = None, order_desc: Optional[bool] = False, at_time: Optional[datetime.datetime.datetime] = None) -> Iterator[ivcap_client.order.Order]
+
+      Return an iterator over all the available orders fulfilling certain constraints.
+
+      :param filter Optional[str]: Allows clients to  filter a collection of
+                                   resources that are addressed by a request URL. The expression specified with 'filter'
+                                   is evaluated for each resource in the collection, and only items where the expression
+                                   evaluates to true are included in the response.
+                                   Example: filter=FirstName eq 'Scott'.. Defaults to None.
+      :param order_by Optional[str]: _description_. Defaults to None.
+      :param order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
+      :param at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+
+      :returns: An iterator over a list of orders
+      :rtype: Iterator[Order]
+
+      :Yields: *Order* -- An order object
+
+
+   .. py:method:: get_order(id: str) -> ivcap_client.order.Order
+
+
+   .. py:method:: add_metadata(entity: str, aspect: Dict[str, any], schema: Optional[str] = None) -> ivcap_client.metadata.Metadata
+
+      Add a metadata 'aspect' to 'entity'. The 'schema' of the aspect, if not defined
+      is expected to found in the 'aspect' under the '$schema' key.
+
+      :param entity: URN of the entity to attach the aspect to
+      :type entity: str
+      :param aspect: The aspect to be attached
+      :type aspect: dict
+      :param schema: Schema of the aspect. Defaults to 'aspect["$schema"]'.
+      :type schema: Optional[str], optional
+
+      :returns: The created metadata record
+      :rtype: metadata
+
+
+   .. py:method:: search_metadata(entity: Optional[str] = None, schema_prefix: Optional[str] = None, aspect_path: Optional[str] = None, filter_: Optional[str] = None, order_by: Optional[str] = None, order_desc: Optional[str] = None, at_time: Optional[datetime.datetime] = None) -> Iterator[ivcap_client.metadata.Metadata]
+
+      Return an iterator over all the metadata records fulfilling certain constraints.
+
+      :param entity Optional[str]: The entity URN for which to restrict the returend metadata records
+      :param schema_prefix Optional[str]: A prefix (using Postgres 'like' patterns) to restrict the
+                                          returend metadata records
+      :param aspect_path: Optional[str]: When defined also return a specific sub tree of the record's aspect
+      :param filter Optional[str]: Allows clients to  filter a collection of
+                                   resources that are addressed by a request URL. The expression specified with 'filter'
+                                   is evaluated for each resource in the collection, and only items where the expression
+                                   evaluates to true are included in the response.
+                                   Example: filter=FirstName eq 'Scott'.. Defaults to None.
+      :param order_by Optional[str]: _description_. Defaults to None.
+      :param order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
+      :param at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+
+      :returns: An iterator over a list of metadata records
+      :rtype: Iterator[Metadata]
+
+      :Yields: *Metadata* -- A metadata object
+
+
+   .. py:method:: list_artifacts(filter: Optional[str] = None, order_by: Optional[str] = None, order_desc: Optional[bool] = False, at_time: Optional[datetime.datetime.datetime] = None) -> Iterator[ivcap_client.artifact.Artifact]
+
+      Return an iterator over all the available artifacts fulfilling certain constraints.
+
+      :param filter Optional[str]: Allows clients to  filter a collection of
+                                   resources that are addressed by a request URL. The expression specified with 'filter'
+                                   is evaluated for each resource in the collection, and only items where the expression
+                                   evaluates to true are included in the response.
+                                   Example: filter=FirstName eq 'Scott'.. Defaults to None.
+      :param order_by Optional[str]: _description_. Defaults to None.
+      :param order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
+      :param at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+
+      :returns: An iterator over a list of services
+      :rtype: Iterator[Service]
+
+      :Yields: *Artifact* -- An artifact object
+
+
+   .. py:method:: upload_artifact(*, name: Optional[str] = None, file_path: Optional[str] = None, io_stream: Optional[IO] = None, content_type: Optional[str] = None, content_size: Optional[int] = -1, chunk_size: Optional[int] = MAXSIZE, retries: Optional[int] = 0, retry_delay: Optional[int] = 30) -> ivcap_client.artifact.Artifact
+
+      Uploads content which is either identified as a `file_path` or `io_stream`. In the
+      latter case, content type need to be provided.
+
+      :param file_path: File to upload
+      :type file_path: Optional[str]
+      :param io_stream: Content as IO stream.
+      :type io_stream: Optional[IO]
+      :param content_type: Content type - needs to be declared for `io_stream`.
+      :type content_type: Optional[str]
+      :param content_size: Overall size of content to be uploaded. Defaults to -1 (don't know).
+      :type content_size: Optional[int]
+      :param chunk_size: Chunk size to use for each individual upload. Defaults to MAXSIZE.
+      :type chunk_size: Optional[int]
+      :param retries: The number of attempts should be made in the case of a failed upload. Defaults to 0.
+      :type retries: Optional[int]
+      :param retry_delay: How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
+      :type retry_delay: Optional[int], optional
+
+
+   .. py:method:: get_artifact(id: str) -> ivcap_client.artifact.Artifact
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: Service(id: str, ivcap: IVCAP, listItem: Optional[ivcap_client.models.service_list_item.ServiceListItem] = None)
+
+
+   This clas represents a particular service available
+   in a particular IVCAP deployment
+
+   .. py:property:: urn
+      :type: str
+
+
+   .. py:property:: name
+      :type: str
+
+
+   .. py:property:: description
+      :type: str
+
+
+   .. py:property:: status
+      :type: str
+
+
+   .. py:property:: parameters
+      :type: Dict[str, Parameter]
+
+
+   .. py:method:: place_order(**kwargs) -> ivcap_client.order.Order
+
+
+   .. py:method:: _mandatory_parameters() -> Set[str]
+
+
+   .. py:method:: _refresh()
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: Order(order_id: str, ivcap: IVCAP, status: Optional[ivcap_client.models.order_status_rt.OrderStatusRT] = None)
+
+
+   This class represents a particular order placed
+   at a particular IVCAP deployment
+
+   .. py:property:: urn
+      :type: str
+
+
+   .. py:method:: status(refresh=True) -> ivcap_client.models.order_status_rt.OrderStatusRT
+
+
+   .. py:method:: metadata() -> List[ivcap_client.metadata.Metadata]
+
+
+   .. py:method:: add_metadata(aspect: Dict[str, any], schema: Optional[str] = None) -> Order
+
+      Add a metadata 'aspect' to this order. The 'schema' of the aspect, if not defined
+      is expected to found in the 'aspect' under the '$schema' key.
+
+      :param aspect: The aspect to be attached
+      :type aspect: dict
+      :param schema: Schema of the aspect. Defaults to 'aspect["$schema"]'.
+      :type schema: Optional[str], optional
+
+      :returns: The metadata record created
+      :rtype: metadata
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: Artifact(id: str, ivcap: IVCAP, status: Optional[ivcap_client.models.artifact_status_rt.ArtifactStatusRT] = None)
+
+
+   This class represents an artifact record
+   stored at a particular IVCAP deployment
+
+   .. py:property:: urn
+      :type: str
+
+
+   .. py:property:: status
+      :type: ivcap_client.models.artifact_status_rt.ArtifactStatusRT
+
+
+   .. py:property:: metadata
+      :type: Iterator[ivcap_client.metadata.Metadata]
+
+
+   .. py:method:: add_metadata(aspect: Dict[str, any], schema: Optional[str] = None) -> Artifact
+
+      Add a metadata 'aspect' to this artifact. The 'schema' of the aspect, if not defined
+      is expected to found in the 'aspect' under the '$schema' key.
+
+      :param aspect: The aspect to be attached
+      :type aspect: dict
+      :param schema: Schema of the aspect. Defaults to 'aspect["$schema"]'.
+      :type schema: Optional[str], optional
+
+      :returns: To enable chaining
+      :rtype: self
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: Metadata(id: str, ivcap: IVCAP, listItem: Optional[ivcap_client.models.metadata_list_item_rt.MetadataListItemRT] = None)
+
+
+   This class represents a metadata record
+   stored at a particular IVCAP deployment
+
+   .. py:property:: urn
+      :type: str
+
+
+   .. py:property:: entity
+      :type: str
+
+
+   .. py:property:: schema
+      :type: str
+
+
+   .. py:property:: aspect
+      :type: dict
+
+
+   .. py:method:: _refresh()
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+

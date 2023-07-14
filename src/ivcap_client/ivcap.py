@@ -3,10 +3,8 @@ from __future__ import annotations # postpone evaluation of annotations
 from datetime import datetime
 import os
 from typing import IO, Dict, Iterator, Optional
-from urllib.parse import quote
 from ivcap_client.api.artifact import artifact_upload
 from ivcap_client.artifact import Artifact, ArtifactIter
-from ivcap_client.models import metadata_list_item_rt
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT 
 from tusclient.client import TusClient
 from sys import maxsize as MAXSIZE
@@ -140,8 +138,8 @@ class IVCAP:
         if not schema:
             raise MissingParameterValue("Missing schema (also not in aspect '$schema')")
         kwargs = {
-            "entity_id": quote(entity),
-            "schema": quote(schema, safe=''),
+            "entity_id": entity,
+            "schema": schema,
             "json_body": aspect,
             "client": self._client,
             "content_type": "application/json",

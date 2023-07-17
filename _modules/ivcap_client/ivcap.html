@@ -232,11 +232,12 @@
         <span class="n">li</span> <span class="o">=</span> <span class="n">MetadataListItemRT</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Metadata</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">record_id</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">li</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="IVCAP.search_metadata"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.search_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">search_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+<div class="viewcode-block" id="IVCAP.search_metadata"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.search_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">search_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
         <span class="n">entity</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">schema_prefix</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">aspect_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">filter_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="nb">filter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">order_by</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">order_desc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">at_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -267,7 +268,7 @@
             <span class="s2">&quot;entity_id&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
             <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">schema_prefix</span><span class="p">,</span>
             <span class="s2">&quot;aspect_path&quot;</span><span class="p">:</span> <span class="n">aspect_path</span><span class="p">,</span>
-            <span class="s2">&quot;filter_&quot;</span><span class="p">:</span> <span class="n">filter_</span><span class="p">,</span>
+            <span class="s2">&quot;filter_&quot;</span><span class="p">:</span> <span class="nb">filter</span><span class="p">,</span>
             <span class="s2">&quot;order_by&quot;</span><span class="p">:</span> <span class="n">order_by</span><span class="p">,</span>
             <span class="s2">&quot;order_desc&quot;</span><span class="p">:</span> <span class="n">order_desc</span><span class="p">,</span>
             <span class="s2">&quot;at_time&quot;</span><span class="p">:</span> <span class="n">at_time</span><span class="p">,</span>

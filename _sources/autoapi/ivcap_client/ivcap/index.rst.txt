@@ -87,7 +87,7 @@ Classes
       :rtype: metadata
 
 
-   .. py:method:: search_metadata(entity: Optional[str] = None, schema_prefix: Optional[str] = None, aspect_path: Optional[str] = None, filter_: Optional[str] = None, order_by: Optional[str] = None, order_desc: Optional[str] = None, at_time: Optional[datetime.datetime] = None) -> Iterator[ivcap_client.metadata.Metadata]
+   .. py:method:: search_metadata(*, entity: Optional[str] = None, schema_prefix: Optional[str] = None, aspect_path: Optional[str] = None, filter: Optional[str] = None, order_by: Optional[str] = None, order_desc: Optional[str] = None, at_time: Optional[datetime.datetime] = None) -> Iterator[ivcap_client.metadata.Metadata]
 
       Return an iterator over all the metadata records fulfilling certain constraints.
 

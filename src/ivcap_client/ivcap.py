@@ -156,11 +156,12 @@ class IVCAP:
         li = MetadataListItemRT.from_dict(d)
         return Metadata(res.record_id, self, li)
     
-    def search_metadata(self, 
+    def search_metadata(self,
+        *,
         entity: Optional[str] = None,
         schema_prefix : Optional[str] = None,
         aspect_path: Optional[str] = None,
-        filter_: Optional[str] = None,
+        filter: Optional[str] = None,
         order_by:Optional[str] = None,
         order_desc: Optional[str] = None,
         at_time: Optional[datetime] = None,
@@ -191,7 +192,7 @@ class IVCAP:
             "entity_id": entity,
             "schema": schema_prefix,
             "aspect_path": aspect_path,
-            "filter_": filter_,
+            "filter_": filter,
             "order_by": order_by,
             "order_desc": order_desc,
             "at_time": at_time,

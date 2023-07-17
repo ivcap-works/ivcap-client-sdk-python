@@ -9,8 +9,11 @@
 try:  # Python < 3.10 (backport) 
     from importlib_metadata import version 
 except ImportError: 
-    from importlib.metadata import version 
-__version__ = version("ivcap_client")
+    from importlib.metadata import version
+try:
+    __version__ = version("ivcap_client")
+except Exception:
+    __version__ = "???" # should only happen when running the local examples
 
 from .ivcap import IVCAP
 from .service import Service

@@ -1,7 +1,7 @@
 from io import BytesIO
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, File, FileJsonType, Unset
 
@@ -12,36 +12,37 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="WorkflowT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class WorkflowT:
     """Defines the workflow to use to execute this service. Currently supported 'types' are 'basic'
     and 'argo'. In case of 'basic', use the 'basic' element for further parameters. In the current implementation
     'opts' is expected to contain the same schema as 'basic'
 
     Example:
-        {'argo': 'Eos est vitae quos consequatur.', 'basic': {'command': ['Molestiae cupiditate voluptas.',
-            'Voluptatibus illum aut deserunt fugiat hic.'], 'cpu': {'limit': 'Sed ut in distinctio consequatur aut
-            voluptas.', 'request': 'Quaerat voluptas distinctio.'}, 'image': 'Quidem nulla quae provident dolor amet
-            nulla.', 'memory': {'limit': 'Sed ut in distinctio consequatur aut voluptas.', 'request': 'Quaerat voluptas
-            distinctio.'}}, 'opts': 'Qui eum.', 'type': 'Et suscipit voluptatum qui earum inventore.'}
+        {'argo': 'Et dolore qui dolores est dolorum rerum.', 'basic': {'command': ['Quis fugiat.', 'Nostrum ex.',
+            'Laborum qui.', 'Rem assumenda sit magnam accusamus enim.'], 'cpu': {'limit': 'Quaerat nulla iure illum eum.',
+            'request': 'Est iusto eum rerum dolores sed.'}, 'image': 'Esse dolorem laudantium nisi laboriosam dolores.',
+            'memory': {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum rerum dolores sed.'}}, 'opts':
+            'Totam voluptas.', 'type': 'Accusamus doloremque et dolor ullam dolorem hic.'}
 
     Attributes:
-        argo (Union[Unset, File]): Defines the workflow using argo's WF schema Example: Possimus distinctio..
-        basic (Union[Unset, BasicWorkflowOptsT]):  Example: {'command': ['Voluptatem facilis libero voluptatem quis
-            quam.', 'Dolor odit rerum quia.', 'Est voluptatem rerum qui amet.'], 'cpu': {'limit': 'Sed ut in distinctio
-            consequatur aut voluptas.', 'request': 'Quaerat voluptas distinctio.'}, 'image': 'Asperiores temporibus.',
-            'memory': {'limit': 'Sed ut in distinctio consequatur aut voluptas.', 'request': 'Quaerat voluptas
-            distinctio.'}}.
+        argo (Union[Unset, File]): Defines the workflow using argo's WF schema Example: Porro blanditiis nihil eligendi
+            perferendis cumque..
+        basic (Union[Unset, BasicWorkflowOptsT]):  Example: {'command': ['Rerum voluptas sit perferendis tempora
+            deserunt.', 'Excepturi impedit cupiditate et nihil.', 'Aut ipsum qui necessitatibus quidem sint.'], 'cpu':
+            {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum rerum dolores sed.'}, 'image': 'Nulla
+            corporis unde aperiam.', 'memory': {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum rerum
+            dolores sed.'}}.
         opts (Union[Unset, File]): Type specific options - left for backward compatibility, if possible use type
-            specific elements Example: Blanditiis quos officia..
-        type (Union[Unset, str]): Type of workflow Example: Cupiditate tenetur ratione qui amet..
+            specific elements Example: Pariatur sint corrupti..
+        type (Union[Unset, str]): Type of workflow Example: Eos amet..
     """
 
     argo: Union[Unset, File] = UNSET
     basic: Union[Unset, "BasicWorkflowOptsT"] = UNSET
     opts: Union[Unset, File] = UNSET
     type: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         argo: Union[Unset, FileJsonType] = UNSET

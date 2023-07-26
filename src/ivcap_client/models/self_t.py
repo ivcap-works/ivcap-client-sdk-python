@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
@@ -11,22 +11,22 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="SelfT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class SelfT:
     """
     Example:
-        {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Corrupti
-            laborum qui incidunt.'}
+        {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self':
+            'Consequatur adipisci.'}
 
     Attributes:
         described_by (Union[Unset, DescribedByT]):  Example: {'href': 'https://api.com/swagger/...', 'type':
             'application/openapi3+json'}.
-        self_ (Union[Unset, str]):  Example: Non et nemo excepturi ex..
+        self_ (Union[Unset, str]):  Example: Quae hic dignissimos..
     """
 
     described_by: Union[Unset, "DescribedByT"] = UNSET
     self_: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         described_by: Union[Unset, Dict[str, Any]] = UNSET

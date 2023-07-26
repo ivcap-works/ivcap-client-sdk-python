@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
@@ -14,24 +14,25 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ServiceDescriptionT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ServiceDescriptionT:
     """
     Example:
-        {'account-id': 'cayp:account:acme', 'banner': 'http://kemmer.com/joshuah_reichert', 'description': 'This service
-            ...', 'metadata': [{'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est
-            incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'},
-            {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'}], 'name': 'Fire risk for Lot2',
-            'parameters': [{'description': 'The name of the region as according to ...', 'label': 'Region Name', 'name':
-            'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit':
-            'm'}], 'policy-id': 'Non occaecati sit.', 'provider-id': 'cayp:provider:acme', 'provider-ref':
-            'service_foo_patch_1', 'references': [{'title': 'Perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'},
-            {'title': 'Perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}], 'tags': ['tag1', 'tag2'],
-            'workflow': {'argo': 'Et vel.', 'basic': {'command': ['Molestiae cupiditate voluptas.', 'Voluptatibus illum aut
-            deserunt fugiat hic.'], 'cpu': {'limit': 'Sed ut in distinctio consequatur aut voluptas.', 'request': 'Quaerat
-            voluptas distinctio.'}, 'image': 'Quidem nulla quae provident dolor amet nulla.', 'memory': {'limit': 'Sed ut in
-            distinctio consequatur aut voluptas.', 'request': 'Quaerat voluptas distinctio.'}}, 'opts': 'Iure beatae libero
-            magnam culpa nulla.', 'type': 'Et aut autem deserunt sit architecto.'}}
+        {'account-id': 'cayp:account:acme', 'banner': 'http://schmeler.info/carlotta', 'description': 'This service
+            ...', 'metadata': [{'name': 'Et ut et.', 'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut
+            et.', 'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.', 'value': 'Possimus et id harum
+            iste dolores esse.'}, {'name': 'Et ut et.', 'value': 'Possimus et id harum iste dolores esse.'}], 'name': 'Fire
+            risk for Lot2', 'parameters': [{'description': 'The name of the region as according to ...', 'label': 'Region
+            Name', 'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type':
+            'float', 'unit': 'm'}], 'policy-id': 'Accusantium illum est veniam.', 'provider-id': 'cayp:provider:acme',
+            'provider-ref': 'service_foo_patch_1', 'references': [{'title': 'Minus sed sit expedita enim.', 'uri':
+            'http://doylemarks.org/krystal_douglas'}, {'title': 'Minus sed sit expedita enim.', 'uri':
+            'http://doylemarks.org/krystal_douglas'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Temporibus eum quo
+            corporis qui molestiae.', 'basic': {'command': ['Quis fugiat.', 'Nostrum ex.', 'Laborum qui.', 'Rem assumenda
+            sit magnam accusamus enim.'], 'cpu': {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum rerum
+            dolores sed.'}, 'image': 'Esse dolorem laudantium nisi laboriosam dolores.', 'memory': {'limit': 'Quaerat nulla
+            iure illum eum.', 'request': 'Est iusto eum rerum dolores sed.'}}, 'opts': 'Minus dignissimos fuga facere
+            minus.', 'type': 'Illo odit et.'}}
 
     Attributes:
         account_id (str): Reference to account revenues for this service should be credited to Example:
@@ -44,26 +45,26 @@ class ServiceDescriptionT:
         workflow (WorkflowT): Defines the workflow to use to execute this service. Currently supported 'types' are
             'basic'
                     and 'argo'. In case of 'basic', use the 'basic' element for further parameters. In the current implementation
-                    'opts' is expected to contain the same schema as 'basic' Example: {'argo': 'Eos est vitae quos consequatur.',
-            'basic': {'command': ['Molestiae cupiditate voluptas.', 'Voluptatibus illum aut deserunt fugiat hic.'], 'cpu':
-            {'limit': 'Sed ut in distinctio consequatur aut voluptas.', 'request': 'Quaerat voluptas distinctio.'}, 'image':
-            'Quidem nulla quae provident dolor amet nulla.', 'memory': {'limit': 'Sed ut in distinctio consequatur aut
-            voluptas.', 'request': 'Quaerat voluptas distinctio.'}}, 'opts': 'Qui eum.', 'type': 'Et suscipit voluptatum qui
-            earum inventore.'}.
+                    'opts' is expected to contain the same schema as 'basic' Example: {'argo': 'Et dolore qui dolores est dolorum
+            rerum.', 'basic': {'command': ['Quis fugiat.', 'Nostrum ex.', 'Laborum qui.', 'Rem assumenda sit magnam
+            accusamus enim.'], 'cpu': {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum rerum dolores
+            sed.'}, 'image': 'Esse dolorem laudantium nisi laboriosam dolores.', 'memory': {'limit': 'Quaerat nulla iure
+            illum eum.', 'request': 'Est iusto eum rerum dolores sed.'}}, 'opts': 'Totam voluptas.', 'type': 'Accusamus
+            doloremque et dolor ullam dolorem hic.'}.
         banner (Union[Unset, str]): Link to banner image oprionally used for this service Example:
-            http://ledner.com/mike.
-        metadata (Union[Unset, List['ParameterT']]): Optional provider provided meta tags Example: [{'name': 'Reiciendis
-            est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo
-            quidem.'}, {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est
-            incidunt.', 'value': 'Rerum nemo quidem.'}].
+            http://rosenbaum.info/della_lowe.
+        metadata (Union[Unset, List['ParameterT']]): Optional provider provided meta tags Example: [{'name': 'Et ut
+            et.', 'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.', 'value': 'Possimus et id harum
+            iste dolores esse.'}, {'name': 'Et ut et.', 'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut
+            et.', 'value': 'Possimus et id harum iste dolores esse.'}].
         name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
-        policy_id (Union[Unset, str]): Reference to policy controlling access Example: Fuga ipsam quo..
+        policy_id (Union[Unset, str]): Reference to policy controlling access Example: Ipsa consequatur distinctio
+            necessitatibus..
         provider_ref (Union[Unset, str]): Provider provided reference. Should to be a single string with punctuations
             allowed. Might be changed, so please check result Example: service_foo_patch_1.
         references (Union[Unset, List['ReferenceT']]): Reference to account revenues for this service should be credited
-            to Example: [{'title': 'Perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Perspiciatis
-            esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Perspiciatis esse rerum.', 'uri':
-            'http://gulgowski.biz/kyle'}, {'title': 'Perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}].
+            to Example: [{'title': 'Minus sed sit expedita enim.', 'uri': 'http://doylemarks.org/krystal_douglas'},
+            {'title': 'Minus sed sit expedita enim.', 'uri': 'http://doylemarks.org/krystal_douglas'}].
         tags (Union[Unset, List[str]]): Optional provider provided tags Example: ['tag1', 'tag2'].
     """
 
@@ -79,7 +80,7 @@ class ServiceDescriptionT:
     provider_ref: Union[Unset, str] = UNSET
     references: Union[Unset, List["ReferenceT"]] = UNSET
     tags: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         account_id = self.account_id

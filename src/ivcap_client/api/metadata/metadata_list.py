@@ -15,7 +15,6 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    client: AuthenticatedClient,
     entity_id: Union[Unset, None, str] = UNSET,
     schema: Union[Unset, None, str] = UNSET,
     aspect_path: Union[Unset, None, str] = UNSET,
@@ -26,10 +25,7 @@ def _get_kwargs(
     order_desc: Union[Unset, None, bool] = UNSET,
     page: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/1/metadata".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["entity-id"] = entity_id
@@ -58,17 +54,13 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "/1/metadata",
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, ListMetaRT, NotImplementedT]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ListMetaRT.from_dict(response.json())
@@ -99,7 +91,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, ListMetaRT, NotImplementedT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -129,13 +121,14 @@ def sync_detailed(
     Args:
         entity_id (Union[Unset, None, str]): Entity for which to request metadata Example:
             urn:blue:image.collA.12.
-        schema (Union[Unset, None, str]): Optional schema to filter on Example: urn:blue:image%.
+        schema (Union[Unset, None, str]): Schema prefix using '%' as wildcard indicator Example:
+            urn:blue:image%.
         aspect_path (Union[Unset, None, str]): To learn more about the supported format, see
                                                 https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH Example:
             $.images[*] ? (@.size > 10000).
         at_time (Union[Unset, None, datetime.datetime]): Return metadata which where valid at that
             time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The $limit system query option requests the number of
+        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
             items in the queried
                                         collection to be included in the result. Default: 10. Example: 10.
         filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
@@ -152,7 +145,7 @@ def sync_detailed(
             on
                                         property EndsAt in descending order. Default: ''. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         page (Union[Unset, None, str]): The content of '$page' is returned in the 'links' part of
             a previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
@@ -167,7 +160,6 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         entity_id=entity_id,
         schema=schema,
         aspect_path=aspect_path,
@@ -179,8 +171,7 @@ def sync_detailed(
         page=page,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -207,13 +198,14 @@ def sync(
     Args:
         entity_id (Union[Unset, None, str]): Entity for which to request metadata Example:
             urn:blue:image.collA.12.
-        schema (Union[Unset, None, str]): Optional schema to filter on Example: urn:blue:image%.
+        schema (Union[Unset, None, str]): Schema prefix using '%' as wildcard indicator Example:
+            urn:blue:image%.
         aspect_path (Union[Unset, None, str]): To learn more about the supported format, see
                                                 https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH Example:
             $.images[*] ? (@.size > 10000).
         at_time (Union[Unset, None, datetime.datetime]): Return metadata which where valid at that
             time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The $limit system query option requests the number of
+        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
             items in the queried
                                         collection to be included in the result. Default: 10. Example: 10.
         filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
@@ -230,7 +222,7 @@ def sync(
             on
                                         property EndsAt in descending order. Default: ''. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         page (Union[Unset, None, str]): The content of '$page' is returned in the 'links' part of
             a previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
@@ -278,13 +270,14 @@ async def asyncio_detailed(
     Args:
         entity_id (Union[Unset, None, str]): Entity for which to request metadata Example:
             urn:blue:image.collA.12.
-        schema (Union[Unset, None, str]): Optional schema to filter on Example: urn:blue:image%.
+        schema (Union[Unset, None, str]): Schema prefix using '%' as wildcard indicator Example:
+            urn:blue:image%.
         aspect_path (Union[Unset, None, str]): To learn more about the supported format, see
                                                 https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH Example:
             $.images[*] ? (@.size > 10000).
         at_time (Union[Unset, None, datetime.datetime]): Return metadata which where valid at that
             time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The $limit system query option requests the number of
+        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
             items in the queried
                                         collection to be included in the result. Default: 10. Example: 10.
         filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
@@ -301,7 +294,7 @@ async def asyncio_detailed(
             on
                                         property EndsAt in descending order. Default: ''. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         page (Union[Unset, None, str]): The content of '$page' is returned in the 'links' part of
             a previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
@@ -316,7 +309,6 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         entity_id=entity_id,
         schema=schema,
         aspect_path=aspect_path,
@@ -328,8 +320,7 @@ async def asyncio_detailed(
         page=page,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -354,13 +345,14 @@ async def asyncio(
     Args:
         entity_id (Union[Unset, None, str]): Entity for which to request metadata Example:
             urn:blue:image.collA.12.
-        schema (Union[Unset, None, str]): Optional schema to filter on Example: urn:blue:image%.
+        schema (Union[Unset, None, str]): Schema prefix using '%' as wildcard indicator Example:
+            urn:blue:image%.
         aspect_path (Union[Unset, None, str]): To learn more about the supported format, see
                                                 https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH Example:
             $.images[*] ? (@.size > 10000).
         at_time (Union[Unset, None, datetime.datetime]): Return metadata which where valid at that
             time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The $limit system query option requests the number of
+        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
             items in the queried
                                         collection to be included in the result. Default: 10. Example: 10.
         filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
@@ -377,7 +369,7 @@ async def asyncio(
             on
                                         property EndsAt in descending order. Default: ''. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         page (Union[Unset, None, str]): The content of '$page' is returned in the 'links' part of
             a previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:

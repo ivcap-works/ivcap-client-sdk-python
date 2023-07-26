@@ -1,11 +1,11 @@
 from typing import Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define, field
 
 T = TypeVar("T", bound="ResourceNotFoundT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ResourceNotFoundT:
     """artifacts not found
 
@@ -19,7 +19,7 @@ class ResourceNotFoundT:
 
     id: str
     message: str
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id

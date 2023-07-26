@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..models.artifact_list_item_status import ArtifactListItemStatus
 from ..types import UNSET, Unset
@@ -12,17 +12,17 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ArtifactListItem")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ArtifactListItem:
     """
     Example:
         {'id': 'cayp:artifact:0000-000', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}, 'mime-type': 'image/jpeg', 'name': 'Fire
-            risk for Lot2', 'size': 19000, 'status': 'ready'}
+            'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil et.'}, 'mime-type': 'image/jpeg', 'name':
+            'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}
 
     Attributes:
         links (SelfT):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Corrupti laborum qui incidunt.'}.
+            'application/openapi3+json'}, 'self': 'Consequatur adipisci.'}.
         id (Union[Unset, str]): Artifact ID Example: cayp:artifact:0000-000.
         mime_type (Union[Unset, str]): Mime (content) type of artifact Example: image/jpeg.
         name (Union[Unset, str]): Optional name Example: Fire risk for Lot2.
@@ -36,7 +36,7 @@ class ArtifactListItem:
     name: Union[Unset, str] = UNSET
     size: Union[Unset, int] = UNSET
     status: Union[Unset, ArtifactListItemStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         links = self.links.to_dict()

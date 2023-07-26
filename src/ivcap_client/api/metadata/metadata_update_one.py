@@ -18,10 +18,11 @@ def _get_kwargs(
     entity_id: str,
     schema: str,
     policy_id: Union[Unset, None, str] = UNSET,
-    content_type: str,
+    content_type: Union[Unset, str] = UNSET,
 ) -> Dict[str, Any]:
     headers = {}
-    headers["Content-Type"] = content_type
+    if not isinstance(content_type, Unset):
+        headers["Content-Type"] = content_type
 
     params: Dict[str, Any] = {}
     params["entity-id"] = entity_id
@@ -35,7 +36,7 @@ def _get_kwargs(
     json_json_body = json_body
 
     return {
-        "method": "post",
+        "method": "put",
         "url": "/1/metadata",
         "json": json_json_body,
         "params": params,
@@ -92,19 +93,21 @@ def sync_detailed(
     entity_id: str,
     schema: str,
     policy_id: Union[Unset, None, str] = UNSET,
-    content_type: str,
+    content_type: Union[Unset, str] = UNSET,
 ) -> Response[Union[AddMetaRT, Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
-    """add metadata
+    """update_one metadata
 
-     Attach new metadata to an entity.
+     Revoke a record for the same entity and same schema and create new one
+                        with the provided properties. __NOTE__, this method will fail if there is more than one active
+    record for the entity/schema pair.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example: http://stamm.net/aisha.kozey.
-        schema (str): Schema of metadata Example: http://grant.com/leon.
+        entity_id (str): Entity to which attach metadata Example: urn:url:.....
+        schema (str): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://kohler.net/orland.
-        content_type (str): Content-Type header, MUST be of application/json. Example:
-            application/json.
+            Example: http://ebert.org/georgiana.
+        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
+            Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.
 
     Raises:
@@ -137,19 +140,21 @@ def sync(
     entity_id: str,
     schema: str,
     policy_id: Union[Unset, None, str] = UNSET,
-    content_type: str,
+    content_type: Union[Unset, str] = UNSET,
 ) -> Optional[Union[AddMetaRT, Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
-    """add metadata
+    """update_one metadata
 
-     Attach new metadata to an entity.
+     Revoke a record for the same entity and same schema and create new one
+                        with the provided properties. __NOTE__, this method will fail if there is more than one active
+    record for the entity/schema pair.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example: http://stamm.net/aisha.kozey.
-        schema (str): Schema of metadata Example: http://grant.com/leon.
+        entity_id (str): Entity to which attach metadata Example: urn:url:.....
+        schema (str): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://kohler.net/orland.
-        content_type (str): Content-Type header, MUST be of application/json. Example:
-            application/json.
+            Example: http://ebert.org/georgiana.
+        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
+            Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.
 
     Raises:
@@ -177,19 +182,21 @@ async def asyncio_detailed(
     entity_id: str,
     schema: str,
     policy_id: Union[Unset, None, str] = UNSET,
-    content_type: str,
+    content_type: Union[Unset, str] = UNSET,
 ) -> Response[Union[AddMetaRT, Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
-    """add metadata
+    """update_one metadata
 
-     Attach new metadata to an entity.
+     Revoke a record for the same entity and same schema and create new one
+                        with the provided properties. __NOTE__, this method will fail if there is more than one active
+    record for the entity/schema pair.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example: http://stamm.net/aisha.kozey.
-        schema (str): Schema of metadata Example: http://grant.com/leon.
+        entity_id (str): Entity to which attach metadata Example: urn:url:.....
+        schema (str): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://kohler.net/orland.
-        content_type (str): Content-Type header, MUST be of application/json. Example:
-            application/json.
+            Example: http://ebert.org/georgiana.
+        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
+            Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.
 
     Raises:
@@ -220,19 +227,21 @@ async def asyncio(
     entity_id: str,
     schema: str,
     policy_id: Union[Unset, None, str] = UNSET,
-    content_type: str,
+    content_type: Union[Unset, str] = UNSET,
 ) -> Optional[Union[AddMetaRT, Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
-    """add metadata
+    """update_one metadata
 
-     Attach new metadata to an entity.
+     Revoke a record for the same entity and same schema and create new one
+                        with the provided properties. __NOTE__, this method will fail if there is more than one active
+    record for the entity/schema pair.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example: http://stamm.net/aisha.kozey.
-        schema (str): Schema of metadata Example: http://grant.com/leon.
+        entity_id (str): Entity to which attach metadata Example: urn:url:.....
+        schema (str): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://kohler.net/orland.
-        content_type (str): Content-Type header, MUST be of application/json. Example:
-            application/json.
+            Example: http://ebert.org/georgiana.
+        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
+            Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.
 
     Raises:

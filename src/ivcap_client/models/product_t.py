@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
@@ -11,24 +11,23 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ProductT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ProductT:
     """
     Example:
-        {'id': 'Maxime hic soluta quis reprehenderit dignissimos.', 'links': {'data': 'Ut et temporibus magnam qui velit
-            ea.', 'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self':
-            'Voluptas facilis ut maxime distinctio minima.'}, 'mime-type': 'Eligendi est.', 'name': 'Accusamus aut sint et
-            ut molestias expedita.', 'size': 1910614714403410712, 'status': 'Recusandae rerum dolor eum vitae esse.'}
+        {'id': 'Occaecati quia ut nostrum.', 'links': {'data': 'Quia ut pariatur.', 'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Sit cumque corrupti excepturi.'},
+            'mime-type': 'Dolore voluptatem.', 'name': 'Suscipit officiis.', 'size': 4314372988661854938, 'status': 'Non
+            occaecati sit.'}
 
     Attributes:
-        id (Union[Unset, str]):  Example: Est iure accusamus..
-        links (Union[Unset, SelfWithDataT]):  Example: {'data': 'Repellendus vel nulla repellendus eum neque autem.',
-            'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Minus et
-            ad eius commodi non pariatur.'}.
-        mime_type (Union[Unset, str]):  Example: Atque itaque..
-        name (Union[Unset, str]):  Example: Dolorem iure assumenda dolore animi..
-        size (Union[Unset, int]):  Example: 6434265844788398676.
-        status (Union[Unset, str]):  Example: Dolorem eveniet illo repellendus atque ad doloremque..
+        id (Union[Unset, str]):  Example: Ex mollitia eum consequatur accusamus..
+        links (Union[Unset, SelfWithDataT]):  Example: {'data': 'Assumenda aut quia commodi.', 'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Eos labore.'}.
+        mime_type (Union[Unset, str]):  Example: Alias velit adipisci..
+        name (Union[Unset, str]):  Example: Incidunt aperiam perspiciatis sit pariatur..
+        size (Union[Unset, int]):  Example: 1667448502336650080.
+        status (Union[Unset, str]):  Example: Voluptatem reiciendis similique repellendus et a..
     """
 
     id: Union[Unset, str] = UNSET
@@ -37,7 +36,7 @@ class ProductT:
     name: Union[Unset, str] = UNSET
     size: Union[Unset, int] = UNSET
     status: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
@@ -11,23 +11,23 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="CreateResponseBodyTiny2")
 
 
-@attr.s(auto_attribs=True)
+@define
 class CreateResponseBodyTiny2:
     """CreateResponseBody result type (tiny view)
 
     Example:
         {'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self':
-            'Officiis reiciendis incidunt.'}, 'name': 'Fire risk for Lot2'}
+            'Ipsam deleniti magnam nihil et.'}, 'name': 'Fire risk for Lot2'}
 
     Attributes:
         links (SelfT):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Corrupti laborum qui incidunt.'}.
+            'application/openapi3+json'}, 'self': 'Consequatur adipisci.'}.
         name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
     """
 
     links: "SelfT"
     name: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         links = self.links.to_dict()

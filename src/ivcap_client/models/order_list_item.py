@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..models.order_list_item_status import OrderListItemStatus
 from ..types import UNSET, Unset
@@ -12,19 +12,19 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="OrderListItem")
 
 
-@attr.s(auto_attribs=True)
+@define
 class OrderListItem:
     """
     Example:
         {'account_id': '2022-01-01', 'finished_at': '2022-01-01', 'id':
             'cayp:order:123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'},
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil et.'},
             'name': 'Fire risk for Lot2', 'ordered_at': '2022-01-01', 'service_id': '2022-01-01', 'started_at':
-            '2022-01-01', 'status': 'pending'}
+            '2022-01-01', 'status': 'failed'}
 
     Attributes:
         links (SelfT):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Corrupti laborum qui incidunt.'}.
+            'application/openapi3+json'}, 'self': 'Consequatur adipisci.'}.
         account_id (Union[Unset, str]): ID of ordered service Example: 2022-01-01.
         finished_at (Union[Unset, str]): DateTime order was finished Example: 2022-01-01.
         id (Union[Unset, str]): Order ID Example: cayp:order:123e4567-e89b-12d3-a456-426614174000.
@@ -32,7 +32,7 @@ class OrderListItem:
         ordered_at (Union[Unset, str]): DateTime order was placed Example: 2022-01-01.
         service_id (Union[Unset, str]): ID of ordered service Example: 2022-01-01.
         started_at (Union[Unset, str]): DateTime processing of order started Example: 2022-01-01.
-        status (Union[Unset, OrderListItemStatus]): Order status Example: finished.
+        status (Union[Unset, OrderListItemStatus]): Order status Example: pending.
     """
 
     links: "SelfT"
@@ -44,7 +44,7 @@ class OrderListItem:
     service_id: Union[Unset, str] = UNSET
     started_at: Union[Unset, str] = UNSET
     status: Union[Unset, OrderListItemStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         links = self.links.to_dict()

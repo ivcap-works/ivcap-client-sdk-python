@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..models.create_response_body_tiny_status import CreateResponseBodyTinyStatus
 from ..types import UNSET, Unset
@@ -12,25 +12,25 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="CreateResponseBodyTiny")
 
 
-@attr.s(auto_attribs=True)
+@define
 class CreateResponseBodyTiny:
     """CreateResponseBody result type (tiny view)
 
     Example:
         {'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self':
-            'Officiis reiciendis incidunt.'}, 'name': 'Fire risk for Lot2', 'status': 'pending'}
+            'Ipsam deleniti magnam nihil et.'}, 'name': 'Fire risk for Lot2', 'status': 'pending'}
 
     Attributes:
         links (Union[Unset, SelfT]):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Corrupti laborum qui incidunt.'}.
+            'application/openapi3+json'}, 'self': 'Consequatur adipisci.'}.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
-        status (Union[Unset, CreateResponseBodyTinyStatus]): Order status Example: executing.
+        status (Union[Unset, CreateResponseBodyTinyStatus]): Order status Example: unknown.
     """
 
     links: Union[Unset, "SelfT"] = UNSET
     name: Union[Unset, str] = UNSET
     status: Union[Unset, CreateResponseBodyTinyStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         links: Union[Unset, Dict[str, Any]] = UNSET

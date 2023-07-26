@@ -17,14 +17,10 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     id: str,
     *,
-    client: AuthenticatedClient,
     json_body: ServiceDescriptionT,
     force_create: Union[Unset, None, bool] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/1/services/{id}".format(client.base_url, id=id)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["force-create"] = force_create
@@ -35,18 +31,16 @@ def _get_kwargs(
 
     return {
         "method": "put",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "/1/services/{id}".format(
+            id=id,
+        ),
         "json": json_json_body,
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ResourceNotFoundT, ServiceStatusRT]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ServiceStatusRT.from_dict(response.json())
@@ -81,7 +75,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ResourceNotFoundT, ServiceStatusRT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -103,26 +97,27 @@ def sync_detailed(
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Tempora deserunt..
-        force_create (Union[Unset, None, bool]): Create if not already exist
+        id (str): ID of services to update Example: Aliquid qui..
+        force_create (Union[Unset, None, bool]): Create if not already exist Example: True.
         json_body (ServiceDescriptionT):  Example: {'account-id': 'cayp:account:acme', 'banner':
-            'http://kemmer.com/joshuah_reichert', 'description': 'This service ...', 'metadata':
-            [{'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis
-            est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.',
-            'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo
-            quidem.'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description': 'The name of the
-            region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'},
-            {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}],
-            'policy-id': 'Non occaecati sit.', 'provider-id': 'cayp:provider:acme', 'provider-ref':
-            'service_foo_patch_1', 'references': [{'title': 'Perspiciatis esse rerum.', 'uri':
-            'http://gulgowski.biz/kyle'}, {'title': 'Perspiciatis esse rerum.', 'uri':
-            'http://gulgowski.biz/kyle'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Et vel.',
-            'basic': {'command': ['Molestiae cupiditate voluptas.', 'Voluptatibus illum aut deserunt
-            fugiat hic.'], 'cpu': {'limit': 'Sed ut in distinctio consequatur aut voluptas.',
-            'request': 'Quaerat voluptas distinctio.'}, 'image': 'Quidem nulla quae provident dolor
-            amet nulla.', 'memory': {'limit': 'Sed ut in distinctio consequatur aut voluptas.',
-            'request': 'Quaerat voluptas distinctio.'}}, 'opts': 'Iure beatae libero magnam culpa
-            nulla.', 'type': 'Et aut autem deserunt sit architecto.'}}.
+            'http://schmeler.info/carlotta', 'description': 'This service ...', 'metadata': [{'name':
+            'Et ut et.', 'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.',
+            'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.', 'value':
+            'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.', 'value': 'Possimus et id
+            harum iste dolores esse.'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description':
+            'The name of the region as according to ...', 'label': 'Region Name', 'name': 'region',
+            'type': 'string'}, {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type':
+            'float', 'unit': 'm'}], 'policy-id': 'Accusantium illum est veniam.', 'provider-id':
+            'cayp:provider:acme', 'provider-ref': 'service_foo_patch_1', 'references': [{'title':
+            'Minus sed sit expedita enim.', 'uri': 'http://doylemarks.org/krystal_douglas'}, {'title':
+            'Minus sed sit expedita enim.', 'uri': 'http://doylemarks.org/krystal_douglas'}], 'tags':
+            ['tag1', 'tag2'], 'workflow': {'argo': 'Temporibus eum quo corporis qui molestiae.',
+            'basic': {'command': ['Quis fugiat.', 'Nostrum ex.', 'Laborum qui.', 'Rem assumenda sit
+            magnam accusamus enim.'], 'cpu': {'limit': 'Quaerat nulla iure illum eum.', 'request':
+            'Est iusto eum rerum dolores sed.'}, 'image': 'Esse dolorem laudantium nisi laboriosam
+            dolores.', 'memory': {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum
+            rerum dolores sed.'}}, 'opts': 'Minus dignissimos fuga facere minus.', 'type': 'Illo odit
+            et.'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -134,13 +129,11 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         id=id,
-        client=client,
         json_body=json_body,
         force_create=force_create,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -159,26 +152,27 @@ def sync(
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Tempora deserunt..
-        force_create (Union[Unset, None, bool]): Create if not already exist
+        id (str): ID of services to update Example: Aliquid qui..
+        force_create (Union[Unset, None, bool]): Create if not already exist Example: True.
         json_body (ServiceDescriptionT):  Example: {'account-id': 'cayp:account:acme', 'banner':
-            'http://kemmer.com/joshuah_reichert', 'description': 'This service ...', 'metadata':
-            [{'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis
-            est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.',
-            'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo
-            quidem.'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description': 'The name of the
-            region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'},
-            {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}],
-            'policy-id': 'Non occaecati sit.', 'provider-id': 'cayp:provider:acme', 'provider-ref':
-            'service_foo_patch_1', 'references': [{'title': 'Perspiciatis esse rerum.', 'uri':
-            'http://gulgowski.biz/kyle'}, {'title': 'Perspiciatis esse rerum.', 'uri':
-            'http://gulgowski.biz/kyle'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Et vel.',
-            'basic': {'command': ['Molestiae cupiditate voluptas.', 'Voluptatibus illum aut deserunt
-            fugiat hic.'], 'cpu': {'limit': 'Sed ut in distinctio consequatur aut voluptas.',
-            'request': 'Quaerat voluptas distinctio.'}, 'image': 'Quidem nulla quae provident dolor
-            amet nulla.', 'memory': {'limit': 'Sed ut in distinctio consequatur aut voluptas.',
-            'request': 'Quaerat voluptas distinctio.'}}, 'opts': 'Iure beatae libero magnam culpa
-            nulla.', 'type': 'Et aut autem deserunt sit architecto.'}}.
+            'http://schmeler.info/carlotta', 'description': 'This service ...', 'metadata': [{'name':
+            'Et ut et.', 'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.',
+            'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.', 'value':
+            'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.', 'value': 'Possimus et id
+            harum iste dolores esse.'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description':
+            'The name of the region as according to ...', 'label': 'Region Name', 'name': 'region',
+            'type': 'string'}, {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type':
+            'float', 'unit': 'm'}], 'policy-id': 'Accusantium illum est veniam.', 'provider-id':
+            'cayp:provider:acme', 'provider-ref': 'service_foo_patch_1', 'references': [{'title':
+            'Minus sed sit expedita enim.', 'uri': 'http://doylemarks.org/krystal_douglas'}, {'title':
+            'Minus sed sit expedita enim.', 'uri': 'http://doylemarks.org/krystal_douglas'}], 'tags':
+            ['tag1', 'tag2'], 'workflow': {'argo': 'Temporibus eum quo corporis qui molestiae.',
+            'basic': {'command': ['Quis fugiat.', 'Nostrum ex.', 'Laborum qui.', 'Rem assumenda sit
+            magnam accusamus enim.'], 'cpu': {'limit': 'Quaerat nulla iure illum eum.', 'request':
+            'Est iusto eum rerum dolores sed.'}, 'image': 'Esse dolorem laudantium nisi laboriosam
+            dolores.', 'memory': {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum
+            rerum dolores sed.'}}, 'opts': 'Minus dignissimos fuga facere minus.', 'type': 'Illo odit
+            et.'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -208,26 +202,27 @@ async def asyncio_detailed(
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Tempora deserunt..
-        force_create (Union[Unset, None, bool]): Create if not already exist
+        id (str): ID of services to update Example: Aliquid qui..
+        force_create (Union[Unset, None, bool]): Create if not already exist Example: True.
         json_body (ServiceDescriptionT):  Example: {'account-id': 'cayp:account:acme', 'banner':
-            'http://kemmer.com/joshuah_reichert', 'description': 'This service ...', 'metadata':
-            [{'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis
-            est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.',
-            'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo
-            quidem.'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description': 'The name of the
-            region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'},
-            {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}],
-            'policy-id': 'Non occaecati sit.', 'provider-id': 'cayp:provider:acme', 'provider-ref':
-            'service_foo_patch_1', 'references': [{'title': 'Perspiciatis esse rerum.', 'uri':
-            'http://gulgowski.biz/kyle'}, {'title': 'Perspiciatis esse rerum.', 'uri':
-            'http://gulgowski.biz/kyle'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Et vel.',
-            'basic': {'command': ['Molestiae cupiditate voluptas.', 'Voluptatibus illum aut deserunt
-            fugiat hic.'], 'cpu': {'limit': 'Sed ut in distinctio consequatur aut voluptas.',
-            'request': 'Quaerat voluptas distinctio.'}, 'image': 'Quidem nulla quae provident dolor
-            amet nulla.', 'memory': {'limit': 'Sed ut in distinctio consequatur aut voluptas.',
-            'request': 'Quaerat voluptas distinctio.'}}, 'opts': 'Iure beatae libero magnam culpa
-            nulla.', 'type': 'Et aut autem deserunt sit architecto.'}}.
+            'http://schmeler.info/carlotta', 'description': 'This service ...', 'metadata': [{'name':
+            'Et ut et.', 'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.',
+            'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.', 'value':
+            'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.', 'value': 'Possimus et id
+            harum iste dolores esse.'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description':
+            'The name of the region as according to ...', 'label': 'Region Name', 'name': 'region',
+            'type': 'string'}, {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type':
+            'float', 'unit': 'm'}], 'policy-id': 'Accusantium illum est veniam.', 'provider-id':
+            'cayp:provider:acme', 'provider-ref': 'service_foo_patch_1', 'references': [{'title':
+            'Minus sed sit expedita enim.', 'uri': 'http://doylemarks.org/krystal_douglas'}, {'title':
+            'Minus sed sit expedita enim.', 'uri': 'http://doylemarks.org/krystal_douglas'}], 'tags':
+            ['tag1', 'tag2'], 'workflow': {'argo': 'Temporibus eum quo corporis qui molestiae.',
+            'basic': {'command': ['Quis fugiat.', 'Nostrum ex.', 'Laborum qui.', 'Rem assumenda sit
+            magnam accusamus enim.'], 'cpu': {'limit': 'Quaerat nulla iure illum eum.', 'request':
+            'Est iusto eum rerum dolores sed.'}, 'image': 'Esse dolorem laudantium nisi laboriosam
+            dolores.', 'memory': {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum
+            rerum dolores sed.'}}, 'opts': 'Minus dignissimos fuga facere minus.', 'type': 'Illo odit
+            et.'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -239,13 +234,11 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         id=id,
-        client=client,
         json_body=json_body,
         force_create=force_create,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -262,26 +255,27 @@ async def asyncio(
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Tempora deserunt..
-        force_create (Union[Unset, None, bool]): Create if not already exist
+        id (str): ID of services to update Example: Aliquid qui..
+        force_create (Union[Unset, None, bool]): Create if not already exist Example: True.
         json_body (ServiceDescriptionT):  Example: {'account-id': 'cayp:account:acme', 'banner':
-            'http://kemmer.com/joshuah_reichert', 'description': 'This service ...', 'metadata':
-            [{'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis
-            est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.',
-            'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo
-            quidem.'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description': 'The name of the
-            region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'},
-            {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}],
-            'policy-id': 'Non occaecati sit.', 'provider-id': 'cayp:provider:acme', 'provider-ref':
-            'service_foo_patch_1', 'references': [{'title': 'Perspiciatis esse rerum.', 'uri':
-            'http://gulgowski.biz/kyle'}, {'title': 'Perspiciatis esse rerum.', 'uri':
-            'http://gulgowski.biz/kyle'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Et vel.',
-            'basic': {'command': ['Molestiae cupiditate voluptas.', 'Voluptatibus illum aut deserunt
-            fugiat hic.'], 'cpu': {'limit': 'Sed ut in distinctio consequatur aut voluptas.',
-            'request': 'Quaerat voluptas distinctio.'}, 'image': 'Quidem nulla quae provident dolor
-            amet nulla.', 'memory': {'limit': 'Sed ut in distinctio consequatur aut voluptas.',
-            'request': 'Quaerat voluptas distinctio.'}}, 'opts': 'Iure beatae libero magnam culpa
-            nulla.', 'type': 'Et aut autem deserunt sit architecto.'}}.
+            'http://schmeler.info/carlotta', 'description': 'This service ...', 'metadata': [{'name':
+            'Et ut et.', 'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.',
+            'value': 'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.', 'value':
+            'Possimus et id harum iste dolores esse.'}, {'name': 'Et ut et.', 'value': 'Possimus et id
+            harum iste dolores esse.'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description':
+            'The name of the region as according to ...', 'label': 'Region Name', 'name': 'region',
+            'type': 'string'}, {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type':
+            'float', 'unit': 'm'}], 'policy-id': 'Accusantium illum est veniam.', 'provider-id':
+            'cayp:provider:acme', 'provider-ref': 'service_foo_patch_1', 'references': [{'title':
+            'Minus sed sit expedita enim.', 'uri': 'http://doylemarks.org/krystal_douglas'}, {'title':
+            'Minus sed sit expedita enim.', 'uri': 'http://doylemarks.org/krystal_douglas'}], 'tags':
+            ['tag1', 'tag2'], 'workflow': {'argo': 'Temporibus eum quo corporis qui molestiae.',
+            'basic': {'command': ['Quis fugiat.', 'Nostrum ex.', 'Laborum qui.', 'Rem assumenda sit
+            magnam accusamus enim.'], 'cpu': {'limit': 'Quaerat nulla iure illum eum.', 'request':
+            'Est iusto eum rerum dolores sed.'}, 'image': 'Esse dolorem laudantium nisi laboriosam
+            dolores.', 'memory': {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum
+            rerum dolores sed.'}}, 'opts': 'Minus dignissimos fuga facere minus.', 'type': 'Illo odit
+            et.'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

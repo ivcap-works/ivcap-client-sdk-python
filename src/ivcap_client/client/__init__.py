@@ -1,4 +1,4 @@
-""" A client library for accessing IVCAP - Intelligent Collaborative Analytics Platform """
+""" A client library for accessing IVCAP """
 from .client import AuthenticatedClient, Client
 
 __all__ = (

@@ -1,11 +1,11 @@
 from typing import Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define, field
 
 T = TypeVar("T", bound="AddMetaRT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class AddMetaRT:
     """
     Example:
@@ -16,7 +16,7 @@ class AddMetaRT:
     """
 
     record_id: str
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         record_id = self.record_id

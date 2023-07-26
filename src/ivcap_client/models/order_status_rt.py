@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..models.order_status_rt_status import OrderStatusRTStatus
 from ..types import UNSET, Unset
@@ -15,41 +15,41 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="OrderStatusRT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class OrderStatusRT:
     """
     Example:
-        {'account': {'id': 'http://gorczany.com/breanne.block', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}},
-            'finished_at': '2023-03-17T04:57:00Z', 'id': '123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis
-            incidunt.'}, 'name': 'Fire risk for Lot2', 'ordered_at': '2023-03-17T04:57:00Z', 'parameters': [{'name':
-            'region', 'value': 'Upper Valley'}, {'name': 'threshold', 'value': 10}], 'products': [{'href':
+        {'account': {'id': 'http://klingdicki.info/creola', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil
+            et.'}}, 'finished_at': '2023-03-17T04:57:00Z', 'id': '123e4567-e89b-12d3-a456-426614174000', 'links':
+            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam
+            deleniti magnam nihil et.'}, 'name': 'Fire risk for Lot2', 'ordered_at': '2023-03-17T04:57:00Z', 'parameters':
+            [{'name': 'region', 'value': 'Upper Valley'}, {'name': 'threshold', 'value': 10}], 'products': [{'href':
             'https:/.../1/artifacts/0000-00001220', 'mime-type': 'image/geo+tiff', 'name': 'fire risk map', 'size':
-            1234963}], 'service': {'id': 'http://gorczany.com/breanne.block', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}},
-            'started_at': '2023-03-17T04:57:00Z', 'status': 'unknown'}
+            1234963}], 'service': {'id': 'http://klingdicki.info/creola', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil
+            et.'}}, 'started_at': '2023-03-17T04:57:00Z', 'status': 'failed'}
 
     Attributes:
         id (str): Order ID Example: 123e4567-e89b-12d3-a456-426614174000.
         parameters (List['ParameterT']): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
             {'name': 'threshold', 'value': 10}].
-        account (Union[Unset, RefT]):  Example: {'id': 'http://dooley.name/marlee.mueller', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis
-            incidunt.'}}.
+        account (Union[Unset, RefT]):  Example: {'id': 'http://gulgowski.name/junior', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil
+            et.'}}.
         finished_at (Union[Unset, str]): DateTime order processing finished Example: 2023-03-17T04:57:00Z.
         links (Union[Unset, SelfT]):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Corrupti laborum qui incidunt.'}.
+            'application/openapi3+json'}, 'self': 'Consequatur adipisci.'}.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
         ordered_at (Union[Unset, str]): DateTime order was placed Example: 2023-03-17T04:57:00Z.
         products (Union[Unset, List['ProductT']]): Products delivered for this order Example: [{'href':
             'https:/.../1/artifacts/0000-00001220', 'mime-type': 'image/geo+tiff', 'name': 'fire risk map', 'size':
             1234963}].
-        service (Union[Unset, RefT]):  Example: {'id': 'http://dooley.name/marlee.mueller', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis
-            incidunt.'}}.
+        service (Union[Unset, RefT]):  Example: {'id': 'http://gulgowski.name/junior', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil
+            et.'}}.
         started_at (Union[Unset, str]): DateTime order processing started Example: 2023-03-17T04:57:00Z.
-        status (Union[Unset, OrderStatusRTStatus]): Order status Example: succeeded.
+        status (Union[Unset, OrderStatusRTStatus]): Order status Example: failed.
     """
 
     id: str
@@ -63,7 +63,7 @@ class OrderStatusRT:
     service: Union[Unset, "RefT"] = UNSET
     started_at: Union[Unset, str] = UNSET
     status: Union[Unset, OrderStatusRTStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id

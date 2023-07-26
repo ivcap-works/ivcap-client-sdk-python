@@ -1,29 +1,30 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="InvalidParameterValue")
 
 
-@attr.s(auto_attribs=True)
+@define
 class InvalidParameterValue:
     """Invalide parameter value
 
     Example:
-        {'message': 'Aspernatur architecto.', 'name': 'Dolore et itaque non.', 'value': 'Vel quis rerum.'}
+        {'message': 'Iste iusto.', 'name': 'Consequatur voluptas eius sed error id et.', 'value': 'Tenetur ratione qui
+            amet reiciendis debitis.'}
 
     Attributes:
-        message (str): message describing expected type or pattern. Example: Alias sit qui occaecati id quis..
-        name (str): name of parameter. Example: Nisi perferendis..
-        value (Union[Unset, str]): provided parameter value. Example: Ipsa autem non sapiente labore iste voluptas..
+        message (str): message describing expected type or pattern. Example: Iure consequuntur commodi..
+        name (str): name of parameter. Example: Commodi optio et magni reprehenderit reprehenderit..
+        value (Union[Unset, str]): provided parameter value. Example: Accusamus maxime..
     """
 
     message: str
     name: str
     value: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         message = self.message

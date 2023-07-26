@@ -1,24 +1,24 @@
 from io import BytesIO
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, File, FileJsonType, Unset
 
 T = TypeVar("T", bound="MetadataListItemRT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class MetadataListItemRT:
     """
     Example:
-        {'aspect': '{...}', 'aspectContext': 'Minus ut.', 'entity': 'urn:blue:transect.1', 'record-id':
-            'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}
+        {'aspect': '{...}', 'aspectContext': 'Sapiente possimus commodi qui sint aut.', 'entity': 'urn:blue:transect.1',
+            'record-id': 'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}
 
     Attributes:
         aspect (Union[Unset, File]): Attached metadata aspect Example: {...}.
-        aspect_context (Union[Unset, File]): If aspectPath was defined, this is what matched the query Example: Deleniti
-            magnam tempore..
+        aspect_context (Union[Unset, File]): If aspectPath was defined, this is what matched the query Example:
+            Architecto facere veniam dolorem velit quia..
         entity (Union[Unset, str]): Entity ID Example: urn:blue:transect.1.
         record_id (Union[Unset, str]): Record ID Example: urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000.
         schema (Union[Unset, str]): Schema ID Example: urn:blue:schema.image.
@@ -29,7 +29,7 @@ class MetadataListItemRT:
     entity: Union[Unset, str] = UNSET
     record_id: Union[Unset, str] = UNSET
     schema: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         aspect: Union[Unset, FileJsonType] = UNSET
@@ -68,15 +68,14 @@ class MetadataListItemRT:
         if isinstance(_aspect, Unset):
             aspect = UNSET
         else:
-            aspect = _aspect
+            aspect = File(payload=BytesIO(_aspect))
 
         _aspect_context = d.pop("aspectContext", UNSET)
         aspect_context: Union[Unset, File]
         if isinstance(_aspect_context, Unset):
             aspect_context = UNSET
         else:
-            #aspect_context = File(payload=BytesIO(_aspect_context))
-            aspect_context = _aspect_context
+            aspect_context = File(payload=BytesIO(_aspect_context))
 
         entity = d.pop("entity", UNSET)
 

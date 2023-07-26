@@ -1,7 +1,7 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-import attr
+from attrs import define, field
 from dateutil.parser import isoparse
 
 if TYPE_CHECKING:
@@ -12,21 +12,30 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ServiceListRT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ServiceListRT:
     """
     Example:
         {'at-time': '1996-12-19T16:39:57-08:00', 'links': {'first': 'https://api.com/foo/...', 'next':
             'https://api.com/foo/...', 'self': 'https://api.com/foo/...'}, 'services': [{'description': 'Some lengthy
             description of fire risk', 'id': 'service:acme:oracle', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'},
-            'name': 'Fire risk for region', 'provider': {'id': 'http://gorczany.com/breanne.block', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis
-            incidunt.'}}}, {'description': 'Some lengthy description of fire risk', 'id': 'service:acme:oracle', 'links':
-            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis
-            reiciendis incidunt.'}, 'name': 'Fire risk for region', 'provider': {'id': 'http://gorczany.com/breanne.block',
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil et.'},
+            'name': 'Fire risk for region', 'provider': {'id': 'http://klingdicki.info/creola', 'links': {'describedBy':
+            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam
+            nihil et.'}}}, {'description': 'Some lengthy description of fire risk', 'id': 'service:acme:oracle', 'links':
+            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam
+            deleniti magnam nihil et.'}, 'name': 'Fire risk for region', 'provider': {'id': 'http://klingdicki.info/creola',
             'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self':
-            'Officiis reiciendis incidunt.'}}}]}
+            'Ipsam deleniti magnam nihil et.'}}}, {'description': 'Some lengthy description of fire risk', 'id':
+            'service:acme:oracle', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
+            'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil et.'}, 'name': 'Fire risk for region',
+            'provider': {'id': 'http://klingdicki.info/creola', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil
+            et.'}}}, {'description': 'Some lengthy description of fire risk', 'id': 'service:acme:oracle', 'links':
+            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam
+            deleniti magnam nihil et.'}, 'name': 'Fire risk for region', 'provider': {'id': 'http://klingdicki.info/creola',
+            'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self':
+            'Ipsam deleniti magnam nihil et.'}}}]}
 
     Attributes:
         at_time (datetime.datetime): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
@@ -34,20 +43,20 @@ class ServiceListRT:
             'https://api.com/foo/...'}.
         services (List['ServiceListItem']): Services Example: [{'description': 'Some lengthy description of fire risk',
             'id': 'service:acme:oracle', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}, 'name': 'Fire risk for region',
-            'provider': {'id': 'http://gorczany.com/breanne.block', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}}},
-            {'description': 'Some lengthy description of fire risk', 'id': 'service:acme:oracle', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis
-            incidunt.'}, 'name': 'Fire risk for region', 'provider': {'id': 'http://gorczany.com/breanne.block', 'links':
-            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis
-            reiciendis incidunt.'}}}].
+            'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil et.'}, 'name': 'Fire risk for region',
+            'provider': {'id': 'http://klingdicki.info/creola', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil
+            et.'}}}, {'description': 'Some lengthy description of fire risk', 'id': 'service:acme:oracle', 'links':
+            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam
+            deleniti magnam nihil et.'}, 'name': 'Fire risk for region', 'provider': {'id': 'http://klingdicki.info/creola',
+            'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self':
+            'Ipsam deleniti magnam nihil et.'}}}].
     """
 
     at_time: datetime.datetime
     links: "NavT"
     services: List["ServiceListItem"]
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         at_time = self.at_time.isoformat()

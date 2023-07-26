@@ -1,13 +1,13 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="DescribedByT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class DescribedByT:
     """
     Example:
@@ -20,7 +20,7 @@ class DescribedByT:
 
     href: Union[Unset, str] = UNSET
     type: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         href = self.href

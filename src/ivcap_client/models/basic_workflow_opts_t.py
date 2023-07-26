@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
@@ -11,33 +11,33 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="BasicWorkflowOptsT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class BasicWorkflowOptsT:
     """
     Example:
-        {'command': ['Voluptatem facilis libero voluptatem quis quam.', 'Dolor odit rerum quia.', 'Est voluptatem rerum
-            qui amet.'], 'cpu': {'limit': 'Sed ut in distinctio consequatur aut voluptas.', 'request': 'Quaerat voluptas
-            distinctio.'}, 'image': 'Asperiores temporibus.', 'memory': {'limit': 'Sed ut in distinctio consequatur aut
-            voluptas.', 'request': 'Quaerat voluptas distinctio.'}}
+        {'command': ['Rerum voluptas sit perferendis tempora deserunt.', 'Excepturi impedit cupiditate et nihil.', 'Aut
+            ipsum qui necessitatibus quidem sint.'], 'cpu': {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto
+            eum rerum dolores sed.'}, 'image': 'Nulla corporis unde aperiam.', 'memory': {'limit': 'Quaerat nulla iure illum
+            eum.', 'request': 'Est iusto eum rerum dolores sed.'}}
 
     Attributes:
         command (Union[Unset, List[str]]): Command to start the container - needed for some container runtimes Example:
-            ['Neque sapiente commodi dolorem.', 'Voluptatum nihil optio sit.', 'Iure facere excepturi voluptatem
-            provident.'].
+            ['Iusto asperiores ratione dolore dolor ut nisi.', 'Dolorem dignissimos atque reiciendis perferendis qui
+            omnis.', 'Officiis vel eius in asperiores voluptatem ut.', 'Corporis voluptatibus.'].
         cpu (Union[Unset, ResourceMemoryT]): See
             and https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/ for units Example:
-            {'limit': 'Aut odit dolorum nulla quo.', 'request': 'Est esse voluptas consectetur quia.'}.
-        image (Union[Unset, str]): container image name Example: Debitis perferendis..
+            {'limit': 'Ipsam cumque voluptatem.', 'request': 'Eaque cumque ipsa eum laborum corporis.'}.
+        image (Union[Unset, str]): container image name Example: Sed voluptas sapiente nihil..
         memory (Union[Unset, ResourceMemoryT]): See
             and https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/ for units Example:
-            {'limit': 'Aut odit dolorum nulla quo.', 'request': 'Est esse voluptas consectetur quia.'}.
+            {'limit': 'Ipsam cumque voluptatem.', 'request': 'Eaque cumque ipsa eum laborum corporis.'}.
     """
 
     command: Union[Unset, List[str]] = UNSET
     cpu: Union[Unset, "ResourceMemoryT"] = UNSET
     image: Union[Unset, str] = UNSET
     memory: Union[Unset, "ResourceMemoryT"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         command: Union[Unset, List[str]] = UNSET

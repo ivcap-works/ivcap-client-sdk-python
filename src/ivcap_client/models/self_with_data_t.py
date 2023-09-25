@@ -15,14 +15,14 @@ T = TypeVar("T", bound="SelfWithDataT")
 class SelfWithDataT:
     """
     Example:
-        {'data': 'Assumenda aut quia commodi.', 'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Eos labore.'}
+        {'data': 'Sapiente possimus commodi qui sint aut.', 'describedBy': {'href': 'https://api.com/swagger/...',
+            'type': 'application/openapi3+json'}, 'self': 'Architecto facere veniam dolorem velit quia.'}
 
     Attributes:
-        data (Union[Unset, str]):  Example: Et harum hic qui voluptas vel..
+        data (Union[Unset, str]):  Example: Voluptates dolor atque..
         described_by (Union[Unset, DescribedByT]):  Example: {'href': 'https://api.com/swagger/...', 'type':
             'application/openapi3+json'}.
-        self_ (Union[Unset, str]):  Example: Qui consequatur minima ut ipsam magni iste..
+        self_ (Union[Unset, str]):  Example: Quis numquam cumque magnam..
     """
 
     data: Union[Unset, str] = UNSET

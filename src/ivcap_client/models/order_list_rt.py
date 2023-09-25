@@ -17,33 +17,45 @@ class OrderListRT:
     """
     Example:
         {'at-time': '1996-12-19T16:39:57-08:00', 'links': {'first': 'https://api.com/foo/...', 'next':
-            'https://api.com/foo/...', 'self': 'https://api.com/foo/...'}, 'orders': [{'account_id': '2022-01-01',
-            'finished_at': '2022-01-01', 'id': 'cayp:order:123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam
-            nihil et.'}, 'name': 'Fire risk for Lot2', 'ordered_at': '2022-01-01', 'service_id': '2022-01-01', 'started_at':
-            '2022-01-01', 'status': 'scheduled'}, {'account_id': '2022-01-01', 'finished_at': '2022-01-01', 'id':
+            'https://api.com/foo/...', 'self': 'https://api.com/foo/...'}, 'orders': [{'account-id': '2022-01-01',
+            'finished-at': '2022-01-01', 'id': 'cayp:order:123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy':
+            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'},
+            'name': 'Fire risk for Lot2', 'ordered-at': '2022-01-01', 'service-id': '2022-01-01', 'started-at':
+            '2022-01-01', 'status': 'unknown'}, {'account-id': '2022-01-01', 'finished-at': '2022-01-01', 'id':
             'cayp:order:123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil et.'},
-            'name': 'Fire risk for Lot2', 'ordered_at': '2022-01-01', 'service_id': '2022-01-01', 'started_at':
-            '2022-01-01', 'status': 'scheduled'}, {'account_id': '2022-01-01', 'finished_at': '2022-01-01', 'id':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire
+            risk for Lot2', 'ordered-at': '2022-01-01', 'service-id': '2022-01-01', 'started-at': '2022-01-01', 'status':
+            'unknown'}, {'account-id': '2022-01-01', 'finished-at': '2022-01-01', 'id':
             'cayp:order:123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil et.'},
-            'name': 'Fire risk for Lot2', 'ordered_at': '2022-01-01', 'service_id': '2022-01-01', 'started_at':
-            '2022-01-01', 'status': 'scheduled'}]}
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire
+            risk for Lot2', 'ordered-at': '2022-01-01', 'service-id': '2022-01-01', 'started-at': '2022-01-01', 'status':
+            'unknown'}, {'account-id': '2022-01-01', 'finished-at': '2022-01-01', 'id':
+            'cayp:order:123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire
+            risk for Lot2', 'ordered-at': '2022-01-01', 'service-id': '2022-01-01', 'started-at': '2022-01-01', 'status':
+            'unknown'}]}
 
     Attributes:
         at_time (datetime.datetime): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
         links (NavT):  Example: {'first': 'https://api.com/foo/...', 'next': 'https://api.com/foo/...', 'self':
             'https://api.com/foo/...'}.
-        orders (List['OrderListItem']): Orders Example: [{'account_id': '2022-01-01', 'finished_at': '2022-01-01', 'id':
+        orders (List['OrderListItem']): Orders Example: [{'account-id': '2022-01-01', 'finished-at': '2022-01-01', 'id':
             'cayp:order:123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil et.'},
-            'name': 'Fire risk for Lot2', 'ordered_at': '2022-01-01', 'service_id': '2022-01-01', 'started_at':
-            '2022-01-01', 'status': 'scheduled'}, {'account_id': '2022-01-01', 'finished_at': '2022-01-01', 'id':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire
+            risk for Lot2', 'ordered-at': '2022-01-01', 'service-id': '2022-01-01', 'started-at': '2022-01-01', 'status':
+            'unknown'}, {'account-id': '2022-01-01', 'finished-at': '2022-01-01', 'id':
             'cayp:order:123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil et.'},
-            'name': 'Fire risk for Lot2', 'ordered_at': '2022-01-01', 'service_id': '2022-01-01', 'started_at':
-            '2022-01-01', 'status': 'scheduled'}].
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire
+            risk for Lot2', 'ordered-at': '2022-01-01', 'service-id': '2022-01-01', 'started-at': '2022-01-01', 'status':
+            'unknown'}, {'account-id': '2022-01-01', 'finished-at': '2022-01-01', 'id':
+            'cayp:order:123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire
+            risk for Lot2', 'ordered-at': '2022-01-01', 'service-id': '2022-01-01', 'started-at': '2022-01-01', 'status':
+            'unknown'}, {'account-id': '2022-01-01', 'finished-at': '2022-01-01', 'id':
+            'cayp:order:123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire
+            risk for Lot2', 'ordered-at': '2022-01-01', 'service-id': '2022-01-01', 'started-at': '2022-01-01', 'status':
+            'unknown'}].
     """
 
     at_time: datetime.datetime

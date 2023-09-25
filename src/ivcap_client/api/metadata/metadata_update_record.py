@@ -111,7 +111,7 @@ def sync_detailed(
             urn:url:.....
         schema (Union[Unset, None, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://huel.name/josefina.
+            Example: http://pagac.org/maximillia.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.
@@ -162,7 +162,7 @@ def sync(
             urn:url:.....
         schema (Union[Unset, None, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://huel.name/josefina.
+            Example: http://pagac.org/maximillia.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.
@@ -208,7 +208,7 @@ async def asyncio_detailed(
             urn:url:.....
         schema (Union[Unset, None, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://huel.name/josefina.
+            Example: http://pagac.org/maximillia.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.
@@ -257,7 +257,7 @@ async def asyncio(
             urn:url:.....
         schema (Union[Unset, None, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://huel.name/josefina.
+            Example: http://pagac.org/maximillia.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.

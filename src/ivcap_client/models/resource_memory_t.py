@@ -9,16 +9,16 @@ T = TypeVar("T", bound="ResourceMemoryT")
 
 @define
 class ResourceMemoryT:
-    """See
-    and https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/ for units
+    """See https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-units-in-kubernetes for
+    units
 
         Example:
-            {'limit': 'Ipsam cumque voluptatem.', 'request': 'Eaque cumque ipsa eum laborum corporis.'}
+            {'limit': 'Eos soluta modi aut et.', 'request': 'Qui suscipit ullam et.'}
 
         Attributes:
-            limit (Union[Unset, str]): minimal requirements [system limit] Example: Mollitia veniam..
-            request (Union[Unset, str]): minimal requirements [0] Example: Quibusdam harum dignissimos quisquam earum
-                dolores unde..
+            limit (Union[Unset, str]): minimal requirements [system limit] Example: Voluptates impedit..
+            request (Union[Unset, str]): minimal requirements [0] Example: Dolorem porro veritatis laborum ut dolore
+                assumenda..
     """
 
     limit: Union[Unset, str] = UNSET

@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class CreateResponseBodyTinyStatus(str, Enum):
+class ReadResponseBodyTinyStatus(str, Enum):
     ERROR = "error"
     EXECUTING = "executing"
     FAILED = "failed"

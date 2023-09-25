@@ -17,21 +17,19 @@ class ServiceListItem:
     """
     Example:
         {'description': 'Some lengthy description of fire risk', 'id': 'service:acme:oracle', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam
-            nihil et.'}, 'name': 'Fire risk for region', 'provider': {'id': 'http://klingdicki.info/creola', 'links':
-            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam
-            deleniti magnam nihil et.'}}}
+            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'},
+            'name': 'Fire risk for region', 'provider': {'id': 'http://beahan.net/laurie', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}}
 
     Attributes:
         links (SelfT):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Consequatur adipisci.'}.
+            'application/openapi3+json'}, 'self': 'At qui.'}.
         description (Union[Unset, str]): Optional description of the service Example: Some lengthy description of fire
             risk.
         id (Union[Unset, str]): Service ID Example: service:acme:oracle.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for region.
-        provider (Union[Unset, RefT]):  Example: {'id': 'http://gulgowski.name/junior', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam
-            nihil et.'}}.
+        provider (Union[Unset, RefT]):  Example: {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy':
+            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}.
     """
 
     links: "SelfT"

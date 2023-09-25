@@ -15,19 +15,20 @@ T = TypeVar("T", bound="ProductT")
 class ProductT:
     """
     Example:
-        {'id': 'Occaecati quia ut nostrum.', 'links': {'data': 'Quia ut pariatur.', 'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Sit cumque corrupti excepturi.'},
-            'mime-type': 'Dolore voluptatem.', 'name': 'Suscipit officiis.', 'size': 4314372988661854938, 'status': 'Non
-            occaecati sit.'}
+        {'id': 'Et magni.', 'links': {'data': 'Vitae et commodi dolores ea minus.', 'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Nemo quidem est ipsa perspiciatis
+            esse.'}, 'mime-type': 'Et officia.', 'name': 'Debitis reiciendis libero qui unde.', 'size': 9085050740354476555,
+            'status': 'Recusandae quisquam.'}
 
     Attributes:
-        id (Union[Unset, str]):  Example: Ex mollitia eum consequatur accusamus..
-        links (Union[Unset, SelfWithDataT]):  Example: {'data': 'Assumenda aut quia commodi.', 'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Eos labore.'}.
-        mime_type (Union[Unset, str]):  Example: Alias velit adipisci..
-        name (Union[Unset, str]):  Example: Incidunt aperiam perspiciatis sit pariatur..
-        size (Union[Unset, int]):  Example: 1667448502336650080.
-        status (Union[Unset, str]):  Example: Voluptatem reiciendis similique repellendus et a..
+        id (Union[Unset, str]):  Example: Ipsam quo dolorum et beatae laboriosam et..
+        links (Union[Unset, SelfWithDataT]):  Example: {'data': 'Sapiente possimus commodi qui sint aut.',
+            'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Architecto
+            facere veniam dolorem velit quia.'}.
+        mime_type (Union[Unset, str]):  Example: Qui fugit pariatur numquam omnis similique quisquam..
+        name (Union[Unset, str]):  Example: Maxime eius..
+        size (Union[Unset, int]):  Example: 4169950383954327222.
+        status (Union[Unset, str]):  Example: Libero ut nihil..
     """
 
     id: Union[Unset, str] = UNSET

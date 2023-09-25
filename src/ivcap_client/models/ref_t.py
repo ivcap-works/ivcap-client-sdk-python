@@ -15,13 +15,13 @@ T = TypeVar("T", bound="RefT")
 class RefT:
     """
     Example:
-        {'id': 'http://gulgowski.name/junior', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Ipsam deleniti magnam nihil et.'}}
+        {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
+            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}
 
     Attributes:
-        id (Union[Unset, str]):  Example: http://torphyzieme.biz/murl.
+        id (Union[Unset, str]):  Example: http://ledner.com/mike.
         links (Union[Unset, SelfT]):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Consequatur adipisci.'}.
+            'application/openapi3+json'}, 'self': 'At qui.'}.
     """
 
     id: Union[Unset, str] = UNSET

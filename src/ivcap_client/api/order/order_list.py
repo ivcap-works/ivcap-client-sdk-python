@@ -104,7 +104,7 @@ def sync_detailed(
 ) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, OrderListRT]]:
     """list order
 
-     orders
+     list orders
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of
@@ -167,7 +167,7 @@ def sync(
 ) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, OrderListRT]]:
     """list order
 
-     orders
+     list orders
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of
@@ -225,7 +225,7 @@ async def asyncio_detailed(
 ) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, OrderListRT]]:
     """list order
 
-     orders
+     list orders
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of
@@ -286,7 +286,7 @@ async def asyncio(
 ) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, OrderListRT]]:
     """list order
 
-     orders
+     list orders
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of

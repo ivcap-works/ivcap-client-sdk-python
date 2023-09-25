@@ -104,7 +104,7 @@ def sync_detailed(
 ) -> Response[Union[Any, ArtifactListRT, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
     """list artifact
 
-     artifacts
+     list artifacts
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of
@@ -127,7 +127,7 @@ def sync_detailed(
             on
                                         property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
             resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -167,7 +167,7 @@ def sync(
 ) -> Optional[Union[Any, ArtifactListRT, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
     """list artifact
 
-     artifacts
+     list artifacts
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of
@@ -190,7 +190,7 @@ def sync(
             on
                                         property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
             resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -225,7 +225,7 @@ async def asyncio_detailed(
 ) -> Response[Union[Any, ArtifactListRT, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
     """list artifact
 
-     artifacts
+     list artifacts
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of
@@ -248,7 +248,7 @@ async def asyncio_detailed(
             on
                                         property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
             resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -286,7 +286,7 @@ async def asyncio(
 ) -> Optional[Union[Any, ArtifactListRT, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
     """list artifact
 
-     artifacts
+     list artifacts
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of
@@ -309,7 +309,7 @@ async def asyncio(
             on
                                         property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
             resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
 

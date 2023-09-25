@@ -12,10 +12,11 @@ class InvalidScopesT:
     """Token scopes are invalid
 
     Example:
-        {'id': '123e4567-e89b-12d3-a456-426614174000', 'message': 'Consequatur qui voluptatem.'}
+        {'id': '123e4567-e89b-12d3-a456-426614174000', 'message': 'Voluptas ut aut placeat autem aut.'}
 
     Attributes:
-        message (str): Message of error Default: 'Not authorized to perform this action'. Example: Cumque in nulla..
+        message (str): Message of error Default: 'Not authorized to perform this action'. Example: Qui voluptas
+            consectetur cumque debitis..
         id (Union[Unset, str]): ID of involved resource Example: 123e4567-e89b-12d3-a456-426614174000.
     """
 

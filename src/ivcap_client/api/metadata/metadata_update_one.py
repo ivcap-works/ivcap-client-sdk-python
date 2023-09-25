@@ -105,7 +105,7 @@ def sync_detailed(
         entity_id (str): Entity to which attach metadata Example: urn:url:.....
         schema (str): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://ebert.org/georgiana.
+            Example: http://heidenreich.org/maximus.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.
@@ -152,7 +152,7 @@ def sync(
         entity_id (str): Entity to which attach metadata Example: urn:url:.....
         schema (str): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://ebert.org/georgiana.
+            Example: http://heidenreich.org/maximus.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.
@@ -194,7 +194,7 @@ async def asyncio_detailed(
         entity_id (str): Entity to which attach metadata Example: urn:url:.....
         schema (str): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://ebert.org/georgiana.
+            Example: http://heidenreich.org/maximus.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.
@@ -239,7 +239,7 @@ async def asyncio(
         entity_id (str): Entity to which attach metadata Example: urn:url:.....
         schema (str): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, None, str]): Policy guiding visibility and actions performed
-            Example: http://ebert.org/georgiana.
+            Example: http://heidenreich.org/maximus.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         json_body (Dict): Aspect content Example: {"$schema": ...}.

@@ -19,23 +19,18 @@ class WorkflowT:
     'opts' is expected to contain the same schema as 'basic'
 
     Example:
-        {'argo': 'Et dolore qui dolores est dolorum rerum.', 'basic': {'command': ['Quis fugiat.', 'Nostrum ex.',
-            'Laborum qui.', 'Rem assumenda sit magnam accusamus enim.'], 'cpu': {'limit': 'Quaerat nulla iure illum eum.',
-            'request': 'Est iusto eum rerum dolores sed.'}, 'image': 'Esse dolorem laudantium nisi laboriosam dolores.',
-            'memory': {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum rerum dolores sed.'}}, 'opts':
-            'Totam voluptas.', 'type': 'Accusamus doloremque et dolor ullam dolorem hic.'}
+        {'argo': 'Ullam illum assumenda explicabo aut.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu':
+            {'limit': '100m', 'request': '10m'}, 'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}},
+            'opts': 'Et porro ducimus corporis quas.', 'type': 'basic'}
 
     Attributes:
-        argo (Union[Unset, File]): Defines the workflow using argo's WF schema Example: Porro blanditiis nihil eligendi
-            perferendis cumque..
-        basic (Union[Unset, BasicWorkflowOptsT]):  Example: {'command': ['Rerum voluptas sit perferendis tempora
-            deserunt.', 'Excepturi impedit cupiditate et nihil.', 'Aut ipsum qui necessitatibus quidem sint.'], 'cpu':
-            {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum rerum dolores sed.'}, 'image': 'Nulla
-            corporis unde aperiam.', 'memory': {'limit': 'Quaerat nulla iure illum eum.', 'request': 'Est iusto eum rerum
-            dolores sed.'}}.
+        argo (Union[Unset, File]): Defines the workflow using argo's WF schema Example: Dolores quis quaerat consequatur
+            quas..
+        basic (Union[Unset, BasicWorkflowOptsT]):  Example: {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu':
+            {'limit': '100m', 'request': '10m'}, 'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}}.
         opts (Union[Unset, File]): Type specific options - left for backward compatibility, if possible use type
-            specific elements Example: Pariatur sint corrupti..
-        type (Union[Unset, str]): Type of workflow Example: Eos amet..
+            specific elements Example: Illo dolores inventore odit unde architecto quis..
+        type (Union[Unset, str]): Type of workflow Example: basic.
     """
 
     argo: Union[Unset, File] = UNSET

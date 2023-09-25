@@ -8,20 +8,20 @@ if TYPE_CHECKING:
     from ..models.self_t import SelfT
 
 
-T = TypeVar("T", bound="CreateResponseBodyTiny2")
+T = TypeVar("T", bound="CreateServiceResponseBodyTiny")
 
 
 @define
-class CreateResponseBodyTiny2:
-    """CreateResponseBody result type (tiny view)
+class CreateServiceResponseBodyTiny:
+    """create_service_response_body result type (tiny view)
 
     Example:
         {'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self':
-            'Ipsam deleniti magnam nihil et.'}, 'name': 'Fire risk for Lot2'}
+            'Omnis cum odit.'}, 'name': 'Fire risk for Lot2'}
 
     Attributes:
         links (SelfT):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Consequatur adipisci.'}.
+            'application/openapi3+json'}, 'self': 'At qui.'}.
         name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
     """
 
@@ -55,13 +55,13 @@ class CreateResponseBodyTiny2:
 
         name = d.pop("name", UNSET)
 
-        create_response_body_tiny_2 = cls(
+        create_service_response_body_tiny = cls(
             links=links,
             name=name,
         )
 
-        create_response_body_tiny_2.additional_properties = d
-        return create_response_body_tiny_2
+        create_service_response_body_tiny.additional_properties = d
+        return create_service_response_body_tiny
 
     @property
     def additional_keys(self) -> List[str]:

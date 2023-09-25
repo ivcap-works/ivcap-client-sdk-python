@@ -1,55 +1,35 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, List, Type, TypeVar
 
 from attrs import define, field
 
-from ..types import UNSET, Unset
-
-T = TypeVar("T", bound="ParameterT")
+T = TypeVar("T", bound="MetadataListItemRTAspect")
 
 
 @define
-class ParameterT:
-    """
+class MetadataListItemRTAspect:
+    """Attached metadata aspect
+
     Example:
-        {'name': 'Cupiditate autem corporis.', 'value': 'Quo ex mollitia.'}
+        {...}
 
-    Attributes:
-        name (Union[Unset, str]):  Example: Dolor recusandae..
-        value (Union[Unset, str]):  Example: Aliquam iure vero rerum incidunt commodi..
     """
 
-    name: Union[Unset, str] = UNSET
-    value: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        name = self.name
-        value = self.value
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if name is not UNSET:
-            field_dict["name"] = name
-        if value is not UNSET:
-            field_dict["value"] = value
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        name = d.pop("name", UNSET)
+        metadata_list_item_rt_aspect = cls()
 
-        value = d.pop("value", UNSET)
-
-        parameter_t = cls(
-            name=name,
-            value=value,
-        )
-
-        parameter_t.additional_properties = d
-        return parameter_t
+        metadata_list_item_rt_aspect.additional_properties = d
+        return metadata_list_item_rt_aspect
 
     @property
     def additional_keys(self) -> List[str]:

@@ -1,0 +1,2 @@
+project_name_override: sdk_client
+package_name_override: ivcap_client

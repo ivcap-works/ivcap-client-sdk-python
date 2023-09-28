@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
@@ -14,56 +14,55 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ServiceDescriptionT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ServiceDescriptionT:
     """
     Example:
-        {'account-id': 'cayp:account:acme', 'banner': 'http://kemmer.com/joshuah_reichert', 'description': 'This service
-            ...', 'metadata': [{'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est
-            incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'},
-            {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'}], 'name': 'Fire risk for Lot2',
-            'parameters': [{'description': 'The name of the region as according to ...', 'label': 'Region Name', 'name':
-            'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit':
-            'm'}], 'policy-id': 'Non occaecati sit.', 'provider-id': 'cayp:provider:acme', 'provider-ref':
-            'service_foo_patch_1', 'references': [{'title': 'Perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'},
-            {'title': 'Perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}], 'tags': ['tag1', 'tag2'],
-            'workflow': {'argo': 'Et vel.', 'basic': {'command': ['Molestiae cupiditate voluptas.', 'Voluptatibus illum aut
-            deserunt fugiat hic.'], 'cpu': {'limit': 'Sed ut in distinctio consequatur aut voluptas.', 'request': 'Quaerat
-            voluptas distinctio.'}, 'image': 'Quidem nulla quae provident dolor amet nulla.', 'memory': {'limit': 'Sed ut in
-            distinctio consequatur aut voluptas.', 'request': 'Quaerat voluptas distinctio.'}}, 'opts': 'Iure beatae libero
-            magnam culpa nulla.', 'type': 'Et aut autem deserunt sit architecto.'}}
+        {'account-id': 'urn:ivcap:account:0f0e3f57-80f7-4899-9b69-459af2efd789', 'banner':
+            'http://hoeger.biz/alisa.dare', 'description': 'This service ...', 'metadata': [{'name': 'Vel cupiditate iure
+            beatae libero.', 'value': 'Culpa nulla facilis voluptatem.'}, {'name': 'Vel cupiditate iure beatae libero.',
+            'value': 'Culpa nulla facilis voluptatem.'}, {'name': 'Vel cupiditate iure beatae libero.', 'value': 'Culpa
+            nulla facilis voluptatem.'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description': 'The name of the
+            region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
+            'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}], 'policy-id': 'Dolore nemo.',
+            'provider-id': 'urn:ivcap:provider:0f0e3f57-80f7-4899-9b69-459af2efd789', 'provider-ref': 'service_foo_patch_1',
+            'references': [{'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri':
+            'http://dach.name/candace.king'}, {'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri':
+            'http://dach.name/candace.king'}, {'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri':
+            'http://dach.name/candace.king'}, {'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri':
+            'http://dach.name/candace.king'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Et perferendis.', 'basic':
+            {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'}, 'image': 'alpine',
+            'memory': {'limit': '100Mi', 'request': '10Mi'}}, 'opts': 'Maxime eius voluptatibus tempore assumenda et qui.',
+            'type': 'basic'}}
 
     Attributes:
         account_id (str): Reference to account revenues for this service should be credited to Example:
-            cayp:account:acme.
+            urn:ivcap:account:0f0e3f57-80f7-4899-9b69-459af2efd789.
         description (str): More detailed description of the service Example: This service ....
         parameters (List['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
             region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
             'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}].
-        provider_id (str): Reference to service provider Example: cayp:provider:acme.
+        provider_id (str): Reference to service provider Example:
+            urn:ivcap:provider:0f0e3f57-80f7-4899-9b69-459af2efd789.
         workflow (WorkflowT): Defines the workflow to use to execute this service. Currently supported 'types' are
             'basic'
                     and 'argo'. In case of 'basic', use the 'basic' element for further parameters. In the current implementation
-                    'opts' is expected to contain the same schema as 'basic' Example: {'argo': 'Eos est vitae quos consequatur.',
-            'basic': {'command': ['Molestiae cupiditate voluptas.', 'Voluptatibus illum aut deserunt fugiat hic.'], 'cpu':
-            {'limit': 'Sed ut in distinctio consequatur aut voluptas.', 'request': 'Quaerat voluptas distinctio.'}, 'image':
-            'Quidem nulla quae provident dolor amet nulla.', 'memory': {'limit': 'Sed ut in distinctio consequatur aut
-            voluptas.', 'request': 'Quaerat voluptas distinctio.'}}, 'opts': 'Qui eum.', 'type': 'Et suscipit voluptatum qui
-            earum inventore.'}.
+                    'opts' is expected to contain the same schema as 'basic' Example: {'argo': 'Ullam illum assumenda explicabo
+            aut.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'},
+            'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}}, 'opts': 'Et porro ducimus corporis quas.',
+            'type': 'basic'}.
         banner (Union[Unset, str]): Link to banner image oprionally used for this service Example:
-            http://ledner.com/mike.
-        metadata (Union[Unset, List['ParameterT']]): Optional provider provided meta tags Example: [{'name': 'Reiciendis
-            est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo
-            quidem.'}, {'name': 'Reiciendis est incidunt.', 'value': 'Rerum nemo quidem.'}, {'name': 'Reiciendis est
-            incidunt.', 'value': 'Rerum nemo quidem.'}].
+            http://erdman.net/estella.
+        metadata (Union[Unset, List['ParameterT']]): Optional provider provided meta tags Example: [{'name': 'Vel
+            cupiditate iure beatae libero.', 'value': 'Culpa nulla facilis voluptatem.'}, {'name': 'Vel cupiditate iure
+            beatae libero.', 'value': 'Culpa nulla facilis voluptatem.'}].
         name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
-        policy_id (Union[Unset, str]): Reference to policy controlling access Example: Fuga ipsam quo..
+        policy_id (Union[Unset, str]): Reference to policy controlling access Example: Amet asperiores dicta eos amet..
         provider_ref (Union[Unset, str]): Provider provided reference. Should to be a single string with punctuations
             allowed. Might be changed, so please check result Example: service_foo_patch_1.
         references (Union[Unset, List['ReferenceT']]): Reference to account revenues for this service should be credited
-            to Example: [{'title': 'Perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Perspiciatis
-            esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Perspiciatis esse rerum.', 'uri':
-            'http://gulgowski.biz/kyle'}, {'title': 'Perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}].
+            to Example: [{'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri': 'http://dach.name/candace.king'},
+            {'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri': 'http://dach.name/candace.king'}].
         tags (Union[Unset, List[str]]): Optional provider provided tags Example: ['tag1', 'tag2'].
     """
 
@@ -79,7 +78,7 @@ class ServiceDescriptionT:
     provider_ref: Union[Unset, str] = UNSET
     references: Union[Unset, List["ReferenceT"]] = UNSET
     tags: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         account_id = self.account_id

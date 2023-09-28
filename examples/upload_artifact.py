@@ -9,6 +9,7 @@ pp = pprint.PrettyPrinter(indent=2)
 
 ivcap = IVCAP()
 artifact = ivcap.upload_artifact(
+    name="test-576",
     file_path=os.path.join(this_dir, "576.JPG"),
 )
 pp.pprint(artifact)

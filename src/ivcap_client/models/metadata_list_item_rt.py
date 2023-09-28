@@ -1,45 +1,44 @@
-from io import BytesIO
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
-from ..types import UNSET, File, FileJsonType, Unset
+from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.metadata_list_item_rt_aspect import MetadataListItemRTAspect
+
 
 T = TypeVar("T", bound="MetadataListItemRT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class MetadataListItemRT:
     """
     Example:
-        {'aspect': '{...}', 'aspectContext': 'Minus ut.', 'entity': 'urn:blue:transect.1', 'record-id':
+        {'aspect': '{...}', 'aspectContext': '{...}', 'entity': 'urn:blue:transect.1', 'record-id':
             'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}
 
     Attributes:
-        aspect (Union[Unset, File]): Attached metadata aspect Example: {...}.
-        aspect_context (Union[Unset, File]): If aspectPath was defined, this is what matched the query Example: Deleniti
-            magnam tempore..
+        aspect (Union[Unset, MetadataListItemRTAspect]): Attached metadata aspect Example: {...}.
+        aspect_context (Union[Unset, str]): If aspectPath was defined, this is what matched the query Example: {...}.
         entity (Union[Unset, str]): Entity ID Example: urn:blue:transect.1.
         record_id (Union[Unset, str]): Record ID Example: urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000.
         schema (Union[Unset, str]): Schema ID Example: urn:blue:schema.image.
     """
 
-    aspect: Union[Unset, File] = UNSET
-    aspect_context: Union[Unset, File] = UNSET
+    aspect: Union[Unset, "MetadataListItemRTAspect"] = UNSET
+    aspect_context: Union[Unset, str] = UNSET
     entity: Union[Unset, str] = UNSET
     record_id: Union[Unset, str] = UNSET
     schema: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        aspect: Union[Unset, FileJsonType] = UNSET
+        aspect: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.aspect, Unset):
-            aspect = self.aspect.to_tuple()
+            aspect = self.aspect.to_dict()
 
-        aspect_context: Union[Unset, FileJsonType] = UNSET
-        if not isinstance(self.aspect_context, Unset):
-            aspect_context = self.aspect_context.to_tuple()
-
+        aspect_context = self.aspect_context
         entity = self.entity
         record_id = self.record_id
         schema = self.schema
@@ -62,21 +61,17 @@ class MetadataListItemRT:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.metadata_list_item_rt_aspect import MetadataListItemRTAspect
+
         d = src_dict.copy()
         _aspect = d.pop("aspect", UNSET)
-        aspect: Union[Unset, File]
+        aspect: Union[Unset, MetadataListItemRTAspect]
         if isinstance(_aspect, Unset):
             aspect = UNSET
         else:
-            aspect = _aspect
+            aspect = MetadataListItemRTAspect.from_dict(_aspect)
 
-        _aspect_context = d.pop("aspectContext", UNSET)
-        aspect_context: Union[Unset, File]
-        if isinstance(_aspect_context, Unset):
-            aspect_context = UNSET
-        else:
-            #aspect_context = File(payload=BytesIO(_aspect_context))
-            aspect_context = _aspect_context
+        aspect_context = d.pop("aspectContext", UNSET)
 
         entity = d.pop("entity", UNSET)
 

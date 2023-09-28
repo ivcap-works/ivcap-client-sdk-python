@@ -12,26 +12,19 @@ from ...types import Response
 
 def _get_kwargs(
     id: str,
-    *,
-    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
-    url = "{}/1/services/{id}".format(client.base_url, id=id)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     return {
         "method": "delete",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "/1/services/{id}".format(
+            id=id,
+        ),
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, InvalidScopesT, NotImplementedT]]:
     if response.status_code == HTTPStatus.NO_CONTENT:
         response_204 = cast(Any, None)
@@ -57,7 +50,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[Any, InvalidScopesT, NotImplementedT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -77,7 +70,7 @@ def sync_detailed(
      Delete an existing services.
 
     Args:
-        id (str): ID of services to update Example: Aut ipsum qui necessitatibus quidem sint..
+        id (str): ID of services to update Example: Aut fuga..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -89,11 +82,9 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         id=id,
-        client=client,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -110,7 +101,7 @@ def sync(
      Delete an existing services.
 
     Args:
-        id (str): ID of services to update Example: Aut ipsum qui necessitatibus quidem sint..
+        id (str): ID of services to update Example: Aut fuga..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -136,7 +127,7 @@ async def asyncio_detailed(
      Delete an existing services.
 
     Args:
-        id (str): ID of services to update Example: Aut ipsum qui necessitatibus quidem sint..
+        id (str): ID of services to update Example: Aut fuga..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -148,11 +139,9 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         id=id,
-        client=client,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -167,7 +156,7 @@ async def asyncio(
      Delete an existing services.
 
     Args:
-        id (str): ID of services to update Example: Aut ipsum qui necessitatibus quidem sint..
+        id (str): ID of services to update Example: Aut fuga..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -1,7 +1,7 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
@@ -14,30 +14,25 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ArtifactListRT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ArtifactListRT:
     """
     Example:
         {'artifacts': [{'id': 'cayp:artifact:0000-000', 'links': {'describedBy': {'href': 'https://api.com/swagger/...',
-            'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}, 'mime-type': 'image/jpeg',
-            'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}, {'id': 'cayp:artifact:0000-000', 'links':
-            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis
-            reiciendis incidunt.'}, 'mime-type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status':
-            'ready'}, {'id': 'cayp:artifact:0000-000', 'links': {'describedBy': {'href': 'https://api.com/swagger/...',
-            'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}, 'mime-type': 'image/jpeg',
-            'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}, {'id': 'cayp:artifact:0000-000', 'links':
-            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis
-            reiciendis incidunt.'}, 'mime-type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status':
-            'ready'}], 'at-time': '1996-12-19T16:39:57-08:00', 'links': {'first': 'https://api.com/foo/...', 'next':
-            'https://api.com/foo/...', 'self': 'https://api.com/foo/...'}}
+            'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'mime-type': 'image/jpeg', 'name': 'Fire risk
+            for Lot2', 'size': 19000, 'status': 'ready'}, {'id': 'cayp:artifact:0000-000', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'mime-type':
+            'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}], 'at-time':
+            '1996-12-19T16:39:57-08:00', 'links': {'first': 'https://api.com/foo/...', 'next': 'https://api.com/foo/...',
+            'self': 'https://api.com/foo/...'}}
 
     Attributes:
         artifacts (List['ArtifactListItem']): Artifacts Example: [{'id': 'cayp:artifact:0000-000', 'links':
-            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis
-            reiciendis incidunt.'}, 'mime-type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status':
-            'ready'}, {'id': 'cayp:artifact:0000-000', 'links': {'describedBy': {'href': 'https://api.com/swagger/...',
-            'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}, 'mime-type': 'image/jpeg',
-            'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}].
+            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum
+            odit.'}, 'mime-type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}, {'id':
+            'cayp:artifact:0000-000', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
+            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'mime-type': 'image/jpeg', 'name': 'Fire risk for
+            Lot2', 'size': 19000, 'status': 'ready'}].
         links (NavT):  Example: {'first': 'https://api.com/foo/...', 'next': 'https://api.com/foo/...', 'self':
             'https://api.com/foo/...'}.
         at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
@@ -46,7 +41,7 @@ class ArtifactListRT:
     artifacts: List["ArtifactListItem"]
     links: "NavT"
     at_time: Union[Unset, datetime.datetime] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         artifacts = []

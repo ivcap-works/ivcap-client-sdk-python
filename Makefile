@@ -4,13 +4,17 @@ SRC_DIR:=${ROOT_DIR}/src
 
 .PHONY: copyx
 
-build: gen
+build: gen add-license
 	cd ${ROOT_DIR}
 	rm -rf ${ROOT_DIR}/dist/*
 	poetry build
 
+# https://www.digitalocean.com/community/tutorials/how-to-publish-python-packages-to-pypi-using-poetry-on-ubuntu-22-04
+publish: build
+	poetry publish
+
 test:
-	poetry run pytest ${ROOT_DIR}/tests/ --cov=ivcap_sdk_service --cov-report=xml
+	poetry run pytest ${ROOT_DIR}/tests/ --cov=ivcap_sdk_client --cov-report=xml
 
 
 SRC_DIR=${ROOT_DIR}/src/ivcap_client
@@ -34,7 +38,8 @@ gen:
 	rm -r ${ROOT_DIR}/build
 
 add-license:
-	licenseheaders -t .license.tmpl -y 2023 -d src
+	licenseheaders -t .license.tmpl -y 2023 -f src/ivcap_client/*.py
+	licenseheaders -t .license.tmpl -y 2023 -d src/ivcap_client/client
 
 docs:
 	rm -rf ${ROOT_DIR}/docs/_build

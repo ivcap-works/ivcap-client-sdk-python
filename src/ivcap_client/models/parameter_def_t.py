@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
@@ -11,29 +11,31 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ParameterDefT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ParameterDefT:
     """
     Example:
-        {'constant': True, 'default': 'Reiciendis incidunt.', 'description': 'Cupiditate autem corporis.', 'label':
-            'Dolor recusandae.', 'name': 'Beatae blanditiis sed iusto.', 'optional': False, 'options': [{'description':
-            'Esse modi.', 'value': 'Cumque quia sit exercitationem.'}, {'description': 'Esse modi.', 'value': 'Cumque quia
-            sit exercitationem.'}, {'description': 'Esse modi.', 'value': 'Cumque quia sit exercitationem.'},
-            {'description': 'Esse modi.', 'value': 'Cumque quia sit exercitationem.'}], 'type': 'Aliquam iure vero rerum
-            incidunt commodi.', 'unit': 'Quo ex mollitia.'}
+        {'constant': True, 'default': 'Corrupti repellat accusamus doloremque.', 'description': 'Aut ipsum qui
+            necessitatibus quidem sint.', 'label': 'Voluptas sit perferendis.', 'name': 'Corporis unde aperiam et nihil.',
+            'optional': True, 'options': [{'description': 'Sit ut fuga ea sapiente.', 'value': 'Nesciunt architecto sint
+            voluptatum repudiandae non.'}, {'description': 'Sit ut fuga ea sapiente.', 'value': 'Nesciunt architecto sint
+            voluptatum repudiandae non.'}, {'description': 'Sit ut fuga ea sapiente.', 'value': 'Nesciunt architecto sint
+            voluptatum repudiandae non.'}], 'type': 'Deserunt placeat excepturi impedit cupiditate et nihil.', 'unit':
+            'Porro blanditiis nihil eligendi perferendis cumque.'}
 
     Attributes:
         constant (Union[Unset, bool]):  Example: True.
-        default (Union[Unset, str]):  Example: Veniam dolorem velit quia fugit sapiente..
-        description (Union[Unset, str]):  Example: Quis numquam cumque magnam..
-        label (Union[Unset, str]):  Example: Nihil quia qui..
-        name (Union[Unset, str]):  Example: Ea libero..
+        default (Union[Unset, str]):  Example: Corporis voluptatibus..
+        description (Union[Unset, str]):  Example: Dignissimos atque reiciendis perferendis..
+        label (Union[Unset, str]):  Example: Tempore iusto..
+        name (Union[Unset, str]):  Example: Eveniet tenetur quasi cupiditate accusamus dolore..
         optional (Union[Unset, bool]):  Example: True.
-        options (Union[Unset, List['ParameterOptT']]):  Example: [{'description': 'Esse modi.', 'value': 'Cumque quia
-            sit exercitationem.'}, {'description': 'Esse modi.', 'value': 'Cumque quia sit exercitationem.'},
-            {'description': 'Esse modi.', 'value': 'Cumque quia sit exercitationem.'}].
-        type (Union[Unset, str]):  Example: Pariatur numquam omnis similique quisquam officia..
-        unit (Union[Unset, str]):  Example: Voluptates dolor atque..
+        options (Union[Unset, List['ParameterOptT']]):  Example: [{'description': 'Sit ut fuga ea sapiente.', 'value':
+            'Nesciunt architecto sint voluptatum repudiandae non.'}, {'description': 'Sit ut fuga ea sapiente.', 'value':
+            'Nesciunt architecto sint voluptatum repudiandae non.'}, {'description': 'Sit ut fuga ea sapiente.', 'value':
+            'Nesciunt architecto sint voluptatum repudiandae non.'}].
+        type (Union[Unset, str]):  Example: Ratione dolore dolor ut nisi optio..
+        unit (Union[Unset, str]):  Example: Omnis explicabo officiis vel eius in asperiores..
     """
 
     constant: Union[Unset, bool] = UNSET
@@ -45,7 +47,7 @@ class ParameterDefT:
     options: Union[Unset, List["ParameterOptT"]] = UNSET
     type: Union[Unset, str] = UNSET
     unit: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         constant = self.constant

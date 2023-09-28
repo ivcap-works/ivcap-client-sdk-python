@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..models.artifact_status_rt_status import ArtifactStatusRTStatus
 from ..types import UNSET, Unset
@@ -13,41 +13,44 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ArtifactStatusRT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ArtifactStatusRT:
     """
     Example:
-        {'account': {'id': 'http://gorczany.com/breanne.block', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}},
-            'cache-of': 'Commodi dolores.', 'created-at': '2022-01-01', 'data': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'},
-            'etag': 'Reiciendis tempore nulla nostrum.', 'id': 'type:scope:name', 'last-modified-at': '2022-01-01', 'links':
-            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis
-            reiciendis incidunt.'}, 'mime-type': 'Sit vel.', 'name': 'Fire risk per LGA', 'policy': {'id':
-            'http://gorczany.com/breanne.block', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}}, 'size': 3024051993118367746, 'status':
-            'error'}
+        {'account': {'id': 'http://beahan.net/laurie', 'links': {'describedBy': {'href': 'https://api.com/swagger/...',
+            'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}, 'cache-of': 'Quia nesciunt.', 'created-at':
+            '2022-01-01', 'data': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
+            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'etag': 'Voluptatem rerum qui amet earum.', 'id':
+            'type:scope:name', 'last-modified-at': '2022-01-01', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'location':
+            'Distinctio dolorum blanditiis quos officia nemo et.', 'mime-type': 'Libero voluptatem quis quam repudiandae
+            dolor.', 'name': 'Fire risk per LGA', 'policy': {'id': 'http://beahan.net/laurie', 'links': {'describedBy':
+            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}},
+            'size': 584529819162657777, 'status': 'partial', 'tus-offset': 2098596842068964345, 'tus-resumable': 'Voluptatum
+            qui earum inventore.'}
 
     Attributes:
         id (str): Artifact ID Example: type:scope:name.
         links (SelfT):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Corrupti laborum qui incidunt.'}.
-        status (ArtifactStatusRTStatus): Artifact status Example: pending.
-        account (Union[Unset, RefT]):  Example: {'id': 'http://dooley.name/marlee.mueller', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis
-            incidunt.'}}.
-        cache_of (Union[Unset, str]): URL of object this artifact is caching Example: Explicabo ducimus..
+            'application/openapi3+json'}, 'self': 'At qui.'}.
+        status (ArtifactStatusRTStatus): Artifact status Example: ready.
+        account (Union[Unset, RefT]):  Example: {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}.
+        cache_of (Union[Unset, str]): URL of object this artifact is caching Example: Hic dignissimos vero consequatur..
         created_at (Union[Unset, str]): DateTime artifact was created Example: 2022-01-01.
         data (Union[Unset, SelfT]):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Corrupti laborum qui incidunt.'}.
-        etag (Union[Unset, str]): ETAG of artifact Example: Est illo..
+            'application/openapi3+json'}, 'self': 'At qui.'}.
+        etag (Union[Unset, str]): ETAG of artifact Example: In similique..
         last_modified_at (Union[Unset, str]): DateTime artifact was last modified Example: 2022-01-01.
-        mime_type (Union[Unset, str]): Mime-type of data Example: Perferendis quis a..
+        location (Union[Unset, str]): link back to record Example: Voluptas consectetur quia sint aut odit..
+        mime_type (Union[Unset, str]): Mime-type of data Example: Reprehenderit quia..
         name (Union[Unset, str]): Optional name Example: Fire risk per LGA.
-        policy (Union[Unset, RefT]):  Example: {'id': 'http://dooley.name/marlee.mueller', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis
-            incidunt.'}}.
-        size (Union[Unset, int]): Size of data Example: 6677373902791452367.
+        policy (Union[Unset, RefT]):  Example: {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}.
+        size (Union[Unset, int]): Size of data Example: 9098245488094500492.
+        tus_offset (Union[Unset, int]): TUS offset for partially uploaded content Example: 1538876244134645216.
+        tus_resumable (Union[Unset, str]): indicate version of TUS supported Example: Nulla quo ut asperiores temporibus
+            quia..
     """
 
     id: str
@@ -59,11 +62,14 @@ class ArtifactStatusRT:
     data: Union[Unset, "SelfT"] = UNSET
     etag: Union[Unset, str] = UNSET
     last_modified_at: Union[Unset, str] = UNSET
+    location: Union[Unset, str] = UNSET
     mime_type: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
     policy: Union[Unset, "RefT"] = UNSET
     size: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    tus_offset: Union[Unset, int] = UNSET
+    tus_resumable: Union[Unset, str] = UNSET
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id
@@ -83,6 +89,7 @@ class ArtifactStatusRT:
 
         etag = self.etag
         last_modified_at = self.last_modified_at
+        location = self.location
         mime_type = self.mime_type
         name = self.name
         policy: Union[Unset, Dict[str, Any]] = UNSET
@@ -90,6 +97,8 @@ class ArtifactStatusRT:
             policy = self.policy.to_dict()
 
         size = self.size
+        tus_offset = self.tus_offset
+        tus_resumable = self.tus_resumable
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -112,6 +121,8 @@ class ArtifactStatusRT:
             field_dict["etag"] = etag
         if last_modified_at is not UNSET:
             field_dict["last-modified-at"] = last_modified_at
+        if location is not UNSET:
+            field_dict["location"] = location
         if mime_type is not UNSET:
             field_dict["mime-type"] = mime_type
         if name is not UNSET:
@@ -120,6 +131,10 @@ class ArtifactStatusRT:
             field_dict["policy"] = policy
         if size is not UNSET:
             field_dict["size"] = size
+        if tus_offset is not UNSET:
+            field_dict["tus-offset"] = tus_offset
+        if tus_resumable is not UNSET:
+            field_dict["tus-resumable"] = tus_resumable
 
         return field_dict
 
@@ -157,6 +172,8 @@ class ArtifactStatusRT:
 
         last_modified_at = d.pop("last-modified-at", UNSET)
 
+        location = d.pop("location", UNSET)
+
         mime_type = d.pop("mime-type", UNSET)
 
         name = d.pop("name", UNSET)
@@ -170,6 +187,10 @@ class ArtifactStatusRT:
 
         size = d.pop("size", UNSET)
 
+        tus_offset = d.pop("tus-offset", UNSET)
+
+        tus_resumable = d.pop("tus-resumable", UNSET)
+
         artifact_status_rt = cls(
             id=id,
             links=links,
@@ -180,10 +201,13 @@ class ArtifactStatusRT:
             data=data,
             etag=etag,
             last_modified_at=last_modified_at,
+            location=location,
             mime_type=mime_type,
             name=name,
             policy=policy,
             size=size,
+            tus_offset=tus_offset,
+            tus_resumable=tus_resumable,
         )
 
         artifact_status_rt.additional_properties = d

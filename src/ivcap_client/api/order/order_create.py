@@ -16,29 +16,21 @@ from ...types import Response
 
 def _get_kwargs(
     *,
-    client: AuthenticatedClient,
     json_body: OrderRequestT,
 ) -> Dict[str, Any]:
-    url = "{}/1/orders".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     json_json_body = json_body.to_dict()
 
     return {
         "method": "post",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "/1/orders",
         "json": json_json_body,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, OrderStatusRT, ResourceNotFoundT]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = OrderStatusRT.from_dict(response.json())
@@ -76,7 +68,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, OrderStatusRT, ResourceNotFoundT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -96,11 +88,11 @@ def sync_detailed(
      Create a new orders and return its status.
 
     Args:
-        json_body (OrderRequestT):  Example: {'accountID':
+        json_body (OrderRequestT):  Example: {'account-id':
             'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for Lot2',
             'parameters': [{'name': 'region', 'value': 'Upper Valley'}, {'name': 'threshold', 'value':
-            10}], 'policyID': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'serviceID':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000'}.
+            '10'}], 'policy-id': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'service-
+            id': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'tags': ['tag1', 'tag2']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -111,12 +103,10 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         json_body=json_body,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -133,11 +123,11 @@ def sync(
      Create a new orders and return its status.
 
     Args:
-        json_body (OrderRequestT):  Example: {'accountID':
+        json_body (OrderRequestT):  Example: {'account-id':
             'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for Lot2',
             'parameters': [{'name': 'region', 'value': 'Upper Valley'}, {'name': 'threshold', 'value':
-            10}], 'policyID': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'serviceID':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000'}.
+            '10'}], 'policy-id': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'service-
+            id': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'tags': ['tag1', 'tag2']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -163,11 +153,11 @@ async def asyncio_detailed(
      Create a new orders and return its status.
 
     Args:
-        json_body (OrderRequestT):  Example: {'accountID':
+        json_body (OrderRequestT):  Example: {'account-id':
             'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for Lot2',
             'parameters': [{'name': 'region', 'value': 'Upper Valley'}, {'name': 'threshold', 'value':
-            10}], 'policyID': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'serviceID':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000'}.
+            '10'}], 'policy-id': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'service-
+            id': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'tags': ['tag1', 'tag2']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -178,12 +168,10 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         json_body=json_body,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -198,11 +186,11 @@ async def asyncio(
      Create a new orders and return its status.
 
     Args:
-        json_body (OrderRequestT):  Example: {'accountID':
+        json_body (OrderRequestT):  Example: {'account-id':
             'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for Lot2',
             'parameters': [{'name': 'region', 'value': 'Upper Valley'}, {'name': 'threshold', 'value':
-            10}], 'policyID': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'serviceID':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000'}.
+            '10'}], 'policy-id': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'service-
+            id': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'tags': ['tag1', 'tag2']}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

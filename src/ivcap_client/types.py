@@ -1,8 +1,13 @@
+#
+# Copyright (c) 2023 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file. See the AUTHORS file for names of contributors.
+#
 """ Contains some shared types for properties """
 from http import HTTPStatus
 from typing import BinaryIO, Generic, Literal, MutableMapping, Optional, Tuple, TypeVar
 
-import attr
+from attrs import define
 
 
 class Unset:
@@ -15,7 +20,7 @@ UNSET: Unset = Unset()
 FileJsonType = Tuple[Optional[str], BinaryIO, Optional[str]]
 
 
-@attr.s(auto_attribs=True)
+@define
 class File:
     """Contains information for file uploads"""
 
@@ -31,7 +36,7 @@ class File:
 T = TypeVar("T")
 
 
-@attr.s(auto_attribs=True)
+@define
 class Response(Generic[T]):
     """A response from an endpoint"""
 

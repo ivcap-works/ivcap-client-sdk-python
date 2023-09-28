@@ -7,14 +7,13 @@ from .artifact_list_rt import ArtifactListRT
 from .artifact_status_rt import ArtifactStatusRT
 from .artifact_status_rt_status import ArtifactStatusRTStatus
 from .basic_workflow_opts_t import BasicWorkflowOptsT
-from .create_response_body_tiny import CreateResponseBodyTiny
-from .create_response_body_tiny_2 import CreateResponseBodyTiny2
-from .create_response_body_tiny_status import CreateResponseBodyTinyStatus
+from .create_service_response_body_tiny import CreateServiceResponseBodyTiny
 from .described_by_t import DescribedByT
 from .invalid_parameter_value import InvalidParameterValue
 from .invalid_scopes_t import InvalidScopesT
 from .list_meta_rt import ListMetaRT
 from .metadata_list_item_rt import MetadataListItemRT
+from .metadata_list_item_rt_aspect import MetadataListItemRTAspect
 from .metadata_record_rt import MetadataRecordRT
 from .nav_t import NavT
 from .not_implemented_t import NotImplementedT
@@ -28,6 +27,8 @@ from .parameter_def_t import ParameterDefT
 from .parameter_opt_t import ParameterOptT
 from .parameter_t import ParameterT
 from .product_t import ProductT
+from .read_response_body_tiny import ReadResponseBodyTiny
+from .read_response_body_tiny_status import ReadResponseBodyTinyStatus
 from .ref_t import RefT
 from .reference_t import ReferenceT
 from .resource_memory_t import ResourceMemoryT
@@ -49,14 +50,13 @@ __all__ = (
     "ArtifactStatusRT",
     "ArtifactStatusRTStatus",
     "BasicWorkflowOptsT",
-    "CreateResponseBodyTiny",
-    "CreateResponseBodyTiny2",
-    "CreateResponseBodyTinyStatus",
+    "CreateServiceResponseBodyTiny",
     "DescribedByT",
     "InvalidParameterValue",
     "InvalidScopesT",
     "ListMetaRT",
     "MetadataListItemRT",
+    "MetadataListItemRTAspect",
     "MetadataRecordRT",
     "NavT",
     "NotImplementedT",
@@ -70,6 +70,8 @@ __all__ = (
     "ParameterOptT",
     "ParameterT",
     "ProductT",
+    "ReadResponseBodyTiny",
+    "ReadResponseBodyTinyStatus",
     "ReferenceT",
     "RefT",
     "ResourceMemoryT",

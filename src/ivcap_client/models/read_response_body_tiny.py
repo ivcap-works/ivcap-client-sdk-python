@@ -1,36 +1,36 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
-from ..models.create_response_body_tiny_status import CreateResponseBodyTinyStatus
+from ..models.read_response_body_tiny_status import ReadResponseBodyTinyStatus
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.self_t import SelfT
 
 
-T = TypeVar("T", bound="CreateResponseBodyTiny")
+T = TypeVar("T", bound="ReadResponseBodyTiny")
 
 
-@attr.s(auto_attribs=True)
-class CreateResponseBodyTiny:
-    """CreateResponseBody result type (tiny view)
+@define
+class ReadResponseBodyTiny:
+    """ReadResponseBody result type (tiny view)
 
     Example:
         {'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self':
-            'Officiis reiciendis incidunt.'}, 'name': 'Fire risk for Lot2', 'status': 'pending'}
+            'Omnis cum odit.'}, 'name': 'Fire risk for Lot2', 'status': 'pending'}
 
     Attributes:
         links (Union[Unset, SelfT]):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Corrupti laborum qui incidunt.'}.
+            'application/openapi3+json'}, 'self': 'At qui.'}.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
-        status (Union[Unset, CreateResponseBodyTinyStatus]): Order status Example: executing.
+        status (Union[Unset, ReadResponseBodyTinyStatus]): Order status Example: unknown.
     """
 
     links: Union[Unset, "SelfT"] = UNSET
     name: Union[Unset, str] = UNSET
-    status: Union[Unset, CreateResponseBodyTinyStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    status: Union[Unset, ReadResponseBodyTinyStatus] = UNSET
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         links: Union[Unset, Dict[str, Any]] = UNSET
@@ -69,20 +69,20 @@ class CreateResponseBodyTiny:
         name = d.pop("name", UNSET)
 
         _status = d.pop("status", UNSET)
-        status: Union[Unset, CreateResponseBodyTinyStatus]
+        status: Union[Unset, ReadResponseBodyTinyStatus]
         if isinstance(_status, Unset):
             status = UNSET
         else:
-            status = CreateResponseBodyTinyStatus(_status)
+            status = ReadResponseBodyTinyStatus(_status)
 
-        create_response_body_tiny = cls(
+        read_response_body_tiny = cls(
             links=links,
             name=name,
             status=status,
         )
 
-        create_response_body_tiny.additional_properties = d
-        return create_response_body_tiny
+        read_response_body_tiny.additional_properties = d
+        return read_response_body_tiny
 
     @property
     def additional_keys(self) -> List[str]:

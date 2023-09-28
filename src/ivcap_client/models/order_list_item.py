@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..models.order_list_item_status import OrderListItemStatus
 from ..types import UNSET, Unset
@@ -12,19 +12,19 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="OrderListItem")
 
 
-@attr.s(auto_attribs=True)
+@define
 class OrderListItem:
     """
     Example:
-        {'account_id': '2022-01-01', 'finished_at': '2022-01-01', 'id':
+        {'account-id': '2022-01-01', 'finished-at': '2022-01-01', 'id':
             'cayp:order:123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'},
-            'name': 'Fire risk for Lot2', 'ordered_at': '2022-01-01', 'service_id': '2022-01-01', 'started_at':
-            '2022-01-01', 'status': 'pending'}
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire
+            risk for Lot2', 'ordered-at': '2022-01-01', 'service-id': '2022-01-01', 'started-at': '2022-01-01', 'status':
+            'pending'}
 
     Attributes:
         links (SelfT):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Corrupti laborum qui incidunt.'}.
+            'application/openapi3+json'}, 'self': 'At qui.'}.
         account_id (Union[Unset, str]): ID of ordered service Example: 2022-01-01.
         finished_at (Union[Unset, str]): DateTime order was finished Example: 2022-01-01.
         id (Union[Unset, str]): Order ID Example: cayp:order:123e4567-e89b-12d3-a456-426614174000.
@@ -32,7 +32,7 @@ class OrderListItem:
         ordered_at (Union[Unset, str]): DateTime order was placed Example: 2022-01-01.
         service_id (Union[Unset, str]): ID of ordered service Example: 2022-01-01.
         started_at (Union[Unset, str]): DateTime processing of order started Example: 2022-01-01.
-        status (Union[Unset, OrderListItemStatus]): Order status Example: finished.
+        status (Union[Unset, OrderListItemStatus]): Order status Example: unknown.
     """
 
     links: "SelfT"
@@ -44,7 +44,7 @@ class OrderListItem:
     service_id: Union[Unset, str] = UNSET
     started_at: Union[Unset, str] = UNSET
     status: Union[Unset, OrderListItemStatus] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         links = self.links.to_dict()
@@ -68,19 +68,19 @@ class OrderListItem:
             }
         )
         if account_id is not UNSET:
-            field_dict["account_id"] = account_id
+            field_dict["account-id"] = account_id
         if finished_at is not UNSET:
-            field_dict["finished_at"] = finished_at
+            field_dict["finished-at"] = finished_at
         if id is not UNSET:
             field_dict["id"] = id
         if name is not UNSET:
             field_dict["name"] = name
         if ordered_at is not UNSET:
-            field_dict["ordered_at"] = ordered_at
+            field_dict["ordered-at"] = ordered_at
         if service_id is not UNSET:
-            field_dict["service_id"] = service_id
+            field_dict["service-id"] = service_id
         if started_at is not UNSET:
-            field_dict["started_at"] = started_at
+            field_dict["started-at"] = started_at
         if status is not UNSET:
             field_dict["status"] = status
 
@@ -93,19 +93,19 @@ class OrderListItem:
         d = src_dict.copy()
         links = SelfT.from_dict(d.pop("links"))
 
-        account_id = d.pop("account_id", UNSET)
+        account_id = d.pop("account-id", UNSET)
 
-        finished_at = d.pop("finished_at", UNSET)
+        finished_at = d.pop("finished-at", UNSET)
 
         id = d.pop("id", UNSET)
 
         name = d.pop("name", UNSET)
 
-        ordered_at = d.pop("ordered_at", UNSET)
+        ordered_at = d.pop("ordered-at", UNSET)
 
-        service_id = d.pop("service_id", UNSET)
+        service_id = d.pop("service-id", UNSET)
 
-        started_at = d.pop("started_at", UNSET)
+        started_at = d.pop("started-at", UNSET)
 
         _status = d.pop("status", UNSET)
         status: Union[Unset, OrderListItemStatus]

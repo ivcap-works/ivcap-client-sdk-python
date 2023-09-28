@@ -11,41 +11,31 @@ from ...models.not_implemented_t import NotImplementedT
 from ...models.resource_not_found_t import ResourceNotFoundT
 from ...models.service_description_t import ServiceDescriptionT
 from ...models.service_status_rt import ServiceStatusRT
-from ...types import UNSET, Response, Unset
+from ...types import Response
 
 
 def _get_kwargs(
-    id: str,
     *,
     json_body: ServiceDescriptionT,
-    force_create: Union[Unset, None, bool] = UNSET,
 ) -> Dict[str, Any]:
     pass
-
-    params: Dict[str, Any] = {}
-    params["force-create"] = force_create
-
-    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     json_json_body = json_body.to_dict()
 
     return {
-        "method": "put",
-        "url": "/1/services/{id}".format(
-            id=id,
-        ),
+        "method": "post",
+        "url": "/1/services",
         "json": json_json_body,
-        "params": params,
     }
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ResourceNotFoundT, ServiceStatusRT]]:
-    if response.status_code == HTTPStatus.OK:
-        response_200 = ServiceStatusRT.from_dict(response.json())
+    if response.status_code == HTTPStatus.CREATED:
+        response_201 = ServiceStatusRT.from_dict(response.json())
 
-        return response_200
+        return response_201
     if response.status_code == HTTPStatus.BAD_REQUEST:
         response_400 = cast(Any, None)
         return response_400
@@ -60,6 +50,10 @@ def _parse_response(
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
+    if response.status_code == HTTPStatus.CONFLICT:
+        response_409 = ResourceNotFoundT.from_dict(response.json())
+
+        return response_409
     if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
         response_422 = InvalidParameterValue.from_dict(response.json())
 
@@ -86,19 +80,15 @@ def _build_response(
 
 
 def sync_detailed(
-    id: str,
     *,
     client: AuthenticatedClient,
     json_body: ServiceDescriptionT,
-    force_create: Union[Unset, None, bool] = UNSET,
 ) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ResourceNotFoundT, ServiceStatusRT]]:
-    """update service
+    """create_service service
 
-     Update an existing services and return its status.
+     Create a new services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Voluptatem sit..
-        force_create (Union[Unset, None, bool]): Create if not already exist Example: True.
         json_body (ServiceDescriptionT):  Example: {'account-id':
             'urn:ivcap:account:0f0e3f57-80f7-4899-9b69-459af2efd789', 'banner':
             'http://hoeger.biz/alisa.dare', 'description': 'This service ...', 'metadata': [{'name':
@@ -129,9 +119,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        id=id,
         json_body=json_body,
-        force_create=force_create,
     )
 
     response = client.get_httpx_client().request(
@@ -142,19 +130,15 @@ def sync_detailed(
 
 
 def sync(
-    id: str,
     *,
     client: AuthenticatedClient,
     json_body: ServiceDescriptionT,
-    force_create: Union[Unset, None, bool] = UNSET,
 ) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ResourceNotFoundT, ServiceStatusRT]]:
-    """update service
+    """create_service service
 
-     Update an existing services and return its status.
+     Create a new services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Voluptatem sit..
-        force_create (Union[Unset, None, bool]): Create if not already exist Example: True.
         json_body (ServiceDescriptionT):  Example: {'account-id':
             'urn:ivcap:account:0f0e3f57-80f7-4899-9b69-459af2efd789', 'banner':
             'http://hoeger.biz/alisa.dare', 'description': 'This service ...', 'metadata': [{'name':
@@ -185,27 +169,21 @@ def sync(
     """
 
     return sync_detailed(
-        id=id,
         client=client,
         json_body=json_body,
-        force_create=force_create,
     ).parsed
 
 
 async def asyncio_detailed(
-    id: str,
     *,
     client: AuthenticatedClient,
     json_body: ServiceDescriptionT,
-    force_create: Union[Unset, None, bool] = UNSET,
 ) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ResourceNotFoundT, ServiceStatusRT]]:
-    """update service
+    """create_service service
 
-     Update an existing services and return its status.
+     Create a new services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Voluptatem sit..
-        force_create (Union[Unset, None, bool]): Create if not already exist Example: True.
         json_body (ServiceDescriptionT):  Example: {'account-id':
             'urn:ivcap:account:0f0e3f57-80f7-4899-9b69-459af2efd789', 'banner':
             'http://hoeger.biz/alisa.dare', 'description': 'This service ...', 'metadata': [{'name':
@@ -236,9 +214,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        id=id,
         json_body=json_body,
-        force_create=force_create,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -247,19 +223,15 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    id: str,
     *,
     client: AuthenticatedClient,
     json_body: ServiceDescriptionT,
-    force_create: Union[Unset, None, bool] = UNSET,
 ) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ResourceNotFoundT, ServiceStatusRT]]:
-    """update service
+    """create_service service
 
-     Update an existing services and return its status.
+     Create a new services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Voluptatem sit..
-        force_create (Union[Unset, None, bool]): Create if not already exist Example: True.
         json_body (ServiceDescriptionT):  Example: {'account-id':
             'urn:ivcap:account:0f0e3f57-80f7-4899-9b69-459af2efd789', 'banner':
             'http://hoeger.biz/alisa.dare', 'description': 'This service ...', 'metadata': [{'name':
@@ -291,9 +263,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            id=id,
             client=client,
             json_body=json_body,
-            force_create=force_create,
         )
     ).parsed

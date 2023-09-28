@@ -1,7 +1,13 @@
+#
+# Copyright (c) 2023 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file. See the AUTHORS file for names of contributors.
+#
 
 from __future__ import annotations # postpone evaluation of annotations 
 from datetime import datetime
 import os
+import json
 from typing import IO, Dict, Iterator, Optional
 from ivcap_client.api.artifact import artifact_upload
 from ivcap_client.artifact import Artifact, ArtifactIter
@@ -9,6 +15,7 @@ from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
 from tusclient.client import TusClient
 from sys import maxsize as MAXSIZE
 import mimetypes
+import base64
 
 from ivcap_client.api.metadata import metadata_add
 from ivcap_client.client.client import AuthenticatedClient
@@ -140,7 +147,7 @@ class IVCAP:
         kwargs = {
             "entity_id": entity,
             "schema": schema,
-            "json_body": aspect,
+            "json_body": aspect, #json.dumps(aspect),
             "client": self._client,
             "content_type": "application/json",
         }
@@ -278,7 +285,8 @@ class IVCAP:
             'tus_resumable': "1.0.0",
         }
         if name:
-            kwargs['x_name'] = name
+            n = base64.b64encode(bytes(name, 'utf-8'))
+            kwargs['x_name'] = n
 
         r = artifact_upload.sync_detailed(client=self._client, **kwargs)
         if r.status_code >= 300 :

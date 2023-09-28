@@ -1,7 +1,7 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
@@ -14,32 +14,32 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ListMetaRT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ListMetaRT:
     """
     Example:
-        {'aspect-path': 'Fugiat facere quas.', 'at-time': '1996-12-19T16:39:57-08:00', 'entity-id':
-            'urn:blue:image.collA.12', 'links': {'first': 'https://api.com/foo/...', 'next': 'https://api.com/foo/...',
-            'self': 'https://api.com/foo/...'}, 'records': [{'aspect': '{...}', 'aspectContext': 'Iste laborum dolorem.',
-            'entity': 'urn:blue:transect.1', 'record-id': 'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema':
-            'urn:blue:schema.image'}, {'aspect': '{...}', 'aspectContext': 'Iste laborum dolorem.', 'entity':
+        {'aspect-path': 'Qui eum.', 'at-time': '1996-12-19T16:39:57-08:00', 'entity-id': 'urn:blue:image.collA.12',
+            'links': {'first': 'https://api.com/foo/...', 'next': 'https://api.com/foo/...', 'self':
+            'https://api.com/foo/...'}, 'records': [{'aspect': '{...}', 'aspectContext': '{...}', 'entity':
             'urn:blue:transect.1', 'record-id': 'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema':
-            'urn:blue:schema.image'}, {'aspect': '{...}', 'aspectContext': 'Iste laborum dolorem.', 'entity':
-            'urn:blue:transect.1', 'record-id': 'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema':
-            'urn:blue:schema.image'}, {'aspect': '{...}', 'aspectContext': 'Iste laborum dolorem.', 'entity':
-            'urn:blue:transect.1', 'record-id': 'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema':
-            'urn:blue:schema.image'}], 'schema': 'urn:blue:image,urn:blue:location'}
+            'urn:blue:schema.image'}, {'aspect': '{...}', 'aspectContext': '{...}', 'entity': 'urn:blue:transect.1',
+            'record-id': 'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'},
+            {'aspect': '{...}', 'aspectContext': '{...}', 'entity': 'urn:blue:transect.1', 'record-id':
+            'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}], 'schema':
+            'urn:blue:image,urn:blue:location'}
 
     Attributes:
         links (NavT):  Example: {'first': 'https://api.com/foo/...', 'next': 'https://api.com/foo/...', 'self':
             'https://api.com/foo/...'}.
         records (List['MetadataListItemRT']): List of metadata records Example: [{'aspect': '{...}', 'aspectContext':
-            'Iste laborum dolorem.', 'entity': 'urn:blue:transect.1', 'record-id':
-            'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}, {'aspect': '{...}',
-            'aspectContext': 'Iste laborum dolorem.', 'entity': 'urn:blue:transect.1', 'record-id':
+            '{...}', 'entity': 'urn:blue:transect.1', 'record-id': 'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000',
+            'schema': 'urn:blue:schema.image'}, {'aspect': '{...}', 'aspectContext': '{...}', 'entity':
+            'urn:blue:transect.1', 'record-id': 'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema':
+            'urn:blue:schema.image'}, {'aspect': '{...}', 'aspectContext': '{...}', 'entity': 'urn:blue:transect.1',
+            'record-id': 'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'},
+            {'aspect': '{...}', 'aspectContext': '{...}', 'entity': 'urn:blue:transect.1', 'record-id':
             'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}].
-        aspect_path (Union[Unset, str]): Optional json path to further filter on returned list Example: Ad alias unde
-            sapiente..
+        aspect_path (Union[Unset, str]): Optional json path to further filter on returned list Example: Vitae quos..
         at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
         entity_id (Union[Unset, str]): Entity for which to request metadata Example: urn:blue:image.collA.12.
         schema (Union[Unset, str]): Optional schema to filter on Example: urn:blue:image,urn:blue:location.
@@ -51,7 +51,7 @@ class ListMetaRT:
     at_time: Union[Unset, datetime.datetime] = UNSET
     entity_id: Union[Unset, str] = UNSET
     schema: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         links = self.links.to_dict()

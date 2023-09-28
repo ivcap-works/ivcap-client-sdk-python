@@ -13,7 +13,6 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    client: AuthenticatedClient,
     content_type: Union[Unset, str] = UNSET,
     content_encoding: Union[Unset, str] = UNSET,
     content_length: Union[Unset, int] = UNSET,
@@ -24,11 +23,7 @@ def _get_kwargs(
     upload_length: Union[Unset, int] = UNSET,
     tus_resumable: Union[Unset, str] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/1/artifacts".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
-
+    headers = {}
     if not isinstance(content_type, Unset):
         headers["Content-Type"] = content_type
 
@@ -58,16 +53,13 @@ def _get_kwargs(
 
     return {
         "method": "post",
-        "url": url,
+        "url": "/1/artifacts",
         "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, ArtifactStatusRT, InvalidScopesT, NotImplementedT]]:
     if response.status_code == HTTPStatus.CREATED:
         response_201 = ArtifactStatusRT.from_dict(response.json())
@@ -94,7 +86,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[Any, ArtifactStatusRT, InvalidScopesT, NotImplementedT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -151,7 +143,6 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         content_type=content_type,
         content_encoding=content_encoding,
         content_length=content_length,
@@ -163,8 +154,7 @@ def sync_detailed(
         tus_resumable=tus_resumable,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -278,7 +268,6 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         content_type=content_type,
         content_encoding=content_encoding,
         content_length=content_length,
@@ -290,8 +279,7 @@ async def asyncio_detailed(
         tus_resumable=tus_resumable,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 

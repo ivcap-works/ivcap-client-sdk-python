@@ -1,6 +1,12 @@
+#
+# Copyright (c) 2023 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file. See the AUTHORS file for names of contributors.
+#
 
 from __future__ import annotations # postpone evaluation of annotations 
 from typing import List, Optional
+import json
 from ivcap_client.api.metadata import metadata_list, metadata_read
 from ivcap_client.models.list_meta_rt import ListMetaRT
 from ivcap_client.models.metadata_list_item_rt import MetadataListItemRT
@@ -40,6 +46,9 @@ class Metadata:
     def aspect(self, refresh=False) -> dict:
         if refresh:
             self._refresh()
+        if isinstance(self._aspect, str):
+            s = self._aspect
+            self._aspect = json.loads(s)
         return self._aspect
 
     def _refresh(self):

@@ -1,26 +1,26 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ReferenceT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ReferenceT:
     """
     Example:
-        {'title': 'Quis laborum mollitia animi sapiente eos libero.', 'uri': 'http://barrows.net/adriana.sanford'}
+        {'title': 'Beatae incidunt voluptas sequi debitis est quis.', 'uri': 'http://rowejakubowski.biz/jason.bosco'}
 
     Attributes:
-        title (Union[Unset, str]): Title of reference document Example: Dolorum sed..
-        uri (Union[Unset, str]): Link to document Example: http://hesseljakubowski.com/alexa.
+        title (Union[Unset, str]): Title of reference document Example: Et a..
+        uri (Union[Unset, str]): Link to document Example: http://ziemann.biz/lucienne.
     """
 
     title: Union[Unset, str] = UNSET
     uri: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         title = self.title

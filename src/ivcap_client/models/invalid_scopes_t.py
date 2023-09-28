@@ -1,27 +1,28 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="InvalidScopesT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class InvalidScopesT:
     """Token scopes are invalid
 
     Example:
-        {'id': '123e4567-e89b-12d3-a456-426614174000', 'message': 'Eaque explicabo.'}
+        {'id': '123e4567-e89b-12d3-a456-426614174000', 'message': 'Voluptas ut aut placeat autem aut.'}
 
     Attributes:
-        message (str): Message of error Default: 'Not authorized to perform this action'. Example: At est alias..
+        message (str): Message of error Default: 'Not authorized to perform this action'. Example: Qui voluptas
+            consectetur cumque debitis..
         id (Union[Unset, str]): ID of involved resource Example: 123e4567-e89b-12d3-a456-426614174000.
     """
 
     message: str = "Not authorized to perform this action"
     id: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         message = self.message

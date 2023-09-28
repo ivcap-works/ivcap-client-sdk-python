@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-import attr
+from attrs import define, field
 
 from ..types import UNSET, Unset
 
@@ -11,22 +11,22 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="RefT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class RefT:
     """
     Example:
-        {'id': 'http://dooley.name/marlee.mueller', 'links': {'describedBy': {'href': 'https://api.com/swagger/...',
-            'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}}
+        {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
+            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}
 
     Attributes:
-        id (Union[Unset, str]):  Example: http://west.name/lonzo_schuster.
+        id (Union[Unset, str]):  Example: http://ledner.com/mike.
         links (Union[Unset, SelfT]):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Corrupti laborum qui incidunt.'}.
+            'application/openapi3+json'}, 'self': 'At qui.'}.
     """
 
     id: Union[Unset, str] = UNSET
     links: Union[Unset, "SelfT"] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id

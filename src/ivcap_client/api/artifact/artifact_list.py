@@ -15,7 +15,6 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    client: AuthenticatedClient,
     limit: Union[Unset, None, int] = 10,
     page: Union[Unset, None, str] = UNSET,
     filter_: Union[Unset, None, str] = UNSET,
@@ -23,10 +22,7 @@ def _get_kwargs(
     order_desc: Union[Unset, None, bool] = False,
     at_time: Union[Unset, None, datetime.datetime] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/1/artifacts".format(client.base_url)
-
-    headers: Dict[str, str] = client.get_headers()
-    cookies: Dict[str, Any] = client.get_cookies()
+    pass
 
     params: Dict[str, Any] = {}
     params["limit"] = limit
@@ -49,17 +45,13 @@ def _get_kwargs(
 
     return {
         "method": "get",
-        "url": url,
-        "headers": headers,
-        "cookies": cookies,
-        "timeout": client.get_timeout(),
-        "follow_redirects": client.follow_redirects,
+        "url": "/1/artifacts",
         "params": params,
     }
 
 
 def _parse_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, ArtifactListRT, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ArtifactListRT.from_dict(response.json())
@@ -90,7 +82,7 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Client, response: httpx.Response
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[Any, ArtifactListRT, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -112,7 +104,7 @@ def sync_detailed(
 ) -> Response[Union[Any, ArtifactListRT, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
     """list artifact
 
-     artifacts
+     list artifacts
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of
@@ -126,7 +118,7 @@ def sync_detailed(
             filter a collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
-                                        evaluates to true are included in the response. Example: filter=FirstName eq 'Scott'.
+                                        evaluates to true are included in the response. Example: name ~= 'Scott%'.
         order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
             resources in either
                                         ascending order using asc or descending order using desc. If asc or desc not
@@ -135,7 +127,7 @@ def sync_detailed(
             on
                                         property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
             resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -148,7 +140,6 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         limit=limit,
         page=page,
         filter_=filter_,
@@ -157,8 +148,7 @@ def sync_detailed(
         at_time=at_time,
     )
 
-    response = httpx.request(
-        verify=client.verify_ssl,
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 
@@ -177,7 +167,7 @@ def sync(
 ) -> Optional[Union[Any, ArtifactListRT, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
     """list artifact
 
-     artifacts
+     list artifacts
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of
@@ -191,7 +181,7 @@ def sync(
             filter a collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
-                                        evaluates to true are included in the response. Example: filter=FirstName eq 'Scott'.
+                                        evaluates to true are included in the response. Example: name ~= 'Scott%'.
         order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
             resources in either
                                         ascending order using asc or descending order using desc. If asc or desc not
@@ -200,7 +190,7 @@ def sync(
             on
                                         property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
             resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -235,7 +225,7 @@ async def asyncio_detailed(
 ) -> Response[Union[Any, ArtifactListRT, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
     """list artifact
 
-     artifacts
+     list artifacts
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of
@@ -249,7 +239,7 @@ async def asyncio_detailed(
             filter a collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
-                                        evaluates to true are included in the response. Example: filter=FirstName eq 'Scott'.
+                                        evaluates to true are included in the response. Example: name ~= 'Scott%'.
         order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
             resources in either
                                         ascending order using asc or descending order using desc. If asc or desc not
@@ -258,7 +248,7 @@ async def asyncio_detailed(
             on
                                         property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
             resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -271,7 +261,6 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        client=client,
         limit=limit,
         page=page,
         filter_=filter_,
@@ -280,8 +269,7 @@ async def asyncio_detailed(
         at_time=at_time,
     )
 
-    async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
-        response = await _client.request(**kwargs)
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
 
@@ -298,7 +286,7 @@ async def asyncio(
 ) -> Optional[Union[Any, ArtifactListRT, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
     """list artifact
 
-     artifacts
+     list artifacts
 
     Args:
         limit (Union[Unset, None, int]): The $limit system query option requests the number of
@@ -312,7 +300,7 @@ async def asyncio(
             filter a collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
-                                        evaluates to true are included in the response. Example: filter=FirstName eq 'Scott'.
+                                        evaluates to true are included in the response. Example: name ~= 'Scott%'.
         order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
             resources in either
                                         ascending order using asc or descending order using desc. If asc or desc not
@@ -321,7 +309,7 @@ async def asyncio(
             on
                                         property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default.
+            Ascending order is the default. Example: True.
         at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
             resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
 

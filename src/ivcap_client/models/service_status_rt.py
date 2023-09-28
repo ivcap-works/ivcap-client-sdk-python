@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-import attr
+from attrs import define, field
 
 from ..models.service_status_rt_status import ServiceStatusRTStatus
 from ..types import UNSET, Unset
@@ -15,43 +15,42 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ServiceStatusRT")
 
 
-@attr.s(auto_attribs=True)
+@define
 class ServiceStatusRT:
     """
     Example:
-        {'account': {'id': 'http://gorczany.com/breanne.block', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'}},
-            'description': 'This service ...', 'id': 'service:acme:oracle', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis incidunt.'},
-            'metadata': [{'name': 'Voluptatem tempore qui quis numquam.', 'value': 'Cumque quo praesentium labore
-            officiis.'}, {'name': 'Voluptatem tempore qui quis numquam.', 'value': 'Cumque quo praesentium labore
-            officiis.'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description': 'The name of the region as according
-            to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold',
-            'name': 'threshold', 'type': 'float', 'unit': 'm'}], 'provider': {'id': 'http://gorczany.com/breanne.block',
-            'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self':
-            'Officiis reiciendis incidunt.'}}, 'provider-ref': 'service_foo', 'status': 'active', 'tags': ['tag1', 'tag2']}
+        {'account': {'id': 'http://beahan.net/laurie', 'links': {'describedBy': {'href': 'https://api.com/swagger/...',
+            'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}, 'description': 'This service ...', 'id':
+            'service:acme:oracle', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
+            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'metadata': [{'name': 'Recusandae quis.', 'value':
+            'Dignissimos qui expedita quia deserunt veritatis.'}, {'name': 'Recusandae quis.', 'value': 'Dignissimos qui
+            expedita quia deserunt veritatis.'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description': 'The name of
+            the region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
+            'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}], 'provider': {'id':
+            'http://beahan.net/laurie', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
+            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}, 'provider-ref': 'service_foo', 'status': 'inactive',
+            'tags': ['tag1', 'tag2']}
 
     Attributes:
         id (str): Service ID Example: service:acme:oracle.
         links (SelfT):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Corrupti laborum qui incidunt.'}.
+            'application/openapi3+json'}, 'self': 'At qui.'}.
         parameters (List['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
             region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
             'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}].
-        account (Union[Unset, RefT]):  Example: {'id': 'http://dooley.name/marlee.mueller', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis
-            incidunt.'}}.
+        account (Union[Unset, RefT]):  Example: {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy': {'href':
+            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}.
         description (Union[Unset, str]): More detailed description of the service Example: This service ....
-        metadata (Union[Unset, List['ParameterT']]): Optional provider provided meta tags Example: [{'name': 'Voluptatem
-            tempore qui quis numquam.', 'value': 'Cumque quo praesentium labore officiis.'}, {'name': 'Voluptatem tempore
-            qui quis numquam.', 'value': 'Cumque quo praesentium labore officiis.'}].
+        metadata (Union[Unset, List['ParameterT']]): Optional provider provided meta tags Example: [{'name': 'Recusandae
+            quis.', 'value': 'Dignissimos qui expedita quia deserunt veritatis.'}, {'name': 'Recusandae quis.', 'value':
+            'Dignissimos qui expedita quia deserunt veritatis.'}, {'name': 'Recusandae quis.', 'value': 'Dignissimos qui
+            expedita quia deserunt veritatis.'}].
         name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
-        provider (Union[Unset, RefT]):  Example: {'id': 'http://dooley.name/marlee.mueller', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Officiis reiciendis
-            incidunt.'}}.
+        provider (Union[Unset, RefT]):  Example: {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy':
+            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}.
         provider_ref (Union[Unset, str]): Provider provided ID. Needs to be a single string with punctuations allowed.
             Might have been changed Example: service_foo.
-        status (Union[Unset, ServiceStatusRTStatus]): Service status Example: error.
+        status (Union[Unset, ServiceStatusRTStatus]): Service status Example: active.
         tags (Union[Unset, List[str]]): Optional provider provided tags Example: ['tag1', 'tag2'].
     """
 
@@ -66,7 +65,7 @@ class ServiceStatusRT:
     provider_ref: Union[Unset, str] = UNSET
     status: Union[Unset, ServiceStatusRTStatus] = UNSET
     tags: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id

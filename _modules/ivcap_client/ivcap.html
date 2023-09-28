@@ -74,10 +74,16 @@
            <div itemprop="articleBody">
              
   <h1>Source code for ivcap_client.ivcap</h1><div class="highlight"><pre>
-<span></span>
+<span></span><span class="c1">#</span>
+<span class="c1"># Copyright (c) 2023 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.</span>
+<span class="c1"># Use of this source code is governed by a BSD-style license that can be</span>
+<span class="c1"># found in the LICENSE file. See the AUTHORS file for names of contributors.</span>
+<span class="c1">#</span>
+
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span> <span class="c1"># postpone evaluation of annotations </span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">IO</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.api.artifact</span> <span class="kn">import</span> <span class="n">artifact_upload</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.artifact</span> <span class="kn">import</span> <span class="n">Artifact</span><span class="p">,</span> <span class="n">ArtifactIter</span>
@@ -85,6 +91,7 @@
 <span class="kn">from</span> <span class="nn">tusclient.client</span> <span class="kn">import</span> <span class="n">TusClient</span>
 <span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">maxsize</span> <span class="k">as</span> <span class="n">MAXSIZE</span>
 <span class="kn">import</span> <span class="nn">mimetypes</span>
+<span class="kn">import</span> <span class="nn">base64</span>
 
 <span class="kn">from</span> <span class="nn">ivcap_client.api.metadata</span> <span class="kn">import</span> <span class="n">metadata_add</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.client.client</span> <span class="kn">import</span> <span class="n">AuthenticatedClient</span>
@@ -216,7 +223,7 @@
         <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;entity_id&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
             <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">schema</span><span class="p">,</span>
-            <span class="s2">&quot;json_body&quot;</span><span class="p">:</span> <span class="n">aspect</span><span class="p">,</span>
+            <span class="s2">&quot;json_body&quot;</span><span class="p">:</span> <span class="n">aspect</span><span class="p">,</span> <span class="c1">#json.dumps(aspect),</span>
             <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
             <span class="s2">&quot;content_type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
         <span class="p">}</span>
@@ -354,7 +361,8 @@
             <span class="s1">&#39;tus_resumable&#39;</span><span class="p">:</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;x_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;x_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">artifact_upload</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>

@@ -24,9 +24,10 @@ from ivcap_client.metadata import Metadata, MetadataIter
 from ivcap_client.models.add_meta_rt import AddMetaRT
 from ivcap_client.order import Order, OrderIter
 from ivcap_client.service import Service, ServiceIter
-from ivcap_client.types import URN
 from ivcap_client.utils import process_error
 from ivcap_client.models.metadata_list_item_rt import MetadataListItemRT
+
+URN = str
 
 class IVCAP:
     """A class to represent a particular IVCAP deployment and it's capabilities

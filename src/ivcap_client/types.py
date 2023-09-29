@@ -3,13 +3,16 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
+
+#
+#### DO NOT EDIT ####
+#
 """ Contains some shared types for properties """
 from http import HTTPStatus
 from typing import BinaryIO, Generic, Literal, MutableMapping, Optional, Tuple, TypeVar
 
 from attrs import define
 
-URN = str
 
 class Unset:
     def __bool__(self) -> Literal[False]:

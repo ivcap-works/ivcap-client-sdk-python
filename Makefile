@@ -34,7 +34,8 @@ gen:
 	rm -fr ${SRC_DIR}/api ${SRC_DIR}/models ${SRC_DIR}/client \
 		&& mkdir -p ${SRC_DIR}/api ${SRC_DIR}/models ${SRC_DIR}/client \
 		&& mv ${ROOT_DIR}/build/sdk_client/ivcap_client/* ${SRC_DIR} \
-		&& mv ${SRC_DIR}/client/errors.py ${SRC_DIR}/client/types.py ${SRC_DIR}
+		&& mv ${SRC_DIR}/client/errors.py ${SRC_DIR}/client/types.py ${SRC_DIR} \
+		&& sed -i '' '1s/^/#\n#### DO NOT EDIT ####\n#\n/' ${SRC_DIR}/types.py ${SRC_DIR}/errors.py
 	rm -r ${ROOT_DIR}/build
 
 add-license:

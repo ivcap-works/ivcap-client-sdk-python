@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ivcap_client"
-version = "0.28.0"
+version = "0.28.1"
 description = "A client library for accessing an IVCAP cluster"
 
 authors = ["Max Ott <max.ott@csiro.au>", 

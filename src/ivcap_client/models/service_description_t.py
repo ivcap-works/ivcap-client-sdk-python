@@ -31,9 +31,9 @@ class ServiceDescriptionT:
             'http://dach.name/candace.king'}, {'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri':
             'http://dach.name/candace.king'}, {'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri':
             'http://dach.name/candace.king'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Et perferendis.', 'basic':
-            {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'}, 'image': 'alpine',
-            'memory': {'limit': '100Mi', 'request': '10Mi'}}, 'opts': 'Maxime eius voluptatibus tempore assumenda et qui.',
-            'type': 'basic'}}
+            {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-storage':
+            {'limit': '4Gi', 'request': '2Gi'}, 'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}}, 'opts':
+            'Maxime eius voluptatibus tempore assumenda et qui.', 'type': 'basic'}}
 
     Attributes:
         account_id (str): Reference to account revenues for this service should be credited to Example:
@@ -49,8 +49,8 @@ class ServiceDescriptionT:
                     and 'argo'. In case of 'basic', use the 'basic' element for further parameters. In the current implementation
                     'opts' is expected to contain the same schema as 'basic' Example: {'argo': 'Ullam illum assumenda explicabo
             aut.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'},
-            'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}}, 'opts': 'Et porro ducimus corporis quas.',
-            'type': 'basic'}.
+            'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'image': 'alpine', 'memory': {'limit': '100Mi',
+            'request': '10Mi'}}, 'opts': 'Et porro ducimus corporis quas.', 'type': 'basic'}.
         banner (Union[Unset, str]): Link to banner image oprionally used for this service Example:
             http://erdman.net/estella.
         metadata (Union[Unset, List['ParameterT']]): Optional provider provided meta tags Example: [{'name': 'Vel

@@ -24,6 +24,7 @@ from ivcap_client.metadata import Metadata, MetadataIter
 from ivcap_client.models.add_meta_rt import AddMetaRT
 from ivcap_client.order import Order, OrderIter
 from ivcap_client.service import Service, ServiceIter
+from ivcap_client.types import URN
 from ivcap_client.utils import process_error
 from ivcap_client.models.metadata_list_item_rt import MetadataListItemRT
 
@@ -128,7 +129,13 @@ class IVCAP:
 
     #### METADATA
 
-    def add_metadata(self, entity: str, aspect: Dict[str,any], schema: Optional[str]=None) -> Metadata:
+    def add_metadata(self, 
+                     entity: str, 
+                     aspect: Dict[str,any], 
+                     schema: Optional[str]=None,
+                     *,
+                     policy: Optional[URN] = None, 
+                     ) -> Metadata:
         """Add a metadata 'aspect' to 'entity'. The 'schema' of the aspect, if not defined
         is expected to found in the 'aspect' under the '$schema' key.
 
@@ -136,6 +143,7 @@ class IVCAP:
             entity (str): URN of the entity to attach the aspect to
             aspect (dict): The aspect to be attached
             schema (Optional[str], optional): Schema of the aspect. Defaults to 'aspect["$schema"]'.
+            policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
 
         Returns:
             metadata: The created metadata record
@@ -151,6 +159,11 @@ class IVCAP:
             "client": self._client,
             "content_type": "application/json",
         }
+        if policy:
+            if not policy.startswith("urn:ivcap:policy:"):
+                raise Exception(f"policy '{collection} is not a policy URN.")
+            kwargs['policy_id'] = policy
+            
         r = metadata_add.sync_detailed(**kwargs)
         if r.status_code >= 300 :
             return process_error('add_metadata', r)
@@ -249,6 +262,8 @@ class IVCAP:
                         io_stream: Optional[IO] = None,
                         content_type:  Optional[str] = None, 
                         content_size: Optional[int] = -1, 
+                        collection: Optional[URN] = None, 
+                        policy: Optional[URN] = None, 
                         chunk_size: Optional[int] = MAXSIZE, 
                         retries: Optional[int] = 0, 
                         retry_delay: Optional[int] = 30
@@ -261,6 +276,8 @@ class IVCAP:
             io_stream (Optional[IO]): Content as IO stream. 
             content_type (Optional[str]): Content type - needs to be declared for `io_stream`.
             content_size (Optional[int]): Overall size of content to be uploaded. Defaults to -1 (don't know).
+            collection: Optional[URN]: Additionally adds artifact to named collection ('urn:...'). 
+            policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
             chunk_size (Optional[int]): Chunk size to use for each individual upload. Defaults to MAXSIZE.
             retries (Optional[int]): The number of attempts should be made in the case of a failed upload. Defaults to 0.
             retry_delay (Optional[int], optional): How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
@@ -287,6 +304,14 @@ class IVCAP:
         if name:
             n = base64.b64encode(bytes(name, 'utf-8'))
             kwargs['x_name'] = n
+        if collection:
+            if not collection.startswith("urn:"):
+                raise Exception(f"collection '{collection} is not a URN.")
+            kwargs['x_collection'] = collection
+        if policy:
+            if not policy.startswith("urn:ivcap:policy:"):
+                raise Exception(f"policy '{collection} is not a policy URN.")
+            kwargs['x_policy'] = policy
 
         r = artifact_upload.sync_detailed(client=self._client, **kwargs)
         if r.status_code >= 300 :

@@ -18,6 +18,7 @@ def _get_kwargs(
     content_length: Union[Unset, int] = UNSET,
     x_name: Union[Unset, str] = UNSET,
     x_collection: Union[Unset, str] = UNSET,
+    x_policy: Union[Unset, str] = UNSET,
     x_content_type: Union[Unset, str] = UNSET,
     x_content_length: Union[Unset, int] = UNSET,
     upload_length: Union[Unset, int] = UNSET,
@@ -38,6 +39,9 @@ def _get_kwargs(
 
     if not isinstance(x_collection, Unset):
         headers["X-Collection"] = x_collection
+
+    if not isinstance(x_policy, Unset):
+        headers["X-Policy"] = x_policy
 
     if not isinstance(x_content_type, Unset):
         headers["X-Content-Type"] = x_content_type
@@ -104,6 +108,7 @@ def sync_detailed(
     content_length: Union[Unset, int] = UNSET,
     x_name: Union[Unset, str] = UNSET,
     x_collection: Union[Unset, str] = UNSET,
+    x_policy: Union[Unset, str] = UNSET,
     x_content_type: Union[Unset, str] = UNSET,
     x_content_length: Union[Unset, int] = UNSET,
     upload_length: Union[Unset, int] = UNSET,
@@ -121,10 +126,11 @@ def sync_detailed(
         content_length (Union[Unset, int]): Content-Length header, MAY define size of expected
             upload. Example: 2376.
         x_name (Union[Unset, str]): X-Name header, MAY define a more human friendly name. Reusing
-            a name will NOT override an existing artifact with the same name Example: field-trip-
-            jun-22.
+            a name will NOT override an existing artifact with the same name Example: sample-12.
         x_collection (Union[Unset, str]): X-Collection header, MAY define an collection name as a
-            simple way of grouping artifacts Example: field-trip-jun-22.
+            simple way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
+        x_policy (Union[Unset, str]): X-Policy header, MAY define a specific policy to control
+            access to this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
         x_content_type (Union[Unset, str]): X-Content-Type header, used for initial, empty content
             creation requests. Example: application/x-netcdf4.
         x_content_length (Union[Unset, int]): X-Content-Length header, used for initial, empty
@@ -148,6 +154,7 @@ def sync_detailed(
         content_length=content_length,
         x_name=x_name,
         x_collection=x_collection,
+        x_policy=x_policy,
         x_content_type=x_content_type,
         x_content_length=x_content_length,
         upload_length=upload_length,
@@ -169,6 +176,7 @@ def sync(
     content_length: Union[Unset, int] = UNSET,
     x_name: Union[Unset, str] = UNSET,
     x_collection: Union[Unset, str] = UNSET,
+    x_policy: Union[Unset, str] = UNSET,
     x_content_type: Union[Unset, str] = UNSET,
     x_content_length: Union[Unset, int] = UNSET,
     upload_length: Union[Unset, int] = UNSET,
@@ -186,10 +194,11 @@ def sync(
         content_length (Union[Unset, int]): Content-Length header, MAY define size of expected
             upload. Example: 2376.
         x_name (Union[Unset, str]): X-Name header, MAY define a more human friendly name. Reusing
-            a name will NOT override an existing artifact with the same name Example: field-trip-
-            jun-22.
+            a name will NOT override an existing artifact with the same name Example: sample-12.
         x_collection (Union[Unset, str]): X-Collection header, MAY define an collection name as a
-            simple way of grouping artifacts Example: field-trip-jun-22.
+            simple way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
+        x_policy (Union[Unset, str]): X-Policy header, MAY define a specific policy to control
+            access to this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
         x_content_type (Union[Unset, str]): X-Content-Type header, used for initial, empty content
             creation requests. Example: application/x-netcdf4.
         x_content_length (Union[Unset, int]): X-Content-Length header, used for initial, empty
@@ -214,6 +223,7 @@ def sync(
         content_length=content_length,
         x_name=x_name,
         x_collection=x_collection,
+        x_policy=x_policy,
         x_content_type=x_content_type,
         x_content_length=x_content_length,
         upload_length=upload_length,
@@ -229,6 +239,7 @@ async def asyncio_detailed(
     content_length: Union[Unset, int] = UNSET,
     x_name: Union[Unset, str] = UNSET,
     x_collection: Union[Unset, str] = UNSET,
+    x_policy: Union[Unset, str] = UNSET,
     x_content_type: Union[Unset, str] = UNSET,
     x_content_length: Union[Unset, int] = UNSET,
     upload_length: Union[Unset, int] = UNSET,
@@ -246,10 +257,11 @@ async def asyncio_detailed(
         content_length (Union[Unset, int]): Content-Length header, MAY define size of expected
             upload. Example: 2376.
         x_name (Union[Unset, str]): X-Name header, MAY define a more human friendly name. Reusing
-            a name will NOT override an existing artifact with the same name Example: field-trip-
-            jun-22.
+            a name will NOT override an existing artifact with the same name Example: sample-12.
         x_collection (Union[Unset, str]): X-Collection header, MAY define an collection name as a
-            simple way of grouping artifacts Example: field-trip-jun-22.
+            simple way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
+        x_policy (Union[Unset, str]): X-Policy header, MAY define a specific policy to control
+            access to this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
         x_content_type (Union[Unset, str]): X-Content-Type header, used for initial, empty content
             creation requests. Example: application/x-netcdf4.
         x_content_length (Union[Unset, int]): X-Content-Length header, used for initial, empty
@@ -273,6 +285,7 @@ async def asyncio_detailed(
         content_length=content_length,
         x_name=x_name,
         x_collection=x_collection,
+        x_policy=x_policy,
         x_content_type=x_content_type,
         x_content_length=x_content_length,
         upload_length=upload_length,
@@ -292,6 +305,7 @@ async def asyncio(
     content_length: Union[Unset, int] = UNSET,
     x_name: Union[Unset, str] = UNSET,
     x_collection: Union[Unset, str] = UNSET,
+    x_policy: Union[Unset, str] = UNSET,
     x_content_type: Union[Unset, str] = UNSET,
     x_content_length: Union[Unset, int] = UNSET,
     upload_length: Union[Unset, int] = UNSET,
@@ -309,10 +323,11 @@ async def asyncio(
         content_length (Union[Unset, int]): Content-Length header, MAY define size of expected
             upload. Example: 2376.
         x_name (Union[Unset, str]): X-Name header, MAY define a more human friendly name. Reusing
-            a name will NOT override an existing artifact with the same name Example: field-trip-
-            jun-22.
+            a name will NOT override an existing artifact with the same name Example: sample-12.
         x_collection (Union[Unset, str]): X-Collection header, MAY define an collection name as a
-            simple way of grouping artifacts Example: field-trip-jun-22.
+            simple way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
+        x_policy (Union[Unset, str]): X-Policy header, MAY define a specific policy to control
+            access to this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
         x_content_type (Union[Unset, str]): X-Content-Type header, used for initial, empty content
             creation requests. Example: application/x-netcdf4.
         x_content_length (Union[Unset, int]): X-Content-Length header, used for initial, empty
@@ -338,6 +353,7 @@ async def asyncio(
             content_length=content_length,
             x_name=x_name,
             x_collection=x_collection,
+            x_policy=x_policy,
             x_content_type=x_content_type,
             x_content_length=x_content_length,
             upload_length=upload_length,

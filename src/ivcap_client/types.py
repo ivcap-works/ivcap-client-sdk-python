@@ -9,6 +9,7 @@ from typing import BinaryIO, Generic, Literal, MutableMapping, Optional, Tuple, 
 
 from attrs import define
 
+URN = str
 
 class Unset:
     def __bool__(self) -> Literal[False]:

@@ -15,7 +15,7 @@ try:
 except Exception:
     __version__ = "???" # should only happen when running the local examples
 
-from .ivcap import IVCAP
+from .ivcap import IVCAP, URN
 from .service import Service
 from .order import Order
 from .artifact import Artifact

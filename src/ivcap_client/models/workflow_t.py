@@ -20,14 +20,15 @@ class WorkflowT:
 
     Example:
         {'argo': 'Ullam illum assumenda explicabo aut.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu':
-            {'limit': '100m', 'request': '10m'}, 'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}},
-            'opts': 'Et porro ducimus corporis quas.', 'type': 'basic'}
+            {'limit': '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'image': 'alpine',
+            'memory': {'limit': '100Mi', 'request': '10Mi'}}, 'opts': 'Et porro ducimus corporis quas.', 'type': 'basic'}
 
     Attributes:
         argo (Union[Unset, File]): Defines the workflow using argo's WF schema Example: Dolores quis quaerat consequatur
             quas..
         basic (Union[Unset, BasicWorkflowOptsT]):  Example: {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu':
-            {'limit': '100m', 'request': '10m'}, 'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}}.
+            {'limit': '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'image': 'alpine',
+            'memory': {'limit': '100Mi', 'request': '10Mi'}}.
         opts (Union[Unset, File]): Type specific options - left for backward compatibility, if possible use type
             specific elements Example: Illo dolores inventore odit unde architecto quis..
         type (Union[Unset, str]): Type of workflow Example: basic.

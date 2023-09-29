@@ -117,8 +117,9 @@ def sync_detailed(
             {'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri':
             'http://dach.name/candace.king'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Et
             perferendis.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit':
-            '100m', 'request': '10m'}, 'image': 'alpine', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}}, 'opts': 'Maxime eius voluptatibus tempore assumenda et qui.', 'type': 'basic'}}.
+            '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'},
+            'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}}, 'opts': 'Maxime eius
+            voluptatibus tempore assumenda et qui.', 'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -173,8 +174,9 @@ def sync(
             {'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri':
             'http://dach.name/candace.king'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Et
             perferendis.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit':
-            '100m', 'request': '10m'}, 'image': 'alpine', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}}, 'opts': 'Maxime eius voluptatibus tempore assumenda et qui.', 'type': 'basic'}}.
+            '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'},
+            'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}}, 'opts': 'Maxime eius
+            voluptatibus tempore assumenda et qui.', 'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -224,8 +226,9 @@ async def asyncio_detailed(
             {'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri':
             'http://dach.name/candace.king'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Et
             perferendis.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit':
-            '100m', 'request': '10m'}, 'image': 'alpine', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}}, 'opts': 'Maxime eius voluptatibus tempore assumenda et qui.', 'type': 'basic'}}.
+            '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'},
+            'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}}, 'opts': 'Maxime eius
+            voluptatibus tempore assumenda et qui.', 'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -278,8 +281,9 @@ async def asyncio(
             {'title': 'Eius perferendis culpa voluptates fuga dicta.', 'uri':
             'http://dach.name/candace.king'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Et
             perferendis.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit':
-            '100m', 'request': '10m'}, 'image': 'alpine', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}}, 'opts': 'Maxime eius voluptatibus tempore assumenda et qui.', 'type': 'basic'}}.
+            '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'},
+            'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}}, 'opts': 'Maxime eius
+            voluptatibus tempore assumenda et qui.', 'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

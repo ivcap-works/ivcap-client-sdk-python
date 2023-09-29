@@ -15,8 +15,8 @@ T = TypeVar("T", bound="BasicWorkflowOptsT")
 class BasicWorkflowOptsT:
     """
     Example:
-        {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'}, 'image': 'alpine',
-            'memory': {'limit': '100Mi', 'request': '10Mi'}}
+        {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-storage':
+            {'limit': '4Gi', 'request': '2Gi'}, 'image': 'alpine', 'memory': {'limit': '100Mi', 'request': '10Mi'}}
 
     Attributes:
         command (List[str]): Command to start the container - needed for some container runtimes Example: ['/bin/sh',
@@ -25,6 +25,9 @@ class BasicWorkflowOptsT:
         cpu (Union[Unset, ResourceMemoryT]): See https://kubernetes.io/docs/concepts/configuration/manage-resources-
             containers/#resource-units-in-kubernetes for units Example: {'limit': 'Eos soluta modi aut et.', 'request': 'Qui
             suscipit ullam et.'}.
+        ephemeral_storage (Union[Unset, ResourceMemoryT]): See https://kubernetes.io/docs/concepts/configuration/manage-
+            resources-containers/#resource-units-in-kubernetes for units Example: {'limit': 'Eos soluta modi aut et.',
+            'request': 'Qui suscipit ullam et.'}.
         memory (Union[Unset, ResourceMemoryT]): See https://kubernetes.io/docs/concepts/configuration/manage-resources-
             containers/#resource-units-in-kubernetes for units Example: {'limit': 'Eos soluta modi aut et.', 'request': 'Qui
             suscipit ullam et.'}.
@@ -33,6 +36,7 @@ class BasicWorkflowOptsT:
     command: List[str]
     image: str
     cpu: Union[Unset, "ResourceMemoryT"] = UNSET
+    ephemeral_storage: Union[Unset, "ResourceMemoryT"] = UNSET
     memory: Union[Unset, "ResourceMemoryT"] = UNSET
     additional_properties: Dict[str, Any] = field(init=False, factory=dict)
 
@@ -43,6 +47,10 @@ class BasicWorkflowOptsT:
         cpu: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.cpu, Unset):
             cpu = self.cpu.to_dict()
+
+        ephemeral_storage: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.ephemeral_storage, Unset):
+            ephemeral_storage = self.ephemeral_storage.to_dict()
 
         memory: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.memory, Unset):
@@ -58,6 +66,8 @@ class BasicWorkflowOptsT:
         )
         if cpu is not UNSET:
             field_dict["cpu"] = cpu
+        if ephemeral_storage is not UNSET:
+            field_dict["ephemeral-storage"] = ephemeral_storage
         if memory is not UNSET:
             field_dict["memory"] = memory
 
@@ -79,6 +89,13 @@ class BasicWorkflowOptsT:
         else:
             cpu = ResourceMemoryT.from_dict(_cpu)
 
+        _ephemeral_storage = d.pop("ephemeral-storage", UNSET)
+        ephemeral_storage: Union[Unset, ResourceMemoryT]
+        if isinstance(_ephemeral_storage, Unset):
+            ephemeral_storage = UNSET
+        else:
+            ephemeral_storage = ResourceMemoryT.from_dict(_ephemeral_storage)
+
         _memory = d.pop("memory", UNSET)
         memory: Union[Unset, ResourceMemoryT]
         if isinstance(_memory, Unset):
@@ -90,6 +107,7 @@ class BasicWorkflowOptsT:
             command=command,
             image=image,
             cpu=cpu,
+            ephemeral_storage=ephemeral_storage,
             memory=memory,
         )
 

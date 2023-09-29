@@ -71,7 +71,7 @@ Classes
    .. py:method:: get_order(id: str) -> ivcap_client.order.Order
 
 
-   .. py:method:: add_metadata(entity: str, aspect: Dict[str, any], schema: Optional[str] = None) -> ivcap_client.metadata.Metadata
+   .. py:method:: add_metadata(entity: str, aspect: Dict[str, any], schema: Optional[str] = None, *, policy: Optional[ivcap_client.types.URN] = None) -> ivcap_client.metadata.Metadata
 
       Add a metadata 'aspect' to 'entity'. The 'schema' of the aspect, if not defined
       is expected to found in the 'aspect' under the '$schema' key.
@@ -82,6 +82,7 @@ Classes
       :type aspect: dict
       :param schema: Schema of the aspect. Defaults to 'aspect["$schema"]'.
       :type schema: Optional[str], optional
+      :param policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
 
       :returns: The created metadata record
       :rtype: metadata
@@ -129,7 +130,7 @@ Classes
       :Yields: *Artifact* -- An artifact object
 
 
-   .. py:method:: upload_artifact(*, name: Optional[str] = None, file_path: Optional[str] = None, io_stream: Optional[IO] = None, content_type: Optional[str] = None, content_size: Optional[int] = -1, chunk_size: Optional[int] = MAXSIZE, retries: Optional[int] = 0, retry_delay: Optional[int] = 30) -> ivcap_client.artifact.Artifact
+   .. py:method:: upload_artifact(*, name: Optional[str] = None, file_path: Optional[str] = None, io_stream: Optional[IO] = None, content_type: Optional[str] = None, content_size: Optional[int] = -1, collection: Optional[ivcap_client.types.URN] = None, policy: Optional[ivcap_client.types.URN] = None, chunk_size: Optional[int] = MAXSIZE, retries: Optional[int] = 0, retry_delay: Optional[int] = 30) -> ivcap_client.artifact.Artifact
 
       Uploads content which is either identified as a `file_path` or `io_stream`. In the
       latter case, content type need to be provided.
@@ -142,6 +143,8 @@ Classes
       :type content_type: Optional[str]
       :param content_size: Overall size of content to be uploaded. Defaults to -1 (don't know).
       :type content_size: Optional[int]
+      :param collection: Optional[URN]: Additionally adds artifact to named collection ('urn:...').
+      :param policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
       :param chunk_size: Chunk size to use for each individual upload. Defaults to MAXSIZE.
       :type chunk_size: Optional[int]
       :param retries: The number of attempts should be made in the case of a failed upload. Defaults to 0.

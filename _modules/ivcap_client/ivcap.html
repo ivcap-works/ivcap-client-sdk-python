@@ -100,6 +100,7 @@
 <span class="kn">from</span> <span class="nn">ivcap_client.models.add_meta_rt</span> <span class="kn">import</span> <span class="n">AddMetaRT</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.order</span> <span class="kn">import</span> <span class="n">Order</span><span class="p">,</span> <span class="n">OrderIter</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.service</span> <span class="kn">import</span> <span class="n">Service</span><span class="p">,</span> <span class="n">ServiceIter</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.types</span> <span class="kn">import</span> <span class="n">URN</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.utils</span> <span class="kn">import</span> <span class="n">process_error</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.models.metadata_list_item_rt</span> <span class="kn">import</span> <span class="n">MetadataListItemRT</span>
 
@@ -204,7 +205,13 @@
 
     <span class="c1">#### METADATA</span>
 
-<div class="viewcode-block" id="IVCAP.add_metadata"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.add_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">add_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">aspect</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">any</span><span class="p">],</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Metadata</span><span class="p">:</span>
+<div class="viewcode-block" id="IVCAP.add_metadata"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.add_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">add_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                     <span class="n">entity</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
+                     <span class="n">aspect</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">any</span><span class="p">],</span> 
+                     <span class="n">schema</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="o">*</span><span class="p">,</span>
+                     <span class="n">policy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">URN</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Metadata</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a metadata &#39;aspect&#39; to &#39;entity&#39;. The &#39;schema&#39; of the aspect, if not defined</span>
 <span class="sd">        is expected to found in the &#39;aspect&#39; under the &#39;$schema&#39; key.</span>
 
@@ -212,6 +219,7 @@
 <span class="sd">            entity (str): URN of the entity to attach the aspect to</span>
 <span class="sd">            aspect (dict): The aspect to be attached</span>
 <span class="sd">            schema (Optional[str], optional): Schema of the aspect. Defaults to &#39;aspect[&quot;$schema&quot;]&#39;.</span>
+<span class="sd">            policy: Optional[URN]: Set specific policy controlling access (&#39;urn:ivcap:policy:...&#39;).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            metadata: The created metadata record</span>
@@ -227,6 +235,11 @@
             <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
             <span class="s2">&quot;content_type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
         <span class="p">}</span>
+        <span class="k">if</span> <span class="n">policy</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">policy</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:policy:&quot;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;policy &#39;</span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2"> is not a policy URN.&quot;</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;policy_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">policy</span>
+            
         <span class="n">r</span> <span class="o">=</span> <span class="n">metadata_add</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
             <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;add_metadata&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
@@ -325,6 +338,8 @@
                         <span class="n">io_stream</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IO</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="n">content_type</span><span class="p">:</span>  <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
                         <span class="n">content_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> 
+                        <span class="n">collection</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">URN</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                        <span class="n">policy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">URN</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
                         <span class="n">chunk_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">MAXSIZE</span><span class="p">,</span> 
                         <span class="n">retries</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> 
                         <span class="n">retry_delay</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span>
@@ -337,6 +352,8 @@
 <span class="sd">            io_stream (Optional[IO]): Content as IO stream. </span>
 <span class="sd">            content_type (Optional[str]): Content type - needs to be declared for `io_stream`.</span>
 <span class="sd">            content_size (Optional[int]): Overall size of content to be uploaded. Defaults to -1 (don&#39;t know).</span>
+<span class="sd">            collection: Optional[URN]: Additionally adds artifact to named collection (&#39;urn:...&#39;). </span>
+<span class="sd">            policy: Optional[URN]: Set specific policy controlling access (&#39;urn:ivcap:policy:...&#39;).</span>
 <span class="sd">            chunk_size (Optional[int]): Chunk size to use for each individual upload. Defaults to MAXSIZE.</span>
 <span class="sd">            retries (Optional[int]): The number of attempts should be made in the case of a failed upload. Defaults to 0.</span>
 <span class="sd">            retry_delay (Optional[int], optional): How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.</span>
@@ -363,6 +380,14 @@
         <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;x_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="k">if</span> <span class="n">collection</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">collection</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;urn:&quot;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;collection &#39;</span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2"> is not a URN.&quot;</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;x_collection&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">collection</span>
+        <span class="k">if</span> <span class="n">policy</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">policy</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:policy:&quot;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;policy &#39;</span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2"> is not a policy URN.&quot;</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;x_policy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">policy</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">artifact_upload</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>

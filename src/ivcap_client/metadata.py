@@ -24,7 +24,7 @@ class Metadata:
         self._ivcap = ivcap
         self._entity = listItem.entity if listItem else None
         self._schema = listItem.schema if listItem else None
-        self._aspect = listItem.aspect if listItem else None
+        self._aspect = listItem.aspect.to_dict() if listItem else None
 
     @property
     def urn(self) -> str:

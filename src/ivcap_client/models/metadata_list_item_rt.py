@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,51 +12,54 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="MetadataListItemRT")
 
 
-@define
+@_attrs_define
 class MetadataListItemRT:
     """
     Example:
-        {'aspect': '{...}', 'aspectContext': '{...}', 'entity': 'urn:blue:transect.1', 'record-id':
-            'urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}
+        {'aspect': '{...}', 'aspect-context': '{...}', 'entity': 'urn:blue:transect.1', 'id':
+            'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}
 
     Attributes:
+        entity (str): Entity ID Example: urn:blue:transect.1.
+        id (str): ID Example: urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000.
+        schema (str): Schema ID Example: urn:blue:schema.image.
         aspect (Union[Unset, MetadataListItemRTAspect]): Attached metadata aspect Example: {...}.
         aspect_context (Union[Unset, str]): If aspectPath was defined, this is what matched the query Example: {...}.
-        entity (Union[Unset, str]): Entity ID Example: urn:blue:transect.1.
-        record_id (Union[Unset, str]): Record ID Example: urn:ivcap:record.123e4567-e89b-12d3-a456-426614174000.
-        schema (Union[Unset, str]): Schema ID Example: urn:blue:schema.image.
     """
 
+    entity: str
+    id: str
+    schema: str
     aspect: Union[Unset, "MetadataListItemRTAspect"] = UNSET
     aspect_context: Union[Unset, str] = UNSET
-    entity: Union[Unset, str] = UNSET
-    record_id: Union[Unset, str] = UNSET
-    schema: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        entity = self.entity
+
+        id = self.id
+
+        schema = self.schema
+
         aspect: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.aspect, Unset):
             aspect = self.aspect.to_dict()
 
         aspect_context = self.aspect_context
-        entity = self.entity
-        record_id = self.record_id
-        schema = self.schema
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update(
+            {
+                "entity": entity,
+                "id": id,
+                "schema": schema,
+            }
+        )
         if aspect is not UNSET:
             field_dict["aspect"] = aspect
         if aspect_context is not UNSET:
-            field_dict["aspectContext"] = aspect_context
-        if entity is not UNSET:
-            field_dict["entity"] = entity
-        if record_id is not UNSET:
-            field_dict["record-id"] = record_id
-        if schema is not UNSET:
-            field_dict["schema"] = schema
+            field_dict["aspect-context"] = aspect_context
 
         return field_dict
 
@@ -64,6 +68,12 @@ class MetadataListItemRT:
         from ..models.metadata_list_item_rt_aspect import MetadataListItemRTAspect
 
         d = src_dict.copy()
+        entity = d.pop("entity")
+
+        id = d.pop("id")
+
+        schema = d.pop("schema")
+
         _aspect = d.pop("aspect", UNSET)
         aspect: Union[Unset, MetadataListItemRTAspect]
         if isinstance(_aspect, Unset):
@@ -71,20 +81,14 @@ class MetadataListItemRT:
         else:
             aspect = MetadataListItemRTAspect.from_dict(_aspect)
 
-        aspect_context = d.pop("aspectContext", UNSET)
-
-        entity = d.pop("entity", UNSET)
-
-        record_id = d.pop("record-id", UNSET)
-
-        schema = d.pop("schema", UNSET)
+        aspect_context = d.pop("aspect-context", UNSET)
 
         metadata_list_item_rt = cls(
+            entity=entity,
+            id=id,
+            schema=schema,
             aspect=aspect,
             aspect_context=aspect_context,
-            entity=entity,
-            record_id=record_id,
-            schema=schema,
         )
 
         metadata_list_item_rt.additional_properties = d

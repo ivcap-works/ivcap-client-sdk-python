@@ -1,29 +1,32 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ParameterOptT")
 
 
-@define
+@_attrs_define
 class ParameterOptT:
     """
     Example:
-        {'description': 'Ipsam cumque voluptatem.', 'value': 'Eaque cumque ipsa eum laborum corporis.'}
+        {'description': 'Repellendus atque ad doloremque adipisci atque.', 'value': 'Iure assumenda dolore animi
+            assumenda dolorem eveniet.'}
 
     Attributes:
-        description (Union[Unset, str]):  Example: Mollitia veniam..
-        value (Union[Unset, str]):  Example: Quibusdam harum dignissimos quisquam earum dolores unde..
+        description (Union[Unset, str]):  Example: Accusamus tenetur..
+        value (Union[Unset, str]):  Example: Quod ipsa est soluta est..
     """
 
     description: Union[Unset, str] = UNSET
     value: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         description = self.description
+
         value = self.value
 
         field_dict: Dict[str, Any] = {}

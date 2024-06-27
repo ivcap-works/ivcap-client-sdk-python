@@ -1,82 +1,77 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..models.artifact_list_item_status import ArtifactListItemStatus
 from ..types import UNSET, Unset
 
-if TYPE_CHECKING:
-    from ..models.self_t import SelfT
-
-
 T = TypeVar("T", bound="ArtifactListItem")
 
 
-@define
+@_attrs_define
 class ArtifactListItem:
     """
     Example:
-        {'id': 'cayp:artifact:0000-000', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'mime-type': 'image/jpeg', 'name': 'Fire risk for
-            Lot2', 'size': 19000, 'status': 'ready'}
+        {'href': 'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000',
+            'mime-type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}
 
     Attributes:
-        links (SelfT):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'At qui.'}.
-        id (Union[Unset, str]): Artifact ID Example: cayp:artifact:0000-000.
+        href (str):  Example: https://api.ivcap.net/1/orders/....
+        id (str): ID Example: urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000.
+        status (ArtifactListItemStatus): Artifact status Example: ready.
         mime_type (Union[Unset, str]): Mime (content) type of artifact Example: image/jpeg.
         name (Union[Unset, str]): Optional name Example: Fire risk for Lot2.
-        size (Union[Unset, int]): Size of aritfact in bytes Example: 19000.
-        status (Union[Unset, ArtifactListItemStatus]): Artifact status Example: ready.
+        size (Union[Unset, int]): Size of artifact in bytes Example: 19000.
     """
 
-    links: "SelfT"
-    id: Union[Unset, str] = UNSET
+    href: str
+    id: str
+    status: ArtifactListItemStatus
     mime_type: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
     size: Union[Unset, int] = UNSET
-    status: Union[Unset, ArtifactListItemStatus] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        links = self.links.to_dict()
+        href = self.href
 
         id = self.id
+
+        status = self.status.value
+
         mime_type = self.mime_type
+
         name = self.name
+
         size = self.size
-        status: Union[Unset, str] = UNSET
-        if not isinstance(self.status, Unset):
-            status = self.status.value
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "links": links,
+                "href": href,
+                "id": id,
+                "status": status,
             }
         )
-        if id is not UNSET:
-            field_dict["id"] = id
         if mime_type is not UNSET:
             field_dict["mime-type"] = mime_type
         if name is not UNSET:
             field_dict["name"] = name
         if size is not UNSET:
             field_dict["size"] = size
-        if status is not UNSET:
-            field_dict["status"] = status
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.self_t import SelfT
-
         d = src_dict.copy()
-        links = SelfT.from_dict(d.pop("links"))
+        href = d.pop("href")
 
-        id = d.pop("id", UNSET)
+        id = d.pop("id")
+
+        status = ArtifactListItemStatus(d.pop("status"))
 
         mime_type = d.pop("mime-type", UNSET)
 
@@ -84,20 +79,13 @@ class ArtifactListItem:
 
         size = d.pop("size", UNSET)
 
-        _status = d.pop("status", UNSET)
-        status: Union[Unset, ArtifactListItemStatus]
-        if isinstance(_status, Unset):
-            status = UNSET
-        else:
-            status = ArtifactListItemStatus(_status)
-
         artifact_list_item = cls(
-            links=links,
+            href=href,
             id=id,
+            status=status,
             mime_type=mime_type,
             name=name,
             size=size,
-            status=status,
         )
 
         artifact_list_item.additional_properties = d

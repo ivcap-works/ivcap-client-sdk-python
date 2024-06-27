@@ -1,7 +1,8 @@
 from io import BytesIO
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, File, FileJsonType, Unset
 
@@ -12,35 +13,35 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="WorkflowT")
 
 
-@define
+@_attrs_define
 class WorkflowT:
     """Defines the workflow to use to execute this service. Currently supported 'types' are 'basic'
     and 'argo'. In case of 'basic', use the 'basic' element for further parameters. In the current implementation
     'opts' is expected to contain the same schema as 'basic'
 
-    Example:
-        {'argo': 'Ullam illum assumenda explicabo aut.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu':
-            {'limit': '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'image': 'alpine',
-            'memory': {'limit': '100Mi', 'request': '10Mi'}}, 'opts': 'Et porro ducimus corporis quas.', 'type': 'basic'}
+       Example:
+           {'argo': 'Repellat reiciendis.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m',
+               'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type':
+               'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Et aut autem deserunt sit architecto.', 'memory':
+               {'limit': '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}
 
-    Attributes:
-        argo (Union[Unset, File]): Defines the workflow using argo's WF schema Example: Dolores quis quaerat consequatur
-            quas..
-        basic (Union[Unset, BasicWorkflowOptsT]):  Example: {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu':
-            {'limit': '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'image': 'alpine',
-            'memory': {'limit': '100Mi', 'request': '10Mi'}}.
-        opts (Union[Unset, File]): Type specific options - left for backward compatibility, if possible use type
-            specific elements Example: Illo dolores inventore odit unde architecto quis..
-        type (Union[Unset, str]): Type of workflow Example: basic.
+       Attributes:
+           type (str): Type of workflow Example: basic.
+           argo (Union[Unset, File]): Defines the workflow using argo's WF schema Example: Accusamus commodi..
+           basic (Union[Unset, BasicWorkflowOptsT]):  Example: {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu':
+               {'limit': '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2,
+               'gpu-type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Sit vel.', 'memory': {'limit': '100Mi',
+               'request': '10Mi'}, 'shared-memory': '1Gi'}.
     """
 
+    type: str
     argo: Union[Unset, File] = UNSET
     basic: Union[Unset, "BasicWorkflowOptsT"] = UNSET
-    opts: Union[Unset, File] = UNSET
-    type: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        type = self.type
+
         argo: Union[Unset, FileJsonType] = UNSET
         if not isinstance(self.argo, Unset):
             argo = self.argo.to_tuple()
@@ -49,23 +50,17 @@ class WorkflowT:
         if not isinstance(self.basic, Unset):
             basic = self.basic.to_dict()
 
-        opts: Union[Unset, FileJsonType] = UNSET
-        if not isinstance(self.opts, Unset):
-            opts = self.opts.to_tuple()
-
-        type = self.type
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update(
+            {
+                "type": type,
+            }
+        )
         if argo is not UNSET:
             field_dict["argo"] = argo
         if basic is not UNSET:
             field_dict["basic"] = basic
-        if opts is not UNSET:
-            field_dict["opts"] = opts
-        if type is not UNSET:
-            field_dict["type"] = type
 
         return field_dict
 
@@ -74,6 +69,8 @@ class WorkflowT:
         from ..models.basic_workflow_opts_t import BasicWorkflowOptsT
 
         d = src_dict.copy()
+        type = d.pop("type")
+
         _argo = d.pop("argo", UNSET)
         argo: Union[Unset, File]
         if isinstance(_argo, Unset):
@@ -88,20 +85,10 @@ class WorkflowT:
         else:
             basic = BasicWorkflowOptsT.from_dict(_basic)
 
-        _opts = d.pop("opts", UNSET)
-        opts: Union[Unset, File]
-        if isinstance(_opts, Unset):
-            opts = UNSET
-        else:
-            opts = File(payload=BytesIO(_opts))
-
-        type = d.pop("type", UNSET)
-
         workflow_t = cls(
+            type=type,
             argo=argo,
             basic=basic,
-            opts=opts,
-            type=type,
         )
 
         workflow_t.additional_properties = d

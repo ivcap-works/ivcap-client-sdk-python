@@ -6,25 +6,24 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.invalid_parameter_value import InvalidParameterValue
+from ...models.bad_request_t import BadRequestT
+from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
-from ...models.not_implemented_t import NotImplementedT
 from ...models.service_list_rt import ServiceListRT
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
-    filter_: Union[Unset, None, str] = UNSET,
-    order_by: Union[Unset, None, str] = UNSET,
-    order_desc: Union[Unset, None, bool] = False,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
+    filter_: Union[Unset, str] = UNSET,
+    order_by: Union[Unset, str] = UNSET,
+    order_desc: Union[Unset, bool] = False,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
 ) -> Dict[str, Any]:
-    pass
-
     params: Dict[str, Any] = {}
+
     params["limit"] = limit
 
     params["page"] = page
@@ -35,31 +34,29 @@ def _get_kwargs(
 
     params["order-desc"] = order_desc
 
-    json_at_time: Union[Unset, None, str] = UNSET
+    json_at_time: Union[Unset, str] = UNSET
     if not isinstance(at_time, Unset):
-        json_at_time = at_time.isoformat() if at_time else None
-
+        json_at_time = at_time.isoformat()
     params["at-time"] = json_at_time
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "get",
         "url": "/1/services",
         "params": params,
     }
 
+    return _kwargs
+
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ServiceListRT]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ServiceListRT]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = ServiceListRT.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
-        response_400 = cast(Any, None)
-        return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
@@ -68,13 +65,20 @@ def _parse_response(
 
         return response_403
     if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
-        response_422 = InvalidParameterValue.from_dict(response.json())
+        response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+    if response.status_code == HTTPStatus.FAILED_DEPENDENCY:
+        response_424 = BadRequestT.from_dict(response.json())
+
+        return response_424
     if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
-        response_501 = NotImplementedT.from_dict(response.json())
+        response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
+    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+        response_503 = cast(Any, None)
+        return response_503
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -83,7 +87,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ServiceListRT]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ServiceListRT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -95,48 +99,46 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
-    filter_: Union[Unset, None, str] = UNSET,
-    order_by: Union[Unset, None, str] = UNSET,
-    order_desc: Union[Unset, None, bool] = False,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ServiceListRT]]:
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
+    filter_: Union[Unset, str] = UNSET,
+    order_by: Union[Unset, str] = UNSET,
+    order_desc: Union[Unset, bool] = False,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ServiceListRT]]:
     """list service
 
      list services
 
     Args:
-        limit (Union[Unset, None, int]): The $limit system query option requests the number of
-            items in the queried
-                                        collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): The content of 'page' is returned in the 'links' part of a
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+                                to be included in the result. Default: 10. Example: 10.
+        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
             previous query and
-                                        will when set, ALL other parameters, except for 'limit' are ignored. Example:
+                                will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
-        filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
-            filter a collection of
+        filter_ (Union[Unset, str]): The 'filter' system query option allows clients to filter a
+            collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
                                         evaluates to true are included in the response. Example: name ~= 'Scott%'.
-        order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
+        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
             resources in either
-                                        ascending order using asc or descending order using desc. If asc or desc not
-            specified,
-                                        then the resources will be ordered in ascending order. The request below orders Trips
+                                ascending order using asc or descending order using desc. If asc or desc not specified,
+                                then the resources will be ordered in ascending order. The request below orders Trips
             on
-                                        property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default. Example: True.
-        at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
-            resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
+                                property EndsAt in descending order. Example: orderby=EndsAt.
+        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
+            order is the lt. Default: False.
+        at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
+            that time [now] Example: 1996-12-19T16:39:57-08:00.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ServiceListRT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ServiceListRT]]
     """
 
     kwargs = _get_kwargs(
@@ -158,48 +160,46 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
-    filter_: Union[Unset, None, str] = UNSET,
-    order_by: Union[Unset, None, str] = UNSET,
-    order_desc: Union[Unset, None, bool] = False,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ServiceListRT]]:
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
+    filter_: Union[Unset, str] = UNSET,
+    order_by: Union[Unset, str] = UNSET,
+    order_desc: Union[Unset, bool] = False,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ServiceListRT]]:
     """list service
 
      list services
 
     Args:
-        limit (Union[Unset, None, int]): The $limit system query option requests the number of
-            items in the queried
-                                        collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): The content of 'page' is returned in the 'links' part of a
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+                                to be included in the result. Default: 10. Example: 10.
+        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
             previous query and
-                                        will when set, ALL other parameters, except for 'limit' are ignored. Example:
+                                will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
-        filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
-            filter a collection of
+        filter_ (Union[Unset, str]): The 'filter' system query option allows clients to filter a
+            collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
                                         evaluates to true are included in the response. Example: name ~= 'Scott%'.
-        order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
+        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
             resources in either
-                                        ascending order using asc or descending order using desc. If asc or desc not
-            specified,
-                                        then the resources will be ordered in ascending order. The request below orders Trips
+                                ascending order using asc or descending order using desc. If asc or desc not specified,
+                                then the resources will be ordered in ascending order. The request below orders Trips
             on
-                                        property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default. Example: True.
-        at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
-            resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
+                                property EndsAt in descending order. Example: orderby=EndsAt.
+        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
+            order is the lt. Default: False.
+        at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
+            that time [now] Example: 1996-12-19T16:39:57-08:00.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ServiceListRT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ServiceListRT]
     """
 
     return sync_detailed(
@@ -216,48 +216,46 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
-    filter_: Union[Unset, None, str] = UNSET,
-    order_by: Union[Unset, None, str] = UNSET,
-    order_desc: Union[Unset, None, bool] = False,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ServiceListRT]]:
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
+    filter_: Union[Unset, str] = UNSET,
+    order_by: Union[Unset, str] = UNSET,
+    order_desc: Union[Unset, bool] = False,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ServiceListRT]]:
     """list service
 
      list services
 
     Args:
-        limit (Union[Unset, None, int]): The $limit system query option requests the number of
-            items in the queried
-                                        collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): The content of 'page' is returned in the 'links' part of a
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+                                to be included in the result. Default: 10. Example: 10.
+        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
             previous query and
-                                        will when set, ALL other parameters, except for 'limit' are ignored. Example:
+                                will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
-        filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
-            filter a collection of
+        filter_ (Union[Unset, str]): The 'filter' system query option allows clients to filter a
+            collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
                                         evaluates to true are included in the response. Example: name ~= 'Scott%'.
-        order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
+        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
             resources in either
-                                        ascending order using asc or descending order using desc. If asc or desc not
-            specified,
-                                        then the resources will be ordered in ascending order. The request below orders Trips
+                                ascending order using asc or descending order using desc. If asc or desc not specified,
+                                then the resources will be ordered in ascending order. The request below orders Trips
             on
-                                        property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default. Example: True.
-        at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
-            resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
+                                property EndsAt in descending order. Example: orderby=EndsAt.
+        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
+            order is the lt. Default: False.
+        at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
+            that time [now] Example: 1996-12-19T16:39:57-08:00.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ServiceListRT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ServiceListRT]]
     """
 
     kwargs = _get_kwargs(
@@ -277,48 +275,46 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
-    filter_: Union[Unset, None, str] = UNSET,
-    order_by: Union[Unset, None, str] = UNSET,
-    order_desc: Union[Unset, None, bool] = False,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ServiceListRT]]:
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
+    filter_: Union[Unset, str] = UNSET,
+    order_by: Union[Unset, str] = UNSET,
+    order_desc: Union[Unset, bool] = False,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ServiceListRT]]:
     """list service
 
      list services
 
     Args:
-        limit (Union[Unset, None, int]): The $limit system query option requests the number of
-            items in the queried
-                                        collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): The content of 'page' is returned in the 'links' part of a
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+                                to be included in the result. Default: 10. Example: 10.
+        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
             previous query and
-                                        will when set, ALL other parameters, except for 'limit' are ignored. Example:
+                                will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
-        filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
-            filter a collection of
+        filter_ (Union[Unset, str]): The 'filter' system query option allows clients to filter a
+            collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
                                         evaluates to true are included in the response. Example: name ~= 'Scott%'.
-        order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
+        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
             resources in either
-                                        ascending order using asc or descending order using desc. If asc or desc not
-            specified,
-                                        then the resources will be ordered in ascending order. The request below orders Trips
+                                ascending order using asc or descending order using desc. If asc or desc not specified,
+                                then the resources will be ordered in ascending order. The request below orders Trips
             on
-                                        property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the default. Example: True.
-        at_time (Union[Unset, None, datetime.datetime]): Return the state of the respective
-            resources at that time [now] Example: 1996-12-19T16:39:57-08:00.
+                                property EndsAt in descending order. Example: orderby=EndsAt.
+        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
+            order is the lt. Default: False.
+        at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
+            that time [now] Example: 1996-12-19T16:39:57-08:00.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT, ServiceListRT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ServiceListRT]
     """
 
     return (

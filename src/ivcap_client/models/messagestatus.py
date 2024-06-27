@@ -1,55 +1,48 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="DescribedByT")
+T = TypeVar("T", bound="Messagestatus")
 
 
-@define
-class DescribedByT:
+@_attrs_define
+class Messagestatus:
     """
     Example:
-        {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}
+        {'id': 'urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000'}
 
     Attributes:
-        href (Union[Unset, str]):  Example: https://api.com/swagger/....
-        type (Union[Unset, str]):  Example: application/openapi3+json.
+        id (Union[Unset, str]): queue Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
     """
 
-    href: Union[Unset, str] = UNSET
-    type: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    id: Union[Unset, str] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        href = self.href
-        type = self.type
+        id = self.id
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if href is not UNSET:
-            field_dict["href"] = href
-        if type is not UNSET:
-            field_dict["type"] = type
+        if id is not UNSET:
+            field_dict["id"] = id
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        href = d.pop("href", UNSET)
+        id = d.pop("id", UNSET)
 
-        type = d.pop("type", UNSET)
-
-        described_by_t = cls(
-            href=href,
-            type=type,
+        messagestatus = cls(
+            id=id,
         )
 
-        described_by_t.additional_properties = d
-        return described_by_t
+        messagestatus.additional_properties = d
+        return messagestatus
 
     @property
     def additional_keys(self) -> List[str]:

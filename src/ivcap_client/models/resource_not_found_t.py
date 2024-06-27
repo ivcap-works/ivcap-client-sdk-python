@@ -1,13 +1,14 @@
 from typing import Any, Dict, List, Type, TypeVar
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 T = TypeVar("T", bound="ResourceNotFoundT")
 
 
-@define
+@_attrs_define
 class ResourceNotFoundT:
-    """artifacts not found
+    """Resource not found
 
     Example:
         {'id': 'cayp:type:123e4567-e89b-12d3-a456-426614174000', 'message': 'Resource 123...00 not found'}
@@ -19,10 +20,11 @@ class ResourceNotFoundT:
 
     id: str
     message: str
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id
+
         message = self.message
 
         field_dict: Dict[str, Any] = {}

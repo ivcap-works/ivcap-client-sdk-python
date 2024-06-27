@@ -1,31 +1,32 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="InvalidScopesT")
 
 
-@define
+@_attrs_define
 class InvalidScopesT:
-    """Token scopes are invalid
+    """Not authorised to access this scope
 
     Example:
-        {'id': '123e4567-e89b-12d3-a456-426614174000', 'message': 'Voluptas ut aut placeat autem aut.'}
+        {'id': '123e4567-e89b-12d3-a456-426614174000', 'message': 'Not authorized to perform this action'}
 
     Attributes:
-        message (str): Message of error Default: 'Not authorized to perform this action'. Example: Qui voluptas
-            consectetur cumque debitis..
+        message (str): Message of error Example: Not authorized to perform this action.
         id (Union[Unset, str]): ID of involved resource Example: 123e4567-e89b-12d3-a456-426614174000.
     """
 
-    message: str = "Not authorized to perform this action"
+    message: str
     id: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         message = self.message
+
         id = self.id
 
         field_dict: Dict[str, Any] = {}

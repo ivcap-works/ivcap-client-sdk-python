@@ -1,24 +1,25 @@
 from typing import Any, Dict, List, Type, TypeVar
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="NotImplementedT")
+T = TypeVar("T", bound="BadRequestT")
 
 
-@define
-class NotImplementedT:
-    """Method is not yet implemented
+@_attrs_define
+class BadRequestT:
+    """Bad request
 
     Example:
-        {'message': 'Quasi quis laborum mollitia animi.'}
+        {'message': 'Autem natus sit ut ex ut.'}
 
     Attributes:
-        message (str): Information message Default: 'Method not implemented'. Example: Et est reiciendis enim adipisci
-            et quibusdam..
+        message (str): Information message Default: 'Having problem with some of the supplied information'. Example: Ut
+            omnis dolor dicta..
     """
 
-    message: str = "Method not implemented"
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    message: str = "Having problem with some of the supplied information"
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         message = self.message
@@ -38,12 +39,12 @@ class NotImplementedT:
         d = src_dict.copy()
         message = d.pop("message")
 
-        not_implemented_t = cls(
+        bad_request_t = cls(
             message=message,
         )
 
-        not_implemented_t.additional_properties = d
-        return not_implemented_t
+        bad_request_t.additional_properties = d
+        return bad_request_t
 
     @property
     def additional_keys(self) -> List[str]:

@@ -5,34 +5,29 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.invalid_parameter_value import InvalidParameterValue
+from ...models.bad_request_t import BadRequestT
+from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
-from ...models.not_implemented_t import NotImplementedT
 from ...types import Response
 
 
 def _get_kwargs(
     id: str,
 ) -> Dict[str, Any]:
-    pass
-
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "delete",
-        "url": "/1/metadata/{id}".format(
-            id=id,
-        ),
+        "url": f"/1/metadata/{id}",
     }
+
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     if response.status_code == HTTPStatus.NO_CONTENT:
         response_204 = cast(Any, None)
         return response_204
-    if response.status_code == HTTPStatus.BAD_REQUEST:
-        response_400 = cast(Any, None)
-        return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
@@ -41,13 +36,20 @@ def _parse_response(
 
         return response_403
     if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
-        response_422 = InvalidParameterValue.from_dict(response.json())
+        response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+    if response.status_code == HTTPStatus.FAILED_DEPENDENCY:
+        response_424 = BadRequestT.from_dict(response.json())
+
+        return response_424
     if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
-        response_501 = NotImplementedT.from_dict(response.json())
+        response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
+    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+        response_503 = cast(Any, None)
+        return response_503
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -56,7 +58,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -69,7 +71,7 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """revoke metadata
 
      Retract a previously created statement.
@@ -83,7 +85,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]
     """
 
     kwargs = _get_kwargs(
@@ -101,7 +103,7 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """revoke metadata
 
      Retract a previously created statement.
@@ -115,7 +117,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]
     """
 
     return sync_detailed(
@@ -128,7 +130,7 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """revoke metadata
 
      Retract a previously created statement.
@@ -142,7 +144,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]
     """
 
     kwargs = _get_kwargs(
@@ -158,7 +160,7 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """revoke metadata
 
      Retract a previously created statement.
@@ -172,7 +174,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, InvalidParameterValue, InvalidScopesT, NotImplementedT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]
     """
 
     return (

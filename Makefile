@@ -18,7 +18,7 @@ test:
 
 
 SRC_DIR=${ROOT_DIR}/src/ivcap_client
-OPENAPI_URL=https://raw.githubusercontent.com/reinventingscience/ivcap-core-api/main/openapi3.json
+OPENAPI_URL=https://raw.githubusercontent.com/ivcap-works/ivcap-core-api/main/openapi3.json
 gen:
 	@if ! type "openapi-python-client" > /dev/null; then \
 		echo ">>>\n>>> You need to first install 'openapi-python-client'\n>>>"; \
@@ -49,6 +49,6 @@ docs:
 clean:
 	rm -rf *.egg-info
 	rm -rf dist
-	find ${ROOT_DIR} -name __pycache__ | xargs rm -r 
+	find ${ROOT_DIR} -name __pycache__ | xargs rm -r
 
 .PHONY: docs

@@ -52,6 +52,10 @@ def _parse_response(
         response_200 = AspectIDRT.from_dict(response.json())
 
         return response_200
+    if response.status_code == HTTPStatus.BAD_REQUEST:
+        response_400 = BadRequestT.from_dict(response.json())
+
+        return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401

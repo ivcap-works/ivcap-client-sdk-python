@@ -1,14 +1,14 @@
 import datetime
-from io import BytesIO
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
-from ..types import UNSET, File, Unset
+from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.aspect_rt_content import AspectRTContent
     from ..models.link_t import LinkT
 
 
@@ -30,7 +30,7 @@ class AspectRT:
     Attributes:
         asserter (str): Entity asserting this metadata record at 'valid-from' Example:
             urn:ivcap:principal:123e4567-e89b-12d3-a456-426614174000.
-        content (File): Description of aspect encoded as 'content-type' Example: {...}.
+        content (AspectRTContent): Attached aspect aspect
         content_type (str): Content-Type header, MUST be of application/json. Example: application/json.
         entity (str): Entity URN Example: urn:blue:transect.1.
         id (str): ID Example: urn:ivcap:record:123e4567-e89b-12d3-a456-426614174000.
@@ -45,7 +45,7 @@ class AspectRT:
     """
 
     asserter: str
-    content: File
+    content: "AspectRTContent"
     content_type: str
     entity: str
     id: str
@@ -59,7 +59,7 @@ class AspectRT:
     def to_dict(self) -> Dict[str, Any]:
         asserter = self.asserter
 
-        content = self.content.to_tuple()
+        content = self.content.to_dict()
 
         content_type = self.content_type
 
@@ -105,12 +105,13 @@ class AspectRT:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.aspect_rt_content import AspectRTContent
         from ..models.link_t import LinkT
 
         d = src_dict.copy()
         asserter = d.pop("asserter")
 
-        content = File(payload=BytesIO(d.pop("content")))
+        content = AspectRTContent.from_dict(d.pop("content"))
 
         content_type = d.pop("content-type")
 

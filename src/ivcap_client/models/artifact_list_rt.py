@@ -19,26 +19,30 @@ T = TypeVar("T", bound="ArtifactListRT")
 class ArtifactListRT:
     """
     Example:
-        {'at-time': '1996-12-19T16:39:57-08:00', 'items': [{'href': 'https://api.ivcap.net/1/orders/...', 'id':
+        {'at-time': '1996-12-19T16:39:57-08:00', 'items': [{'created-at': '1996-12-19T16:39:57-08:00', 'href':
+            'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-
+            type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}, {'created-at':
+            '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
             'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-type': 'image/jpeg', 'name': 'Fire risk for
-            Lot2', 'size': 19000, 'status': 'ready'}, {'href': 'https://api.ivcap.net/1/orders/...', 'id':
-            'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-type': 'image/jpeg', 'name': 'Fire risk for
-            Lot2', 'size': 19000, 'status': 'ready'}, {'href': 'https://api.ivcap.net/1/orders/...', 'id':
-            'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-type': 'image/jpeg', 'name': 'Fire risk for
-            Lot2', 'size': 19000, 'status': 'ready'}, {'href': 'https://api.ivcap.net/1/orders/...', 'id':
-            'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-type': 'image/jpeg', 'name': 'Fire risk for
-            Lot2', 'size': 19000, 'status': 'ready'}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self',
-            'type': 'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type':
-            'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'},
-            {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
+            Lot2', 'size': 19000, 'status': 'ready'}, {'created-at': '1996-12-19T16:39:57-08:00', 'href':
+            'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-
+            type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}], 'links': [{'href':
+            'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}]}
 
     Attributes:
-        items (List['ArtifactListItem']): Artifacts Example: [{'href': 'https://api.ivcap.net/1/orders/...', 'id':
+        items (List['ArtifactListItem']): Artifacts Example: [{'created-at': '1996-12-19T16:39:57-08:00', 'href':
+            'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-
+            type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}, {'created-at':
+            '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
             'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-type': 'image/jpeg', 'name': 'Fire risk for
-            Lot2', 'size': 19000, 'status': 'ready'}, {'href': 'https://api.ivcap.net/1/orders/...', 'id':
-            'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-type': 'image/jpeg', 'name': 'Fire risk for
-            Lot2', 'size': 19000, 'status': 'ready'}, {'href': 'https://api.ivcap.net/1/orders/...', 'id':
+            Lot2', 'size': 19000, 'status': 'ready'}, {'created-at': '1996-12-19T16:39:57-08:00', 'href':
+            'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-
+            type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}, {'created-at':
+            '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
             'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-type': 'image/jpeg', 'name': 'Fire risk for
             Lot2', 'size': 19000, 'status': 'ready'}].
         links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':

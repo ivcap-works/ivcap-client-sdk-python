@@ -10,15 +10,16 @@ T = TypeVar("T", bound="OrderTopResultItem")
 class OrderTopResultItem:
     """
     Example:
-        {'container': 'Vel qui et.', 'cpu': 'Nostrum maiores aut quam.', 'ephemeral-storage': 'Debitis ut culpa
-            consectetur laborum et.', 'memory': 'Aut architecto suscipit ut non quo.', 'storage': 'Illo enim et est.'}
+        {'container': 'Corporis laudantium qui aliquid sit.', 'cpu': 'Id accusamus commodi dolores repellat
+            reiciendis.', 'ephemeral-storage': 'Unde sapiente.', 'memory': 'Nulla nostrum et deleniti.', 'storage': 'Tempore
+            aut minus ut ullam quisquam ad.'}
 
     Attributes:
-        container (str): container Example: Non in aperiam et vel porro..
-        cpu (str): cpu Example: Vitae et et optio eos..
-        ephemeral_storage (str): ephemeral-storage Example: Vel architecto autem tempore eos ea autem..
-        memory (str): memory Example: Aut ut quia..
-        storage (str): storage Example: Temporibus totam suscipit..
+        container (str): container Example: Quis ut..
+        cpu (str): cpu Example: Fugit repellendus..
+        ephemeral_storage (str): ephemeral-storage Example: Provident minus ratione quas molestiae non qui..
+        memory (str): memory Example: Et ut dolores expedita voluptatibus qui..
+        storage (str): storage Example: Exercitationem sunt ut molestiae quia voluptatem..
     """
 
     container: str

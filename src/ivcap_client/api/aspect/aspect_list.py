@@ -69,6 +69,10 @@ def _parse_response(
         response_200 = AspectListRT.from_dict(response.json())
 
         return response_200
+    if response.status_code == HTTPStatus.BAD_REQUEST:
+        response_400 = BadRequestT.from_dict(response.json())
+
+        return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
@@ -84,10 +88,6 @@ def _parse_response(
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.FAILED_DEPENDENCY:
-        response_424 = BadRequestT.from_dict(response.json())
-
-        return response_424
     if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
@@ -165,6 +165,7 @@ def sync_detailed(
         order_direction (Union[Unset, str]): Set the sort direction 'ASC', 'DESC' for each order-
             by element. Default: 'DESC'. Example: desc.
         include_content (Union[Unset, bool]): When set, also include aspect content in list.
+            Example: True.
         page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
@@ -251,6 +252,7 @@ def sync(
         order_direction (Union[Unset, str]): Set the sort direction 'ASC', 'DESC' for each order-
             by element. Default: 'DESC'. Example: desc.
         include_content (Union[Unset, bool]): When set, also include aspect content in list.
+            Example: True.
         page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
@@ -332,6 +334,7 @@ async def asyncio_detailed(
         order_direction (Union[Unset, str]): Set the sort direction 'ASC', 'DESC' for each order-
             by element. Default: 'DESC'. Example: desc.
         include_content (Union[Unset, bool]): When set, also include aspect content in list.
+            Example: True.
         page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
@@ -416,6 +419,7 @@ async def asyncio(
         order_direction (Union[Unset, str]): Set the sort direction 'ASC', 'DESC' for each order-
             by element. Default: 'DESC'. Example: desc.
         include_content (Union[Unset, bool]): When set, also include aspect content in list.
+            Example: True.
         page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:

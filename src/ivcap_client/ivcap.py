@@ -4,28 +4,28 @@
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
 
-from __future__ import annotations # postpone evaluation of annotations 
+from __future__ import annotations # postpone evaluation of annotations
 from datetime import datetime
 import os
-import json
-from typing import IO, Dict, Iterator, Optional
+from typing import IO, Dict, Iterator, Optional, Union
 from ivcap_client.api.artifact import artifact_upload
+from ivcap_client.api.aspect import aspect_create
 from ivcap_client.artifact import Artifact, ArtifactIter
-from ivcap_client.models.artifact_status_rt import ArtifactStatusRT 
+from ivcap_client.aspect import Aspect, AspectIter
+from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
 from tusclient.client import TusClient
 from sys import maxsize as MAXSIZE
 import mimetypes
 import base64
 
-from ivcap_client.api.metadata import metadata_add
 from ivcap_client.client.client import AuthenticatedClient
 from ivcap_client.excpetions import MissingParameterValue
-from ivcap_client.metadata import Metadata, MetadataIter
 from ivcap_client.models.add_meta_rt import AddMetaRT
+from ivcap_client.models.aspect_list_item_rt import AspectListItemRT
 from ivcap_client.order import Order, OrderIter
 from ivcap_client.service import Service, ServiceIter
-from ivcap_client.utils import process_error
-from ivcap_client.models.metadata_list_item_rt import MetadataListItemRT
+from ivcap_client.types import UNSET, Unset
+from ivcap_client.utils import _wrap, process_error
 
 URN = str
 
@@ -34,7 +34,7 @@ class IVCAP:
     """
 
     def __init__(self, url:Optional[str]=None, token:Optional[str]=None, account_id:Optional[str]=None):
-        """Create a new IVCAP instance through which to interact with 
+        """Create a new IVCAP instance through which to interact with
         a specific IVCAP deployment identified by 'url'. Access is authorized
         by 'token'.
 
@@ -44,7 +44,7 @@ class IVCAP:
             account_id (Optional[str], optional): _description_. Defaults to [env: IVCAP_ACCOUNT_ID].
         """
         if not url:
-            url= os.getenv('IVCAP_URL', 'https://api.ivcap.net')
+            url= os.environ['IVCAP_URL']
         if not token:
             token = os.environ['IVCAP_JWT']
         if not account_id:
@@ -54,23 +54,32 @@ class IVCAP:
         self._client = AuthenticatedClient(base_url=url, token=token)
         self._account_id = account_id
 
-    def list_services(self, 
+    def list_services(self,
+            *,
             filter: Optional[str] = None,
+            limit: Optional[int] = 10,
             order_by: Optional[str] = None,
             order_desc: Optional[bool] = False,
-            at_time: Optional[datetime.datetime] = None,
+            at_time: Optional[datetime.datetime] = UNSET,
     ) -> Iterator[Service]:
         """Return an iterator over all the available services fulfilling certain constraints.
 
         Args:
-            filter Optional[str]: Allows clients to  filter a collection of
-                                        resources that are addressed by a request URL. The expression specified with 'filter'
-                                        is evaluated for each resource in the collection, and only items where the expression
-                                        evaluates to true are included in the response. 
-                                        Example: filter=FirstName eq 'Scott'.. Defaults to None.
-            order_by Optional[str]: _description_. Defaults to None.
-            order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
-            at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+            limit (Optional[int]): The 'limit' query option sets the maximum number of items
+                                    to be included in the result. Default: 10. Example: 10.
+            filter_ (Optional[str]): The 'filter' system query option allows clients to filter a
+                collection of resources that are addressed by a request URL. The expression specified with 'filter'
+                                            is evaluated for each resource in the collection, and only items where the expression
+                                            evaluates to true are included in the response. Example: name ~= 'Scott%'.
+            order_by (Optional[str]): The 'orderby' query option allows clients to request
+                resources in either
+                                    ascending order using asc or descending order using desc. If asc or desc not specified,
+                                    then the resources will be ordered in ascending order. The request below orders Trips on
+                                    property EndsAt in descending order. Example: orderby=EndsAt.
+            order_desc (Optional[bool]): When set order result in descending order. Ascending
+                order is the lt. Default: False.
+            at_time (Optional[datetime.datetime]): Return the state of the respective resources at
+                that time [now] Example: 1996-12-19T16:39:57-08:00.
 
         Returns:
             Iterator[Service]: An iterator over a list of services
@@ -79,36 +88,46 @@ class IVCAP:
             Service: A Service object
         """
         kwargs = {
-            "filter_": filter,
-            "order_by": order_by,
-            "order_desc": order_desc,
-            "at_time": at_time,
+            "filter_": _wrap(filter),
+            "limit": _wrap(limit),
+            "order_by": _wrap(order_by),
+            "order_desc": _wrap(order_desc),
+            "at_time": _wrap(at_time),
             "client": self._client,
         }
         return ServiceIter(self, **kwargs)
 
     def get_service(self, service_id: str) -> Service:
         return Service(service_id, self)
-    
+
     ### ORDERS
 
-    def list_orders(self, 
+    def list_orders(self,
+            *,
             filter: Optional[str] = None,
+            limit: Optional[int] = 10,
             order_by: Optional[str] = None,
             order_desc: Optional[bool] = False,
-            at_time: Optional[datetime.datetime] = None,
+            at_time: Optional[datetime.datetime] = UNSET,
     ) -> Iterator[Order]:
         """Return an iterator over all the available orders fulfilling certain constraints.
 
         Args:
-            filter Optional[str]: Allows clients to  filter a collection of
-                                        resources that are addressed by a request URL. The expression specified with 'filter'
-                                        is evaluated for each resource in the collection, and only items where the expression
-                                        evaluates to true are included in the response. 
-                                        Example: filter=FirstName eq 'Scott'.. Defaults to None.
-            order_by Optional[str]: _description_. Defaults to None.
-            order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
-            at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+            limit (Optional[int]): The 'limit' query option sets the maximum number of items
+                                    to be included in the result. Default: 10. Example: 10.
+            filter_ (Optional[str]): The 'filter' system query option allows clients to filter a
+                collection of resources that are addressed by a request URL. The expression specified with 'filter'
+                                            is evaluated for each resource in the collection, and only items where the expression
+                                            evaluates to true are included in the response. Example: name ~= 'Scott%'.
+            order_by (Optional[str]): The 'orderby' query option allows clients to request
+                resources in either
+                                    ascending order using asc or descending order using desc. If asc or desc not specified,
+                                    then the resources will be ordered in ascending order. The request below orders Trips on
+                                    property EndsAt in descending order. Example: orderby=EndsAt.
+            order_desc (Optional[bool]): When set order result in descending order. Ascending
+                order is the lt. Default: False.
+            at_time (Optional[datetime.datetime]): Return the state of the respective resources at
+                that time [now] Example: 1996-12-19T16:39:57-08:00.
 
         Returns:
             Iterator[Order]: An iterator over a list of orders
@@ -117,27 +136,28 @@ class IVCAP:
             Order: An order object
         """
         kwargs = {
-            "filter_": filter,
-            "order_by": order_by,
-            "order_desc": order_desc,
-            "at_time": at_time,
+            "filter_": _wrap(filter),
+            "limit": _wrap(limit),
+            "order_by": _wrap(order_by),
+            "order_desc": _wrap(order_desc),
+            "at_time": _wrap(at_time),
             "client": self._client,
         }
-        return OrderIter(self, **kwargs)    
-    
+        return OrderIter(self, **kwargs)
+
     def get_order(self, id: str) -> Order:
         return Order(id, self)
 
-    #### METADATA
+    #### ASPECT
 
-    def add_metadata(self, 
-                     entity: str, 
-                     aspect: Dict[str,any], 
+    def add_aspect(self,
+                     entity: str,
+                     aspect: Dict[str,any],
                      schema: Optional[str]=None,
                      *,
-                     policy: Optional[URN] = None, 
-                     ) -> Metadata:
-        """Add a metadata 'aspect' to 'entity'. The 'schema' of the aspect, if not defined
+                     policy: Optional[URN] = None,
+                     ) -> Aspect:
+        """Add an 'aspect' to an 'entity'. The 'schema' of the aspect, if not defined
         is expected to found in the 'aspect' under the '$schema' key.
 
         Args:
@@ -147,7 +167,7 @@ class IVCAP:
             policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
 
         Returns:
-            metadata: The created metadata record
+            aspect: The created aspect record
         """
         if not schema:
             schema = aspect.get("$schema")
@@ -156,90 +176,124 @@ class IVCAP:
         kwargs = {
             "entity_id": entity,
             "schema": schema,
-            "json_body": aspect, #json.dumps(aspect),
+            "body": aspect, #json.dumps(aspect),
             "client": self._client,
             "content_type": "application/json",
         }
         if policy:
             if not policy.startswith("urn:ivcap:policy:"):
                 raise Exception(f"policy '{collection} is not a policy URN.")
-            kwargs['policy_id'] = policy
-            
-        r = metadata_add.sync_detailed(**kwargs)
+            kwargs['policy'] = policy
+
+        r = aspect_create.sync_detailed(**kwargs)
         if r.status_code >= 300 :
-            return process_error('add_metadata', r)
-        
+            return process_error('add_aspect', r)
+
         res:AddMetaRT = r.parsed
         d = res.to_dict()
         d['entity'] = entity
         d['schema'] = schema
         d['aspect'] = aspect
-        li = MetadataListItemRT.from_dict(d)
-        return Metadata(res.record_id, self, li)
-    
-    def search_metadata(self,
+        li = AspectListItemRT.from_dict(d)
+        return Aspect(res.record_id, self, li)
+
+    def list_aspect(self,
         *,
         entity: Optional[str] = None,
-        schema_prefix : Optional[str] = None,
-        aspect_path: Optional[str] = None,
+        schema: Optional[str] = None,
+        content_path: Optional[str] = None,
+        at_time: Optional[datetime.datetime] = None,
+        limit: Optional[int] = 10,
         filter: Optional[str] = None,
-        order_by:Optional[str] = None,
-        order_desc: Optional[str] = None,
-        at_time: Optional[datetime] = None,
-    )-> Iterator[Metadata]:
-        """Return an iterator over all the metadata records fulfilling certain constraints.
+        order_by: Optional[str] = "valid_from",
+        order_direction: Optional[str] = "DESC",
+        include_content: Optional[bool] = True,
+    )-> Iterator[Aspect]:
+        """Return an iterator over all the aspect records fulfilling certain constraints.
 
         Args:
-            entity Optional[str]: The entity URN for which to restrict the returend metadata records
-            schema_prefix Optional[str]: A prefix (using Postgres 'like' patterns) to restrict the 
-                                        returend metadata records
-            aspect_path: Optional[str]: When defined also return a specific sub tree of the record's aspect
-            filter Optional[str]: Allows clients to  filter a collection of
-                                        resources that are addressed by a request URL. The expression specified with 'filter'
-                                        is evaluated for each resource in the collection, and only items where the expression
-                                        evaluates to true are included in the response. 
-                                        Example: filter=FirstName eq 'Scott'.. Defaults to None.
-            order_by Optional[str]: _description_. Defaults to None.
-            order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
-            at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+            entity (Optional[str]): Optional entity for which to request aspects Example:
+                urn:blue:image.collA#12.
+            schema (Optional[str]): Schema prefix using '%' as wildcard indicator Example:
+                urn:blue:schema:image%.
+            content_path (Optional[str]): To learn more about the supported format, see
+                                                    https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH Example:
+                $.images[*] ? (@.size > 10000).
+            at_time (Optional[datetime.datetime]): Return aspect which where valid at that time
+                [now] Example: 1996-12-19T16:39:57-08:00.
+            limit (Optional[int]): The 'limit' system query option requests the number of items in
+                the queried
+                                            collection to be included in the result. Default: 10. Example: 10.
+            filter_ (Optional[str]): The 'filter' system query option allows clients to filter a collection of
+                                            resources that are addressed by a request URL. The expression specified with 'filter'
+                                            is evaluated for each resource in the collection, and only items where the expression
+                                            evaluates to true are included in the response. Default: ''. Example: FirstName eq
+                'Scott'.
+            order_by (Optional[str]): Optional comma-separated list of attributes to sort the list
+                by.
+                * entity
+                * schema
+                * content
+                * policy
+                * account
+                * created_by
+                * retracted_by
+                * replaces
+                * valid_from
+                * valid_to
+                Default: 'valid_from'. Example: entity,created-at.
+            order_direction (Optional[str]): Set the sort direction 'ASC', 'DESC' for each order-
+                by element. Default: 'DESC'. Example: desc.
+            include_content (Optional[bool]): When set, also include aspect content in list.
 
         Returns:
-            Iterator[Metadata]: An iterator over a list of metadata records
+            Iterator[Aspect]: An iterator over a list of aspect records
 
         Yields:
-            Metadata: A metadata object
+            Aspect: A aspect object
         """
         kwargs = {
-            "entity_id": entity,
-            "schema": schema_prefix,
-            "aspect_path": aspect_path,
-            "filter_": filter,
-            "order_by": order_by,
-            "order_desc": order_desc,
-            "at_time": at_time,
+            "entity": _wrap(entity),
+            "schema": _wrap(schema),
+            "content_path": _wrap(content_path),
+            "at_time": _wrap(at_time),
+            "limit": _wrap(limit),
+            "filter_": _wrap(filter),
+            "order_by": _wrap(order_by),
+            "order_direction": _wrap(order_direction),
+            "include_content": _wrap(include_content),
             "client": self._client,
         }
-        return MetadataIter(self, **kwargs)   
+        return AspectIter(self, **kwargs)
 
     #### ARTIFACTS
 
-    def list_artifacts(self, 
+    def list_artifacts(self,
+            *,
             filter: Optional[str] = None,
+            limit: Optional[int] = 10,
             order_by: Optional[str] = None,
             order_desc: Optional[bool] = False,
-            at_time: Optional[datetime.datetime] = None,
+            at_time: Optional[datetime.datetime] = UNSET,
     ) -> Iterator[Artifact]:
         """Return an iterator over all the available artifacts fulfilling certain constraints.
 
         Args:
-            filter Optional[str]: Allows clients to  filter a collection of
-                                        resources that are addressed by a request URL. The expression specified with 'filter'
-                                        is evaluated for each resource in the collection, and only items where the expression
-                                        evaluates to true are included in the response. 
-                                        Example: filter=FirstName eq 'Scott'.. Defaults to None.
-            order_by Optional[str]: _description_. Defaults to None.
-            order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
-            at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+            limit (Optional[int]): The 'limit' query option sets the maximum number of items
+                                    to be included in the result. Default: 10. Example: 10.
+            filter_ (Optional[str]): The 'filter' system query option allows clients to filter a
+                collection of resources that are addressed by a request URL. The expression specified with 'filter'
+                                            is evaluated for each resource in the collection, and only items where the expression
+                                            evaluates to true are included in the response. Example: name ~= 'Scott%'.
+            order_by (Optional[str]): The 'orderby' query option allows clients to request
+                resources in either
+                                    ascending order using asc or descending order using desc. If asc or desc not specified,
+                                    then the resources will be ordered in ascending order. The request below orders Trips on
+                                    property EndsAt in descending order. Example: orderby=EndsAt.
+            order_desc (Optional[bool]): When set order result in descending order. Ascending
+                order is the lt. Default: False.
+            at_time (Optional[datetime.datetime]): Return the state of the respective resources at
+                that time [now] Example: 1996-12-19T16:39:57-08:00.
 
         Returns:
             Iterator[Service]: An iterator over a list of services
@@ -248,25 +302,26 @@ class IVCAP:
             Artifact: An artifact object
         """
         kwargs = {
-            "filter_": filter,
-            "order_by": order_by,
-            "order_desc": order_desc,
-            "at_time": at_time,
+            "filter_": _wrap(filter),
+            "limit": _wrap(limit),
+            "order_by": _wrap(order_by),
+            "order_desc": _wrap(order_desc),
+            "at_time": _wrap(at_time),
             "client": self._client,
         }
         return ArtifactIter(self, **kwargs)
-    
+
     def upload_artifact(self,
                         *,
                         name: Optional[str] = None,
                         file_path: Optional[str] = None,
                         io_stream: Optional[IO] = None,
-                        content_type:  Optional[str] = None, 
-                        content_size: Optional[int] = -1, 
-                        collection: Optional[URN] = None, 
-                        policy: Optional[URN] = None, 
-                        chunk_size: Optional[int] = MAXSIZE, 
-                        retries: Optional[int] = 0, 
+                        content_type:  Optional[str] = None,
+                        content_size: Optional[int] = -1,
+                        collection: Optional[URN] = None,
+                        policy: Optional[URN] = None,
+                        chunk_size: Optional[int] = MAXSIZE,
+                        retries: Optional[int] = 0,
                         retry_delay: Optional[int] = 30
     ) -> Artifact:
         """Uploads content which is either identified as a `file_path` or `io_stream`. In the
@@ -274,25 +329,25 @@ class IVCAP:
 
         Args:
             file_path (Optional[str]): File to upload
-            io_stream (Optional[IO]): Content as IO stream. 
+            io_stream (Optional[IO]): Content as IO stream.
             content_type (Optional[str]): Content type - needs to be declared for `io_stream`.
             content_size (Optional[int]): Overall size of content to be uploaded. Defaults to -1 (don't know).
-            collection: Optional[URN]: Additionally adds artifact to named collection ('urn:...'). 
+            collection: Optional[URN]: Additionally adds artifact to named collection ('urn:...').
             policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
             chunk_size (Optional[int]): Chunk size to use for each individual upload. Defaults to MAXSIZE.
             retries (Optional[int]): The number of attempts should be made in the case of a failed upload. Defaults to 0.
             retry_delay (Optional[int], optional): How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
         """
-        
+
         if not (file_path or io_stream):
             raise Exception(f"require either 'file_path' or 'io_stream'")
 
         if not content_type and file_path:
-            content_type, encoding= mimetypes.guess_type(file_path) 
+            content_type, encoding= mimetypes.guess_type(file_path)
 
         if not content_type:
             raise Exception("missing 'content-type'")
-        
+
         if content_size < 0 and file_path:
             # generate size of file from file_path
             content_size = os.path.getsize(file_path)
@@ -320,20 +375,23 @@ class IVCAP:
         res:ArtifactStatusRT = r.parsed
 
         h = {'Authorization': f"Bearer {self._token}"}
-        data_url = res.data.self_
+        data_url = res.data_href
         c = TusClient(data_url, headers=h)
         kwargs = {
             'file_path': file_path,
             'file_stream': io_stream,
-            'chunk_size': chunk_size, 
-            'retries': retries, 
+            'chunk_size': chunk_size,
+            'retries': retries,
             'retry_delay': retry_delay,
         }
         uploader = c.uploader(**kwargs)
         uploader.set_url(data_url) # not sure why I need to set it here again
         uploader.upload()
-        a = Artifact(res.id, self)
-        a.status # status will have changed after upload
+
+        kwargs = res.to_dict()
+        kwargs["status"] = None
+        a = Artifact(self, **kwargs)
+        a.status # force status update as it will have change
         return a
 
     def get_artifact(self, id: str) -> Artifact:

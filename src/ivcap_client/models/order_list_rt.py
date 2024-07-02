@@ -22,20 +22,20 @@ class OrderListRT:
             'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'name':
             'Fire risk for Lot2', 'ordered-at': '1996-12-19T16:39:57-08:00', 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'pending'}, {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'finished-at':
+            'unknown'}, {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'finished-at':
             '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
             'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for Lot2', 'ordered-at':
             '1996-12-19T16:39:57-08:00', 'service': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at':
-            '1996-12-19T16:39:57-08:00', 'status': 'pending'}, {'account':
+            '1996-12-19T16:39:57-08:00', 'status': 'unknown'}, {'account':
             'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'finished-at': '1996-12-19T16:39:57-08:00', 'href':
             'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'name':
             'Fire risk for Lot2', 'ordered-at': '1996-12-19T16:39:57-08:00', 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'pending'}, {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'finished-at':
+            'unknown'}, {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'finished-at':
             '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
             'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for Lot2', 'ordered-at':
             '1996-12-19T16:39:57-08:00', 'service': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at':
-            '1996-12-19T16:39:57-08:00', 'status': 'pending'}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel':
+            '1996-12-19T16:39:57-08:00', 'status': 'unknown'}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel':
             'self', 'type': 'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
@@ -48,20 +48,11 @@ class OrderListRT:
             'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'name':
             'Fire risk for Lot2', 'ordered-at': '1996-12-19T16:39:57-08:00', 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'pending'}, {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'finished-at':
+            'unknown'}, {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'finished-at':
             '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
             'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for Lot2', 'ordered-at':
             '1996-12-19T16:39:57-08:00', 'service': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at':
-            '1996-12-19T16:39:57-08:00', 'status': 'pending'}, {'account':
-            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'finished-at': '1996-12-19T16:39:57-08:00', 'href':
-            'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'name':
-            'Fire risk for Lot2', 'ordered-at': '1996-12-19T16:39:57-08:00', 'service':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'pending'}, {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'finished-at':
-            '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
-            'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for Lot2', 'ordered-at':
-            '1996-12-19T16:39:57-08:00', 'service': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at':
-            '1996-12-19T16:39:57-08:00', 'status': 'pending'}].
+            '1996-12-19T16:39:57-08:00', 'status': 'unknown'}].
         links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':

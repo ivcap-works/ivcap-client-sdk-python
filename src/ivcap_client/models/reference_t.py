@@ -12,11 +12,11 @@ T = TypeVar("T", bound="ReferenceT")
 class ReferenceT:
     """
     Example:
-        {'title': 'Sit qui occaecati id quis.', 'uri': 'http://oberbrunner.biz/zion'}
+        {'title': 'Quo ut asperiores temporibus quia.', 'uri': 'http://waters.info/luisa.larkin'}
 
     Attributes:
-        title (Union[Unset, str]): Title of reference document Example: Asperiores aut accusantium..
-        uri (Union[Unset, str]): Link to document Example: http://konopelski.com/lysanne.
+        title (Union[Unset, str]): Title of reference document Example: Iste iusto..
+        uri (Union[Unset, str]): Link to document Example: http://koelpin.net/lucio.lind.
     """
 
     title: Union[Unset, str] = UNSET

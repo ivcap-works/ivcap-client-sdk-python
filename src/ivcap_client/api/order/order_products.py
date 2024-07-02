@@ -17,7 +17,7 @@ def _get_kwargs(
     order_id: str,
     *,
     order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = False,
+    order_desc: Union[Unset, bool] = True,
     limit: Union[Unset, int] = 10,
     page: Union[Unset, str] = UNSET,
 ) -> Dict[str, Any]:
@@ -49,6 +49,10 @@ def _parse_response(
         response_200 = PartialProductListT.from_dict(response.json())
 
         return response_200
+    if response.status_code == HTTPStatus.BAD_REQUEST:
+        response_400 = BadRequestT.from_dict(response.json())
+
+        return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
@@ -64,10 +68,6 @@ def _parse_response(
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.FAILED_DEPENDENCY:
-        response_424 = BadRequestT.from_dict(response.json())
-
-        return response_424
     if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
@@ -97,7 +97,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = False,
+    order_desc: Union[Unset, bool] = True,
     limit: Union[Unset, int] = 10,
     page: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductListT, ResourceNotFoundT]]:
@@ -115,7 +115,7 @@ def sync_detailed(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: False. Example: True.
+            order is the lt. Default: True.
         limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
         page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
@@ -151,7 +151,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = False,
+    order_desc: Union[Unset, bool] = True,
     limit: Union[Unset, int] = 10,
     page: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductListT, ResourceNotFoundT]]:
@@ -169,7 +169,7 @@ def sync(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: False. Example: True.
+            order is the lt. Default: True.
         limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
         page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
@@ -200,7 +200,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = False,
+    order_desc: Union[Unset, bool] = True,
     limit: Union[Unset, int] = 10,
     page: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductListT, ResourceNotFoundT]]:
@@ -218,7 +218,7 @@ async def asyncio_detailed(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: False. Example: True.
+            order is the lt. Default: True.
         limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
         page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
@@ -252,7 +252,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = False,
+    order_desc: Union[Unset, bool] = True,
     limit: Union[Unset, int] = 10,
     page: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductListT, ResourceNotFoundT]]:
@@ -270,7 +270,7 @@ async def asyncio(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: False. Example: True.
+            order is the lt. Default: True.
         limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
         page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a

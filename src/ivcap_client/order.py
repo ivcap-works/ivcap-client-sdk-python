@@ -82,7 +82,7 @@ class Order:
         return self._parameters
 
     def metadata(self) -> List[Aspect]:
-        self._ivcap.list_aspect(entity=self._id)
+        self._ivcap.list_aspect(entity=self.id)
 
     def add_metadata(self, aspect: Dict[str,any], schema: Optional[str]=None) -> 'Order':
         """Add a metadata 'aspect' to this order. The 'schema' of the aspect, if not defined
@@ -95,7 +95,7 @@ class Order:
         Returns:
             metadata: The metadata record created
         """
-        return self._ivcap.add_aspect(entity=self._id, aspect=aspect, schema=schema)
+        return self._ivcap.add_aspect(entity=self.id, aspect=aspect, schema=schema)
 
     def _refresh(self):
         r = order_read.sync_detailed(client=self._ivcap._client, id=self.id)

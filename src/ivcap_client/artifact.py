@@ -88,7 +88,7 @@ class Artifact:
         Returns:
             self: To enable chaining
         """
-        self._ivcap.add_aspect(entity=self._id, aspect=aspect, schema=schema)
+        self._ivcap.add_aspect(entity=self.id, aspect=aspect, schema=schema)
         return self
 
     def __repr__(self):

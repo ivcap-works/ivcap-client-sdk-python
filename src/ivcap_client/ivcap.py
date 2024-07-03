@@ -6,6 +6,7 @@
 
 from __future__ import annotations # postpone evaluation of annotations
 from datetime import datetime
+import types
 import os
 from typing import IO, Dict, Iterator, Optional, Union
 from ivcap_client.api.artifact import artifact_upload
@@ -19,7 +20,7 @@ import mimetypes
 import base64
 
 from ivcap_client.client.client import AuthenticatedClient
-from ivcap_client.excpetions import MissingParameterValue
+from ivcap_client.excpetions import AmbiguousRequest, MissingParameterValue, ResourceNotFound
 from ivcap_client.models.add_meta_rt import AddMetaRT
 from ivcap_client.models.aspect_list_item_rt import AspectListItemRT
 from ivcap_client.order import Order, OrderIter
@@ -47,12 +48,14 @@ class IVCAP:
             url= os.environ['IVCAP_URL']
         if not token:
             token = os.environ['IVCAP_JWT']
-        if not account_id:
-            account_id = os.environ['IVCAP_ACCOUNT_ID']
+        # if not account_id:
+        #     account_id = os.environ['IVCAP_ACCOUNT_ID']
         self._url = url
         self._token = token
         self._client = AuthenticatedClient(base_url=url, token=token)
         self._account_id = account_id
+
+    #### SERVICES
 
     def list_services(self,
             *,
@@ -97,7 +100,16 @@ class IVCAP:
         }
         return ServiceIter(self, **kwargs)
 
-    def get_service(self, service_id: str) -> Service:
+    def get_service_by_name(self, name: str) -> Service:
+        l = list(self.list_services(filter=f"name~='{name}'"))
+        n = len(l)
+        if n == 0:
+            raise ResourceNotFound(name)
+        elif n > 1:
+            raise AmbiguousRequest(f"more than one service '{name} found.")
+        return l[0]
+
+    def get_service(self, service_id: URN) -> Service:
         return Service(service_id, self)
 
     ### ORDERS
@@ -173,16 +185,22 @@ class IVCAP:
             schema = aspect.get("$schema")
         if not schema:
             raise MissingParameterValue("Missing schema (also not in aspect '$schema')")
+        body = aspect
+        if isinstance(body, dict):
+            # api is calling to_dict on body
+            body = types.SimpleNamespace()
+            body.to_dict = lambda: aspect
+
         kwargs = {
-            "entity_id": entity,
+            "entity": entity,
             "schema": schema,
-            "body": aspect, #json.dumps(aspect),
+            "body": body,
             "client": self._client,
             "content_type": "application/json",
         }
         if policy:
             if not policy.startswith("urn:ivcap:policy:"):
-                raise Exception(f"policy '{collection} is not a policy URN.")
+                raise ValueError(f"policy '{policy} is not a policy URN.")
             kwargs['policy'] = policy
 
         r = aspect_create.sync_detailed(**kwargs)
@@ -193,9 +211,9 @@ class IVCAP:
         d = res.to_dict()
         d['entity'] = entity
         d['schema'] = schema
-        d['aspect'] = aspect
-        li = AspectListItemRT.from_dict(d)
-        return Aspect(res.record_id, self, li)
+        d['content'] = aspect
+        d['content-type'] = "application/json"
+        return Aspect(self, **d)
 
     def list_aspect(self,
         *,
@@ -346,7 +364,7 @@ class IVCAP:
             content_type, encoding= mimetypes.guess_type(file_path)
 
         if not content_type:
-            raise Exception("missing 'content-type'")
+            raise ValueError("missing 'content-type'")
 
         if content_size < 0 and file_path:
             # generate size of file from file_path
@@ -362,11 +380,11 @@ class IVCAP:
             kwargs['x_name'] = n
         if collection:
             if not collection.startswith("urn:"):
-                raise Exception(f"collection '{collection} is not a URN.")
+                raise ValueError(f"collection '{collection} is not a URN.")
             kwargs['x_collection'] = collection
         if policy:
             if not policy.startswith("urn:ivcap:policy:"):
-                raise Exception(f"policy '{collection} is not a policy URN.")
+                raise ValueError(f"policy '{collection} is not a policy URN.")
             kwargs['x_policy'] = policy
 
         r = artifact_upload.sync_detailed(client=self._client, **kwargs)

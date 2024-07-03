@@ -69,7 +69,7 @@ class Aspect:
 
 
     # def __init__(self, id: str, ivcap: IVCAP, list_item:Optional[AspectListItemRT]=None):
-    #     self._id = id
+    #     self.id = id
     #     self._ivcap = ivcap
     #     self._entity = list_item.entity if list_item else None
     #     self._schema = list_item.schema if list_item else None

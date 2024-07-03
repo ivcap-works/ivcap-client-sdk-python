@@ -6,15 +6,16 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.aspect_idrt import AspectIDRT
+from ...models.aspectcreate_body import AspectcreateBody
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
-from ...types import UNSET, File, Response, Unset
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
-    body: File,
+    body: AspectcreateBody,
     entity: str,
     schema: str,
     policy: Union[Unset, str] = UNSET,
@@ -39,7 +40,7 @@ def _get_kwargs(
         "params": params,
     }
 
-    _body = body.to_tuple()
+    _body = body.to_dict()
 
     _kwargs["json"] = _body
     headers["Content-Type"] = "application/json"
@@ -97,7 +98,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: AspectcreateBody,
     entity: str,
     schema: str,
     policy: Union[Unset, str] = UNSET,
@@ -114,7 +115,7 @@ def sync_detailed(
             urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
-        body (File): Aspect content Example: {"$schema": ...}.
+        body (AspectcreateBody): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -142,7 +143,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: AspectcreateBody,
     entity: str,
     schema: str,
     policy: Union[Unset, str] = UNSET,
@@ -159,7 +160,7 @@ def sync(
             urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
-        body (File): Aspect content Example: {"$schema": ...}.
+        body (AspectcreateBody): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -182,7 +183,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: AspectcreateBody,
     entity: str,
     schema: str,
     policy: Union[Unset, str] = UNSET,
@@ -199,7 +200,7 @@ async def asyncio_detailed(
             urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
-        body (File): Aspect content Example: {"$schema": ...}.
+        body (AspectcreateBody): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -225,7 +226,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: AspectcreateBody,
     entity: str,
     schema: str,
     policy: Union[Unset, str] = UNSET,
@@ -242,7 +243,7 @@ async def asyncio(
             urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
-        body (File): Aspect content Example: {"$schema": ...}.
+        body (AspectcreateBody): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

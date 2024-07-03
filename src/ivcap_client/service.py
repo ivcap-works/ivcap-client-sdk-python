@@ -80,32 +80,33 @@ class Service:
             self._refresh()
         return self._parameters
 
+    @property
+    def mandatory_parameters(self) -> Set[str]:
+        v = self.parameters.values()
+        f = map(lambda p: p.name, filter(lambda p: not p.is_optional, v))
+        return set(f)
+
     def place_order(self, **kwargs) -> Order:
         pl:list[ParameterT] = []
-        mandatory = self._mandatory_parameters()
+        params = self.parameters
+        mandatory = self.mandatory_parameters
         for name, value in kwargs.items():
-            p = self._parameters.get(name)
+            p = params.get(name)
             if not p:
-                raise f"Unknown parameter '{name}'"
+                raise ValueError(f"Unknown parameter '{name}'")
             p.verify(value)
             mandatory.discard(name)
             pl.append(ParameterT(name=name, value=value))
         if len(mandatory) > 0:
-            raise Exception(f"missing mandatory parameters '{mandatory}'")
+            raise ValueError(f"missing mandatory parameters '{mandatory}'")
 
         req = OrderRequestT(parameters=pl,
-                            service_id=self._id ,
-                            account_id=self._ivcap._account_id)
-        r = order_create.sync_detailed(client=self._ivcap._client, json_body=req)
+                            service=self.id)
+        r = order_create.sync_detailed(client=self._ivcap._client, body=req)
         if r.status_code >= 300:
             return process_error('place_order', r)
         status:OrderStatusRT = r.parsed
         return Order(status.id, self._ivcap, status)
-
-    def _mandatory_parameters(self) -> Set[str]:
-        v = self.parameters.values()
-        f = map(lambda p: p.name, filter(lambda p: not p.is_optional, v))
-        return set(f)
 
     def _refresh(self):
         r = service_read.sync_detailed(self.id, client=self._ivcap._client)

@@ -12,6 +12,8 @@ from .aspect_list_item_rt_content import AspectListItemRTContent
 from .aspect_list_rt import AspectListRT
 from .aspect_rt import AspectRT
 from .aspect_rt_content import AspectRTContent
+from .aspectcreate_body import AspectcreateBody
+from .aspectupdate_body import AspectupdateBody
 from .bad_request_t import BadRequestT
 from .basic_workflow_opts_t import BasicWorkflowOptsT
 from .createqueueresponse import Createqueueresponse
@@ -61,12 +63,14 @@ __all__ = (
     "ArtifactListRT",
     "ArtifactStatusRT",
     "ArtifactStatusRTStatus",
+    "AspectcreateBody",
     "AspectIDRT",
     "AspectListItemRT",
     "AspectListItemRTContent",
     "AspectListRT",
     "AspectRT",
     "AspectRTContent",
+    "AspectupdateBody",
     "BadRequestT",
     "BasicWorkflowOptsT",
     "Createqueueresponse",

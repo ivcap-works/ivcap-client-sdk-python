@@ -150,7 +150,7 @@ def sync_detailed(
         at_time=at_time,
     )
 
-        response = client.get_httpx_client().request(
+    response = client.get_httpx_client().request(
         **kwargs,
     )
 

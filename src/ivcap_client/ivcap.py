@@ -165,8 +165,8 @@ class IVCAP:
     def add_aspect(self,
                      entity: str,
                      aspect: Dict[str,any],
-                     schema: Optional[str]=None,
                      *,
+                     schema: Optional[str]=None,
                      policy: Optional[URN] = None,
                      ) -> Aspect:
         """Add an 'aspect' to an 'entity'. The 'schema' of the aspect, if not defined
@@ -181,6 +181,8 @@ class IVCAP:
         Returns:
             aspect: The created aspect record
         """
+        if not entity:
+            raise MissingParameterValue("Missing entity")
         if isinstance(aspect, dict):
             b = aspect
         else:
@@ -367,7 +369,7 @@ class IVCAP:
         """
 
         if not (file_path or io_stream):
-            raise Exception(f"require either 'file_path' or 'io_stream'")
+            raise ValueError(f"require either 'file_path' or 'io_stream'")
 
         if not content_type and file_path:
             content_type, encoding= mimetypes.guess_type(file_path)

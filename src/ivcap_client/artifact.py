@@ -77,18 +77,24 @@ class Artifact:
     def metadata(self) -> Iterator[Aspect]:
         return self._ivcap.list_aspect(entity=self.id)
 
-    def add_metadata(self, aspect: Dict[str,any], schema: Optional[str]=None) -> 'Artifact':
+    def add_metadata(self,
+                     aspect: Dict[str,any],
+                     *,
+                     schema: Optional[str]=None,
+                     policy: Optional[URN]=None,
+    ) -> 'Artifact':
         """Add a metadata 'aspect' to this artifact. The 'schema' of the aspect, if not defined
         is expected to found in the 'aspect' under the '$schema' key.
 
         Args:
             aspect (dict): The aspect to be attached
             schema (Optional[str], optional): Schema of the aspect. Defaults to 'aspect["$schema"]'.
+            policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
 
         Returns:
             self: To enable chaining
         """
-        self._ivcap.add_aspect(entity=self.id, aspect=aspect, schema=schema)
+        self._ivcap.add_aspect(entity=self.id, aspect=aspect, schema=schema, policy=policy)
         return self
 
     def __repr__(self):

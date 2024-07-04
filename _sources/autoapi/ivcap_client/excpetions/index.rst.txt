@@ -10,17 +10,33 @@ Module Contents
 .. py:exception:: NotAuthorizedException
 
 
-   Bases: :py:obj:`BaseException`
+   Bases: :py:obj:`Exception`
 
-   Common base class for all exceptions
-
-
-.. py:exception:: ResourceNotFound
+   Common base class for all non-exit exceptions.
 
 
-   Bases: :py:obj:`BaseException`
+.. py:exception:: ResourceNotFound(resource: str)
 
-   Common base class for all exceptions
+
+   Bases: :py:obj:`Exception`
+
+   Exception raised when requestred resource is not found.
+
+   .. attribute:: resource -- name or URN of missing resource
+
+      
+
+
+.. py:exception:: AmbiguousRequest(message: str)
+
+
+   Bases: :py:obj:`Exception`
+
+   Exception raised when request is not specific enough.
+
+   .. attribute:: message -- cause for ambiguity
+
+      
 
 
 .. py:exception:: MissingParameterValue

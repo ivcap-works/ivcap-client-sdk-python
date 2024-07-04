@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ivcap_client.aspect &mdash; ivcap_client  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ivcap_client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ivcap_client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ivcap_client.aspect</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ivcap_client.aspect</h1><div class="highlight"><pre>
+<span></span><span class="c1">#</span>
+<span class="c1"># Copyright (c) 2023 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.</span>
+<span class="c1"># Use of this source code is governed by a BSD-style license that can be</span>
+<span class="c1"># found in the LICENSE file. See the AUTHORS file for names of contributors.</span>
+<span class="c1">#</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span> <span class="c1"># postpone evaluation of annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Set</span>
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">ivcap_client.ivcap</span> <span class="kn">import</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="n">URN</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.api.aspect</span> <span class="kn">import</span> <span class="n">aspect_list</span><span class="p">,</span> <span class="n">aspect_read</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.models.list_meta_rt</span> <span class="kn">import</span> <span class="n">ListMetaRT</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.models.aspect_list_item_rt</span> <span class="kn">import</span> <span class="n">AspectListItemRT</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.models.aspect_rt</span> <span class="kn">import</span> <span class="n">AspectRT</span>
+
+<span class="kn">from</span> <span class="nn">ivcap_client.utils</span> <span class="kn">import</span> <span class="n">BaseIter</span><span class="p">,</span> <span class="n">Links</span><span class="p">,</span> <span class="n">_set_fields</span><span class="p">,</span> <span class="n">process_error</span><span class="p">,</span> <span class="n">set_page</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.types</span> <span class="kn">import</span> <span class="n">UNSET</span>
+
+<div class="viewcode-block" id="Aspect"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.Aspect">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Aspect</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This class represents a aspect record</span>
+<span class="sd">    stored at a particular IVCAP deployment&quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">entity</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="c1"># content: Optional[any] = None</span>
+    <span class="n">content_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">valid_from</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">valid_to</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">asserter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">URN</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">retracter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">URN</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+
+<div class="viewcode-block" id="Aspect._from_list_item"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.Aspect._from_list_item">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_list_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">AspectListItemRT</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">):</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">ivcap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ivcap</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;missing &#39;ivcap&#39; argument&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span> <span class="o">=</span> <span class="n">ivcap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Aspect.__update__"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.Aspect.__update__">[docs]</a>    <span class="k">def</span> <span class="nf">__update__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">,</span> <span class="s2">&quot;schema&quot;</span><span class="p">,</span> <span class="s2">&quot;content-type&quot;</span><span class="p">,</span> <span class="s2">&quot;valid-from&quot;</span><span class="p">,</span> <span class="s2">&quot;valid-to&quot;</span><span class="p">,</span> <span class="s2">&quot;asserter&quot;</span><span class="p">,</span> <span class="s2">&quot;retracter&quot;</span><span class="p">]</span>
+        <span class="n">hp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
+        <span class="n">_set_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">hp</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">urn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span>
+
+<div class="viewcode-block" id="Aspect.refresh"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.Aspect.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_read</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;aspect&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+        <span class="n">res</span><span class="p">:</span><span class="n">AspectRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">res</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Aspect.__repr__"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.Aspect.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Aspect id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">, entity=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="si">}</span><span class="s2"> schema=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="XAspectIter"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.XAspectIter">[docs]</a><span class="k">class</span> <span class="nc">XAspectIter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="s1">&#39;IVCAP&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span> <span class="o">=</span> <span class="n">ivcap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_links</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># init navigation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill</span><span class="p">()</span>
+
+<div class="viewcode-block" id="XAspectIter.__iter__"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.XAspectIter.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="XAspectIter.__next__"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.XAspectIter.__next__">[docs]</a>    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+
+        <span class="n">el</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Aspect</span><span class="p">(</span><span class="n">el</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="p">,</span> <span class="n">el</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XAspectIter._fill"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.XAspectIter._fill">[docs]</a>    <span class="k">def</span> <span class="nf">_fill</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span>  <span class="n">List</span><span class="p">[</span><span class="n">AspectListItemRT</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_links</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_links</span><span class="o">.</span><span class="n">next</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">set_page</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_links</span><span class="o">.</span><span class="n">next</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;artifact_list&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+        <span class="n">l</span><span class="p">:</span> <span class="n">ListMetaRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_links</span> <span class="o">=</span> <span class="n">Links</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">links</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">items</span></div></div>
+
+<div class="viewcode-block" id="AspectIter"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.AspectIter">[docs]</a><span class="k">class</span> <span class="nc">AspectIter</span><span class="p">(</span><span class="n">BaseIter</span><span class="p">[</span><span class="n">Aspect</span><span class="p">,</span> <span class="n">AspectListItemRT</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="s1">&#39;IVCAP&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">ivcap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AspectIter._next_el"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.AspectIter._next_el">[docs]</a>    <span class="k">def</span> <span class="nf">_next_el</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">el</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Aspect</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Aspect</span><span class="o">.</span><span class="n">_from_list_item</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AspectIter._get_list"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.AspectIter._get_list">[docs]</a>    <span class="k">def</span> <span class="nf">_get_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AspectListItemRT</span><span class="p">]:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;artifact_list&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+        <span class="n">l</span><span class="p">:</span> <span class="n">ListMetaRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_links</span> <span class="o">=</span> <span class="n">Links</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">links</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">items</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CSIRO.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

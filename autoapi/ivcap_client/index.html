@@ -53,10 +53,10 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="artifact/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.artifact</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="aspect/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.aspect</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="errors/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.errors</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="excpetions/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.excpetions</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="ivcap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.ivcap</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="metadata/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.metadata</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="order/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.order</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="service/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.service</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="types/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.types</span></code></a></li>
@@ -107,10 +107,10 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="artifact/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.artifact</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="aspect/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.aspect</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="errors/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.errors</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="excpetions/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.excpetions</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="ivcap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.ivcap</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="metadata/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.metadata</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="order/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.order</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="service/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.service</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="types/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.types</span></code></a></li>
@@ -135,9 +135,6 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#ivcap_client.Artifact" title="ivcap_client.Artifact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Artifact</span></code></a></p></td>
 <td><p>This class represents an artifact record</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_client.Metadata" title="ivcap_client.Metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Metadata</span></code></a></p></td>
-<td><p>This class represents a metadata record</p></td>
 </tr>
 </tbody>
 </table>
@@ -170,19 +167,32 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ivcap_client.IVCAP.list_services">
-<span class="sig-name descname"><span class="pre">list_services</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="service/index.html#ivcap_client.service.Service" title="ivcap_client.service.Service"><span class="pre">ivcap_client.service.Service</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.list_services"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.list_services" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">list_services</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">UNSET</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="service/index.html#ivcap_client.service.Service" title="ivcap_client.service.Service"><span class="pre">ivcap_client.service.Service</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.list_services"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.list_services" title="Permalink to this definition"></a></dt>
 <dd><p>Return an iterator over all the available services fulfilling certain constraints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> (<em>order_desc</em>) – Allows clients to  filter a collection of
-resources that are addressed by a request URL. The expression specified with ‘filter’
-is evaluated for each resource in the collection, and only items where the expression
-evaluates to true are included in the response.
-Example: filter=FirstName eq ‘Scott’.. Defaults to None.</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> – _description_. Defaults to None.</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> – When true sort in descending order otherwise use ascending order. Defaults to False (ascending).</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>datetime.datetime</strong><strong>]</strong> (<em>at_time</em>) – Return the list which would have been valid at this time. Defaults to ‘Now’.</p></li>
+<li><p><strong>limit</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – The ‘limit’ query option sets the maximum number of items
+to be included in the result. Default: 10. Example: 10.</p></li>
+<li><p><strong>filter</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – <p>The ‘filter’ system query option allows clients to filter a
+collection of resources that are addressed by a request URL. The expression specified with ‘filter’</p>
+<blockquote>
+<div><p>is evaluated for each resource in the collection, and only items where the expression
+evaluates to true are included in the response. Example: name ~= ‘Scott%’.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>order_by</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – <p>The ‘orderby’ query option allows clients to request
+resources in either</p>
+<blockquote>
+<div><p>ascending order using asc or descending order using desc. If asc or desc not specified,
+then the resources will be ordered in ascending order. The request below orders Trips on
+property EndsAt in descending order. Example: orderby=EndsAt.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>order_desc</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – When set order result in descending order. Ascending
+order is the lt. Default: False.</p></li>
+<li><p><strong>at_time</strong> (<em>Optional</em><em>[</em><em>datetime.datetime</em><em>]</em>) – Return the state of the respective resources at
+that time [now] Example: 1996-12-19T16:39:57-08:00.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -198,25 +208,43 @@ Example: filter=FirstName eq ‘Scott’.. Defaults to None.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.IVCAP.get_service_by_name">
+<span class="sig-name descname"><span class="pre">get_service_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="service/index.html#ivcap_client.service.Service" title="ivcap_client.service.Service"><span class="pre">ivcap_client.service.Service</span></a></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.get_service_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.get_service_by_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="ivcap_client.IVCAP.get_service">
-<span class="sig-name descname"><span class="pre">get_service</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">service_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="service/index.html#ivcap_client.service.Service" title="ivcap_client.service.Service"><span class="pre">ivcap_client.service.Service</span></a></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.get_service"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.get_service" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_service</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">service_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">URN</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="service/index.html#ivcap_client.service.Service" title="ivcap_client.service.Service"><span class="pre">ivcap_client.service.Service</span></a></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.get_service"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.get_service" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ivcap_client.IVCAP.list_orders">
-<span class="sig-name descname"><span class="pre">list_orders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="order/index.html#ivcap_client.order.Order" title="ivcap_client.order.Order"><span class="pre">ivcap_client.order.Order</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.list_orders"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.list_orders" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">list_orders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">UNSET</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="order/index.html#ivcap_client.order.Order" title="ivcap_client.order.Order"><span class="pre">ivcap_client.order.Order</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.list_orders"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.list_orders" title="Permalink to this definition"></a></dt>
 <dd><p>Return an iterator over all the available orders fulfilling certain constraints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> (<em>order_desc</em>) – Allows clients to  filter a collection of
-resources that are addressed by a request URL. The expression specified with ‘filter’
-is evaluated for each resource in the collection, and only items where the expression
-evaluates to true are included in the response.
-Example: filter=FirstName eq ‘Scott’.. Defaults to None.</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> – _description_. Defaults to None.</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> – When true sort in descending order otherwise use ascending order. Defaults to False (ascending).</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>datetime.datetime</strong><strong>]</strong> (<em>at_time</em>) – Return the list which would have been valid at this time. Defaults to ‘Now’.</p></li>
+<li><p><strong>limit</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – The ‘limit’ query option sets the maximum number of items
+to be included in the result. Default: 10. Example: 10.</p></li>
+<li><p><strong>filter</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – <p>The ‘filter’ system query option allows clients to filter a
+collection of resources that are addressed by a request URL. The expression specified with ‘filter’</p>
+<blockquote>
+<div><p>is evaluated for each resource in the collection, and only items where the expression
+evaluates to true are included in the response. Example: name ~= ‘Scott%’.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>order_by</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – <p>The ‘orderby’ query option allows clients to request
+resources in either</p>
+<blockquote>
+<div><p>ascending order using asc or descending order using desc. If asc or desc not specified,
+then the resources will be ordered in ascending order. The request below orders Trips on
+property EndsAt in descending order. Example: orderby=EndsAt.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>order_desc</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – When set order result in descending order. Ascending
+order is the lt. Default: False.</p></li>
+<li><p><strong>at_time</strong> (<em>Optional</em><em>[</em><em>datetime.datetime</em><em>]</em>) – Return the state of the respective resources at
+that time [now] Example: 1996-12-19T16:39:57-08:00.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -237,9 +265,9 @@ Example: filter=FirstName eq ‘Scott’.. Defaults to None.</p></li>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ivcap_client.IVCAP.add_metadata">
-<span class="sig-name descname"><span class="pre">add_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">URN</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="metadata/index.html#ivcap_client.metadata.Metadata" title="ivcap_client.metadata.Metadata"><span class="pre">ivcap_client.metadata.Metadata</span></a></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.add_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.add_metadata" title="Permalink to this definition"></a></dt>
-<dd><p>Add a metadata ‘aspect’ to ‘entity’. The ‘schema’ of the aspect, if not defined
+<dt class="sig sig-object py" id="ivcap_client.IVCAP.add_aspect">
+<span class="sig-name descname"><span class="pre">add_aspect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">URN</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="aspect/index.html#ivcap_client.aspect.Aspect" title="ivcap_client.aspect.Aspect"><span class="pre">ivcap_client.aspect.Aspect</span></a></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.add_aspect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.add_aspect" title="Permalink to this definition"></a></dt>
+<dd><p>Add an ‘aspect’ to an ‘entity’. The ‘schema’ of the aspect, if not defined
 is expected to found in the ‘aspect’ under the ‘$schema’ key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -251,62 +279,105 @@ is expected to found in the ‘aspect’ under the ‘$schema’ key.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The created metadata record</p>
+<dd class="field-even"><p>The created aspect record</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>metadata</p>
+<dd class="field-odd"><p>aspect</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ivcap_client.IVCAP.search_metadata">
-<span class="sig-name descname"><span class="pre">search_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="metadata/index.html#ivcap_client.metadata.Metadata" title="ivcap_client.metadata.Metadata"><span class="pre">ivcap_client.metadata.Metadata</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.search_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.search_metadata" title="Permalink to this definition"></a></dt>
-<dd><p>Return an iterator over all the metadata records fulfilling certain constraints.</p>
+<dt class="sig sig-object py" id="ivcap_client.IVCAP.list_aspect">
+<span class="sig-name descname"><span class="pre">list_aspect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'valid_from'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'DESC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="aspect/index.html#ivcap_client.aspect.Aspect" title="ivcap_client.aspect.Aspect"><span class="pre">ivcap_client.aspect.Aspect</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.list_aspect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.list_aspect" title="Permalink to this definition"></a></dt>
+<dd><p>Return an iterator over all the aspect records fulfilling certain constraints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> (<em>order_desc</em>) – The entity URN for which to restrict the returend metadata records</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> – A prefix (using Postgres ‘like’ patterns) to restrict the
-returend metadata records</p></li>
-<li><p><strong>aspect_path</strong> – Optional[str]: When defined also return a specific sub tree of the record’s aspect</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> – Allows clients to  filter a collection of
-resources that are addressed by a request URL. The expression specified with ‘filter’
+<li><p><strong>entity</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional entity for which to request aspects Example:
+<a class="reference external" href="urn:blue:image.collA#12">urn:blue:image.collA#12</a>.</p></li>
+<li><p><strong>schema</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Schema prefix using ‘%’ as wildcard indicator Example:
+<a class="reference external" href="urn:blue:schema">urn:blue:schema</a>:image%.</p></li>
+<li><p><strong>content_path</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – <dl class="simple">
+<dt>To learn more about the supported format, see</dt><dd><p><a class="reference external" href="https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH">https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH</a> Example:</p>
+</dd>
+</dl>
+<p>$.images[*] ? (&#64;.size &gt; 10000).</p>
+</p></li>
+<li><p><strong>at_time</strong> (<em>Optional</em><em>[</em><em>datetime.datetime</em><em>]</em>) – Return aspect which where valid at that time
+[now] Example: 1996-12-19T16:39:57-08:00.</p></li>
+<li><p><strong>limit</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – <p>The ‘limit’ system query option requests the number of items in
+the queried</p>
+<blockquote>
+<div><p>collection to be included in the result. Default: 10. Example: 10.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>filter</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – <dl class="simple">
+<dt>The ‘filter’ system query option allows clients to filter a collection of</dt><dd><p>resources that are addressed by a request URL. The expression specified with ‘filter’
 is evaluated for each resource in the collection, and only items where the expression
-evaluates to true are included in the response.
-Example: filter=FirstName eq ‘Scott’.. Defaults to None.</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> – _description_. Defaults to None.</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> – When true sort in descending order otherwise use ascending order. Defaults to False (ascending).</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>datetime.datetime</strong><strong>]</strong> (<em>at_time</em>) – Return the list which would have been valid at this time. Defaults to ‘Now’.</p></li>
+evaluates to true are included in the response. Default: ‘’. Example: FirstName eq</p>
+</dd>
+</dl>
+<p>’Scott’.</p>
+</p></li>
+<li><p><strong>order_by</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional comma-separated list of attributes to sort the list
+by.
+* entity
+* schema
+* content
+* policy
+* account
+* created_by
+* retracted_by
+* replaces
+* valid_from
+* valid_to
+Default: ‘valid_from’. Example: entity,created-at.</p></li>
+<li><p><strong>order_direction</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Set the sort direction ‘ASC’, ‘DESC’ for each order-
+by element. Default: ‘DESC’. Example: desc.</p></li>
+<li><p><strong>include_content</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – When set, also include aspect content in list.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An iterator over a list of metadata records</p>
+<dd class="field-even"><p>An iterator over a list of aspect records</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Iterator[<a class="reference internal" href="#ivcap_client.Metadata" title="ivcap_client.Metadata">Metadata</a>]</p>
+<dd class="field-odd"><p>Iterator[<a class="reference internal" href="aspect/index.html#ivcap_client.aspect.Aspect" title="ivcap_client.aspect.Aspect">Aspect</a>]</p>
 </dd>
 <dt class="field-even">Yields<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Metadata</em> – A metadata object</p>
+<dd class="field-even"><p><em>Aspect</em> – A aspect object</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ivcap_client.IVCAP.list_artifacts">
-<span class="sig-name descname"><span class="pre">list_artifacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="artifact/index.html#ivcap_client.artifact.Artifact" title="ivcap_client.artifact.Artifact"><span class="pre">ivcap_client.artifact.Artifact</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.list_artifacts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.list_artifacts" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">list_artifacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">UNSET</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="artifact/index.html#ivcap_client.artifact.Artifact" title="ivcap_client.artifact.Artifact"><span class="pre">ivcap_client.artifact.Artifact</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ivcap_client/ivcap.html#IVCAP.list_artifacts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.IVCAP.list_artifacts" title="Permalink to this definition"></a></dt>
 <dd><p>Return an iterator over all the available artifacts fulfilling certain constraints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> (<em>order_desc</em>) – Allows clients to  filter a collection of
-resources that are addressed by a request URL. The expression specified with ‘filter’
-is evaluated for each resource in the collection, and only items where the expression
-evaluates to true are included in the response.
-Example: filter=FirstName eq ‘Scott’.. Defaults to None.</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> – _description_. Defaults to None.</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>str</strong><strong>]</strong> – When true sort in descending order otherwise use ascending order. Defaults to False (ascending).</p></li>
-<li><p><strong>Optional</strong><strong>[</strong><strong>datetime.datetime</strong><strong>]</strong> (<em>at_time</em>) – Return the list which would have been valid at this time. Defaults to ‘Now’.</p></li>
+<li><p><strong>limit</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – The ‘limit’ query option sets the maximum number of items
+to be included in the result. Default: 10. Example: 10.</p></li>
+<li><p><strong>filter</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – <p>The ‘filter’ system query option allows clients to filter a
+collection of resources that are addressed by a request URL. The expression specified with ‘filter’</p>
+<blockquote>
+<div><p>is evaluated for each resource in the collection, and only items where the expression
+evaluates to true are included in the response. Example: name ~= ‘Scott%’.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>order_by</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – <p>The ‘orderby’ query option allows clients to request
+resources in either</p>
+<blockquote>
+<div><p>ascending order using asc or descending order using desc. If asc or desc not specified,
+then the resources will be ordered in ascending order. The request below orders Trips on
+property EndsAt in descending order. Example: orderby=EndsAt.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>order_desc</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – When set order result in descending order. Ascending
+order is the lt. Default: False.</p></li>
+<li><p><strong>at_time</strong> (<em>Optional</em><em>[</em><em>datetime.datetime</em><em>]</em>) – Return the state of the respective resources at
+that time [now] Example: 1996-12-19T16:39:57-08:00.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -363,42 +434,77 @@ latter case, content type need to be provided.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ivcap_client.Service">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.</span></span><span class="sig-name descname"><span class="pre">Service</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ivcap_client.IVCAP" title="ivcap_client.IVCAP"><span class="pre">IVCAP</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">listItem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.models.service_list_item.ServiceListItem</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/service.html#Service"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Service" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.</span></span><span class="sig-name descname"><span class="pre">Service</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/service.html#Service"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Service" title="Permalink to this definition"></a></dt>
 <dd><p>This clas represents a particular service available
 in a particular IVCAP deployment</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="ivcap_client.Service.urn">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">urn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ivcap_client.Service.urn" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="ivcap_client.Service.name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ivcap_client.Service.name" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="ivcap_client.Service.description">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ivcap_client.Service.description" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="ivcap_client.Service.status">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ivcap_client.Service.status" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
 <dt class="sig sig-object py" id="ivcap_client.Service.parameters">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="service/index.html#ivcap_client.service.Parameter" title="ivcap_client.service.Parameter"><span class="pre">Parameter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Service.parameters" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="service/index.html#ivcap_client.service.ServiceParameter" title="ivcap_client.service.ServiceParameter"><span class="pre">ServiceParameter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Service.parameters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ivcap_client.Service.mandatory_parameters">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mandatory_parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Service.mandatory_parameters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Service.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Service.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Service.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Service.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Service.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Service.description" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Service.banner">
+<span class="sig-name descname"><span class="pre">banner</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Service.banner" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Service.policy">
+<span class="sig-name descname"><span class="pre">policy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Service.policy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Service.published_at">
+<span class="sig-name descname"><span class="pre">published_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Service.published_at" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">policy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Service.account">
+<span class="sig-name descname"><span class="pre">account</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Service.account" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.Service._from_list_item">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_from_list_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ivcap_client.models.service_list_item.ServiceListItem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/service.html#Service._from_list_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Service._from_list_item" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.Service.__update__">
+<span class="sig-name descname"><span class="pre">__update__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/service.html#Service.__update__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Service.__update__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.Service.status">
+<span class="sig-name descname"><span class="pre">status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ivcap_client.models.service_status_rt_status.ServiceStatusRTStatus</span></span></span><a class="reference internal" href="../../_modules/ivcap_client/service.html#Service.status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Service.status" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ivcap_client.Service.place_order">
 <span class="sig-name descname"><span class="pre">place_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="order/index.html#ivcap_client.order.Order" title="ivcap_client.order.Order"><span class="pre">ivcap_client.order.Order</span></a></span></span><a class="reference internal" href="../../_modules/ivcap_client/service.html#Service.place_order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Service.place_order" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ivcap_client.Service._mandatory_parameters">
-<span class="sig-name descname"><span class="pre">_mandatory_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ivcap_client/service.html#Service._mandatory_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Service._mandatory_parameters" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -416,12 +522,67 @@ in a particular IVCAP deployment</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ivcap_client.Order">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.</span></span><span class="sig-name descname"><span class="pre">Order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ivcap_client.IVCAP" title="ivcap_client.IVCAP"><span class="pre">IVCAP</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.models.order_status_rt.OrderStatusRT</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/order.html#Order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Order" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.</span></span><span class="sig-name descname"><span class="pre">Order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/order.html#Order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Order" title="Permalink to this definition"></a></dt>
 <dd><p>This class represents a particular order placed
 at a particular IVCAP deployment</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="ivcap_client.Order.urn">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">urn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ivcap_client.Order.urn" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ivcap_client.Order.parameters">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ivcap_client.models.parameter_t.ParameterT</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Order.parameters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Order.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ivcap_client.Order.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Order.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Order.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Order.service">
+<span class="sig-name descname"><span class="pre">service</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Order.service" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Order.ordered_at">
+<span class="sig-name descname"><span class="pre">ordered_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Order.ordered_at" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Order.started_at">
+<span class="sig-name descname"><span class="pre">started_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Order.started_at" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Order.finished_at">
+<span class="sig-name descname"><span class="pre">finished_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Order.finished_at" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Order.policy">
+<span class="sig-name descname"><span class="pre">policy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Order.policy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Order.account">
+<span class="sig-name descname"><span class="pre">account</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Order.account" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.Order._from_list_item">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_from_list_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ivcap_client.models.order_list_item.OrderListItem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/order.html#Order._from_list_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Order._from_list_item" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.Order.__update__">
+<span class="sig-name descname"><span class="pre">__update__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/order.html#Order.__update__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Order.__update__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -431,7 +592,7 @@ at a particular IVCAP deployment</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ivcap_client.Order.metadata">
-<span class="sig-name descname"><span class="pre">metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="metadata/index.html#ivcap_client.metadata.Metadata" title="ivcap_client.metadata.Metadata"><span class="pre">ivcap_client.metadata.Metadata</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ivcap_client/order.html#Order.metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Order.metadata" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="aspect/index.html#ivcap_client.aspect.Aspect" title="ivcap_client.aspect.Aspect"><span class="pre">ivcap_client.aspect.Aspect</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ivcap_client/order.html#Order.metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Order.metadata" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -456,6 +617,11 @@ is expected to found in the ‘aspect’ under the ‘$schema’ key.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.Order._refresh">
+<span class="sig-name descname"><span class="pre">_refresh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/order.html#Order._refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Order._refresh" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="ivcap_client.Order.__repr__">
 <span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/order.html#Order.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Order.__repr__" title="Permalink to this definition"></a></dt>
 <dd><p>Return repr(self).</p>
@@ -465,7 +631,7 @@ is expected to found in the ‘aspect’ under the ‘$schema’ key.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ivcap_client.Artifact">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.</span></span><span class="sig-name descname"><span class="pre">Artifact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ivcap_client.IVCAP" title="ivcap_client.IVCAP"><span class="pre">IVCAP</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.models.artifact_status_rt.ArtifactStatusRT</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/artifact.html#Artifact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Artifact" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.</span></span><span class="sig-name descname"><span class="pre">Artifact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/artifact.html#Artifact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Artifact" title="Permalink to this definition"></a></dt>
 <dd><p>This class represents an artifact record
 stored at a particular IVCAP deployment</p>
 <dl class="py property">
@@ -480,12 +646,72 @@ stored at a particular IVCAP deployment</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="ivcap_client.Artifact.metadata">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="metadata/index.html#ivcap_client.metadata.Metadata" title="ivcap_client.metadata.Metadata"><span class="pre">ivcap_client.metadata.Metadata</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Artifact.metadata" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="aspect/index.html#ivcap_client.aspect.Aspect" title="ivcap_client.aspect.Aspect"><span class="pre">ivcap_client.aspect.Aspect</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Artifact.metadata" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Artifact.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ivcap_client.Artifact.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ivcap_client.models.artifact_status_rt_status.ArtifactStatusRTStatus</span></em><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Artifact.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Artifact.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Artifact.size">
+<span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Artifact.size" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Artifact.mime_type">
+<span class="sig-name descname"><span class="pre">mime_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Artifact.mime_type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Artifact.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Artifact.created_at" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Artifact.last_modified_at">
+<span class="sig-name descname"><span class="pre">last_modified_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Artifact.last_modified_at" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Artifact.etag">
+<span class="sig-name descname"><span class="pre">etag</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Artifact.etag" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Artifact.policy">
+<span class="sig-name descname"><span class="pre">policy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Artifact.policy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.Artifact.account">
+<span class="sig-name descname"><span class="pre">account</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.Artifact.account" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.Artifact._from_list_item">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_from_list_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ivcap_client.models.artifact_list_item.ArtifactListItem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/artifact.html#Artifact._from_list_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Artifact._from_list_item" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.Artifact.__update__">
+<span class="sig-name descname"><span class="pre">__update__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/artifact.html#Artifact.__update__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Artifact.__update__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ivcap_client.Artifact.add_metadata">
-<span class="sig-name descname"><span class="pre">add_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ivcap_client.Artifact" title="ivcap_client.Artifact"><span class="pre">Artifact</span></a></span></span><a class="reference internal" href="../../_modules/ivcap_client/artifact.html#Artifact.add_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Artifact.add_metadata" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ivcap_client.Artifact" title="ivcap_client.Artifact"><span class="pre">Artifact</span></a></span></span><a class="reference internal" href="../../_modules/ivcap_client/artifact.html#Artifact.add_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Artifact.add_metadata" title="Permalink to this definition"></a></dt>
 <dd><p>Add a metadata ‘aspect’ to this artifact. The ‘schema’ of the aspect, if not defined
 is expected to found in the ‘aspect’ under the ‘$schema’ key.</p>
 <dl class="field-list simple">
@@ -493,6 +719,7 @@ is expected to found in the ‘aspect’ under the ‘$schema’ key.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>aspect</strong> (<em>dict</em>) – The aspect to be attached</p></li>
 <li><p><strong>schema</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Schema of the aspect. Defaults to ‘aspect[“$schema”]’.</p></li>
+<li><p><strong>policy</strong> – Optional[URN]: Set specific policy controlling access (’<a class="reference external" href="urn:ivcap:policy">urn:ivcap:policy</a>:…’).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -507,44 +734,6 @@ is expected to found in the ‘aspect’ under the ‘$schema’ key.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="ivcap_client.Artifact.__repr__">
 <span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/artifact.html#Artifact.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Artifact.__repr__" title="Permalink to this definition"></a></dt>
-<dd><p>Return repr(self).</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="ivcap_client.Metadata">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.</span></span><span class="sig-name descname"><span class="pre">Metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ivcap_client.IVCAP" title="ivcap_client.IVCAP"><span class="pre">IVCAP</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">listItem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.models.metadata_list_item_rt.MetadataListItemRT</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/metadata.html#Metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Metadata" title="Permalink to this definition"></a></dt>
-<dd><p>This class represents a metadata record
-stored at a particular IVCAP deployment</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="ivcap_client.Metadata.urn">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">urn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ivcap_client.Metadata.urn" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="ivcap_client.Metadata.entity">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">entity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ivcap_client.Metadata.entity" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="ivcap_client.Metadata.schema">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">schema</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ivcap_client.Metadata.schema" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="ivcap_client.Metadata.aspect">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aspect</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#ivcap_client.Metadata.aspect" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ivcap_client.Metadata._refresh">
-<span class="sig-name descname"><span class="pre">_refresh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/metadata.html#Metadata._refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Metadata._refresh" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ivcap_client.Metadata.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ivcap_client/metadata.html#Metadata.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.Metadata.__repr__" title="Permalink to this definition"></a></dt>
 <dd><p>Return repr(self).</p>
 </dd></dl>
 

@@ -16,10 +16,10 @@ Submodules
    :maxdepth: 1
 
    artifact/index.rst
+   aspect/index.rst
    errors/index.rst
    excpetions/index.rst
    ivcap/index.rst
-   metadata/index.rst
    order/index.rst
    service/index.rst
    types/index.rst
@@ -38,7 +38,6 @@ Classes
    ivcap_client.Service
    ivcap_client.Order
    ivcap_client.Artifact
-   ivcap_client.Metadata
 
 
 
@@ -66,18 +65,30 @@ Attributes
       :type: str
 
 
-   .. py:method:: list_services(filter: Optional[str] = None, order_by: Optional[str] = None, order_desc: Optional[bool] = False, at_time: Optional[datetime.datetime.datetime] = None) -> Iterator[ivcap_client.service.Service]
+   .. py:method:: list_services(*, filter: Optional[str] = None, limit: Optional[int] = 10, order_by: Optional[str] = None, order_desc: Optional[bool] = False, at_time: Optional[datetime.datetime.datetime] = UNSET) -> Iterator[ivcap_client.service.Service]
 
       Return an iterator over all the available services fulfilling certain constraints.
 
-      :param filter Optional[str]: Allows clients to  filter a collection of
-                                   resources that are addressed by a request URL. The expression specified with 'filter'
-                                   is evaluated for each resource in the collection, and only items where the expression
-                                   evaluates to true are included in the response.
-                                   Example: filter=FirstName eq 'Scott'.. Defaults to None.
-      :param order_by Optional[str]: _description_. Defaults to None.
-      :param order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
-      :param at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+      :param limit: The 'limit' query option sets the maximum number of items
+                    to be included in the result. Default: 10. Example: 10.
+      :type limit: Optional[int]
+      :param filter_: The 'filter' system query option allows clients to filter a
+                      collection of resources that are addressed by a request URL. The expression specified with 'filter'
+                                                  is evaluated for each resource in the collection, and only items where the expression
+                                                  evaluates to true are included in the response. Example: name ~= 'Scott%'.
+      :type filter_: Optional[str]
+      :param order_by: The 'orderby' query option allows clients to request
+                       resources in either
+                                           ascending order using asc or descending order using desc. If asc or desc not specified,
+                                           then the resources will be ordered in ascending order. The request below orders Trips on
+                                           property EndsAt in descending order. Example: orderby=EndsAt.
+      :type order_by: Optional[str]
+      :param order_desc: When set order result in descending order. Ascending
+                         order is the lt. Default: False.
+      :type order_desc: Optional[bool]
+      :param at_time: Return the state of the respective resources at
+                      that time [now] Example: 1996-12-19T16:39:57-08:00.
+      :type at_time: Optional[datetime.datetime]
 
       :returns: An iterator over a list of services
       :rtype: Iterator[Service]
@@ -85,21 +96,36 @@ Attributes
       :Yields: *Service* -- A Service object
 
 
-   .. py:method:: get_service(service_id: str) -> ivcap_client.service.Service
+   .. py:method:: get_service_by_name(name: str) -> ivcap_client.service.Service
 
 
-   .. py:method:: list_orders(filter: Optional[str] = None, order_by: Optional[str] = None, order_desc: Optional[bool] = False, at_time: Optional[datetime.datetime.datetime] = None) -> Iterator[ivcap_client.order.Order]
+   .. py:method:: get_service(service_id: URN) -> ivcap_client.service.Service
+
+
+   .. py:method:: list_orders(*, filter: Optional[str] = None, limit: Optional[int] = 10, order_by: Optional[str] = None, order_desc: Optional[bool] = False, at_time: Optional[datetime.datetime.datetime] = UNSET) -> Iterator[ivcap_client.order.Order]
 
       Return an iterator over all the available orders fulfilling certain constraints.
 
-      :param filter Optional[str]: Allows clients to  filter a collection of
-                                   resources that are addressed by a request URL. The expression specified with 'filter'
-                                   is evaluated for each resource in the collection, and only items where the expression
-                                   evaluates to true are included in the response.
-                                   Example: filter=FirstName eq 'Scott'.. Defaults to None.
-      :param order_by Optional[str]: _description_. Defaults to None.
-      :param order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
-      :param at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+      :param limit: The 'limit' query option sets the maximum number of items
+                    to be included in the result. Default: 10. Example: 10.
+      :type limit: Optional[int]
+      :param filter_: The 'filter' system query option allows clients to filter a
+                      collection of resources that are addressed by a request URL. The expression specified with 'filter'
+                                                  is evaluated for each resource in the collection, and only items where the expression
+                                                  evaluates to true are included in the response. Example: name ~= 'Scott%'.
+      :type filter_: Optional[str]
+      :param order_by: The 'orderby' query option allows clients to request
+                       resources in either
+                                           ascending order using asc or descending order using desc. If asc or desc not specified,
+                                           then the resources will be ordered in ascending order. The request below orders Trips on
+                                           property EndsAt in descending order. Example: orderby=EndsAt.
+      :type order_by: Optional[str]
+      :param order_desc: When set order result in descending order. Ascending
+                         order is the lt. Default: False.
+      :type order_desc: Optional[bool]
+      :param at_time: Return the state of the respective resources at
+                      that time [now] Example: 1996-12-19T16:39:57-08:00.
+      :type at_time: Optional[datetime.datetime]
 
       :returns: An iterator over a list of orders
       :rtype: Iterator[Order]
@@ -110,9 +136,9 @@ Attributes
    .. py:method:: get_order(id: str) -> ivcap_client.order.Order
 
 
-   .. py:method:: add_metadata(entity: str, aspect: Dict[str, any], schema: Optional[str] = None, *, policy: Optional[URN] = None) -> ivcap_client.metadata.Metadata
+   .. py:method:: add_aspect(entity: str, aspect: Dict[str, any], *, schema: Optional[str] = None, policy: Optional[URN] = None) -> ivcap_client.aspect.Aspect
 
-      Add a metadata 'aspect' to 'entity'. The 'schema' of the aspect, if not defined
+      Add an 'aspect' to an 'entity'. The 'schema' of the aspect, if not defined
       is expected to found in the 'aspect' under the '$schema' key.
 
       :param entity: URN of the entity to attach the aspect to
@@ -123,45 +149,89 @@ Attributes
       :type schema: Optional[str], optional
       :param policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
 
-      :returns: The created metadata record
-      :rtype: metadata
+      :returns: The created aspect record
+      :rtype: aspect
 
 
-   .. py:method:: search_metadata(*, entity: Optional[str] = None, schema_prefix: Optional[str] = None, aspect_path: Optional[str] = None, filter: Optional[str] = None, order_by: Optional[str] = None, order_desc: Optional[str] = None, at_time: Optional[datetime.datetime] = None) -> Iterator[ivcap_client.metadata.Metadata]
+   .. py:method:: list_aspect(*, entity: Optional[str] = None, schema: Optional[str] = None, content_path: Optional[str] = None, at_time: Optional[datetime.datetime.datetime] = None, limit: Optional[int] = 10, filter: Optional[str] = None, order_by: Optional[str] = 'valid_from', order_direction: Optional[str] = 'DESC', include_content: Optional[bool] = True) -> Iterator[ivcap_client.aspect.Aspect]
 
-      Return an iterator over all the metadata records fulfilling certain constraints.
+      Return an iterator over all the aspect records fulfilling certain constraints.
 
-      :param entity Optional[str]: The entity URN for which to restrict the returend metadata records
-      :param schema_prefix Optional[str]: A prefix (using Postgres 'like' patterns) to restrict the
-                                          returend metadata records
-      :param aspect_path: Optional[str]: When defined also return a specific sub tree of the record's aspect
-      :param filter Optional[str]: Allows clients to  filter a collection of
-                                   resources that are addressed by a request URL. The expression specified with 'filter'
-                                   is evaluated for each resource in the collection, and only items where the expression
-                                   evaluates to true are included in the response.
-                                   Example: filter=FirstName eq 'Scott'.. Defaults to None.
-      :param order_by Optional[str]: _description_. Defaults to None.
-      :param order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
-      :param at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+      :param entity: Optional entity for which to request aspects Example:
+                     urn:blue:image.collA#12.
+      :type entity: Optional[str]
+      :param schema: Schema prefix using '%' as wildcard indicator Example:
+                     urn:blue:schema:image%.
+      :type schema: Optional[str]
+      :param content_path:
+                           To learn more about the supported format, see
+                                                               https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH Example:
+                           $.images[*] ? (@.size > 10000).
+      :type content_path: Optional[str]
+      :param at_time: Return aspect which where valid at that time
+                      [now] Example: 1996-12-19T16:39:57-08:00.
+      :type at_time: Optional[datetime.datetime]
+      :param limit: The 'limit' system query option requests the number of items in
+                    the queried
+                                                collection to be included in the result. Default: 10. Example: 10.
+      :type limit: Optional[int]
+      :param filter_:
+                      The 'filter' system query option allows clients to filter a collection of
+                                                  resources that are addressed by a request URL. The expression specified with 'filter'
+                                                  is evaluated for each resource in the collection, and only items where the expression
+                                                  evaluates to true are included in the response. Default: ''. Example: FirstName eq
+                      'Scott'.
+      :type filter_: Optional[str]
+      :param order_by: Optional comma-separated list of attributes to sort the list
+                       by.
+                       * entity
+                       * schema
+                       * content
+                       * policy
+                       * account
+                       * created_by
+                       * retracted_by
+                       * replaces
+                       * valid_from
+                       * valid_to
+                       Default: 'valid_from'. Example: entity,created-at.
+      :type order_by: Optional[str]
+      :param order_direction: Set the sort direction 'ASC', 'DESC' for each order-
+                              by element. Default: 'DESC'. Example: desc.
+      :type order_direction: Optional[str]
+      :param include_content: When set, also include aspect content in list.
+      :type include_content: Optional[bool]
 
-      :returns: An iterator over a list of metadata records
-      :rtype: Iterator[Metadata]
+      :returns: An iterator over a list of aspect records
+      :rtype: Iterator[Aspect]
 
-      :Yields: *Metadata* -- A metadata object
+      :Yields: *Aspect* -- A aspect object
 
 
-   .. py:method:: list_artifacts(filter: Optional[str] = None, order_by: Optional[str] = None, order_desc: Optional[bool] = False, at_time: Optional[datetime.datetime.datetime] = None) -> Iterator[ivcap_client.artifact.Artifact]
+   .. py:method:: list_artifacts(*, filter: Optional[str] = None, limit: Optional[int] = 10, order_by: Optional[str] = None, order_desc: Optional[bool] = False, at_time: Optional[datetime.datetime.datetime] = UNSET) -> Iterator[ivcap_client.artifact.Artifact]
 
       Return an iterator over all the available artifacts fulfilling certain constraints.
 
-      :param filter Optional[str]: Allows clients to  filter a collection of
-                                   resources that are addressed by a request URL. The expression specified with 'filter'
-                                   is evaluated for each resource in the collection, and only items where the expression
-                                   evaluates to true are included in the response.
-                                   Example: filter=FirstName eq 'Scott'.. Defaults to None.
-      :param order_by Optional[str]: _description_. Defaults to None.
-      :param order_desc Optional[str]: When true sort in descending order otherwise use ascending order. Defaults to False (ascending).
-      :param at_time Optional[datetime.datetime]: Return the list which would have been valid at this time. Defaults to 'Now'.
+      :param limit: The 'limit' query option sets the maximum number of items
+                    to be included in the result. Default: 10. Example: 10.
+      :type limit: Optional[int]
+      :param filter_: The 'filter' system query option allows clients to filter a
+                      collection of resources that are addressed by a request URL. The expression specified with 'filter'
+                                                  is evaluated for each resource in the collection, and only items where the expression
+                                                  evaluates to true are included in the response. Example: name ~= 'Scott%'.
+      :type filter_: Optional[str]
+      :param order_by: The 'orderby' query option allows clients to request
+                       resources in either
+                                           ascending order using asc or descending order using desc. If asc or desc not specified,
+                                           then the resources will be ordered in ascending order. The request below orders Trips on
+                                           property EndsAt in descending order. Example: orderby=EndsAt.
+      :type order_by: Optional[str]
+      :param order_desc: When set order result in descending order. Ascending
+                         order is the lt. Default: False.
+      :type order_desc: Optional[bool]
+      :param at_time: Return the state of the respective resources at
+                      that time [now] Example: 1996-12-19T16:39:57-08:00.
+      :type at_time: Optional[datetime.datetime]
 
       :returns: An iterator over a list of services
       :rtype: Iterator[Service]
@@ -205,36 +275,71 @@ Attributes
 
    
 
-.. py:class:: Service(id: str, ivcap: IVCAP, listItem: Optional[ivcap_client.models.service_list_item.ServiceListItem] = None)
+.. py:class:: Service(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
 
 
    This clas represents a particular service available
    in a particular IVCAP deployment
 
-   .. py:property:: urn
-      :type: str
-
-
-   .. py:property:: name
-      :type: str
-
-
-   .. py:property:: description
-      :type: str
-
-
-   .. py:property:: status
-      :type: str
-
-
    .. py:property:: parameters
-      :type: Dict[str, Parameter]
+      :type: Dict[str, ServiceParameter]
+
+
+   .. py:property:: mandatory_parameters
+      :type: Set[str]
+
+
+   .. py:attribute:: id
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:attribute:: name
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: description
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: banner
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: policy
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:attribute:: published_at
+      :type: Optional[datetime.datetime]
+
+      
+
+   .. py:attribute:: policy
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:attribute:: account
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:method:: _from_list_item(item: ivcap_client.models.service_list_item.ServiceListItem, ivcap: ivcap_client.ivcap.IVCAP)
+      :classmethod:
+
+
+   .. py:method:: __update__(**kwargs)
+
+
+   .. py:method:: status(refresh=True) -> ivcap_client.models.service_status_rt_status.ServiceStatusRTStatus
 
 
    .. py:method:: place_order(**kwargs) -> ivcap_client.order.Order
-
-
-   .. py:method:: _mandatory_parameters() -> Set[str]
 
 
    .. py:method:: _refresh()
@@ -246,7 +351,7 @@ Attributes
 
 
 
-.. py:class:: Order(order_id: str, ivcap: IVCAP, status: Optional[ivcap_client.models.order_status_rt.OrderStatusRT] = None)
+.. py:class:: Order(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
 
 
    This class represents a particular order placed
@@ -256,10 +361,61 @@ Attributes
       :type: str
 
 
+   .. py:property:: parameters
+      :type: Dict[str, ivcap_client.models.parameter_t.ParameterT]
+
+
+   .. py:attribute:: id
+      :type: str
+
+      
+
+   .. py:attribute:: name
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: service
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:attribute:: ordered_at
+      :type: Optional[datetime.datetime.datetime]
+
+      
+
+   .. py:attribute:: started_at
+      :type: Optional[datetime.datetime.datetime]
+
+      
+
+   .. py:attribute:: finished_at
+      :type: Optional[datetime.datetime.datetime]
+
+      
+
+   .. py:attribute:: policy
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:attribute:: account
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:method:: _from_list_item(item: ivcap_client.models.order_list_item.OrderListItem, ivcap: ivcap_client.ivcap.IVCAP)
+      :classmethod:
+
+
+   .. py:method:: __update__(**kwargs)
+
+
    .. py:method:: status(refresh=True) -> ivcap_client.models.order_status_rt.OrderStatusRT
 
 
-   .. py:method:: metadata() -> List[ivcap_client.metadata.Metadata]
+   .. py:method:: metadata() -> List[ivcap_client.aspect.Aspect]
 
 
    .. py:method:: add_metadata(aspect: Dict[str, any], schema: Optional[str] = None) -> Order
@@ -276,13 +432,16 @@ Attributes
       :rtype: metadata
 
 
+   .. py:method:: _refresh()
+
+
    .. py:method:: __repr__()
 
       Return repr(self).
 
 
 
-.. py:class:: Artifact(id: str, ivcap: IVCAP, status: Optional[ivcap_client.models.artifact_status_rt.ArtifactStatusRT] = None)
+.. py:class:: Artifact(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
 
 
    This class represents an artifact record
@@ -297,10 +456,67 @@ Attributes
 
 
    .. py:property:: metadata
-      :type: Iterator[ivcap_client.metadata.Metadata]
+      :type: Iterator[ivcap_client.aspect.Aspect]
 
 
-   .. py:method:: add_metadata(aspect: Dict[str, any], schema: Optional[str] = None) -> Artifact
+   .. py:attribute:: id
+      :type: str
+
+      
+
+   .. py:attribute:: status
+      :type: ivcap_client.models.artifact_status_rt_status.ArtifactStatusRTStatus
+
+      
+
+   .. py:attribute:: name
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: size
+      :type: Optional[int]
+
+      
+
+   .. py:attribute:: mime_type
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: created_at
+      :type: Optional[datetime.datetime.datetime]
+
+      
+
+   .. py:attribute:: last_modified_at
+      :type: Optional[datetime.datetime.datetime]
+
+      
+
+   .. py:attribute:: etag
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: policy
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:attribute:: account
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:method:: _from_list_item(item: ivcap_client.models.artifact_list_item.ArtifactListItem, ivcap: ivcap_client.ivcap.IVCAP)
+      :classmethod:
+
+
+   .. py:method:: __update__(**kwargs)
+
+
+   .. py:method:: add_metadata(aspect: Dict[str, any], *, schema: Optional[str] = None, policy: Optional[ivcap_client.ivcap.URN] = None) -> Artifact
 
       Add a metadata 'aspect' to this artifact. The 'schema' of the aspect, if not defined
       is expected to found in the 'aspect' under the '$schema' key.
@@ -309,40 +525,10 @@ Attributes
       :type aspect: dict
       :param schema: Schema of the aspect. Defaults to 'aspect["$schema"]'.
       :type schema: Optional[str], optional
+      :param policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
 
       :returns: To enable chaining
       :rtype: self
-
-
-   .. py:method:: __repr__()
-
-      Return repr(self).
-
-
-
-.. py:class:: Metadata(id: str, ivcap: IVCAP, listItem: Optional[ivcap_client.models.metadata_list_item_rt.MetadataListItemRT] = None)
-
-
-   This class represents a metadata record
-   stored at a particular IVCAP deployment
-
-   .. py:property:: urn
-      :type: str
-
-
-   .. py:property:: entity
-      :type: str
-
-
-   .. py:property:: schema
-      :type: str
-
-
-   .. py:property:: aspect
-      :type: dict
-
-
-   .. py:method:: _refresh()
 
 
    .. py:method:: __repr__()

@@ -22,7 +22,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="ivcap_client.errors" href="../errors/index.html" />
+    <link rel="next" title="ivcap_client.aspect" href="../aspect/index.html" />
     <link rel="prev" title="ivcap_client" href="../index.html" /> 
 </head>
 
@@ -53,10 +53,10 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.artifact</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../aspect/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.aspect</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../errors/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.errors</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../excpetions/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.excpetions</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ivcap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.ivcap</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../metadata/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.metadata</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../order/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.order</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../service/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.service</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../types/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.types</span></code></a></li>
@@ -108,13 +108,13 @@
 <td><p>This class represents an artifact record</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#ivcap_client.artifact.ArtifactIter" title="ivcap_client.artifact.ArtifactIter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArtifactIter</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Helper class that provides a standard way to create an ABC using</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="ivcap_client.artifact.Artifact">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.artifact.</span></span><span class="sig-name descname"><span class="pre">Artifact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../index.html#ivcap_client.IVCAP" title="ivcap_client.IVCAP"><span class="pre">IVCAP</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.models.artifact_status_rt.ArtifactStatusRT</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#Artifact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.Artifact" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.artifact.</span></span><span class="sig-name descname"><span class="pre">Artifact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#Artifact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.Artifact" title="Permalink to this definition"></a></dt>
 <dd><p>This class represents an artifact record
 stored at a particular IVCAP deployment</p>
 <dl class="py property">
@@ -129,12 +129,72 @@ stored at a particular IVCAP deployment</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.metadata">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../metadata/index.html#ivcap_client.metadata.Metadata" title="ivcap_client.metadata.Metadata"><span class="pre">ivcap_client.metadata.Metadata</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.artifact.Artifact.metadata" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../aspect/index.html#ivcap_client.aspect.Aspect" title="ivcap_client.aspect.Aspect"><span class="pre">ivcap_client.aspect.Aspect</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.artifact.Artifact.metadata" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ivcap_client.artifact.Artifact.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ivcap_client.models.artifact_status_rt_status.ArtifactStatusRTStatus</span></em><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.artifact.Artifact.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.size">
+<span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.artifact.Artifact.size" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.mime_type">
+<span class="sig-name descname"><span class="pre">mime_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.artifact.Artifact.mime_type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.artifact.Artifact.created_at" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.last_modified_at">
+<span class="sig-name descname"><span class="pre">last_modified_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.artifact.Artifact.last_modified_at" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.etag">
+<span class="sig-name descname"><span class="pre">etag</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.artifact.Artifact.etag" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.policy">
+<span class="sig-name descname"><span class="pre">policy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.artifact.Artifact.policy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.account">
+<span class="sig-name descname"><span class="pre">account</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.artifact.Artifact.account" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact._from_list_item">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_from_list_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ivcap_client.models.artifact_list_item.ArtifactListItem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#Artifact._from_list_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.Artifact._from_list_item" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.__update__">
+<span class="sig-name descname"><span class="pre">__update__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#Artifact.__update__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.Artifact.__update__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.add_metadata">
-<span class="sig-name descname"><span class="pre">add_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ivcap_client.artifact.Artifact" title="ivcap_client.artifact.Artifact"><span class="pre">Artifact</span></a></span></span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#Artifact.add_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.Artifact.add_metadata" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ivcap_client.artifact.Artifact" title="ivcap_client.artifact.Artifact"><span class="pre">Artifact</span></a></span></span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#Artifact.add_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.Artifact.add_metadata" title="Permalink to this definition"></a></dt>
 <dd><p>Add a metadata ‘aspect’ to this artifact. The ‘schema’ of the aspect, if not defined
 is expected to found in the ‘aspect’ under the ‘$schema’ key.</p>
 <dl class="field-list simple">
@@ -142,6 +202,7 @@ is expected to found in the ‘aspect’ under the ‘$schema’ key.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>aspect</strong> (<em>dict</em>) – The aspect to be attached</p></li>
 <li><p><strong>schema</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Schema of the aspect. Defaults to ‘aspect[“$schema”]’.</p></li>
+<li><p><strong>policy</strong> – Optional[URN]: Set specific policy controlling access (’<a class="reference external" href="urn:ivcap:policy">urn:ivcap:policy</a>:…’).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -163,20 +224,18 @@ is expected to found in the ‘aspect’ under the ‘$schema’ key.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ivcap_client.artifact.ArtifactIter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.artifact.</span></span><span class="sig-name descname"><span class="pre">ArtifactIter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../index.html#ivcap_client.IVCAP" title="ivcap_client.IVCAP"><span class="pre">IVCAP</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#ArtifactIter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.ArtifactIter" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="ivcap_client.artifact.ArtifactIter.__iter__">
-<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#ArtifactIter.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.ArtifactIter.__iter__" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.artifact.</span></span><span class="sig-name descname"><span class="pre">ArtifactIter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#ArtifactIter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.ArtifactIter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../utils/index.html#ivcap_client.utils.BaseIter" title="ivcap_client.utils.BaseIter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ivcap_client.utils.BaseIter</span></code></a>[<a class="reference internal" href="#ivcap_client.artifact.Artifact" title="ivcap_client.artifact.Artifact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Artifact</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ivcap_client.models.artifact_list_item.ArtifactListItem</span></code>]</p>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.artifact.ArtifactIter._next_el">
+<span class="sig-name descname"><span class="pre">_next_el</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">el</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ivcap_client.artifact.Artifact" title="ivcap_client.artifact.Artifact"><span class="pre">Artifact</span></a></span></span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#ArtifactIter._next_el"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.ArtifactIter._next_el" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ivcap_client.artifact.ArtifactIter.__next__">
-<span class="sig-name descname"><span class="pre">__next__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#ArtifactIter.__next__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.ArtifactIter.__next__" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ivcap_client.artifact.ArtifactIter._fill">
-<span class="sig-name descname"><span class="pre">_fill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.models.artifact_status_rt.ArtifactStatusRT</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#ArtifactIter._fill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.ArtifactIter._fill" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ivcap_client.artifact.ArtifactIter._get_list">
+<span class="sig-name descname"><span class="pre">_get_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.models.artifact_list_item.ArtifactListItem</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#ArtifactIter._get_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.ArtifactIter._get_list" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -190,7 +249,7 @@ is expected to found in the ‘aspect’ under the ‘$schema’ key.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../index.html" class="btn btn-neutral float-left" title="ivcap_client" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../errors/index.html" class="btn btn-neutral float-right" title="ivcap_client.errors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../aspect/index.html" class="btn btn-neutral float-right" title="ivcap_client.aspect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -52,10 +52,10 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../artifact/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.artifact</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../aspect/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.aspect</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../errors/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.errors</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../excpetions/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.excpetions</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ivcap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.ivcap</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../metadata/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.metadata</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../order/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.order</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../service/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.service</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../types/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.types</span></code></a></li>
@@ -99,6 +99,19 @@
 <span id="ivcap-client-utils"></span><h1><a class="reference internal" href="#module-ivcap_client.utils" title="ivcap_client.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.utils</span></code></a><a class="headerlink" href="#module-ivcap_client.utils" title="Permalink to this heading"></a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_client.utils.Links" title="ivcap_client.utils.Links"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Links</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivcap_client.utils.BaseIter" title="ivcap_client.utils.BaseIter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseIter</span></code></a></p></td>
+<td><p>Helper class that provides a standard way to create an ABC using</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
@@ -107,6 +120,31 @@
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#ivcap_client.utils.set_page" title="ivcap_client.utils.set_page"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_page</span></code></a>(next)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_client.utils._unset" title="ivcap_client.utils._unset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_unset</span></code></a>(v)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivcap_client.utils._unset_bool" title="ivcap_client.utils._unset_bool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_unset_bool</span></code></a>(v)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_client.utils._wrap" title="ivcap_client.utils._wrap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_wrap</span></code></a>(→ Union[ivcap_client.types.Unset, any])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivcap_client.utils._set_fields" title="ivcap_client.utils._set_fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_set_fields</span></code></a>(self, attr, hidden_attr, kwargs)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_client.utils.T" title="ivcap_client.utils.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivcap_client.utils.L" title="ivcap_client.utils.L"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -120,6 +158,89 @@
 <dt class="sig sig-object py" id="ivcap_client.utils.set_page">
 <span class="sig-prename descclassname"><span class="pre">ivcap_client.utils.</span></span><span class="sig-name descname"><span class="pre">set_page</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#set_page"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils.set_page" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ivcap_client.utils.Links">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.utils.</span></span><span class="sig-name descname"><span class="pre">Links</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">la</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#Links"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils.Links" title="Permalink to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.utils.Links.this">
+<span class="sig-name descname"><span class="pre">this</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.utils.Links.this" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.utils.Links.first">
+<span class="sig-name descname"><span class="pre">first</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.utils.Links.first" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ivcap_client.utils.Links.next">
+<span class="sig-name descname"><span class="pre">next</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ivcap_client.utils.Links.next" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivcap_client.utils._unset">
+<span class="sig-prename descclassname"><span class="pre">ivcap_client.utils.</span></span><span class="sig-name descname"><span class="pre">_unset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#_unset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils._unset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivcap_client.utils._unset_bool">
+<span class="sig-prename descclassname"><span class="pre">ivcap_client.utils.</span></span><span class="sig-name descname"><span class="pre">_unset_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#_unset_bool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils._unset_bool" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivcap_client.utils._wrap">
+<span class="sig-prename descclassname"><span class="pre">ivcap_client.utils.</span></span><span class="sig-name descname"><span class="pre">_wrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../types/index.html#ivcap_client.types.Unset" title="ivcap_client.types.Unset"><span class="pre">ivcap_client.types.Unset</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#_wrap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils._wrap" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivcap_client.utils._set_fields">
+<span class="sig-prename descclassname"><span class="pre">ivcap_client.utils.</span></span><span class="sig-name descname"><span class="pre">_set_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#_set_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils._set_fields" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ivcap_client.utils.T">
+<span class="sig-prename descclassname"><span class="pre">ivcap_client.utils.</span></span><span class="sig-name descname"><span class="pre">T</span></span><a class="headerlink" href="#ivcap_client.utils.T" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ivcap_client.utils.L">
+<span class="sig-prename descclassname"><span class="pre">ivcap_client.utils.</span></span><span class="sig-name descname"><span class="pre">L</span></span><a class="headerlink" href="#ivcap_client.utils.L" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ivcap_client.utils.BaseIter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.utils.</span></span><span class="sig-name descname"><span class="pre">BaseIter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#BaseIter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils.BaseIter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">Generic</span></code>[<a class="reference internal" href="#ivcap_client.utils.T" title="ivcap_client.utils.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code></a>, <a class="reference internal" href="#ivcap_client.utils.L" title="ivcap_client.utils.L"><code class="xref py py-obj docutils literal notranslate"><span class="pre">L</span></code></a>]</p>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.utils.BaseIter.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#BaseIter.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils.BaseIter.__iter__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.utils.BaseIter.__next__">
+<span class="sig-name descname"><span class="pre">__next__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#BaseIter.__next__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils.BaseIter.__next__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.utils.BaseIter._fill">
+<span class="sig-name descname"><span class="pre">_fill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">L</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#BaseIter._fill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils.BaseIter._fill" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.utils.BaseIter._next_el">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_next_el</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">el</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#BaseIter._next_el"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils.BaseIter._next_el" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.utils.BaseIter._get_list">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_get_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">L</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/ivcap_client/utils.html#BaseIter._get_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.utils.BaseIter._get_list" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
 
 </section>
 </section>

@@ -18,7 +18,7 @@ Classes
 
 
 
-.. py:class:: Artifact(id: str, ivcap: IVCAP, status: Optional[ivcap_client.models.artifact_status_rt.ArtifactStatusRT] = None)
+.. py:class:: Artifact(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
 
 
    This class represents an artifact record
@@ -33,10 +33,67 @@ Classes
 
 
    .. py:property:: metadata
-      :type: Iterator[ivcap_client.metadata.Metadata]
+      :type: Iterator[ivcap_client.aspect.Aspect]
 
 
-   .. py:method:: add_metadata(aspect: Dict[str, any], schema: Optional[str] = None) -> Artifact
+   .. py:attribute:: id
+      :type: str
+
+      
+
+   .. py:attribute:: status
+      :type: ivcap_client.models.artifact_status_rt_status.ArtifactStatusRTStatus
+
+      
+
+   .. py:attribute:: name
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: size
+      :type: Optional[int]
+
+      
+
+   .. py:attribute:: mime_type
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: created_at
+      :type: Optional[datetime.datetime.datetime]
+
+      
+
+   .. py:attribute:: last_modified_at
+      :type: Optional[datetime.datetime.datetime]
+
+      
+
+   .. py:attribute:: etag
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: policy
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:attribute:: account
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:method:: _from_list_item(item: ivcap_client.models.artifact_list_item.ArtifactListItem, ivcap: ivcap_client.ivcap.IVCAP)
+      :classmethod:
+
+
+   .. py:method:: __update__(**kwargs)
+
+
+   .. py:method:: add_metadata(aspect: Dict[str, any], *, schema: Optional[str] = None, policy: Optional[ivcap_client.ivcap.URN] = None) -> Artifact
 
       Add a metadata 'aspect' to this artifact. The 'schema' of the aspect, if not defined
       is expected to found in the 'aspect' under the '$schema' key.
@@ -45,6 +102,7 @@ Classes
       :type aspect: dict
       :param schema: Schema of the aspect. Defaults to 'aspect["$schema"]'.
       :type schema: Optional[str], optional
+      :param policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
 
       :returns: To enable chaining
       :rtype: self
@@ -56,16 +114,18 @@ Classes
 
 
 
-.. py:class:: ArtifactIter(ivcap: IVCAP, **kwargs)
+.. py:class:: ArtifactIter(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
 
 
-   .. py:method:: __iter__()
+   Bases: :py:obj:`ivcap_client.utils.BaseIter`\ [\ :py:obj:`Artifact`\ , :py:obj:`ivcap_client.models.artifact_list_item.ArtifactListItem`\ ]
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:method:: _next_el(el) -> Artifact
 
 
-   .. py:method:: __next__()
-
-
-   .. py:method:: _fill() -> List[ivcap_client.models.artifact_status_rt.ArtifactStatusRT]
+   .. py:method:: _get_list() -> List[ivcap_client.models.artifact_list_item.ArtifactListItem]
 
 
 

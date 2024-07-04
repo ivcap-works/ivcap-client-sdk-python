@@ -17,6 +17,7 @@ Classes
 
 .. autoapisummary::
 
+   ivcap_client.types.Unset
    ivcap_client.types.File
    ivcap_client.types.Response
 
@@ -28,8 +29,21 @@ Attributes
 
 .. autoapisummary::
 
+   ivcap_client.types.UNSET
    ivcap_client.types.FileJsonType
 
+
+.. py:class:: Unset
+
+
+   .. py:method:: __bool__() -> Literal[False]
+
+
+
+.. py:data:: UNSET
+   :type: Unset
+
+   
 
 .. py:data:: FileJsonType
 

@@ -1,0 +1,119 @@
+:py:mod:`ivcap_client.aspect`
+=============================
+
+.. py:module:: ivcap_client.aspect
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.aspect.Aspect
+   ivcap_client.aspect.XAspectIter
+   ivcap_client.aspect.AspectIter
+
+
+
+
+.. py:class:: Aspect(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
+
+
+   This class represents a aspect record
+   stored at a particular IVCAP deployment
+
+   .. py:property:: urn
+      :type: str
+
+
+   .. py:property:: aspect
+      :type: dict
+
+
+   .. py:attribute:: id
+      :type: str
+
+      
+
+   .. py:attribute:: entity
+      :type: str
+
+      
+
+   .. py:attribute:: schema
+      :type: str
+
+      
+
+   .. py:attribute:: content_type
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: valid_from
+      :type: Optional[datetime.datetime]
+
+      
+
+   .. py:attribute:: valid_to
+      :type: Optional[datetime.datetime]
+
+      
+
+   .. py:attribute:: asserter
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:attribute:: retracter
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:method:: _from_list_item(item: ivcap_client.models.aspect_list_item_rt.AspectListItemRT, ivcap: ivcap_client.ivcap.IVCAP)
+      :classmethod:
+
+
+   .. py:method:: __update__(**kwargs)
+
+
+   .. py:method:: refresh()
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: XAspectIter(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
+
+
+   .. py:method:: __iter__()
+
+
+   .. py:method:: __next__()
+
+
+   .. py:method:: _fill() -> List[ivcap_client.models.aspect_list_item_rt.AspectListItemRT]
+
+
+
+.. py:class:: AspectIter(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
+
+
+   Bases: :py:obj:`ivcap_client.utils.BaseIter`\ [\ :py:obj:`Aspect`\ , :py:obj:`ivcap_client.models.aspect_list_item_rt.AspectListItemRT`\ ]
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:method:: _next_el(el) -> Aspect
+
+
+   .. py:method:: _get_list() -> List[ivcap_client.models.aspect_list_item_rt.AspectListItemRT]
+
+
+

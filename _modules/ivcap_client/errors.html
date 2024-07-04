@@ -83,7 +83,7 @@
 <span class="c1">#</span>
 <span class="c1">#### DO NOT EDIT ####</span>
 <span class="c1">#</span>
-<span class="sd">&quot;&quot;&quot; Contains shared errors types that can be raised from API functions &quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;Contains shared errors types that can be raised from API functions&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="UnexpectedStatus"><a class="viewcode-back" href="../../autoapi/ivcap_client/errors/index.html#ivcap_client.errors.UnexpectedStatus">[docs]</a><span class="k">class</span> <span class="nc">UnexpectedStatus</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -93,7 +93,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="n">status_code</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">content</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected status code: </span><span class="si">{</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Unexpected status code: </span><span class="si">{</span><span class="n">status_code</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Response content:</span><span class="se">\n</span><span class="si">{</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;UnexpectedStatus&quot;</span><span class="p">]</span>

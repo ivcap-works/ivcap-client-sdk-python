@@ -7,6 +7,15 @@
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.utils.Links
+   ivcap_client.utils.BaseIter
+
+
 
 Functions
 ~~~~~~~~~
@@ -15,12 +24,90 @@ Functions
 
    ivcap_client.utils.process_error
    ivcap_client.utils.set_page
+   ivcap_client.utils._unset
+   ivcap_client.utils._unset_bool
+   ivcap_client.utils._wrap
+   ivcap_client.utils._set_fields
 
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.utils.T
+   ivcap_client.utils.L
 
 
 .. py:function:: process_error(method: str, r: ivcap_client.types.Response, verbose: bool = True)
 
 
 .. py:function:: set_page(next: str)
+
+
+.. py:class:: Links(la: List[Dict])
+
+
+   .. py:attribute:: this
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: first
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: next
+      :type: Optional[str]
+
+      
+
+
+.. py:function:: _unset(v)
+
+
+.. py:function:: _unset_bool(v)
+
+
+.. py:function:: _wrap(v: Any) -> Union[ivcap_client.types.Unset, any]
+
+
+.. py:function:: _set_fields(self, attr, hidden_attr, kwargs)
+
+
+.. py:data:: T
+
+   
+
+.. py:data:: L
+
+   
+
+.. py:class:: BaseIter(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
+
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`Generic`\ [\ :py:obj:`T`\ , :py:obj:`L`\ ]
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:method:: __iter__()
+
+
+   .. py:method:: __next__()
+
+
+   .. py:method:: _fill() -> List[L]
+
+
+   .. py:method:: _next_el(el) -> T
+      :abstractmethod:
+
+
+   .. py:method:: _get_list() -> List[L]
+      :abstractmethod:
+
 
 

@@ -53,10 +53,10 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../artifact/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.artifact</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../aspect/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.aspect</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../errors/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.errors</span></code></a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.excpetions</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ivcap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.ivcap</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../metadata/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.metadata</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../order/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.order</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../service/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.service</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../types/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ivcap_client.types</span></code></a></li>
@@ -103,15 +103,32 @@
 <dl class="py exception">
 <dt class="sig sig-object py" id="ivcap_client.excpetions.NotAuthorizedException">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.excpetions.</span></span><span class="sig-name descname"><span class="pre">NotAuthorizedException</span></span><a class="reference internal" href="../../../_modules/ivcap_client/excpetions.html#NotAuthorizedException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.excpetions.NotAuthorizedException" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseException</span></code></p>
-<p>Common base class for all exceptions</p>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Common base class for all non-exit exceptions.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="ivcap_client.excpetions.ResourceNotFound">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.excpetions.</span></span><span class="sig-name descname"><span class="pre">ResourceNotFound</span></span><a class="reference internal" href="../../../_modules/ivcap_client/excpetions.html#ResourceNotFound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.excpetions.ResourceNotFound" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseException</span></code></p>
-<p>Common base class for all exceptions</p>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.excpetions.</span></span><span class="sig-name descname"><span class="pre">ResourceNotFound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/excpetions.html#ResourceNotFound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.excpetions.ResourceNotFound" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when requestred resource is not found.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">resource</span> <span class="pre">--</span> <span class="pre">name</span> <span class="pre">or</span> <span class="pre">URN</span> <span class="pre">of</span> <span class="pre">missing</span> <span class="pre">resource</span></span></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ivcap_client.excpetions.AmbiguousRequest">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.excpetions.</span></span><span class="sig-name descname"><span class="pre">AmbiguousRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/excpetions.html#AmbiguousRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.excpetions.AmbiguousRequest" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when request is not specific enough.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">message</span> <span class="pre">--</span> <span class="pre">cause</span> <span class="pre">for</span> <span class="pre">ambiguity</span></span></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py exception">

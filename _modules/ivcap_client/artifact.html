@@ -79,94 +79,117 @@
 <span class="c1"># Use of this source code is governed by a BSD-style license that can be</span>
 <span class="c1"># found in the LICENSE file. See the AUTHORS file for names of contributors.</span>
 <span class="c1">#</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span> <span class="c1"># postpone evaluation of annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">ivcap_client.ivcap</span> <span class="kn">import</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="n">URN</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
-
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="kn">from</span> <span class="nn">ivcap_client.api.artifact</span> <span class="kn">import</span> <span class="n">artifact_list</span><span class="p">,</span> <span class="n">artifact_read</span>
-<span class="kn">from</span> <span class="nn">ivcap_client.metadata</span> <span class="kn">import</span> <span class="n">Metadata</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.models.artifact_list_rt</span> <span class="kn">import</span> <span class="n">ArtifactListRT</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.models.artifact_status_rt</span> <span class="kn">import</span> <span class="n">ArtifactStatusRT</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.models.artifact_list_item</span> <span class="kn">import</span> <span class="n">ArtifactListItem</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.models.artifact_status_rt_status</span> <span class="kn">import</span> <span class="n">ArtifactStatusRTStatus</span>
 
-<span class="kn">from</span> <span class="nn">ivcap_client.utils</span> <span class="kn">import</span> <span class="n">process_error</span><span class="p">,</span> <span class="n">set_page</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.utils</span> <span class="kn">import</span> <span class="n">BaseIter</span><span class="p">,</span> <span class="n">Links</span><span class="p">,</span> <span class="n">_set_fields</span><span class="p">,</span> <span class="n">process_error</span><span class="p">,</span> <span class="n">set_page</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.aspect</span> <span class="kn">import</span> <span class="n">Aspect</span>
 
-
-<div class="viewcode-block" id="Artifact"><a class="viewcode-back" href="../../autoapi/ivcap_client/index.html#ivcap_client.artifact.Artifact">[docs]</a><span class="k">class</span> <span class="nc">Artifact</span><span class="p">:</span>
+<div class="viewcode-block" id="Artifact"><a class="viewcode-back" href="../../autoapi/ivcap_client/index.html#ivcap_client.artifact.Artifact">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Artifact</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This class represents an artifact record</span>
 <span class="sd">    stored at a particular IVCAP deployment&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="s1">&#39;IVCAP&#39;</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="n">ArtifactStatusRT</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="nb">id</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">status</span><span class="p">:</span> <span class="n">ArtifactStatusRTStatus</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">mime_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">last_modified_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">etag</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">policy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">URN</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">account</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">URN</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Artifact._from_list_item"><a class="viewcode-back" href="../../autoapi/ivcap_client/index.html#ivcap_client.artifact.Artifact._from_list_item">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_list_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ArtifactListItem</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">):</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">ivcap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ivcap</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;missing &#39;ivcap&#39; argument&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span> <span class="o">=</span> <span class="n">ivcap</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_status</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Artifact.__update__"><a class="viewcode-back" href="../../autoapi/ivcap_client/index.html#ivcap_client.artifact.Artifact.__update__">[docs]</a>    <span class="k">def</span> <span class="nf">__update__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="s2">&quot;mime-type&quot;</span><span class="p">,</span> <span class="s2">&quot;last-modified-at&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;created-at&quot;</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">,</span> <span class="s2">&quot;etag&quot;</span><span class="p">,</span> <span class="s2">&quot;account&quot;</span><span class="p">]</span>
+        <span class="n">hp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;cache_of&quot;</span><span class="p">,</span> <span class="s2">&quot;data_href&quot;</span><span class="p">]</span>
+        <span class="n">_set_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">hp</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;missing &#39;id&#39; for Artifact&quot;</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">urn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArtifactStatusRT</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">refresh</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="p">:</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="n">artifact_read</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">)</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">artifact_read</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;place_order&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_status</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span>
-    
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Metadata</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">search_metadata</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Artifact.add_metadata"><a class="viewcode-back" href="../../autoapi/ivcap_client/index.html#ivcap_client.artifact.Artifact.add_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">add_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspect</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">any</span><span class="p">],</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Artifact&#39;</span><span class="p">:</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Aspect</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">list_aspect</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Artifact.add_metadata"><a class="viewcode-back" href="../../autoapi/ivcap_client/index.html#ivcap_client.artifact.Artifact.add_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">add_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">aspect</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">any</span><span class="p">],</span>
+                     <span class="o">*</span><span class="p">,</span>
+                     <span class="n">schema</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">policy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">URN</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Artifact&#39;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a metadata &#39;aspect&#39; to this artifact. The &#39;schema&#39; of the aspect, if not defined</span>
 <span class="sd">        is expected to found in the &#39;aspect&#39; under the &#39;$schema&#39; key.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            aspect (dict): The aspect to be attached</span>
 <span class="sd">            schema (Optional[str], optional): Schema of the aspect. Defaults to &#39;aspect[&quot;$schema&quot;]&#39;.</span>
+<span class="sd">            policy: Optional[URN]: Set specific policy controlling access (&#39;urn:ivcap:policy:...&#39;).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            self: To enable chaining</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">add_metadata</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">add_aspect</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="n">policy</span><span class="o">=</span><span class="n">policy</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
-    
+
 <div class="viewcode-block" id="Artifact.__repr__"><a class="viewcode-back" href="../../autoapi/ivcap_client/index.html#ivcap_client.artifact.Artifact.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Artifact id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="si">}</span><span class="s2">, status=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="o">.</span><span class="n">status</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;???&#39;</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Artifact id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">, status=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;???&#39;</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div></div>
 
-<div class="viewcode-block" id="ArtifactIter"><a class="viewcode-back" href="../../autoapi/ivcap_client/artifact/index.html#ivcap_client.artifact.ArtifactIter">[docs]</a><span class="k">class</span> <span class="nc">ArtifactIter</span><span class="p">:</span>
+<div class="viewcode-block" id="ArtifactIter"><a class="viewcode-back" href="../../autoapi/ivcap_client/artifact/index.html#ivcap_client.artifact.ArtifactIter">[docs]</a><span class="k">class</span> <span class="nc">ArtifactIter</span><span class="p">(</span><span class="n">BaseIter</span><span class="p">[</span><span class="n">Artifact</span><span class="p">,</span> <span class="n">ArtifactListItem</span><span class="p">]):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="s1">&#39;IVCAP&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span> <span class="o">=</span> <span class="n">ivcap</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_links</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># init navigation</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">ivcap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ArtifactIter.__iter__"><a class="viewcode-back" href="../../autoapi/ivcap_client/artifact/index.html#ivcap_client.artifact.ArtifactIter.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
+<div class="viewcode-block" id="ArtifactIter._next_el"><a class="viewcode-back" href="../../autoapi/ivcap_client/artifact/index.html#ivcap_client.artifact.ArtifactIter._next_el">[docs]</a>    <span class="k">def</span> <span class="nf">_next_el</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">el</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Artifact</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Artifact</span><span class="o">.</span><span class="n">_from_list_item</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ArtifactIter.__next__"><a class="viewcode-back" href="../../autoapi/ivcap_client/artifact/index.html#ivcap_client.artifact.ArtifactIter.__next__">[docs]</a>    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">StopIteration</span>
-        
-        <span class="n">el</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Artifact</span><span class="p">(</span><span class="n">el</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="p">,</span> <span class="n">el</span><span class="p">)</span></div>
-        
-<div class="viewcode-block" id="ArtifactIter._fill"><a class="viewcode-back" href="../../autoapi/ivcap_client/artifact/index.html#ivcap_client.artifact.ArtifactIter._fill">[docs]</a>    <span class="k">def</span> <span class="nf">_fill</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span>  <span class="n">List</span><span class="p">[</span><span class="n">ArtifactStatusRT</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_links</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_links</span><span class="o">.</span><span class="n">next_</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">[]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">set_page</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_links</span><span class="o">.</span><span class="n">next_</span><span class="p">)</span>
+<div class="viewcode-block" id="ArtifactIter._get_list"><a class="viewcode-back" href="../../autoapi/ivcap_client/artifact/index.html#ivcap_client.artifact.ArtifactIter._get_list">[docs]</a>    <span class="k">def</span> <span class="nf">_get_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ArtifactListItem</span><span class="p">]:</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">artifact_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
             <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;artifact_list&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
         <span class="n">l</span><span class="p">:</span> <span class="n">ArtifactListRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_links</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">links</span>
-        <span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">artifacts</span></div></div>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_links</span> <span class="o">=</span> <span class="n">Links</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">links</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">items</span></div></div>
 </pre></div>
 
            </div>

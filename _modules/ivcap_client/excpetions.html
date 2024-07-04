@@ -79,11 +79,28 @@
 <span class="c1"># Use of this source code is governed by a BSD-style license that can be</span>
 <span class="c1"># found in the LICENSE file. See the AUTHORS file for names of contributors.</span>
 <span class="c1">#</span>
-<div class="viewcode-block" id="NotAuthorizedException"><a class="viewcode-back" href="../../autoapi/ivcap_client/excpetions/index.html#ivcap_client.excpetions.NotAuthorizedException">[docs]</a><span class="k">class</span> <span class="nc">NotAuthorizedException</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+<div class="viewcode-block" id="NotAuthorizedException"><a class="viewcode-back" href="../../autoapi/ivcap_client/excpetions/index.html#ivcap_client.excpetions.NotAuthorizedException">[docs]</a><span class="k">class</span> <span class="nc">NotAuthorizedException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="ResourceNotFound"><a class="viewcode-back" href="../../autoapi/ivcap_client/excpetions/index.html#ivcap_client.excpetions.ResourceNotFound">[docs]</a><span class="k">class</span> <span class="nc">ResourceNotFound</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
-    <span class="k">pass</span></div>
+<div class="viewcode-block" id="ResourceNotFound"><a class="viewcode-back" href="../../autoapi/ivcap_client/excpetions/index.html#ivcap_client.excpetions.ResourceNotFound">[docs]</a><span class="k">class</span> <span class="nc">ResourceNotFound</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exception raised when requestred resource is not found.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        resource -- name or URN of missing resource</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource</span> <span class="o">=</span> <span class="n">resource</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;resource &#39;</span><span class="si">{</span><span class="n">resource</span><span class="si">}</span><span class="s2">&#39; not found&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AmbiguousRequest"><a class="viewcode-back" href="../../autoapi/ivcap_client/excpetions/index.html#ivcap_client.excpetions.AmbiguousRequest">[docs]</a><span class="k">class</span> <span class="nc">AmbiguousRequest</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exception raised when request is not specific enough.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        message -- cause for ambiguity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MissingParameterValue"><a class="viewcode-back" href="../../autoapi/ivcap_client/excpetions/index.html#ivcap_client.excpetions.MissingParameterValue">[docs]</a><span class="k">class</span> <span class="nc">MissingParameterValue</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">pass</span></div>
@@ -91,7 +108,6 @@
 <div class="viewcode-block" id="HttpException"><a class="viewcode-back" href="../../autoapi/ivcap_client/excpetions/index.html#ivcap_client.excpetions.HttpException">[docs]</a><span class="k">class</span> <span class="nc">HttpException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="n">status_code</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span></div>
-
 </pre></div>
 
            </div>

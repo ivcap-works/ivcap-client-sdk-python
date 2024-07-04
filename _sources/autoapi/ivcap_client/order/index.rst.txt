@@ -14,11 +14,12 @@ Classes
 
    ivcap_client.order.Order
    ivcap_client.order.OrderIter
+   ivcap_client.order.OrderParameter
 
 
 
 
-.. py:class:: Order(order_id: str, ivcap: IVCAP, status: Optional[ivcap_client.models.order_status_rt.OrderStatusRT] = None)
+.. py:class:: Order(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
 
 
    This class represents a particular order placed
@@ -28,10 +29,61 @@ Classes
       :type: str
 
 
+   .. py:property:: parameters
+      :type: Dict[str, ivcap_client.models.parameter_t.ParameterT]
+
+
+   .. py:attribute:: id
+      :type: str
+
+      
+
+   .. py:attribute:: name
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: service
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:attribute:: ordered_at
+      :type: Optional[datetime.datetime.datetime]
+
+      
+
+   .. py:attribute:: started_at
+      :type: Optional[datetime.datetime.datetime]
+
+      
+
+   .. py:attribute:: finished_at
+      :type: Optional[datetime.datetime.datetime]
+
+      
+
+   .. py:attribute:: policy
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:attribute:: account
+      :type: Optional[ivcap_client.ivcap.URN]
+
+      
+
+   .. py:method:: _from_list_item(item: ivcap_client.models.order_list_item.OrderListItem, ivcap: ivcap_client.ivcap.IVCAP)
+      :classmethod:
+
+
+   .. py:method:: __update__(**kwargs)
+
+
    .. py:method:: status(refresh=True) -> ivcap_client.models.order_status_rt.OrderStatusRT
 
 
-   .. py:method:: metadata() -> List[ivcap_client.metadata.Metadata]
+   .. py:method:: metadata() -> List[ivcap_client.aspect.Aspect]
 
 
    .. py:method:: add_metadata(aspect: Dict[str, any], schema: Optional[str] = None) -> Order
@@ -48,22 +100,41 @@ Classes
       :rtype: metadata
 
 
+   .. py:method:: _refresh()
+
+
    .. py:method:: __repr__()
 
       Return repr(self).
 
 
 
-.. py:class:: OrderIter(ivcap: IVCAP, **kwargs)
+.. py:class:: OrderIter(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
 
 
-   .. py:method:: __iter__()
+   Bases: :py:obj:`ivcap_client.utils.BaseIter`\ [\ :py:obj:`Order`\ , :py:obj:`ivcap_client.models.order_list_item.OrderListItem`\ ]
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:method:: _next_el(el) -> Order
 
 
-   .. py:method:: __next__()
+   .. py:method:: _get_list() -> List[ivcap_client.models.order_list_item.OrderListItem]
 
 
-   .. py:method:: _fill() -> List[ivcap_client.models.order_list_item.OrderListItem]
 
+.. py:class:: OrderParameter(p: ivcap_client.models.parameter_t.ParameterT)
+
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:attribute:: value
+      :type: any
+
+      
 
 

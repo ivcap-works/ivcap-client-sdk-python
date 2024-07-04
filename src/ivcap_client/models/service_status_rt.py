@@ -24,7 +24,7 @@ class ServiceStatusRT:
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/json'}], 'name': 'Fire risk for Lot2', 'parameters': [{'description': 'The name of the region as
             according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month
-            threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}], 'status': 'error', 'tags': ['tag1', 'tag2']}
+            threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}], 'status': 'inactive', 'tags': ['tag1', 'tag2']}
 
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
@@ -35,7 +35,7 @@ class ServiceStatusRT:
         parameters (List['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
             region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
             'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}].
-        status (ServiceStatusRTStatus): Service status Example: error.
+        status (ServiceStatusRTStatus): Service status Example: active.
         description (Union[Unset, str]): More detailed description of the service Example: This service ....
         name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
         tags (Union[Unset, List[str]]): Optional provider provided tags Example: ['tag1', 'tag2'].

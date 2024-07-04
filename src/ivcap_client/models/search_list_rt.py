@@ -19,8 +19,8 @@ T = TypeVar("T", bound="SearchListRT")
 class SearchListRT:
     """
     Example:
-        {'at-time': '1996-12-19T16:39:57-08:00', 'items': ['Explicabo facilis.', 'Inventore velit nihil mollitia.',
-            'Harum alias sit qui occaecati.'], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        {'at-time': '1996-12-19T16:39:57-08:00', 'items': ['Dolorum ipsam repellat doloremque vitae.', 'Porro est
+            inventore eius.'], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
@@ -28,8 +28,8 @@ class SearchListRT:
 
     Attributes:
         at_time (datetime.datetime): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
-        items (List[File]): List of search result Example: ['Excepturi ex voluptate corrupti laborum qui.', 'Sint
-            cumque.', 'At est alias.'].
+        items (List[File]): List of search result Example: ['Reiciendis atque id vel voluptas.', 'Autem dignissimos
+            tempora suscipit quis sunt libero.', 'Assumenda aperiam reiciendis earum minima.'].
         links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':

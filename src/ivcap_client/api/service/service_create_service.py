@@ -41,10 +41,6 @@ def _parse_response(
         response_201 = ServiceStatusRT.from_dict(response.json())
 
         return response_201
-    if response.status_code == HTTPStatus.BAD_REQUEST:
-        response_400 = BadRequestT.from_dict(response.json())
-
-        return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
@@ -64,6 +60,10 @@ def _parse_response(
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+    if response.status_code == HTTPStatus.FAILED_DEPENDENCY:
+        response_424 = BadRequestT.from_dict(response.json())
+
+        return response_424
     if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
@@ -98,21 +98,22 @@ def sync_detailed(
      Create a new services and return its status.
 
     Args:
-        body (ServiceDefinitionT):  Example: {'banner': 'http://ondricka.info/maci',
+        body (ServiceDefinitionT):  Example: {'banner': 'http://brakus.com/aleen_mohr',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
             'threshold', 'type': 'float', 'unit': 'm'}], 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}], 'tags':
-            ['tag1', 'tag2'], 'workflow': {'argo': 'Alias ab amet accusamus assumenda nobis.',
-            'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request':
-            '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-
-            type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Atque exercitationem
-            nobis perspiciatis voluptate quia nihil.', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}}.
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}], 'tags': ['tag1', 'tag2'],
+            'workflow': {'argo': 'Quidem nulla quae provident dolor amet nulla.', 'basic': {'command':
+            ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-
+            storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-
+            tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Et aut autem deserunt sit
+            architecto.', 'memory': {'limit': '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'},
+            'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -143,21 +144,22 @@ def sync(
      Create a new services and return its status.
 
     Args:
-        body (ServiceDefinitionT):  Example: {'banner': 'http://ondricka.info/maci',
+        body (ServiceDefinitionT):  Example: {'banner': 'http://brakus.com/aleen_mohr',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
             'threshold', 'type': 'float', 'unit': 'm'}], 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}], 'tags':
-            ['tag1', 'tag2'], 'workflow': {'argo': 'Alias ab amet accusamus assumenda nobis.',
-            'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request':
-            '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-
-            type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Atque exercitationem
-            nobis perspiciatis voluptate quia nihil.', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}}.
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}], 'tags': ['tag1', 'tag2'],
+            'workflow': {'argo': 'Quidem nulla quae provident dolor amet nulla.', 'basic': {'command':
+            ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-
+            storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-
+            tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Et aut autem deserunt sit
+            architecto.', 'memory': {'limit': '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'},
+            'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -183,21 +185,22 @@ async def asyncio_detailed(
      Create a new services and return its status.
 
     Args:
-        body (ServiceDefinitionT):  Example: {'banner': 'http://ondricka.info/maci',
+        body (ServiceDefinitionT):  Example: {'banner': 'http://brakus.com/aleen_mohr',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
             'threshold', 'type': 'float', 'unit': 'm'}], 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}], 'tags':
-            ['tag1', 'tag2'], 'workflow': {'argo': 'Alias ab amet accusamus assumenda nobis.',
-            'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request':
-            '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-
-            type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Atque exercitationem
-            nobis perspiciatis voluptate quia nihil.', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}}.
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}], 'tags': ['tag1', 'tag2'],
+            'workflow': {'argo': 'Quidem nulla quae provident dolor amet nulla.', 'basic': {'command':
+            ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-
+            storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-
+            tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Et aut autem deserunt sit
+            architecto.', 'memory': {'limit': '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'},
+            'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -226,21 +229,22 @@ async def asyncio(
      Create a new services and return its status.
 
     Args:
-        body (ServiceDefinitionT):  Example: {'banner': 'http://ondricka.info/maci',
+        body (ServiceDefinitionT):  Example: {'banner': 'http://brakus.com/aleen_mohr',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
             'threshold', 'type': 'float', 'unit': 'm'}], 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}], 'tags':
-            ['tag1', 'tag2'], 'workflow': {'argo': 'Alias ab amet accusamus assumenda nobis.',
-            'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request':
-            '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-
-            type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Atque exercitationem
-            nobis perspiciatis voluptate quia nihil.', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}}.
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}, {'title': 'Ipsa
+            perspiciatis esse rerum.', 'uri': 'http://gulgowski.biz/kyle'}], 'tags': ['tag1', 'tag2'],
+            'workflow': {'argo': 'Quidem nulla quae provident dolor amet nulla.', 'basic': {'command':
+            ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-
+            storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-
+            tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Et aut autem deserunt sit
+            architecto.', 'memory': {'limit': '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'},
+            'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

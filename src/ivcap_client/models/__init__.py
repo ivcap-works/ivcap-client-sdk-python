@@ -8,12 +8,8 @@ from .artifact_status_rt import ArtifactStatusRT
 from .artifact_status_rt_status import ArtifactStatusRTStatus
 from .aspect_idrt import AspectIDRT
 from .aspect_list_item_rt import AspectListItemRT
-from .aspect_list_item_rt_content import AspectListItemRTContent
 from .aspect_list_rt import AspectListRT
 from .aspect_rt import AspectRT
-from .aspect_rt_content import AspectRTContent
-from .aspectcreate_body import AspectcreateBody
-from .aspectupdate_body import AspectupdateBody
 from .bad_request_t import BadRequestT
 from .basic_workflow_opts_t import BasicWorkflowOptsT
 from .createqueueresponse import Createqueueresponse
@@ -50,7 +46,6 @@ from .resource_memory_t import ResourceMemoryT
 from .resource_not_found_t import ResourceNotFoundT
 from .search_list_rt import SearchListRT
 from .service_definition_t import ServiceDefinitionT
-from .service_list_item import ServiceListItem
 from .service_list_rt import ServiceListRT
 from .service_status_rt import ServiceStatusRT
 from .service_status_rt_status import ServiceStatusRTStatus
@@ -63,14 +58,10 @@ __all__ = (
     "ArtifactListRT",
     "ArtifactStatusRT",
     "ArtifactStatusRTStatus",
-    "AspectcreateBody",
     "AspectIDRT",
     "AspectListItemRT",
-    "AspectListItemRTContent",
     "AspectListRT",
     "AspectRT",
-    "AspectRTContent",
-    "AspectupdateBody",
     "BadRequestT",
     "BasicWorkflowOptsT",
     "Createqueueresponse",
@@ -107,7 +98,6 @@ __all__ = (
     "ResourceNotFoundT",
     "SearchListRT",
     "ServiceDefinitionT",
-    "ServiceListItem",
     "ServiceListRT",
     "ServiceStatusRT",
     "ServiceStatusRTStatus",

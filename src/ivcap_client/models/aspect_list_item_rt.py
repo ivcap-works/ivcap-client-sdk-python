@@ -1,15 +1,12 @@
 import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from io import BytesIO
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
-from ..types import UNSET, Unset
-
-if TYPE_CHECKING:
-    from ..models.aspect_list_item_rt_content import AspectListItemRTContent
-
+from ..types import UNSET, File, FileJsonType, Unset
 
 T = TypeVar("T", bound="AspectListItemRT")
 
@@ -27,7 +24,7 @@ class AspectListItemRT:
         entity (str): Entity URN Example: urn:blue:transect.1.
         id (str): ID Example: urn:ivcap:aspect:123e4567-e89b-12d3-a456-426614174000.
         schema (str): Schema URN Example: urn:blue:schema.image.
-        content (Union[Unset, AspectListItemRTContent]): Attached aspect aspect
+        content (Union[Unset, File]): Attached aspect aspect Example: {...}.
         valid_from (Union[Unset, datetime.datetime]): Time this assertion became valid Example:
             1996-12-19T16:39:57-08:00.
         valid_to (Union[Unset, datetime.datetime]): Time this assertion became valid Example: 1996-12-19T16:39:57-08:00.
@@ -37,7 +34,7 @@ class AspectListItemRT:
     entity: str
     id: str
     schema: str
-    content: Union[Unset, "AspectListItemRTContent"] = UNSET
+    content: Union[Unset, File] = UNSET
     valid_from: Union[Unset, datetime.datetime] = UNSET
     valid_to: Union[Unset, datetime.datetime] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -51,9 +48,9 @@ class AspectListItemRT:
 
         schema = self.schema
 
-        content: Union[Unset, Dict[str, Any]] = UNSET
+        content: Union[Unset, FileJsonType] = UNSET
         if not isinstance(self.content, Unset):
-            content = self.content.to_dict()
+            content = self.content.to_tuple()
 
         valid_from: Union[Unset, str] = UNSET
         if not isinstance(self.valid_from, Unset):
@@ -84,8 +81,6 @@ class AspectListItemRT:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.aspect_list_item_rt_content import AspectListItemRTContent
-
         d = src_dict.copy()
         content_type = d.pop("content-type")
 
@@ -96,11 +91,11 @@ class AspectListItemRT:
         schema = d.pop("schema")
 
         _content = d.pop("content", UNSET)
-        content: Union[Unset, AspectListItemRTContent]
+        content: Union[Unset, File]
         if isinstance(_content, Unset):
             content = UNSET
         else:
-            content = AspectListItemRTContent.from_dict(_content)
+            content = File(payload=BytesIO(_content))
 
         _valid_from = d.pop("valid-from", UNSET)
         valid_from: Union[Unset, datetime.datetime]

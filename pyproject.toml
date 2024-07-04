@@ -3,7 +3,7 @@ name = "ivcap_client"
 version = "0.28.3"
 description = "A client library for accessing an IVCAP cluster"
 
-authors = ["Max Ott <max.ott@csiro.au>", 
+authors = ["Max Ott <max.ott@csiro.au>",
             "openapi-python-client <https://github.com/openapi-generators/openapi-python-client>"]
 
 readme = "README.md"

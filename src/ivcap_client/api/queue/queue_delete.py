@@ -27,10 +27,6 @@ def _parse_response(
     if response.status_code == HTTPStatus.NO_CONTENT:
         response_204 = cast(Any, None)
         return response_204
-    if response.status_code == HTTPStatus.BAD_REQUEST:
-        response_400 = BadRequestT.from_dict(response.json())
-
-        return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
@@ -38,6 +34,10 @@ def _parse_response(
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+    if response.status_code == HTTPStatus.FAILED_DEPENDENCY:
+        response_424 = BadRequestT.from_dict(response.json())
+
+        return response_424
     if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
@@ -72,7 +72,7 @@ def sync_detailed(
      Delete an existing queues.
 
     Args:
-        id (str): ID of queues to update Example: Est hic deserunt..
+        id (str): ID of queues to update Example: At ratione aut illo doloremque aut maxime..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -103,7 +103,7 @@ def sync(
      Delete an existing queues.
 
     Args:
-        id (str): ID of queues to update Example: Est hic deserunt..
+        id (str): ID of queues to update Example: At ratione aut illo doloremque aut maxime..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -129,7 +129,7 @@ async def asyncio_detailed(
      Delete an existing queues.
 
     Args:
-        id (str): ID of queues to update Example: Est hic deserunt..
+        id (str): ID of queues to update Example: At ratione aut illo doloremque aut maxime..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -158,7 +158,7 @@ async def asyncio(
      Delete an existing queues.
 
     Args:
-        id (str): ID of queues to update Example: Est hic deserunt..
+        id (str): ID of queues to update Example: At ratione aut illo doloremque aut maxime..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -6,16 +6,15 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.aspect_idrt import AspectIDRT
-from ...models.aspectupdate_body import AspectupdateBody
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
-from ...types import UNSET, Response
+from ...types import UNSET, File, Response
 
 
 def _get_kwargs(
     *,
-    body: AspectupdateBody,
+    body: File,
     entity: str,
     schema: str,
     content_type: str,
@@ -37,7 +36,7 @@ def _get_kwargs(
         "params": params,
     }
 
-    _body = body.to_dict()
+    _body = body.to_tuple()
 
     _kwargs["json"] = _body
     headers["Content-Type"] = "application/json"
@@ -53,10 +52,6 @@ def _parse_response(
         response_200 = AspectIDRT.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
-        response_400 = BadRequestT.from_dict(response.json())
-
-        return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
@@ -99,7 +94,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    body: AspectupdateBody,
+    body: File,
     entity: str,
     schema: str,
     content_type: str,
@@ -114,7 +109,7 @@ def sync_detailed(
         schema (str): Schema of aspect Example: urn:url:.....
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
-        body (AspectupdateBody): Aspect content Example: {"$schema": ...}.
+        body (File): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -141,7 +136,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    body: AspectupdateBody,
+    body: File,
     entity: str,
     schema: str,
     content_type: str,
@@ -156,7 +151,7 @@ def sync(
         schema (str): Schema of aspect Example: urn:url:.....
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
-        body (AspectupdateBody): Aspect content Example: {"$schema": ...}.
+        body (File): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -178,7 +173,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    body: AspectupdateBody,
+    body: File,
     entity: str,
     schema: str,
     content_type: str,
@@ -193,7 +188,7 @@ async def asyncio_detailed(
         schema (str): Schema of aspect Example: urn:url:.....
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
-        body (AspectupdateBody): Aspect content Example: {"$schema": ...}.
+        body (File): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -218,7 +213,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    body: AspectupdateBody,
+    body: File,
     entity: str,
     schema: str,
     content_type: str,
@@ -233,7 +228,7 @@ async def asyncio(
         schema (str): Schema of aspect Example: urn:url:.....
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
-        body (AspectupdateBody): Aspect content Example: {"$schema": ...}.
+        body (File): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

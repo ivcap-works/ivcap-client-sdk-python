@@ -71,10 +71,6 @@ def _parse_response(
         response_201 = ArtifactStatusRT.from_dict(response.json())
 
         return response_201
-    if response.status_code == HTTPStatus.BAD_REQUEST:
-        response_400 = BadRequestT.from_dict(response.json())
-
-        return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
@@ -82,6 +78,10 @@ def _parse_response(
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+    if response.status_code == HTTPStatus.FAILED_DEPENDENCY:
+        response_424 = BadRequestT.from_dict(response.json())
+
+        return response_424
     if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 

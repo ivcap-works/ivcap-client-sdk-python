@@ -7,7 +7,7 @@ from dateutil.parser import isoparse
 
 if TYPE_CHECKING:
     from ..models.link_t import LinkT
-    from ..models.service_list_item import ServiceListItem
+    from ..models.queue_list_item import QueueListItem
 
 
 T = TypeVar("T", bound="ServiceListRT")
@@ -18,19 +18,19 @@ class ServiceListRT:
     """
     Example:
         {'at-time': '1996-12-19T16:39:57-08:00', 'items': [{'account':
-            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some lengthy
-            description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
-            {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
-            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
-            {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
-            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'}], 'links':
-            [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
+            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'description': 'Some lengthy description of fire
+            risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region'}, {'account':
+            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'description': 'Some lengthy description of fire
+            risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region'}, {'account':
+            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'description': 'Some lengthy description of fire
+            risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region'}, {'account':
+            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'description': 'Some lengthy description of fire
+            risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region'}], 'links': [{'href':
+            'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
@@ -38,19 +38,16 @@ class ServiceListRT:
 
     Attributes:
         at_time (datetime.datetime): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
-        items (List['ServiceListItem']): Services Example: [{'account':
-            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some lengthy
-            description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
-            {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
-            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
-            {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
-            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'}].
+        items (List['QueueListItem']): Services Example: [{'account':
+            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'description': 'Some lengthy description of fire
+            risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region'}, {'account':
+            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'description': 'Some lengthy description of fire
+            risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region'}, {'account':
+            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'description': 'Some lengthy description of fire
+            risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region'}].
         links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
@@ -59,7 +56,7 @@ class ServiceListRT:
     """
 
     at_time: datetime.datetime
-    items: List["ServiceListItem"]
+    items: List["QueueListItem"]
     links: List["LinkT"]
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -91,7 +88,7 @@ class ServiceListRT:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.link_t import LinkT
-        from ..models.service_list_item import ServiceListItem
+        from ..models.queue_list_item import QueueListItem
 
         d = src_dict.copy()
         at_time = isoparse(d.pop("at-time"))
@@ -99,7 +96,7 @@ class ServiceListRT:
         items = []
         _items = d.pop("items")
         for items_item_data in _items:
-            items_item = ServiceListItem.from_dict(items_item_data)
+            items_item = QueueListItem.from_dict(items_item_data)
 
             items.append(items_item)
 

@@ -19,10 +19,12 @@ T = TypeVar("T", bound="ListMetaRT")
 class ListMetaRT:
     """
     Example:
-        {'aspect-path': 'Aspernatur architecto.', 'at-time': '1996-12-19T16:39:57-08:00', 'entity':
-            'urn:blue:image.collA.12', 'items': [{'aspect': '{...}', 'aspect-context': '{...}', 'entity':
-            'urn:blue:transect.1', 'id': 'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema':
-            'urn:blue:schema.image'}, {'aspect': '{...}', 'aspect-context': '{...}', 'entity': 'urn:blue:transect.1', 'id':
+        {'aspect-path': 'Quasi incidunt.', 'at-time': '1996-12-19T16:39:57-08:00', 'entity': 'urn:blue:image.collA.12',
+            'items': [{'aspect': '{...}', 'aspect-context': '{...}', 'entity': 'urn:blue:transect.1', 'id':
+            'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}, {'aspect':
+            '{...}', 'aspect-context': '{...}', 'entity': 'urn:blue:transect.1', 'id':
+            'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}, {'aspect':
+            '{...}', 'aspect-context': '{...}', 'entity': 'urn:blue:transect.1', 'id':
             'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}, {'aspect':
             '{...}', 'aspect-context': '{...}', 'entity': 'urn:blue:transect.1', 'id':
             'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}], 'links':
@@ -38,14 +40,16 @@ class ListMetaRT:
             'schema': 'urn:blue:schema.image'}, {'aspect': '{...}', 'aspect-context': '{...}', 'entity':
             'urn:blue:transect.1', 'id': 'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema':
             'urn:blue:schema.image'}, {'aspect': '{...}', 'aspect-context': '{...}', 'entity': 'urn:blue:transect.1', 'id':
+            'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}, {'aspect':
+            '{...}', 'aspect-context': '{...}', 'entity': 'urn:blue:transect.1', 'id':
             'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}].
         links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}].
-        aspect_path (Union[Unset, str]): Optional json path to further filter on returned list Example: Non sapiente
-            labore iste..
+        aspect_path (Union[Unset, str]): Optional json path to further filter on returned list Example: Ratione
+            repudiandae et sed..
         at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
         entity (Union[Unset, str]): Entity for which to request metadata Example: urn:blue:image.collA.12.
         schema (Union[Unset, str]): Optional schema to filter on Example: urn:blue:image,urn:blue:location.

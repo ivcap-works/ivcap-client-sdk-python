@@ -18,25 +18,25 @@ class BasicWorkflowOptsT:
     Example:
         {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-storage':
             {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-
-            pull-policy': 'Aut at.', 'memory': {'limit': '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'}
+            pull-policy': 'Sit vel.', 'memory': {'limit': '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'}
 
     Attributes:
         command (List[str]): Command to start the container - needed for some container runtimes Example: ['/bin/sh',
             '-c', 'echo $PATH'].
         image (str): container image name Example: alpine.
         cpu (Union[Unset, ResourceMemoryT]): See https://kubernetes.io/docs/concepts/configuration/manage-resources-
-            containers/#resource-units-in-kubernetes for units Example: {'limit': 'Fugit alias velit.', 'request':
-            'Reiciendis similique repellendus et.'}.
+            containers/#resource-units-in-kubernetes for units Example: {'limit': 'Est corporis laudantium qui.', 'request':
+            'Minus ratione quas molestiae non.'}.
         ephemeral_storage (Union[Unset, ResourceMemoryT]): See https://kubernetes.io/docs/concepts/configuration/manage-
-            resources-containers/#resource-units-in-kubernetes for units Example: {'limit': 'Fugit alias velit.', 'request':
-            'Reiciendis similique repellendus et.'}.
+            resources-containers/#resource-units-in-kubernetes for units Example: {'limit': 'Est corporis laudantium qui.',
+            'request': 'Minus ratione quas molestiae non.'}.
         gpu_number (Union[Unset, int]): Defines number of required gpu Example: 2.
         gpu_type (Union[Unset, str]): Defines required gpu type Example: nvidia-tesla-t4.
         image_pull_policy (Union[Unset, str]): Optionally definesq the image pull policy Default: 'IfNotPresent'.
-            Example: Cupiditate autem corporis..
+            Example: Quibusdam iusto quis ut ipsum fugit..
         memory (Union[Unset, ResourceMemoryT]): See https://kubernetes.io/docs/concepts/configuration/manage-resources-
-            containers/#resource-units-in-kubernetes for units Example: {'limit': 'Fugit alias velit.', 'request':
-            'Reiciendis similique repellendus et.'}.
+            containers/#resource-units-in-kubernetes for units Example: {'limit': 'Est corporis laudantium qui.', 'request':
+            'Minus ratione quas molestiae non.'}.
         shared_memory (Union[Unset, str]): Defines needed amount of shared-memory Example: 1Gi.
     """
 

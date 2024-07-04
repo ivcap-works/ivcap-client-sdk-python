@@ -19,7 +19,7 @@ def _get_kwargs(
     page: Union[Unset, str] = UNSET,
     filter_: Union[Unset, str] = UNSET,
     order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
+    order_desc: Union[Unset, bool] = False,
     at_time: Union[Unset, datetime.datetime] = UNSET,
 ) -> Dict[str, Any]:
     params: Dict[str, Any] = {}
@@ -57,10 +57,6 @@ def _parse_response(
         response_200 = OrderListRT.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
-        response_400 = BadRequestT.from_dict(response.json())
-
-        return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
@@ -72,6 +68,10 @@ def _parse_response(
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+    if response.status_code == HTTPStatus.FAILED_DEPENDENCY:
+        response_424 = BadRequestT.from_dict(response.json())
+
+        return response_424
     if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
@@ -103,7 +103,7 @@ def sync_detailed(
     page: Union[Unset, str] = UNSET,
     filter_: Union[Unset, str] = UNSET,
     order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
+    order_desc: Union[Unset, bool] = False,
     at_time: Union[Unset, datetime.datetime] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, OrderListRT]]:
     """list order
@@ -129,7 +129,7 @@ def sync_detailed(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True.
+            order is the lt. Default: False. Example: True.
         at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
             that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -164,7 +164,7 @@ def sync(
     page: Union[Unset, str] = UNSET,
     filter_: Union[Unset, str] = UNSET,
     order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
+    order_desc: Union[Unset, bool] = False,
     at_time: Union[Unset, datetime.datetime] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, OrderListRT]]:
     """list order
@@ -190,7 +190,7 @@ def sync(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True.
+            order is the lt. Default: False. Example: True.
         at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
             that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -220,7 +220,7 @@ async def asyncio_detailed(
     page: Union[Unset, str] = UNSET,
     filter_: Union[Unset, str] = UNSET,
     order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
+    order_desc: Union[Unset, bool] = False,
     at_time: Union[Unset, datetime.datetime] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, OrderListRT]]:
     """list order
@@ -246,7 +246,7 @@ async def asyncio_detailed(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True.
+            order is the lt. Default: False. Example: True.
         at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
             that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -279,7 +279,7 @@ async def asyncio(
     page: Union[Unset, str] = UNSET,
     filter_: Union[Unset, str] = UNSET,
     order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
+    order_desc: Union[Unset, bool] = False,
     at_time: Union[Unset, datetime.datetime] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, OrderListRT]]:
     """list order
@@ -305,7 +305,7 @@ async def asyncio(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True.
+            order is the lt. Default: False. Example: True.
         at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
             that time [now] Example: 1996-12-19T16:39:57-08:00.
 

@@ -11,11 +11,11 @@ class BadRequestT:
     """Bad request
 
     Example:
-        {'message': 'Ut sint dolorum qui corrupti.'}
+        {'message': 'Autem natus sit ut ex ut.'}
 
     Attributes:
-        message (str): Information message Default: 'Having problem with some of the supplied information'. Example:
-            Inventore at dolorem..
+        message (str): Information message Default: 'Having problem with some of the supplied information'. Example: Ut
+            omnis dolor dicta..
     """
 
     message: str = "Having problem with some of the supplied information"

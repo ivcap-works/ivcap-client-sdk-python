@@ -13,13 +13,13 @@ class QueueListItem:
     """
     Example:
         {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'description': 'Events for the event
-            service', 'href': 'https://api.ivcap.net/1/queues/...', 'id':
-            'urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000', 'name': 'events'}
+            service', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'events'}
 
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
-        href (str):  Example: https://api.ivcap.net/1/queues/....
-        id (str): queue Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
+        href (str):  Example: https://api.ivcap.net/1/services/....
+        id (str): service Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
         description (Union[Unset, str]): Description of the created queue. Example: Events for the event service.
         name (Union[Unset, str]): Name of the created queue. Example: events.
     """

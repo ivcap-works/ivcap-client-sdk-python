@@ -1,99 +1,122 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+import datetime
+from typing import Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
-
-if TYPE_CHECKING:
-    from ..models.ref_t import RefT
-    from ..models.self_t import SelfT
-
 
 T = TypeVar("T", bound="ServiceListItem")
 
 
-@define
+@_attrs_define
 class ServiceListItem:
     """
     Example:
-        {'description': 'Some lengthy description of fire risk', 'id': 'service:acme:oracle', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'},
-            'name': 'Fire risk for region', 'provider': {'id': 'http://beahan.net/laurie', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}}
+        {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
+            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'}
 
     Attributes:
-        links (SelfT):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'At qui.'}.
+        account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
+        href (str):  Example: https://api.ivcap.net/1/services/....
+        id (str): ID Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
+        banner (Union[Unset, str]): Optional banner image for this service Example: urn:.....
         description (Union[Unset, str]): Optional description of the service Example: Some lengthy description of fire
             risk.
-        id (Union[Unset, str]): Service ID Example: service:acme:oracle.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for region.
-        provider (Union[Unset, RefT]):  Example: {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}.
+        policy (Union[Unset, str]): Reference to policy used Example:
+            urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
+        published_at (Union[Unset, datetime.datetime]): time this service was published Example:
+            1996-12-19T16:39:57-08:00.
     """
 
-    links: "SelfT"
+    account: str
+    href: str
+    id: str
+    banner: Union[Unset, str] = UNSET
     description: Union[Unset, str] = UNSET
-    id: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
-    provider: Union[Unset, "RefT"] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    policy: Union[Unset, str] = UNSET
+    published_at: Union[Unset, datetime.datetime] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        links = self.links.to_dict()
+        account = self.account
+
+        href = self.href
+
+        id = self.id
+
+        banner = self.banner
 
         description = self.description
-        id = self.id
+
         name = self.name
-        provider: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.provider, Unset):
-            provider = self.provider.to_dict()
+
+        policy = self.policy
+
+        published_at: Union[Unset, str] = UNSET
+        if not isinstance(self.published_at, Unset):
+            published_at = self.published_at.isoformat()
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "links": links,
+                "account": account,
+                "href": href,
+                "id": id,
             }
         )
+        if banner is not UNSET:
+            field_dict["banner"] = banner
         if description is not UNSET:
             field_dict["description"] = description
-        if id is not UNSET:
-            field_dict["id"] = id
         if name is not UNSET:
             field_dict["name"] = name
-        if provider is not UNSET:
-            field_dict["provider"] = provider
+        if policy is not UNSET:
+            field_dict["policy"] = policy
+        if published_at is not UNSET:
+            field_dict["published-at"] = published_at
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.ref_t import RefT
-        from ..models.self_t import SelfT
-
         d = src_dict.copy()
-        links = SelfT.from_dict(d.pop("links"))
+        account = d.pop("account")
+
+        href = d.pop("href")
+
+        id = d.pop("id")
+
+        banner = d.pop("banner", UNSET)
 
         description = d.pop("description", UNSET)
 
-        id = d.pop("id", UNSET)
-
         name = d.pop("name", UNSET)
 
-        _provider = d.pop("provider", UNSET)
-        provider: Union[Unset, RefT]
-        if isinstance(_provider, Unset):
-            provider = UNSET
+        policy = d.pop("policy", UNSET)
+
+        _published_at = d.pop("published-at", UNSET)
+        published_at: Union[Unset, datetime.datetime]
+        if isinstance(_published_at, Unset):
+            published_at = UNSET
         else:
-            provider = RefT.from_dict(_provider)
+            published_at = isoparse(_published_at)
 
         service_list_item = cls(
-            links=links,
-            description=description,
+            account=account,
+            href=href,
             id=id,
+            banner=banner,
+            description=description,
             name=name,
-            provider=provider,
+            policy=policy,
+            published_at=published_at,
         )
 
         service_list_item.additional_properties = d

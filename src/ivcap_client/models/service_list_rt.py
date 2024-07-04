@@ -1,82 +1,88 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 if TYPE_CHECKING:
-    from ..models.nav_t import NavT
+    from ..models.link_t import LinkT
     from ..models.service_list_item import ServiceListItem
 
 
 T = TypeVar("T", bound="ServiceListRT")
 
 
-@define
+@_attrs_define
 class ServiceListRT:
     """
     Example:
-        {'at-time': '1996-12-19T16:39:57-08:00', 'links': {'first': 'https://api.com/foo/...', 'next':
-            'https://api.com/foo/...', 'self': 'https://api.com/foo/...'}, 'services': [{'description': 'Some lengthy
-            description of fire risk', 'id': 'service:acme:oracle', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire
-            risk for region', 'provider': {'id': 'http://beahan.net/laurie', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}},
-            {'description': 'Some lengthy description of fire risk', 'id': 'service:acme:oracle', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'},
-            'name': 'Fire risk for region', 'provider': {'id': 'http://beahan.net/laurie', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}},
-            {'description': 'Some lengthy description of fire risk', 'id': 'service:acme:oracle', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'},
-            'name': 'Fire risk for region', 'provider': {'id': 'http://beahan.net/laurie', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}},
-            {'description': 'Some lengthy description of fire risk', 'id': 'service:acme:oracle', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'},
-            'name': 'Fire risk for region', 'provider': {'id': 'http://beahan.net/laurie', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}}]}
+        {'at-time': '1996-12-19T16:39:57-08:00', 'items': [{'account':
+            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some lengthy
+            description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
+            {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
+            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
+            {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
+            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'}], 'links':
+            [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
+            'application/openapi3+json'}]}
 
     Attributes:
         at_time (datetime.datetime): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
-        links (NavT):  Example: {'first': 'https://api.com/foo/...', 'next': 'https://api.com/foo/...', 'self':
-            'https://api.com/foo/...'}.
-        services (List['ServiceListItem']): Services Example: [{'description': 'Some lengthy description of fire risk',
-            'id': 'service:acme:oracle', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire risk for region', 'provider': {'id':
-            'http://beahan.net/laurie', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}}, {'description': 'Some lengthy description of fire
-            risk', 'id': 'service:acme:oracle', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire risk for region', 'provider': {'id':
-            'http://beahan.net/laurie', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}}, {'description': 'Some lengthy description of fire
-            risk', 'id': 'service:acme:oracle', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire risk for region', 'provider': {'id':
-            'http://beahan.net/laurie', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}}].
+        items (List['ServiceListItem']): Services Example: [{'account':
+            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some lengthy
+            description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
+            {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
+            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
+            {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
+            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'}].
+        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+            'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
+            {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
+            'application/openapi3+json'}].
     """
 
     at_time: datetime.datetime
-    links: "NavT"
-    services: List["ServiceListItem"]
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    items: List["ServiceListItem"]
+    links: List["LinkT"]
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         at_time = self.at_time.isoformat()
 
-        links = self.links.to_dict()
+        items = []
+        for items_item_data in self.items:
+            items_item = items_item_data.to_dict()
+            items.append(items_item)
 
-        services = []
-        for services_item_data in self.services:
-            services_item = services_item_data.to_dict()
-
-            services.append(services_item)
+        links = []
+        for links_item_data in self.links:
+            links_item = links_item_data.to_dict()
+            links.append(links_item)
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "at-time": at_time,
+                "items": items,
                 "links": links,
-                "services": services,
             }
         )
 
@@ -84,25 +90,30 @@ class ServiceListRT:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.nav_t import NavT
+        from ..models.link_t import LinkT
         from ..models.service_list_item import ServiceListItem
 
         d = src_dict.copy()
         at_time = isoparse(d.pop("at-time"))
 
-        links = NavT.from_dict(d.pop("links"))
+        items = []
+        _items = d.pop("items")
+        for items_item_data in _items:
+            items_item = ServiceListItem.from_dict(items_item_data)
 
-        services = []
-        _services = d.pop("services")
-        for services_item_data in _services:
-            services_item = ServiceListItem.from_dict(services_item_data)
+            items.append(items_item)
 
-            services.append(services_item)
+        links = []
+        _links = d.pop("links")
+        for links_item_data in _links:
+            links_item = LinkT.from_dict(links_item_data)
+
+            links.append(links_item)
 
         service_list_rt = cls(
             at_time=at_time,
+            items=items,
             links=links,
-            services=services,
         )
 
         service_list_rt.additional_properties = d

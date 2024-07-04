@@ -1,104 +1,108 @@
+import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+from dateutil.parser import isoparse
 
 from ..models.order_status_rt_status import OrderStatusRTStatus
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.link_t import LinkT
     from ..models.parameter_t import ParameterT
-    from ..models.product_t import ProductT
-    from ..models.ref_t import RefT
-    from ..models.self_t import SelfT
+    from ..models.partial_product_list_t import PartialProductListT
 
 
 T = TypeVar("T", bound="OrderStatusRT")
 
 
-@define
+@_attrs_define
 class OrderStatusRT:
     """
     Example:
-        {'account': {'id': 'http://beahan.net/laurie', 'links': {'describedBy': {'href': 'https://api.com/swagger/...',
-            'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}, 'finished-at': '2023-03-17T04:57:00Z', 'id':
-            '123e4567-e89b-12d3-a456-426614174000', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'name': 'Fire risk for Lot2', 'ordered-at':
-            '2023-03-17T04:57:00Z', 'parameters': [{'name': 'region', 'value': 'Upper Valley'}, {'name': 'threshold',
-            'value': '10'}], 'products': [{'href': 'https:/.../1/artifacts/0000-00001220', 'mime-type': 'image/geo+tiff',
-            'name': 'fire risk map', 'size': 1234963}], 'service': {'id': 'http://beahan.net/laurie', 'links':
-            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum
-            odit.'}}, 'started-at': '2023-03-17T04:57:00Z', 'status': 'error', 'tags': ['tag1', 'tag2']}
+        {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'finished-at':
+            '1996-12-19T16:39:57-08:00', 'id': 'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'links': [{'href':
+            'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
+            'application/json'}], 'name': 'Fire risk for Lot2', 'ordered-at': '1996-12-19T16:39:57-08:00', 'parameters':
+            [{'name': 'region', 'value': 'Upper Valley'}, {'name': 'threshold', 'value': '10'}], 'products': {'items':
+            [{'data-href': 'https:/.../1/artifacts/0000-00001220/blob', 'href': 'https:/.../1/artifacts/0000-00001220',
+            'mime-type': 'image/geo+tiff', 'name': 'fire risk map', 'size': 1234963}], 'links': [{'href':
+            'https://api.ivcap.net/1/....', 'rel': 'next'}]}, 'service':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
+            'error', 'tags': ['tag1', 'tag2']}
 
     Attributes:
-        id (str): Order ID Example: 123e4567-e89b-12d3-a456-426614174000.
+        account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
+        id (str): ID Example: urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
+        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+            'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
+            'describedBy', 'type': 'application/json'}].
         parameters (List['ParameterT']): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
             {'name': 'threshold', 'value': '10'}].
-        account (Union[Unset, RefT]):  Example: {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}.
-        finished_at (Union[Unset, str]): DateTime order processing finished Example: 2023-03-17T04:57:00Z.
-        links (Union[Unset, SelfT]):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'At qui.'}.
+        products (PartialProductListT):  Example: {'items': [{'data-href': 'https:/.../1/artifacts/0000-00001220/blob',
+            'href': 'https:/.../1/artifacts/0000-00001220', 'mime-type': 'image/geo+tiff', 'name': 'fire risk map', 'size':
+            1234963}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'next'}]}.
+        service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
+        status (OrderStatusRTStatus): Order status Example: scheduled.
+        finished_at (Union[Unset, datetime.datetime]): DateTime order processing finished Example:
+            1996-12-19T16:39:57-08:00.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
-        ordered_at (Union[Unset, str]): DateTime order was placed Example: 2023-03-17T04:57:00Z.
-        products (Union[Unset, List['ProductT']]): Products delivered for this order Example: [{'href':
-            'https:/.../1/artifacts/0000-00001220', 'mime-type': 'image/geo+tiff', 'name': 'fire risk map', 'size':
-            1234963}].
-        service (Union[Unset, RefT]):  Example: {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}.
-        started_at (Union[Unset, str]): DateTime order processing started Example: 2023-03-17T04:57:00Z.
-        status (Union[Unset, OrderStatusRTStatus]): Order status Example: scheduled.
+        ordered_at (Union[Unset, datetime.datetime]): DateTime order was placed Example: 1996-12-19T16:39:57-08:00.
+        started_at (Union[Unset, datetime.datetime]): DateTime order processing started Example:
+            1996-12-19T16:39:57-08:00.
         tags (Union[Unset, List[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
     """
 
+    account: str
     id: str
+    links: List["LinkT"]
     parameters: List["ParameterT"]
-    account: Union[Unset, "RefT"] = UNSET
-    finished_at: Union[Unset, str] = UNSET
-    links: Union[Unset, "SelfT"] = UNSET
+    products: "PartialProductListT"
+    service: str
+    status: OrderStatusRTStatus
+    finished_at: Union[Unset, datetime.datetime] = UNSET
     name: Union[Unset, str] = UNSET
-    ordered_at: Union[Unset, str] = UNSET
-    products: Union[Unset, List["ProductT"]] = UNSET
-    service: Union[Unset, "RefT"] = UNSET
-    started_at: Union[Unset, str] = UNSET
-    status: Union[Unset, OrderStatusRTStatus] = UNSET
+    ordered_at: Union[Unset, datetime.datetime] = UNSET
+    started_at: Union[Unset, datetime.datetime] = UNSET
     tags: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        account = self.account
+
         id = self.id
+
+        links = []
+        for links_item_data in self.links:
+            links_item = links_item_data.to_dict()
+            links.append(links_item)
+
         parameters = []
         for parameters_item_data in self.parameters:
             parameters_item = parameters_item_data.to_dict()
-
             parameters.append(parameters_item)
 
-        account: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.account, Unset):
-            account = self.account.to_dict()
+        products = self.products.to_dict()
 
-        finished_at = self.finished_at
-        links: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.links, Unset):
-            links = self.links.to_dict()
+        service = self.service
+
+        status = self.status.value
+
+        finished_at: Union[Unset, str] = UNSET
+        if not isinstance(self.finished_at, Unset):
+            finished_at = self.finished_at.isoformat()
 
         name = self.name
-        ordered_at = self.ordered_at
-        products: Union[Unset, List[Dict[str, Any]]] = UNSET
-        if not isinstance(self.products, Unset):
-            products = []
-            for products_item_data in self.products:
-                products_item = products_item_data.to_dict()
 
-                products.append(products_item)
+        ordered_at: Union[Unset, str] = UNSET
+        if not isinstance(self.ordered_at, Unset):
+            ordered_at = self.ordered_at.isoformat()
 
-        service: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.service, Unset):
-            service = self.service.to_dict()
-
-        started_at = self.started_at
-        status: Union[Unset, str] = UNSET
-        if not isinstance(self.status, Unset):
-            status = self.status.value
+        started_at: Union[Unset, str] = UNSET
+        if not isinstance(self.started_at, Unset):
+            started_at = self.started_at.isoformat()
 
         tags: Union[Unset, List[str]] = UNSET
         if not isinstance(self.tags, Unset):
@@ -108,28 +112,23 @@ class OrderStatusRT:
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
+                "account": account,
                 "id": id,
+                "links": links,
                 "parameters": parameters,
+                "products": products,
+                "service": service,
+                "status": status,
             }
         )
-        if account is not UNSET:
-            field_dict["account"] = account
         if finished_at is not UNSET:
             field_dict["finished-at"] = finished_at
-        if links is not UNSET:
-            field_dict["links"] = links
         if name is not UNSET:
             field_dict["name"] = name
         if ordered_at is not UNSET:
             field_dict["ordered-at"] = ordered_at
-        if products is not UNSET:
-            field_dict["products"] = products
-        if service is not UNSET:
-            field_dict["service"] = service
         if started_at is not UNSET:
             field_dict["started-at"] = started_at
-        if status is not UNSET:
-            field_dict["status"] = status
         if tags is not UNSET:
             field_dict["tags"] = tags
 
@@ -137,13 +136,21 @@ class OrderStatusRT:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.link_t import LinkT
         from ..models.parameter_t import ParameterT
-        from ..models.product_t import ProductT
-        from ..models.ref_t import RefT
-        from ..models.self_t import SelfT
+        from ..models.partial_product_list_t import PartialProductListT
 
         d = src_dict.copy()
+        account = d.pop("account")
+
         id = d.pop("id")
+
+        links = []
+        _links = d.pop("links")
+        for links_item_data in _links:
+            links_item = LinkT.from_dict(links_item_data)
+
+            links.append(links_item)
 
         parameters = []
         _parameters = d.pop("parameters")
@@ -152,63 +159,49 @@ class OrderStatusRT:
 
             parameters.append(parameters_item)
 
-        _account = d.pop("account", UNSET)
-        account: Union[Unset, RefT]
-        if isinstance(_account, Unset):
-            account = UNSET
-        else:
-            account = RefT.from_dict(_account)
+        products = PartialProductListT.from_dict(d.pop("products"))
 
-        finished_at = d.pop("finished-at", UNSET)
+        service = d.pop("service")
 
-        _links = d.pop("links", UNSET)
-        links: Union[Unset, SelfT]
-        if isinstance(_links, Unset):
-            links = UNSET
+        status = OrderStatusRTStatus(d.pop("status"))
+
+        _finished_at = d.pop("finished-at", UNSET)
+        finished_at: Union[Unset, datetime.datetime]
+        if isinstance(_finished_at, Unset):
+            finished_at = UNSET
         else:
-            links = SelfT.from_dict(_links)
+            finished_at = isoparse(_finished_at)
 
         name = d.pop("name", UNSET)
 
-        ordered_at = d.pop("ordered-at", UNSET)
-
-        products = []
-        _products = d.pop("products", UNSET)
-        for products_item_data in _products or []:
-            products_item = ProductT.from_dict(products_item_data)
-
-            products.append(products_item)
-
-        _service = d.pop("service", UNSET)
-        service: Union[Unset, RefT]
-        if isinstance(_service, Unset):
-            service = UNSET
+        _ordered_at = d.pop("ordered-at", UNSET)
+        ordered_at: Union[Unset, datetime.datetime]
+        if isinstance(_ordered_at, Unset):
+            ordered_at = UNSET
         else:
-            service = RefT.from_dict(_service)
+            ordered_at = isoparse(_ordered_at)
 
-        started_at = d.pop("started-at", UNSET)
-
-        _status = d.pop("status", UNSET)
-        status: Union[Unset, OrderStatusRTStatus]
-        if isinstance(_status, Unset):
-            status = UNSET
+        _started_at = d.pop("started-at", UNSET)
+        started_at: Union[Unset, datetime.datetime]
+        if isinstance(_started_at, Unset):
+            started_at = UNSET
         else:
-            status = OrderStatusRTStatus(_status)
+            started_at = isoparse(_started_at)
 
         tags = cast(List[str], d.pop("tags", UNSET))
 
         order_status_rt = cls(
-            id=id,
-            parameters=parameters,
             account=account,
-            finished_at=finished_at,
+            id=id,
             links=links,
-            name=name,
-            ordered_at=ordered_at,
+            parameters=parameters,
             products=products,
             service=service,
-            started_at=started_at,
             status=status,
+            finished_at=finished_at,
+            name=name,
+            ordered_at=ordered_at,
+            started_at=started_at,
             tags=tags,
         )
 

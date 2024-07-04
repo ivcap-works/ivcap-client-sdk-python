@@ -1,56 +1,73 @@
 import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.artifact_list_item import ArtifactListItem
-    from ..models.nav_t import NavT
+    from ..models.link_t import LinkT
 
 
 T = TypeVar("T", bound="ArtifactListRT")
 
 
-@define
+@_attrs_define
 class ArtifactListRT:
     """
     Example:
-        {'artifacts': [{'id': 'cayp:artifact:0000-000', 'links': {'describedBy': {'href': 'https://api.com/swagger/...',
-            'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'mime-type': 'image/jpeg', 'name': 'Fire risk
-            for Lot2', 'size': 19000, 'status': 'ready'}, {'id': 'cayp:artifact:0000-000', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'mime-type':
-            'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}], 'at-time':
-            '1996-12-19T16:39:57-08:00', 'links': {'first': 'https://api.com/foo/...', 'next': 'https://api.com/foo/...',
-            'self': 'https://api.com/foo/...'}}
+        {'at-time': '1996-12-19T16:39:57-08:00', 'items': [{'created-at': '1996-12-19T16:39:57-08:00', 'href':
+            'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-
+            type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}, {'created-at':
+            '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
+            'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-type': 'image/jpeg', 'name': 'Fire risk for
+            Lot2', 'size': 19000, 'status': 'ready'}, {'created-at': '1996-12-19T16:39:57-08:00', 'href':
+            'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-
+            type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}], 'links': [{'href':
+            'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
+            'application/openapi3+json'}]}
 
     Attributes:
-        artifacts (List['ArtifactListItem']): Artifacts Example: [{'id': 'cayp:artifact:0000-000', 'links':
-            {'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum
-            odit.'}, 'mime-type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}, {'id':
-            'cayp:artifact:0000-000', 'links': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'mime-type': 'image/jpeg', 'name': 'Fire risk for
+        items (List['ArtifactListItem']): Artifacts Example: [{'created-at': '1996-12-19T16:39:57-08:00', 'href':
+            'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-
+            type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}, {'created-at':
+            '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
+            'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-type': 'image/jpeg', 'name': 'Fire risk for
+            Lot2', 'size': 19000, 'status': 'ready'}, {'created-at': '1996-12-19T16:39:57-08:00', 'href':
+            'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-
+            type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}, {'created-at':
+            '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
+            'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-type': 'image/jpeg', 'name': 'Fire risk for
             Lot2', 'size': 19000, 'status': 'ready'}].
-        links (NavT):  Example: {'first': 'https://api.com/foo/...', 'next': 'https://api.com/foo/...', 'self':
-            'https://api.com/foo/...'}.
+        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+            'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
+            {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
+            'application/openapi3+json'}].
         at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
     """
 
-    artifacts: List["ArtifactListItem"]
-    links: "NavT"
+    items: List["ArtifactListItem"]
+    links: List["LinkT"]
     at_time: Union[Unset, datetime.datetime] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        artifacts = []
-        for artifacts_item_data in self.artifacts:
-            artifacts_item = artifacts_item_data.to_dict()
+        items = []
+        for items_item_data in self.items:
+            items_item = items_item_data.to_dict()
+            items.append(items_item)
 
-            artifacts.append(artifacts_item)
-
-        links = self.links.to_dict()
+        links = []
+        for links_item_data in self.links:
+            links_item = links_item_data.to_dict()
+            links.append(links_item)
 
         at_time: Union[Unset, str] = UNSET
         if not isinstance(self.at_time, Unset):
@@ -60,7 +77,7 @@ class ArtifactListRT:
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "artifacts": artifacts,
+                "items": items,
                 "links": links,
             }
         )
@@ -72,17 +89,22 @@ class ArtifactListRT:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.artifact_list_item import ArtifactListItem
-        from ..models.nav_t import NavT
+        from ..models.link_t import LinkT
 
         d = src_dict.copy()
-        artifacts = []
-        _artifacts = d.pop("artifacts")
-        for artifacts_item_data in _artifacts:
-            artifacts_item = ArtifactListItem.from_dict(artifacts_item_data)
+        items = []
+        _items = d.pop("items")
+        for items_item_data in _items:
+            items_item = ArtifactListItem.from_dict(items_item_data)
 
-            artifacts.append(artifacts_item)
+            items.append(items_item)
 
-        links = NavT.from_dict(d.pop("links"))
+        links = []
+        _links = d.pop("links")
+        for links_item_data in _links:
+            links_item = LinkT.from_dict(links_item_data)
+
+            links.append(links_item)
 
         _at_time = d.pop("at-time", UNSET)
         at_time: Union[Unset, datetime.datetime]
@@ -92,7 +114,7 @@ class ArtifactListRT:
             at_time = isoparse(_at_time)
 
         artifact_list_rt = cls(
-            artifacts=artifacts,
+            items=items,
             links=links,
             at_time=at_time,
         )

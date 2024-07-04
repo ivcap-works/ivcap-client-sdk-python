@@ -1,35 +1,36 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="InvalidParameterValue")
+T = TypeVar("T", bound="InvalidParameterT")
 
 
-@define
-class InvalidParameterValue:
-    """Invalide parameter value
+@_attrs_define
+class InvalidParameterT:
+    """Invalid parameter value
 
     Example:
-        {'message': 'Cupiditate incidunt eius voluptatem distinctio.', 'name': 'Quas sed magni aliquam in voluptatem
-            doloremque.', 'value': 'Commodi dolorem provident ab et.'}
+        {'message': 'cannot parse date', 'name': 'timestamp', 'value': 'today'}
 
     Attributes:
-        message (str): message describing expected type or pattern. Example: Eos libero mollitia quis..
-        name (str): name of parameter. Example: Omnis et..
-        value (Union[Unset, str]): provided parameter value. Example: Exercitationem blanditiis omnis magnam repellat
-            impedit ullam..
+        message (str): message describing expected type or pattern. Example: cannot parse date.
+        name (str): name of parameter. Example: timestamp.
+        value (Union[Unset, str]): provided parameter value. Example: today.
     """
 
     message: str
     name: str
     value: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         message = self.message
+
         name = self.name
+
         value = self.value
 
         field_dict: Dict[str, Any] = {}
@@ -54,14 +55,14 @@ class InvalidParameterValue:
 
         value = d.pop("value", UNSET)
 
-        invalid_parameter_value = cls(
+        invalid_parameter_t = cls(
             message=message,
             name=name,
             value=value,
         )
 
-        invalid_parameter_value.additional_properties = d
-        return invalid_parameter_value
+        invalid_parameter_t.additional_properties = d
+        return invalid_parameter_t
 
     @property
     def additional_keys(self) -> List[str]:

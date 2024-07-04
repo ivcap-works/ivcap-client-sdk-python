@@ -5,9 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.bad_request_t import BadRequestT
 from ...models.invalid_scopes_t import InvalidScopesT
 from ...models.metadata_record_rt import MetadataRecordRT
-from ...models.not_implemented_t import NotImplementedT
 from ...models.resource_not_found_t import ResourceNotFoundT
 from ...types import Response
 
@@ -15,25 +15,24 @@ from ...types import Response
 def _get_kwargs(
     id: str,
 ) -> Dict[str, Any]:
-    pass
-
-    return {
+    _kwargs: Dict[str, Any] = {
         "method": "get",
-        "url": "/1/metadata/{id}".format(
-            id=id,
-        ),
+        "url": f"/1/metadata/{id}",
     }
+
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, InvalidScopesT, MetadataRecordRT, NotImplementedT, ResourceNotFoundT]]:
+) -> Optional[Union[Any, BadRequestT, InvalidScopesT, MetadataRecordRT, ResourceNotFoundT]]:
     if response.status_code == HTTPStatus.OK:
         response_200 = MetadataRecordRT.from_dict(response.json())
 
         return response_200
     if response.status_code == HTTPStatus.BAD_REQUEST:
-        response_400 = cast(Any, None)
+        response_400 = BadRequestT.from_dict(response.json())
+
         return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
@@ -47,9 +46,12 @@ def _parse_response(
 
         return response_404
     if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
-        response_501 = NotImplementedT.from_dict(response.json())
+        response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
+    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+        response_503 = cast(Any, None)
+        return response_503
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -58,7 +60,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, InvalidScopesT, MetadataRecordRT, NotImplementedT, ResourceNotFoundT]]:
+) -> Response[Union[Any, BadRequestT, InvalidScopesT, MetadataRecordRT, ResourceNotFoundT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -71,20 +73,20 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, InvalidScopesT, MetadataRecordRT, NotImplementedT, ResourceNotFoundT]]:
+) -> Response[Union[Any, BadRequestT, InvalidScopesT, MetadataRecordRT, ResourceNotFoundT]]:
     """read metadata
 
      Show metadata by ID
 
     Args:
-        id (str): ID of metadata to show Example: type:scope:name.
+        id (str): ID of metadata to show Example: urn:ivcap:metadata.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, InvalidScopesT, MetadataRecordRT, NotImplementedT, ResourceNotFoundT]]
+        Response[Union[Any, BadRequestT, InvalidScopesT, MetadataRecordRT, ResourceNotFoundT]]
     """
 
     kwargs = _get_kwargs(
@@ -102,20 +104,20 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, InvalidScopesT, MetadataRecordRT, NotImplementedT, ResourceNotFoundT]]:
+) -> Optional[Union[Any, BadRequestT, InvalidScopesT, MetadataRecordRT, ResourceNotFoundT]]:
     """read metadata
 
      Show metadata by ID
 
     Args:
-        id (str): ID of metadata to show Example: type:scope:name.
+        id (str): ID of metadata to show Example: urn:ivcap:metadata.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, InvalidScopesT, MetadataRecordRT, NotImplementedT, ResourceNotFoundT]
+        Union[Any, BadRequestT, InvalidScopesT, MetadataRecordRT, ResourceNotFoundT]
     """
 
     return sync_detailed(
@@ -128,20 +130,20 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, InvalidScopesT, MetadataRecordRT, NotImplementedT, ResourceNotFoundT]]:
+) -> Response[Union[Any, BadRequestT, InvalidScopesT, MetadataRecordRT, ResourceNotFoundT]]:
     """read metadata
 
      Show metadata by ID
 
     Args:
-        id (str): ID of metadata to show Example: type:scope:name.
+        id (str): ID of metadata to show Example: urn:ivcap:metadata.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, InvalidScopesT, MetadataRecordRT, NotImplementedT, ResourceNotFoundT]]
+        Response[Union[Any, BadRequestT, InvalidScopesT, MetadataRecordRT, ResourceNotFoundT]]
     """
 
     kwargs = _get_kwargs(
@@ -157,20 +159,20 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, InvalidScopesT, MetadataRecordRT, NotImplementedT, ResourceNotFoundT]]:
+) -> Optional[Union[Any, BadRequestT, InvalidScopesT, MetadataRecordRT, ResourceNotFoundT]]:
     """read metadata
 
      Show metadata by ID
 
     Args:
-        id (str): ID of metadata to show Example: type:scope:name.
+        id (str): ID of metadata to show Example: urn:ivcap:metadata.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, InvalidScopesT, MetadataRecordRT, NotImplementedT, ResourceNotFoundT]
+        Union[Any, BadRequestT, InvalidScopesT, MetadataRecordRT, ResourceNotFoundT]
     """
 
     return (

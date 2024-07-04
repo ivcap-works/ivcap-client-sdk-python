@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,81 +12,92 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="ParameterDefT")
 
 
-@define
+@_attrs_define
 class ParameterDefT:
     """
     Example:
-        {'constant': True, 'default': 'Corrupti repellat accusamus doloremque.', 'description': 'Aut ipsum qui
-            necessitatibus quidem sint.', 'label': 'Voluptas sit perferendis.', 'name': 'Corporis unde aperiam et nihil.',
-            'optional': True, 'options': [{'description': 'Sit ut fuga ea sapiente.', 'value': 'Nesciunt architecto sint
-            voluptatum repudiandae non.'}, {'description': 'Sit ut fuga ea sapiente.', 'value': 'Nesciunt architecto sint
-            voluptatum repudiandae non.'}, {'description': 'Sit ut fuga ea sapiente.', 'value': 'Nesciunt architecto sint
-            voluptatum repudiandae non.'}], 'type': 'Deserunt placeat excepturi impedit cupiditate et nihil.', 'unit':
-            'Porro blanditiis nihil eligendi perferendis cumque.'}
+        {'constant': True, 'default': 'Repudiandae debitis.', 'description': 'Sapiente at ratione aut illo doloremque
+            aut.', 'label': 'Quas voluptatem deserunt dolores vel iure.', 'name': 'Quia qui perspiciatis laboriosam et ea.',
+            'optional': True, 'options': [{'description': 'Quo corporis temporibus nostrum et temporibus et.', 'value': 'In
+            alias accusamus.'}, {'description': 'Quo corporis temporibus nostrum et temporibus et.', 'value': 'In alias
+            accusamus.'}, {'description': 'Quo corporis temporibus nostrum et temporibus et.', 'value': 'In alias
+            accusamus.'}], 'type': 'Maxime rerum aut voluptates possimus nam.', 'unary': True, 'unit': 'Est sequi quisquam
+            sunt.'}
 
     Attributes:
-        constant (Union[Unset, bool]):  Example: True.
-        default (Union[Unset, str]):  Example: Corporis voluptatibus..
-        description (Union[Unset, str]):  Example: Dignissimos atque reiciendis perferendis..
-        label (Union[Unset, str]):  Example: Tempore iusto..
-        name (Union[Unset, str]):  Example: Eveniet tenetur quasi cupiditate accusamus dolore..
+        description (str):  Example: Suscipit officiis..
+        name (str):  Example: Eos labore..
+        type (str):  Example: Occaecati quia ut nostrum..
+        constant (Union[Unset, bool]):
+        default (Union[Unset, str]):  Example: Quibusdam dolore magni..
+        label (Union[Unset, str]):  Example: Assumenda aut quia commodi..
         optional (Union[Unset, bool]):  Example: True.
-        options (Union[Unset, List['ParameterOptT']]):  Example: [{'description': 'Sit ut fuga ea sapiente.', 'value':
-            'Nesciunt architecto sint voluptatum repudiandae non.'}, {'description': 'Sit ut fuga ea sapiente.', 'value':
-            'Nesciunt architecto sint voluptatum repudiandae non.'}, {'description': 'Sit ut fuga ea sapiente.', 'value':
-            'Nesciunt architecto sint voluptatum repudiandae non.'}].
-        type (Union[Unset, str]):  Example: Ratione dolore dolor ut nisi optio..
-        unit (Union[Unset, str]):  Example: Omnis explicabo officiis vel eius in asperiores..
+        options (Union[Unset, List['ParameterOptT']]):  Example: [{'description': 'Quo corporis temporibus nostrum et
+            temporibus et.', 'value': 'In alias accusamus.'}, {'description': 'Quo corporis temporibus nostrum et temporibus
+            et.', 'value': 'In alias accusamus.'}].
+        unary (Union[Unset, bool]):  Example: True.
+        unit (Union[Unset, str]):  Example: Non occaecati sit..
     """
 
+    description: str
+    name: str
+    type: str
     constant: Union[Unset, bool] = UNSET
     default: Union[Unset, str] = UNSET
-    description: Union[Unset, str] = UNSET
     label: Union[Unset, str] = UNSET
-    name: Union[Unset, str] = UNSET
     optional: Union[Unset, bool] = UNSET
     options: Union[Unset, List["ParameterOptT"]] = UNSET
-    type: Union[Unset, str] = UNSET
+    unary: Union[Unset, bool] = UNSET
     unit: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        constant = self.constant
-        default = self.default
         description = self.description
-        label = self.label
+
         name = self.name
+
+        type = self.type
+
+        constant = self.constant
+
+        default = self.default
+
+        label = self.label
+
         optional = self.optional
+
         options: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.options, Unset):
             options = []
             for options_item_data in self.options:
                 options_item = options_item_data.to_dict()
-
                 options.append(options_item)
 
-        type = self.type
+        unary = self.unary
+
         unit = self.unit
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
+        field_dict.update(
+            {
+                "description": description,
+                "name": name,
+                "type": type,
+            }
+        )
         if constant is not UNSET:
             field_dict["constant"] = constant
         if default is not UNSET:
             field_dict["default"] = default
-        if description is not UNSET:
-            field_dict["description"] = description
         if label is not UNSET:
             field_dict["label"] = label
-        if name is not UNSET:
-            field_dict["name"] = name
         if optional is not UNSET:
             field_dict["optional"] = optional
         if options is not UNSET:
             field_dict["options"] = options
-        if type is not UNSET:
-            field_dict["type"] = type
+        if unary is not UNSET:
+            field_dict["unary"] = unary
         if unit is not UNSET:
             field_dict["unit"] = unit
 
@@ -96,15 +108,17 @@ class ParameterDefT:
         from ..models.parameter_opt_t import ParameterOptT
 
         d = src_dict.copy()
+        description = d.pop("description")
+
+        name = d.pop("name")
+
+        type = d.pop("type")
+
         constant = d.pop("constant", UNSET)
 
         default = d.pop("default", UNSET)
 
-        description = d.pop("description", UNSET)
-
         label = d.pop("label", UNSET)
-
-        name = d.pop("name", UNSET)
 
         optional = d.pop("optional", UNSET)
 
@@ -115,19 +129,20 @@ class ParameterDefT:
 
             options.append(options_item)
 
-        type = d.pop("type", UNSET)
+        unary = d.pop("unary", UNSET)
 
         unit = d.pop("unit", UNSET)
 
         parameter_def_t = cls(
+            description=description,
+            name=name,
+            type=type,
             constant=constant,
             default=default,
-            description=description,
             label=label,
-            name=name,
             optional=optional,
             options=options,
-            type=type,
+            unary=unary,
             unit=unit,
         )
 

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -11,47 +12,43 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="OrderRequestT")
 
 
-@define
+@_attrs_define
 class OrderRequestT:
     """
     Example:
-        {'account-id': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for Lot2',
-            'parameters': [{'name': 'region', 'value': 'Upper Valley'}, {'name': 'threshold', 'value': '10'}], 'policy-id':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'service-id':
+        {'name': 'Fire risk for Lot2', 'parameters': [{'name': 'region', 'value': 'Upper Valley'}, {'name': 'threshold',
+            'value': '10'}], 'policy': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'tags': ['tag1', 'tag2']}
 
     Attributes:
         parameters (List['ParameterT']): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
             {'name': 'threshold', 'value': '10'}].
-        service_id (str): Reference to service requested Example:
-            urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        account_id (Union[Unset, str]): Reference to billable account Example:
-            urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
+        service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
-        policy_id (Union[Unset, str]): Policy to control access to record an all generated artifacts Example:
+        policy (Union[Unset, str]): Reference to policy used Example:
             urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
         tags (Union[Unset, List[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
     """
 
     parameters: List["ParameterT"]
-    service_id: str
-    account_id: Union[Unset, str] = UNSET
+    service: str
     name: Union[Unset, str] = UNSET
-    policy_id: Union[Unset, str] = UNSET
+    policy: Union[Unset, str] = UNSET
     tags: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         parameters = []
         for parameters_item_data in self.parameters:
             parameters_item = parameters_item_data.to_dict()
-
             parameters.append(parameters_item)
 
-        service_id = self.service_id
-        account_id = self.account_id
+        service = self.service
+
         name = self.name
-        policy_id = self.policy_id
+
+        policy = self.policy
+
         tags: Union[Unset, List[str]] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
@@ -61,15 +58,13 @@ class OrderRequestT:
         field_dict.update(
             {
                 "parameters": parameters,
-                "service-id": service_id,
+                "service": service,
             }
         )
-        if account_id is not UNSET:
-            field_dict["account-id"] = account_id
         if name is not UNSET:
             field_dict["name"] = name
-        if policy_id is not UNSET:
-            field_dict["policy-id"] = policy_id
+        if policy is not UNSET:
+            field_dict["policy"] = policy
         if tags is not UNSET:
             field_dict["tags"] = tags
 
@@ -87,22 +82,19 @@ class OrderRequestT:
 
             parameters.append(parameters_item)
 
-        service_id = d.pop("service-id")
-
-        account_id = d.pop("account-id", UNSET)
+        service = d.pop("service")
 
         name = d.pop("name", UNSET)
 
-        policy_id = d.pop("policy-id", UNSET)
+        policy = d.pop("policy", UNSET)
 
         tags = cast(List[str], d.pop("tags", UNSET))
 
         order_request_t = cls(
             parameters=parameters,
-            service_id=service_id,
-            account_id=account_id,
+            service=service,
             name=name,
-            policy_id=policy_id,
+            policy=policy,
             tags=tags,
         )
 

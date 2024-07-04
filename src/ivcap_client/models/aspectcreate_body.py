@@ -1,49 +1,35 @@
 from typing import Any, Dict, List, Type, TypeVar
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="NotImplementedT")
+T = TypeVar("T", bound="AspectcreateBody")
 
 
-@define
-class NotImplementedT:
-    """Method is not yet implemented
+@_attrs_define
+class AspectcreateBody:
+    """Aspect content
 
     Example:
-        {'message': 'Quasi quis laborum mollitia animi.'}
+        {"$schema": ...}
 
-    Attributes:
-        message (str): Information message Default: 'Method not implemented'. Example: Et est reiciendis enim adipisci
-            et quibusdam..
     """
 
-    message: str = "Method not implemented"
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        message = self.message
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update(
-            {
-                "message": message,
-            }
-        )
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        message = d.pop("message")
+        aspectcreate_body = cls()
 
-        not_implemented_t = cls(
-            message=message,
-        )
-
-        not_implemented_t.additional_properties = d
-        return not_implemented_t
+        aspectcreate_body.additional_properties = d
+        return aspectcreate_body
 
     @property
     def additional_keys(self) -> List[str]:

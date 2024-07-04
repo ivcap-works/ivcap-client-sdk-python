@@ -1,32 +1,33 @@
 from typing import Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ResourceMemoryT")
 
 
-@define
+@_attrs_define
 class ResourceMemoryT:
     """See https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-units-in-kubernetes for
     units
 
         Example:
-            {'limit': 'Eos soluta modi aut et.', 'request': 'Qui suscipit ullam et.'}
+            {'limit': 'Fugit alias velit.', 'request': 'Reiciendis similique repellendus et.'}
 
         Attributes:
-            limit (Union[Unset, str]): minimal requirements [system limit] Example: Voluptates impedit..
-            request (Union[Unset, str]): minimal requirements [0] Example: Dolorem porro veritatis laborum ut dolore
-                assumenda..
+            limit (Union[Unset, str]): minimal requirements [system limit] Example: Perspiciatis sit pariatur sunt..
+            request (Union[Unset, str]): minimal requirements [0] Example: Consequatur accusamus reiciendis incidunt..
     """
 
     limit: Union[Unset, str] = UNSET
     request: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         limit = self.limit
+
         request = self.request
 
         field_dict: Dict[str, Any] = {}

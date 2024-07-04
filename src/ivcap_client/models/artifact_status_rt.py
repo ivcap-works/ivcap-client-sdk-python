@@ -1,104 +1,102 @@
+import datetime
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
-from attrs import define, field
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+from dateutil.parser import isoparse
 
 from ..models.artifact_status_rt_status import ArtifactStatusRTStatus
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.ref_t import RefT
-    from ..models.self_t import SelfT
+    from ..models.link_t import LinkT
 
 
 T = TypeVar("T", bound="ArtifactStatusRT")
 
 
-@define
+@_attrs_define
 class ArtifactStatusRT:
     """
     Example:
-        {'account': {'id': 'http://beahan.net/laurie', 'links': {'describedBy': {'href': 'https://api.com/swagger/...',
-            'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}, 'cache-of': 'Quia nesciunt.', 'created-at':
-            '2022-01-01', 'data': {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'etag': 'Voluptatem rerum qui amet earum.', 'id':
-            'type:scope:name', 'last-modified-at': '2022-01-01', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}, 'location':
-            'Distinctio dolorum blanditiis quos officia nemo et.', 'mime-type': 'Libero voluptatem quis quam repudiandae
-            dolor.', 'name': 'Fire risk per LGA', 'policy': {'id': 'http://beahan.net/laurie', 'links': {'describedBy':
-            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}},
-            'size': 584529819162657777, 'status': 'partial', 'tus-offset': 2098596842068964345, 'tus-resumable': 'Voluptatum
-            qui earum inventore.'}
+        {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'cache-of': 'urn:ivcap:artifact:00000',
+            'created-at': '1996-12-19T16:39:57-08:00', 'data-href': 'https://api.ivcap.net/1/artifacts/.../blob', 'etag':
+            '00000-0000123', 'id': 'urn:ivcap:Artifact ID:123e4567-e89b-12d3-a456-426614174000', 'last-modified-at':
+            '1996-12-19T16:39:57-08:00', 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+            'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
+            'describedBy', 'type': 'application/json'}], 'mime-type': 'application/json', 'name': 'Fire risk per LGA',
+            'policy': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'size': 7880539171253465676, 'status':
+            'ready'}
 
     Attributes:
-        id (str): Artifact ID Example: type:scope:name.
-        links (SelfT):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'At qui.'}.
-        status (ArtifactStatusRTStatus): Artifact status Example: ready.
-        account (Union[Unset, RefT]):  Example: {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}.
-        cache_of (Union[Unset, str]): URL of object this artifact is caching Example: Hic dignissimos vero consequatur..
-        created_at (Union[Unset, str]): DateTime artifact was created Example: 2022-01-01.
-        data (Union[Unset, SelfT]):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
-            'application/openapi3+json'}, 'self': 'At qui.'}.
-        etag (Union[Unset, str]): ETAG of artifact Example: In similique..
-        last_modified_at (Union[Unset, str]): DateTime artifact was last modified Example: 2022-01-01.
-        location (Union[Unset, str]): link back to record Example: Voluptas consectetur quia sint aut odit..
-        mime_type (Union[Unset, str]): Mime-type of data Example: Reprehenderit quia..
+        id (str): Artifact ID Example: urn:ivcap:Artifact ID:123e4567-e89b-12d3-a456-426614174000.
+        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+            'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
+            'describedBy', 'type': 'application/json'}].
+        status (ArtifactStatusRTStatus): Artifact status Example: partial.
+        account (Union[Unset, str]): Reference to billable account Example:
+            urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
+        cache_of (Union[Unset, str]): URL of object this artifact is caching Example: urn:ivcap:artifact:00000.
+        created_at (Union[Unset, datetime.datetime]): DateTime artifact was created Example: 1996-12-19T16:39:57-08:00.
+        data_href (Union[Unset, str]):  Example: https://api.ivcap.net/1/artifacts/.../blob.
+        etag (Union[Unset, str]): ETAG of artifact Example: 00000-0000123.
+        last_modified_at (Union[Unset, datetime.datetime]): DateTime artifact was last modified Example:
+            1996-12-19T16:39:57-08:00.
+        mime_type (Union[Unset, str]): Mime-type of data Example: application/json.
         name (Union[Unset, str]): Optional name Example: Fire risk per LGA.
-        policy (Union[Unset, RefT]):  Example: {'id': 'http://lind.org/ruthe.kemmer', 'links': {'describedBy': {'href':
-            'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Omnis cum odit.'}}.
-        size (Union[Unset, int]): Size of data Example: 9098245488094500492.
-        tus_offset (Union[Unset, int]): TUS offset for partially uploaded content Example: 1538876244134645216.
-        tus_resumable (Union[Unset, str]): indicate version of TUS supported Example: Nulla quo ut asperiores temporibus
-            quia..
+        policy (Union[Unset, str]): Reference to policy used Example:
+            urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
+        size (Union[Unset, int]): Size of data Example: 3214757617914283922.
     """
 
     id: str
-    links: "SelfT"
+    links: List["LinkT"]
     status: ArtifactStatusRTStatus
-    account: Union[Unset, "RefT"] = UNSET
+    account: Union[Unset, str] = UNSET
     cache_of: Union[Unset, str] = UNSET
-    created_at: Union[Unset, str] = UNSET
-    data: Union[Unset, "SelfT"] = UNSET
+    created_at: Union[Unset, datetime.datetime] = UNSET
+    data_href: Union[Unset, str] = UNSET
     etag: Union[Unset, str] = UNSET
-    last_modified_at: Union[Unset, str] = UNSET
-    location: Union[Unset, str] = UNSET
+    last_modified_at: Union[Unset, datetime.datetime] = UNSET
     mime_type: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
-    policy: Union[Unset, "RefT"] = UNSET
+    policy: Union[Unset, str] = UNSET
     size: Union[Unset, int] = UNSET
-    tus_offset: Union[Unset, int] = UNSET
-    tus_resumable: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         id = self.id
-        links = self.links.to_dict()
+
+        links = []
+        for links_item_data in self.links:
+            links_item = links_item_data.to_dict()
+            links.append(links_item)
 
         status = self.status.value
 
-        account: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.account, Unset):
-            account = self.account.to_dict()
+        account = self.account
 
         cache_of = self.cache_of
-        created_at = self.created_at
-        data: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.data, Unset):
-            data = self.data.to_dict()
+
+        created_at: Union[Unset, str] = UNSET
+        if not isinstance(self.created_at, Unset):
+            created_at = self.created_at.isoformat()
+
+        data_href = self.data_href
 
         etag = self.etag
-        last_modified_at = self.last_modified_at
-        location = self.location
+
+        last_modified_at: Union[Unset, str] = UNSET
+        if not isinstance(self.last_modified_at, Unset):
+            last_modified_at = self.last_modified_at.isoformat()
+
         mime_type = self.mime_type
+
         name = self.name
-        policy: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.policy, Unset):
-            policy = self.policy.to_dict()
+
+        policy = self.policy
 
         size = self.size
-        tus_offset = self.tus_offset
-        tus_resumable = self.tus_resumable
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -115,14 +113,12 @@ class ArtifactStatusRT:
             field_dict["cache-of"] = cache_of
         if created_at is not UNSET:
             field_dict["created-at"] = created_at
-        if data is not UNSET:
-            field_dict["data"] = data
+        if data_href is not UNSET:
+            field_dict["data-href"] = data_href
         if etag is not UNSET:
             field_dict["etag"] = etag
         if last_modified_at is not UNSET:
             field_dict["last-modified-at"] = last_modified_at
-        if location is not UNSET:
-            field_dict["location"] = location
         if mime_type is not UNSET:
             field_dict["mime-type"] = mime_type
         if name is not UNSET:
@@ -131,65 +127,54 @@ class ArtifactStatusRT:
             field_dict["policy"] = policy
         if size is not UNSET:
             field_dict["size"] = size
-        if tus_offset is not UNSET:
-            field_dict["tus-offset"] = tus_offset
-        if tus_resumable is not UNSET:
-            field_dict["tus-resumable"] = tus_resumable
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.ref_t import RefT
-        from ..models.self_t import SelfT
+        from ..models.link_t import LinkT
 
         d = src_dict.copy()
         id = d.pop("id")
 
-        links = SelfT.from_dict(d.pop("links"))
+        links = []
+        _links = d.pop("links")
+        for links_item_data in _links:
+            links_item = LinkT.from_dict(links_item_data)
+
+            links.append(links_item)
 
         status = ArtifactStatusRTStatus(d.pop("status"))
 
-        _account = d.pop("account", UNSET)
-        account: Union[Unset, RefT]
-        if isinstance(_account, Unset):
-            account = UNSET
-        else:
-            account = RefT.from_dict(_account)
+        account = d.pop("account", UNSET)
 
         cache_of = d.pop("cache-of", UNSET)
 
-        created_at = d.pop("created-at", UNSET)
-
-        _data = d.pop("data", UNSET)
-        data: Union[Unset, SelfT]
-        if isinstance(_data, Unset):
-            data = UNSET
+        _created_at = d.pop("created-at", UNSET)
+        created_at: Union[Unset, datetime.datetime]
+        if isinstance(_created_at, Unset):
+            created_at = UNSET
         else:
-            data = SelfT.from_dict(_data)
+            created_at = isoparse(_created_at)
+
+        data_href = d.pop("data-href", UNSET)
 
         etag = d.pop("etag", UNSET)
 
-        last_modified_at = d.pop("last-modified-at", UNSET)
-
-        location = d.pop("location", UNSET)
+        _last_modified_at = d.pop("last-modified-at", UNSET)
+        last_modified_at: Union[Unset, datetime.datetime]
+        if isinstance(_last_modified_at, Unset):
+            last_modified_at = UNSET
+        else:
+            last_modified_at = isoparse(_last_modified_at)
 
         mime_type = d.pop("mime-type", UNSET)
 
         name = d.pop("name", UNSET)
 
-        _policy = d.pop("policy", UNSET)
-        policy: Union[Unset, RefT]
-        if isinstance(_policy, Unset):
-            policy = UNSET
-        else:
-            policy = RefT.from_dict(_policy)
+        policy = d.pop("policy", UNSET)
 
         size = d.pop("size", UNSET)
-
-        tus_offset = d.pop("tus-offset", UNSET)
-
-        tus_resumable = d.pop("tus-resumable", UNSET)
 
         artifact_status_rt = cls(
             id=id,
@@ -198,16 +183,13 @@ class ArtifactStatusRT:
             account=account,
             cache_of=cache_of,
             created_at=created_at,
-            data=data,
+            data_href=data_href,
             etag=etag,
             last_modified_at=last_modified_at,
-            location=location,
             mime_type=mime_type,
             name=name,
             policy=policy,
             size=size,
-            tus_offset=tus_offset,
-            tus_resumable=tus_resumable,
         )
 
         artifact_status_rt.additional_properties = d

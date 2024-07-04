@@ -10,20 +10,19 @@ from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
 from ...models.search_list_rt import SearchListRT
-from ...types import UNSET, Response, Unset
+from ...types import UNSET, File, FileJsonType, Response, Unset
 
 
 def _get_kwargs(
     *,
-    body: str,
+    body: File,
     at_time: Union[Unset, datetime.datetime] = UNSET,
     limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
+    page: Union[Unset, File] = UNSET,
+    content_type: str,
 ) -> Dict[str, Any]:
     headers: Dict[str, Any] = {}
-    if not isinstance(content_type, Unset):
-        headers["Content-Type"] = content_type
+    headers["Content-Type"] = content_type
 
     params: Dict[str, Any] = {}
 
@@ -34,7 +33,11 @@ def _get_kwargs(
 
     params["limit"] = limit
 
-    params["page"] = page
+    json_page: Union[Unset, FileJsonType] = UNSET
+    if not isinstance(page, Unset):
+        json_page = page.to_tuple()
+
+    params["page"] = json_page
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -60,6 +63,10 @@ def _parse_response(
         response_200 = SearchListRT.from_dict(response.json())
 
         return response_200
+    if response.status_code == HTTPStatus.BAD_REQUEST:
+        response_400 = BadRequestT.from_dict(response.json())
+
+        return response_400
     if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
@@ -75,10 +82,6 @@ def _parse_response(
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.FAILED_DEPENDENCY:
-        response_424 = BadRequestT.from_dict(response.json())
-
-        return response_424
     if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
@@ -106,11 +109,11 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    body: str,
+    body: File,
     at_time: Union[Unset, datetime.datetime] = UNSET,
     limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
+    page: Union[Unset, File] = UNSET,
+    content_type: str,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
     """search search
 
@@ -122,13 +125,13 @@ def sync_detailed(
         limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
             the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
+        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
-        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
-            Example: application/datalog+mangle.
-        body (str): Query Example:
+        content_type (str): Content-Type header, MUST be of application/json. Example:
+            application/datalog+mangle.
+        body (File): Query Example:
             # Find all the artifacts in the input collection for a specific order
             #
 
@@ -172,11 +175,11 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    body: str,
+    body: File,
     at_time: Union[Unset, datetime.datetime] = UNSET,
     limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
+    page: Union[Unset, File] = UNSET,
+    content_type: str,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
     """search search
 
@@ -188,13 +191,13 @@ def sync(
         limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
             the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
+        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
-        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
-            Example: application/datalog+mangle.
-        body (str): Query Example:
+        content_type (str): Content-Type header, MUST be of application/json. Example:
+            application/datalog+mangle.
+        body (File): Query Example:
             # Find all the artifacts in the input collection for a specific order
             #
 
@@ -233,11 +236,11 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    body: str,
+    body: File,
     at_time: Union[Unset, datetime.datetime] = UNSET,
     limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
+    page: Union[Unset, File] = UNSET,
+    content_type: str,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
     """search search
 
@@ -249,13 +252,13 @@ async def asyncio_detailed(
         limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
             the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
+        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
-        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
-            Example: application/datalog+mangle.
-        body (str): Query Example:
+        content_type (str): Content-Type header, MUST be of application/json. Example:
+            application/datalog+mangle.
+        body (File): Query Example:
             # Find all the artifacts in the input collection for a specific order
             #
 
@@ -297,11 +300,11 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    body: str,
+    body: File,
     at_time: Union[Unset, datetime.datetime] = UNSET,
     limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
+    page: Union[Unset, File] = UNSET,
+    content_type: str,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
     """search search
 
@@ -313,13 +316,13 @@ async def asyncio(
         limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
             the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
+        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
-        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
-            Example: application/datalog+mangle.
-        body (str): Query Example:
+        content_type (str): Content-Type header, MUST be of application/json. Example:
+            application/datalog+mangle.
+        body (File): Query Example:
             # Find all the artifacts in the input collection for a specific order
             #
 

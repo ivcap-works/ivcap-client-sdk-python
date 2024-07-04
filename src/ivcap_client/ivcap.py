@@ -181,15 +181,24 @@ class IVCAP:
         Returns:
             aspect: The created aspect record
         """
+        if isinstance(aspect, dict):
+            b = aspect
+        else:
+            b = aspect.to_dict()
+
         if not schema:
-            schema = aspect.get("$schema")
+            schema = b.get("$schema")
         if not schema:
             raise MissingParameterValue("Missing schema (also not in aspect '$schema')")
-        body = aspect
-        if isinstance(body, dict):
-            # api is calling to_dict on body
-            body = types.SimpleNamespace()
-            body.to_dict = lambda: aspect
+
+        b = {
+            "$schema": schema,
+            "$entity": entity,
+            **b
+        }
+        # api is calling to_dict on body
+        body = types.SimpleNamespace()
+        body.to_dict = lambda: b
 
         kwargs = {
             "entity": entity,

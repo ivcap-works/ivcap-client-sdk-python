@@ -3,48 +3,33 @@ from typing import Any, Dict, List, Type, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="BadRequestT")
+T = TypeVar("T", bound="AspectupdateBody")
 
 
 @_attrs_define
-class BadRequestT:
-    """Bad request
+class AspectupdateBody:
+    """Aspect content
 
     Example:
-        {'message': 'Ut sint dolorum qui corrupti.'}
+        {"$schema": ...}
 
-    Attributes:
-        message (str): Information message Default: 'Having problem with some of the supplied information'. Example:
-            Inventore at dolorem..
     """
 
-    message: str = "Having problem with some of the supplied information"
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        message = self.message
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update(
-            {
-                "message": message,
-            }
-        )
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        message = d.pop("message")
+        aspectupdate_body = cls()
 
-        bad_request_t = cls(
-            message=message,
-        )
-
-        bad_request_t.additional_properties = d
-        return bad_request_t
+        aspectupdate_body.additional_properties = d
+        return aspectupdate_body
 
     @property
     def additional_keys(self) -> List[str]:

@@ -20,17 +20,17 @@ class WorkflowT:
     'opts' is expected to contain the same schema as 'basic'
 
        Example:
-           {'argo': 'Repellat reiciendis.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m',
+           {'argo': 'Magni iste.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m',
                'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type':
-               'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Et aut autem deserunt sit architecto.', 'memory':
-               {'limit': '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}
+               'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Atque exercitationem nobis perspiciatis voluptate
+               quia nihil.', 'memory': {'limit': '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}
 
        Attributes:
            type (str): Type of workflow Example: basic.
-           argo (Union[Unset, File]): Defines the workflow using argo's WF schema Example: Accusamus commodi..
+           argo (Union[Unset, File]): Defines the workflow using argo's WF schema Example: Consequatur minima ut..
            basic (Union[Unset, BasicWorkflowOptsT]):  Example: {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu':
                {'limit': '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2,
-               'gpu-type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Sit vel.', 'memory': {'limit': '100Mi',
+               'gpu-type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Aut at.', 'memory': {'limit': '100Mi',
                'request': '10Mi'}, 'shared-memory': '1Gi'}.
     """
 

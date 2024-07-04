@@ -25,15 +25,15 @@ class ArtifactStatusRT:
             '1996-12-19T16:39:57-08:00', 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}], 'mime-type': 'application/json', 'name': 'Fire risk per LGA',
-            'policy': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'size': 3846405831098405009, 'status':
-            'unknown'}
+            'policy': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'size': 7880539171253465676, 'status':
+            'ready'}
 
     Attributes:
         id (str): Artifact ID Example: urn:ivcap:Artifact ID:123e4567-e89b-12d3-a456-426614174000.
         links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
-        status (ArtifactStatusRTStatus): Artifact status Example: error.
+        status (ArtifactStatusRTStatus): Artifact status Example: partial.
         account (Union[Unset, str]): Reference to billable account Example:
             urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
         cache_of (Union[Unset, str]): URL of object this artifact is caching Example: urn:ivcap:artifact:00000.
@@ -46,7 +46,7 @@ class ArtifactStatusRT:
         name (Union[Unset, str]): Optional name Example: Fire risk per LGA.
         policy (Union[Unset, str]): Reference to policy used Example:
             urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
-        size (Union[Unset, int]): Size of data Example: 2133510296137406293.
+        size (Union[Unset, int]): Size of data Example: 3214757617914283922.
     """
 
     id: str

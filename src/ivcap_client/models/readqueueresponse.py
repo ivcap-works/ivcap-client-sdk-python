@@ -14,26 +14,26 @@ T = TypeVar("T", bound="Readqueueresponse")
 class Readqueueresponse:
     """
     Example:
-        {'bytes': 12186659555599251104, 'consumer-count': 671111967583184727, 'created-at': '1996-12-19T16:39:57-08:00',
-            'description': 'Events for the event service', 'first-id': 'http://mraz.name/sadie', 'first-time':
+        {'bytes': 1742645208466165557, 'consumer-count': 1253965597670358472, 'created-at': '1996-12-19T16:39:57-08:00',
+            'description': 'Events for the event service', 'first-id': 'http://bins.biz/cordell_kovacek', 'first-time':
             '1996-12-19T16:39:57-08:00', 'id': 'urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000', 'last-id':
-            'http://stehrschneider.org/tristian', 'last-time': '1996-12-19T16:39:57-08:00', 'name': 'events', 'total-
-            messages': 13443250697568949734}
+            'http://leannon.info/treva', 'last-time': '1996-12-19T16:39:57-08:00', 'name': 'events', 'total-messages':
+            5765006188850863462}
 
     Attributes:
         created_at (datetime.datetime): Timestamp when the queue was created Example: 1996-12-19T16:39:57-08:00.
         id (str): ID Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
         name (str): Name of the queue. Example: events.
-        bytes_ (Union[Unset, int]): Number of bytes in the queue Example: 4720960586489154865.
-        consumer_count (Union[Unset, int]): Number of consumers Example: 631419855111496670.
+        bytes_ (Union[Unset, int]): Number of bytes in the queue Example: 14261317834828336776.
+        consumer_count (Union[Unset, int]): Number of consumers Example: 1004337198302308113.
         description (Union[Unset, str]): Description of the queue. Example: Events for the event service.
-        first_id (Union[Unset, str]): First identifier in the queue Example: http://turner.org/gregory.
+        first_id (Union[Unset, str]): First identifier in the queue Example: http://beatty.info/vida.
         first_time (Union[Unset, datetime.datetime]): Timestamp of the first message in the queue Example:
             1996-12-19T16:39:57-08:00.
-        last_id (Union[Unset, str]): Last identifier in the queue Example: http://mosciskilehner.name/will_kris.
+        last_id (Union[Unset, str]): Last identifier in the queue Example: http://hodkiewicz.net/jordi.hansen.
         last_time (Union[Unset, datetime.datetime]): Timestamp of the last message in the queue Example:
             1996-12-19T16:39:57-08:00.
-        total_messages (Union[Unset, int]): Number of messages sent to the queue Example: 2991028749758806253.
+        total_messages (Union[Unset, int]): Number of messages sent to the queue Example: 6527866174719529844.
     """
 
     created_at: datetime.datetime

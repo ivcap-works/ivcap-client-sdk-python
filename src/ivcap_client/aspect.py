@@ -39,6 +39,8 @@ class Aspect:
     asserter: Optional[URN] = None
     retracter: Optional[URN] = None
 
+
+
     @classmethod
     def _from_list_item(cls, item: AspectListItemRT, ivcap: IVCAP):
         kwargs = item.to_dict()
@@ -61,42 +63,14 @@ class Aspect:
         else:
             self._content = None
 
-        # self._parameters: Optional[dict[str, ServiceParameter]] = None
-        # params = kwargs.get("parameters")
-        # if params:
-        #     pd = dict(map(lambda d: [d["name"].replace('-', '_'), ServiceParameter(ParameterDefT.from_dict(d))], params))
-        #     self._parameters = pd
-
-
-    # def __init__(self, id: str, ivcap: IVCAP, list_item:Optional[AspectListItemRT]=None):
-    #     self.id = id
-    #     self._ivcap = ivcap
-    #     self._entity = list_item.entity if list_item else None
-    #     self._schema = list_item.schema if list_item else None
-    #     self._aspect = list_item.content.to_dict() if list_item.content != UNSET else None
-
     @property
     def urn(self) -> str:
         return self.id
-
-    # @property
-    # def entity(self, refresh=False) -> str:
-    #     if refresh:
-    #         self._refresh()
-    #     return self._entity
-
-    # @property
-    # def schema(self, refresh=False) -> str:
-    #     if refresh:
-    #         self._refresh()
-    #     return self._schema
 
     @property
     def aspect(self) -> dict:
         if self._content is None:
             self.refresh()
-            # s = self._aspect
-            # self._aspect = json.loads(s)
         return self._content
 
     def refresh(self):
@@ -105,7 +79,6 @@ class Aspect:
             return process_error('aspect', r)
         res:AspectRT = r.parsed
         self.__update__(**res.to_dict())
-
 
     def __repr__(self):
         return f"<Aspect id={self.id}, entity={self.entity} schema={self.schema}>"

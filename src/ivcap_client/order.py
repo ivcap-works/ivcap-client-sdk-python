@@ -72,13 +72,13 @@ class Order:
 
     def status(self, refresh=True) -> OrderStatusRT:
         if refresh:
-            self._refresh()
+            self.refresh()
         return self._status
 
     @property
     def parameters(self) -> Dict[str, ParameterT]:
         if not self._parameters:
-            self._refresh()
+            self.refresh()
         return self._parameters
 
     def metadata(self) -> List[Aspect]:
@@ -97,13 +97,13 @@ class Order:
         """
         return self._ivcap.add_aspect(entity=self.id, aspect=aspect, schema=schema)
 
-    def _refresh(self):
+    def refresh(self) -> Order:
         r = order_read.sync_detailed(client=self._ivcap._client, id=self.id)
         if r.status_code >= 300:
             return process_error('place_order', r)
         kwargs = r.parsed.to_dict()
-        x: OrderStatusRT
         self.__update__(**kwargs)
+        return self
 
     def __repr__(self):
         status = self._status if self._status else '???'

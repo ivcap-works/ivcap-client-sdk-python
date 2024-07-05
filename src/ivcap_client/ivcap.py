@@ -11,7 +11,7 @@ import os
 from typing import IO, Dict, Iterator, Optional, Union
 from ivcap_client.api.artifact import artifact_upload
 from ivcap_client.api.aspect import aspect_create
-from ivcap_client.artifact import Artifact, ArtifactIter
+from ivcap_client.artifact import Artifact, ArtifactIter, check_file_already_uploaded, mark_file_already_uploaded
 from ivcap_client.aspect import Aspect, AspectIter
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
 from tusclient.client import TusClient
@@ -110,7 +110,7 @@ class IVCAP:
         return l[0]
 
     def get_service(self, service_id: URN) -> Service:
-        return Service(service_id, self)
+        return Service(self, id=service_id)
 
     ### ORDERS
 
@@ -158,7 +158,7 @@ class IVCAP:
         return OrderIter(self, **kwargs)
 
     def get_order(self, id: str) -> Order:
-        return Order(id, self)
+        return Order(self, id=id)
 
     #### ASPECT
 
@@ -351,7 +351,8 @@ class IVCAP:
                         policy: Optional[URN] = None,
                         chunk_size: Optional[int] = MAXSIZE,
                         retries: Optional[int] = 0,
-                        retry_delay: Optional[int] = 30
+                        retry_delay: Optional[int] = 30,
+                        force_upload: Optional[bool] = False,
     ) -> Artifact:
         """Uploads content which is either identified as a `file_path` or `io_stream`. In the
         latter case, content type need to be provided.
@@ -366,13 +367,19 @@ class IVCAP:
             chunk_size (Optional[int]): Chunk size to use for each individual upload. Defaults to MAXSIZE.
             retries (Optional[int]): The number of attempts should be made in the case of a failed upload. Defaults to 0.
             retry_delay (Optional[int], optional): How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
+            force_upload (Optional[bool], optional): Upload file even if it has been uploaded before.
         """
 
         if not (file_path or io_stream):
-            raise ValueError(f"require either 'file_path' or 'io_stream'")
+            raise ValueError("require either 'file_path' or 'io_stream'")
+
+        if not force_upload:
+            aurn = check_file_already_uploaded(file_path)
+            if aurn is not None:
+                return self.get_artifact(aurn)
 
         if not content_type and file_path:
-            content_type, encoding= mimetypes.guess_type(file_path)
+            content_type, _ = mimetypes.guess_type(file_path)
 
         if not content_type:
             raise ValueError("missing 'content-type'")
@@ -418,13 +425,14 @@ class IVCAP:
         uploader.upload()
 
         kwargs = res.to_dict()
+        mark_file_already_uploaded(res.id, file_path)
         kwargs["status"] = None
         a = Artifact(self, **kwargs)
         a.status # force status update as it will have change
         return a
 
     def get_artifact(self, id: str) -> Artifact:
-        return Artifact(id, self)
+        return Artifact(self, id=id).refresh()
 
     @property
     def url(self) -> str:

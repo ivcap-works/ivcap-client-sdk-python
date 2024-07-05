@@ -70,13 +70,13 @@ class Service:
 
     def status(self, refresh = True) -> ServiceStatusRTStatus:
         if refresh:
-            self._refresh()
+            self.refresh()
         return self._status
 
     @property
     def parameters(self) -> Dict[str, ServiceParameter]:
         if not self._parameters:
-            self._refresh()
+            self.refresh()
         return self._parameters
 
     @property
@@ -107,13 +107,14 @@ class Service:
         status:OrderStatusRT = r.parsed
         return Order(status.id, self._ivcap, status)
 
-    def _refresh(self):
+    def refresh(self) -> Service:
         r = service_read.sync_detailed(self.id, client=self._ivcap._client)
         if r.status_code >= 300:
             return process_error('create_service', r)
 
         p: ServiceStatusRT = r.parsed
         self.__update__(**p.to_dict())
+        return self
 
     def __repr__(self):
         name = self.name if self.name else "???"

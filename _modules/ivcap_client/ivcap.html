@@ -87,7 +87,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">IO</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.api.artifact</span> <span class="kn">import</span> <span class="n">artifact_upload</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.api.aspect</span> <span class="kn">import</span> <span class="n">aspect_create</span>
-<span class="kn">from</span> <span class="nn">ivcap_client.artifact</span> <span class="kn">import</span> <span class="n">Artifact</span><span class="p">,</span> <span class="n">ArtifactIter</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.artifact</span> <span class="kn">import</span> <span class="n">Artifact</span><span class="p">,</span> <span class="n">ArtifactIter</span><span class="p">,</span> <span class="n">check_file_already_uploaded</span><span class="p">,</span> <span class="n">mark_file_already_uploaded</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.aspect</span> <span class="kn">import</span> <span class="n">Aspect</span><span class="p">,</span> <span class="n">AspectIter</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.models.artifact_status_rt</span> <span class="kn">import</span> <span class="n">ArtifactStatusRT</span>
 <span class="kn">from</span> <span class="nn">tusclient.client</span> <span class="kn">import</span> <span class="n">TusClient</span>
@@ -124,8 +124,6 @@
             <span class="n">url</span><span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;IVCAP_URL&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
             <span class="n">token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;IVCAP_JWT&#39;</span><span class="p">]</span>
-        <span class="c1"># if not account_id:</span>
-        <span class="c1">#     account_id = os.environ[&#39;IVCAP_ACCOUNT_ID&#39;]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="o">=</span> <span class="n">token</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">AuthenticatedClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
@@ -177,6 +175,18 @@
         <span class="k">return</span> <span class="n">ServiceIter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="IVCAP.get_service_by_name"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.get_service_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_service_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Service</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a Service instance named &#39;name&#39;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): Name of service requested</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ResourceNotFound: Service is not found</span>
+<span class="sd">            AmbiguousRequest: More than one service is found for &#39;name&#39;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Service: The Service instance for the requested service</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">l</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">list_services</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;name~=&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">))</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -186,7 +196,15 @@
         <span class="k">return</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="IVCAP.get_service"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.get_service">[docs]</a>    <span class="k">def</span> <span class="nf">get_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service_id</span><span class="p">:</span> <span class="n">URN</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Service</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Service</span><span class="p">(</span><span class="n">service_id</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a Service instance for service &#39;service_id&#39;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            service_id (URN): URN of service</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Service: Returns a Service instance if service exists</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">service_id</span><span class="p">)</span></div>
 
     <span class="c1">### ORDERS</span>
 
@@ -233,8 +251,16 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">OrderIter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="IVCAP.get_order"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.get_order">[docs]</a>    <span class="k">def</span> <span class="nf">get_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Order</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Order</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+<div class="viewcode-block" id="IVCAP.get_order"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.get_order">[docs]</a>    <span class="k">def</span> <span class="nf">get_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order_id</span><span class="p">:</span> <span class="n">URN</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Order</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a Service instance for service &#39;service_id&#39;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            order_id (URN): URN of order</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Order: Returns an Order instance if order exists</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">order_id</span><span class="p">)</span></div>
 
     <span class="c1">#### ASPECT</span>
 
@@ -427,7 +453,8 @@
                         <span class="n">policy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">URN</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="n">chunk_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">MAXSIZE</span><span class="p">,</span>
                         <span class="n">retries</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-                        <span class="n">retry_delay</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span>
+                        <span class="n">retry_delay</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+                        <span class="n">force_upload</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Artifact</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Uploads content which is either identified as a `file_path` or `io_stream`. In the</span>
 <span class="sd">        latter case, content type need to be provided.</span>
@@ -442,13 +469,22 @@
 <span class="sd">            chunk_size (Optional[int]): Chunk size to use for each individual upload. Defaults to MAXSIZE.</span>
 <span class="sd">            retries (Optional[int]): The number of attempts should be made in the case of a failed upload. Defaults to 0.</span>
 <span class="sd">            retry_delay (Optional[int], optional): How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.</span>
+<span class="sd">            force_upload (Optional[bool], optional): Upload file even if it has been uploaded before.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">file_path</span> <span class="ow">or</span> <span class="n">io_stream</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;require either &#39;file_path&#39; or &#39;io_stream&#39;&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;require either &#39;file_path&#39; or &#39;io_stream&#39;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">file_path</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">R_OK</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;file &#39;</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&#39; doesn&#39;t exist or is not readable.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">force_upload</span><span class="p">:</span>
+            <span class="n">aurn</span> <span class="o">=</span> <span class="n">check_file_already_uploaded</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">aurn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="n">aurn</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">content_type</span> <span class="ow">and</span> <span class="n">file_path</span><span class="p">:</span>
-            <span class="n">content_type</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="n">content_type</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">content_type</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;missing &#39;content-type&#39;&quot;</span><span class="p">)</span>
@@ -494,16 +530,46 @@
         <span class="n">uploader</span><span class="o">.</span><span class="n">upload</span><span class="p">()</span>
 
         <span class="n">kwargs</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">mark_file_already_uploaded</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">Artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">a</span><span class="o">.</span><span class="n">status</span> <span class="c1"># force status update as it will have change</span>
         <span class="k">return</span> <span class="n">a</span></div>
 
-<div class="viewcode-block" id="IVCAP.get_artifact"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.get_artifact">[docs]</a>    <span class="k">def</span> <span class="nf">get_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Artifact</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Artifact</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+<div class="viewcode-block" id="IVCAP.artifact_for_file"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.artifact_for_file">[docs]</a>    <span class="k">def</span> <span class="nf">artifact_for_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an Artifact instance if local file &#39;file_path&#39;</span>
+<span class="sd">        has already been uploaded as artifact.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Path to local file</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[Artifact]: Return artifact instance if file has been uploaded,</span>
+<span class="sd">            otherwise return None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">aurn</span> <span class="o">=</span> <span class="n">check_file_already_uploaded</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">aurn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="n">aurn</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IVCAP.get_artifact"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.get_artifact">[docs]</a>    <span class="k">def</span> <span class="nf">get_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">URN</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Artifact</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an Artifact instance for artifact &#39;id&#39;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            id (URN): URN of artifact</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Artifact: Returns an Artifact instance if artifact exists</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the URL of the IVCAP deployment</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: URL of IVCAP deployment</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span>
 
 <div class="viewcode-block" id="IVCAP.__repr__"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

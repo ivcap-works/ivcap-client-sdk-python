@@ -100,7 +100,7 @@ Classes
       :rtype: metadata
 
 
-   .. py:method:: _refresh()
+   .. py:method:: refresh() -> Order
 
 
    .. py:method:: __repr__()

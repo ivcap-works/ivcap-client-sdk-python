@@ -96,7 +96,7 @@ Attributes
    .. py:method:: place_order(**kwargs) -> ivcap_client.order.Order
 
 
-   .. py:method:: _refresh()
+   .. py:method:: refresh() -> Service
 
 
    .. py:method:: __repr__()

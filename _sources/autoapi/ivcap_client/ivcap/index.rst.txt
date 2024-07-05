@@ -38,6 +38,10 @@ Attributes
    .. py:property:: url
       :type: str
 
+      Returns the URL of the IVCAP deployment
+
+      :returns: URL of IVCAP deployment
+      :rtype: str
 
    .. py:method:: list_services(*, filter: Optional[str] = None, limit: Optional[int] = 10, order_by: Optional[str] = None, order_desc: Optional[bool] = False, at_time: Optional[datetime.datetime.datetime] = UNSET) -> Iterator[ivcap_client.service.Service]
 
@@ -72,8 +76,27 @@ Attributes
 
    .. py:method:: get_service_by_name(name: str) -> ivcap_client.service.Service
 
+      Return a Service instance named 'name'
+
+      :param name: Name of service requested
+      :type name: str
+
+      :raises ResourceNotFound: Service is not found
+      :raises AmbiguousRequest: More than one service is found for 'name'
+
+      :returns: The Service instance for the requested service
+      :rtype: Service
+
 
    .. py:method:: get_service(service_id: URN) -> ivcap_client.service.Service
+
+      Returns a Service instance for service 'service_id'
+
+      :param service_id: URN of service
+      :type service_id: URN
+
+      :returns: Returns a Service instance if service exists
+      :rtype: Service
 
 
    .. py:method:: list_orders(*, filter: Optional[str] = None, limit: Optional[int] = 10, order_by: Optional[str] = None, order_desc: Optional[bool] = False, at_time: Optional[datetime.datetime.datetime] = UNSET) -> Iterator[ivcap_client.order.Order]
@@ -107,7 +130,15 @@ Attributes
       :Yields: *Order* -- An order object
 
 
-   .. py:method:: get_order(id: str) -> ivcap_client.order.Order
+   .. py:method:: get_order(order_id: URN) -> ivcap_client.order.Order
+
+      Returns a Service instance for service 'service_id'
+
+      :param order_id: URN of order
+      :type order_id: URN
+
+      :returns: Returns an Order instance if order exists
+      :rtype: Order
 
 
    .. py:method:: add_aspect(entity: str, aspect: Dict[str, any], *, schema: Optional[str] = None, policy: Optional[URN] = None) -> ivcap_client.aspect.Aspect
@@ -213,7 +244,7 @@ Attributes
       :Yields: *Artifact* -- An artifact object
 
 
-   .. py:method:: upload_artifact(*, name: Optional[str] = None, file_path: Optional[str] = None, io_stream: Optional[IO] = None, content_type: Optional[str] = None, content_size: Optional[int] = -1, collection: Optional[URN] = None, policy: Optional[URN] = None, chunk_size: Optional[int] = MAXSIZE, retries: Optional[int] = 0, retry_delay: Optional[int] = 30) -> ivcap_client.artifact.Artifact
+   .. py:method:: upload_artifact(*, name: Optional[str] = None, file_path: Optional[str] = None, io_stream: Optional[IO] = None, content_type: Optional[str] = None, content_size: Optional[int] = -1, collection: Optional[URN] = None, policy: Optional[URN] = None, chunk_size: Optional[int] = MAXSIZE, retries: Optional[int] = 0, retry_delay: Optional[int] = 30, force_upload: Optional[bool] = False) -> ivcap_client.artifact.Artifact
 
       Uploads content which is either identified as a `file_path` or `io_stream`. In the
       latter case, content type need to be provided.
@@ -234,9 +265,32 @@ Attributes
       :type retries: Optional[int]
       :param retry_delay: How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
       :type retry_delay: Optional[int], optional
+      :param force_upload: Upload file even if it has been uploaded before.
+      :type force_upload: Optional[bool], optional
 
 
-   .. py:method:: get_artifact(id: str) -> ivcap_client.artifact.Artifact
+   .. py:method:: artifact_for_file(file_path: str) -> Optional[ivcap_client.artifact.Artifact]
+
+      Return an Artifact instance if local file 'file_path'
+      has already been uploaded as artifact.
+
+      :param file_path: Path to local file
+      :type file_path: str
+
+      :returns: Return artifact instance if file has been uploaded,
+                otherwise return None
+      :rtype: Optional[Artifact]
+
+
+   .. py:method:: get_artifact(id: URN) -> ivcap_client.artifact.Artifact
+
+      Returns an Artifact instance for artifact 'id'
+
+      :param id: URN of artifact
+      :type id: URN
+
+      :returns: Returns an Artifact instance if artifact exists
+      :rtype: Artifact
 
 
    .. py:method:: __repr__()

@@ -112,6 +112,25 @@
 </tr>
 </tbody>
 </table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_client.artifact.check_file_already_uploaded" title="ivcap_client.artifact.check_file_already_uploaded"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_file_already_uploaded</span></code></a>(→ Optional[str])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivcap_client.artifact.mark_file_already_uploaded" title="ivcap_client.artifact.mark_file_already_uploaded"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mark_file_already_uploaded</span></code></a>(id, file_path)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_client.artifact._upload_marker" title="ivcap_client.artifact._upload_marker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_upload_marker</span></code></a>(file_path)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivcap_client.artifact.md5sum" title="ivcap_client.artifact.md5sum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">md5sum</span></code></a>(filename[, blocksize])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py class">
 <dt class="sig sig-object py" id="ivcap_client.artifact.Artifact">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.artifact.</span></span><span class="sig-name descname"><span class="pre">Artifact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#Artifact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.Artifact" title="Permalink to this definition"></a></dt>
@@ -193,6 +212,11 @@ stored at a particular IVCAP deployment</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.refresh">
+<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ivcap_client.artifact.Artifact" title="ivcap_client.artifact.Artifact"><span class="pre">Artifact</span></a></span></span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#Artifact.refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.Artifact.refresh" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="ivcap_client.artifact.Artifact.add_metadata">
 <span class="sig-name descname"><span class="pre">add_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.ivcap.URN</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ivcap_client.artifact.Artifact" title="ivcap_client.artifact.Artifact"><span class="pre">Artifact</span></a></span></span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#Artifact.add_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.Artifact.add_metadata" title="Permalink to this definition"></a></dt>
 <dd><p>Add a metadata ‘aspect’ to this artifact. The ‘schema’ of the aspect, if not defined
@@ -239,6 +263,26 @@ inheritance.</p>
 <dd></dd></dl>
 
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivcap_client.artifact.check_file_already_uploaded">
+<span class="sig-prename descclassname"><span class="pre">ivcap_client.artifact.</span></span><span class="sig-name descname"><span class="pre">check_file_already_uploaded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#check_file_already_uploaded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.check_file_already_uploaded" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivcap_client.artifact.mark_file_already_uploaded">
+<span class="sig-prename descclassname"><span class="pre">ivcap_client.artifact.</span></span><span class="sig-name descname"><span class="pre">mark_file_already_uploaded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#mark_file_already_uploaded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.mark_file_already_uploaded" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivcap_client.artifact._upload_marker">
+<span class="sig-prename descclassname"><span class="pre">ivcap_client.artifact.</span></span><span class="sig-name descname"><span class="pre">_upload_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#_upload_marker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact._upload_marker" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ivcap_client.artifact.md5sum">
+<span class="sig-prename descclassname"><span class="pre">ivcap_client.artifact.</span></span><span class="sig-name descname"><span class="pre">md5sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">65536</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/artifact.html#md5sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.artifact.md5sum" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 </section>

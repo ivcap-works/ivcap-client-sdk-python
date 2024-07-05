@@ -148,13 +148,13 @@
 
 <div class="viewcode-block" id="Order.status"><a class="viewcode-back" href="../../autoapi/ivcap_client/order/index.html#ivcap_client.Order.status">[docs]</a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OrderStatusRT</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_refresh</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ParameterT</span><span class="p">]:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_refresh</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span>
 
 <div class="viewcode-block" id="Order.metadata"><a class="viewcode-back" href="../../autoapi/ivcap_client/order/index.html#ivcap_client.Order.metadata">[docs]</a>    <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Aspect</span><span class="p">]:</span>
@@ -173,13 +173,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">add_aspect</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Order._refresh"><a class="viewcode-back" href="../../autoapi/ivcap_client/order/index.html#ivcap_client.Order._refresh">[docs]</a>    <span class="k">def</span> <span class="nf">_refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Order.refresh"><a class="viewcode-back" href="../../autoapi/ivcap_client/order/index.html#ivcap_client.Order.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Order</span><span class="p">:</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">order_read</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;place_order&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-        <span class="n">x</span><span class="p">:</span> <span class="n">OrderStatusRT</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="Order.__repr__"><a class="viewcode-back" href="../../autoapi/ivcap_client/order/index.html#ivcap_client.Order.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span> <span class="k">else</span> <span class="s1">&#39;???&#39;</span>

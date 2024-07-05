@@ -17,6 +17,17 @@ Classes
 
 
 
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.artifact.check_file_already_uploaded
+   ivcap_client.artifact.mark_file_already_uploaded
+   ivcap_client.artifact._upload_marker
+   ivcap_client.artifact.md5sum
+
+
 
 .. py:class:: Artifact(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
 
@@ -93,6 +104,9 @@ Classes
    .. py:method:: __update__(**kwargs)
 
 
+   .. py:method:: refresh() -> Artifact
+
+
    .. py:method:: add_metadata(aspect: Dict[str, any], *, schema: Optional[str] = None, policy: Optional[ivcap_client.ivcap.URN] = None) -> Artifact
 
       Add a metadata 'aspect' to this artifact. The 'schema' of the aspect, if not defined
@@ -127,5 +141,17 @@ Classes
 
    .. py:method:: _get_list() -> List[ivcap_client.models.artifact_list_item.ArtifactListItem]
 
+
+
+.. py:function:: check_file_already_uploaded(file_path: str) -> Optional[str]
+
+
+.. py:function:: mark_file_already_uploaded(id: str, file_path: str)
+
+
+.. py:function:: _upload_marker(file_path: str)
+
+
+.. py:function:: md5sum(filename, blocksize=65536)
 
 

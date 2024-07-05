@@ -146,13 +146,13 @@
 
 <div class="viewcode-block" id="Service.status"><a class="viewcode-back" href="../../autoapi/ivcap_client/service/index.html#ivcap_client.Service.status">[docs]</a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ServiceStatusRTStatus</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_refresh</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ServiceParameter</span><span class="p">]:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_refresh</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span>
 
     <span class="nd">@property</span>
@@ -183,13 +183,14 @@
         <span class="n">status</span><span class="p">:</span><span class="n">OrderStatusRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
         <span class="k">return</span> <span class="n">Order</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Service._refresh"><a class="viewcode-back" href="../../autoapi/ivcap_client/service/index.html#ivcap_client.Service._refresh">[docs]</a>    <span class="k">def</span> <span class="nf">_refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Service.refresh"><a class="viewcode-back" href="../../autoapi/ivcap_client/service/index.html#ivcap_client.Service.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Service</span><span class="p">:</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">service_read</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;create_service&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
 
         <span class="n">p</span><span class="p">:</span> <span class="n">ServiceStatusRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="Service.__repr__"><a class="viewcode-back" href="../../autoapi/ivcap_client/service/index.html#ivcap_client.Service.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="k">else</span> <span class="s2">&quot;???&quot;</span>

@@ -66,12 +66,16 @@ class Artifact:
     @property
     def status(self, refresh=True) -> ArtifactStatusRT:
         if refresh or not self._status:
-            r = artifact_read.sync_detailed(client=self._ivcap._client, id=self.id)
-            if r.status_code >= 300:
-                return process_error('place_order', r)
-            kwargs = r.parsed.to_dict()
-            self.__update__(**kwargs)
+            self.refresh()
         return self._status
+
+    def refresh(self) -> Artifact:
+        r = artifact_read.sync_detailed(client=self._ivcap._client, id=self.id)
+        if r.status_code >= 300:
+            return process_error('place_order', r)
+        kwargs = r.parsed.to_dict()
+        self.__update__(**kwargs)
+        return self
 
     @property
     def metadata(self) -> Iterator[Aspect]:
@@ -114,3 +118,37 @@ class ArtifactIter(BaseIter[Artifact, ArtifactListItem]):
         l: ArtifactListRT = r.parsed
         self._links = Links(l.links)
         return l.items
+
+import os
+def check_file_already_uploaded(file_path: str) -> Optional[str]:
+    df = _upload_marker(file_path)
+
+    if os.path.isfile(df) and os.access(df, os.R_OK):
+        with open(df, "r") as f:
+            l = f.readlines()
+            oh5, aid = l[0].split("|") if len(l) > 0 else [None, None]
+            if oh5 and aid:
+                h5 = md5sum(file_path)
+                if oh5 == h5:
+                    return aid.strip()
+    return None
+
+def mark_file_already_uploaded(id: str, file_path: str):
+    df = _upload_marker(file_path)
+    h5 = md5sum(file_path)
+    with open(df, "w") as f:
+        f.write(f"{h5}|{id}\n")
+
+def _upload_marker(file_path: str):
+    fn = os.path.basename(file_path)
+    dn = os.path.dirname(file_path)
+    df = os.path.join(dn, ".ivcap-" + fn + ".txt")
+    return df
+
+import hashlib
+def md5sum(filename, blocksize=65536):
+    h = hashlib.md5()
+    with open(filename, "rb") as f:
+        for block in iter(lambda: f.read(blocksize), b""):
+            h.update(block)
+    return h.hexdigest()

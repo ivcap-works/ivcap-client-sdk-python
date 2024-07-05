@@ -1,5 +1,6 @@
 .dbg-env*
 .vscode/
+examples/data/.ivcap*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

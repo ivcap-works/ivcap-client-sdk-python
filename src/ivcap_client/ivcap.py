@@ -11,7 +11,7 @@ import os
 from typing import IO, Dict, Iterator, Optional, Union
 from ivcap_client.api.artifact import artifact_upload
 from ivcap_client.api.aspect import aspect_create
-from ivcap_client.artifact import Artifact, ArtifactIter
+from ivcap_client.artifact import Artifact, ArtifactIter, check_file_already_uploaded, mark_file_already_uploaded
 from ivcap_client.aspect import Aspect, AspectIter
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
 from tusclient.client import TusClient
@@ -48,8 +48,6 @@ class IVCAP:
             url= os.environ['IVCAP_URL']
         if not token:
             token = os.environ['IVCAP_JWT']
-        # if not account_id:
-        #     account_id = os.environ['IVCAP_ACCOUNT_ID']
         self._url = url
         self._token = token
         self._client = AuthenticatedClient(base_url=url, token=token)
@@ -101,6 +99,18 @@ class IVCAP:
         return ServiceIter(self, **kwargs)
 
     def get_service_by_name(self, name: str) -> Service:
+        """Return a Service instance named 'name'
+
+        Args:
+            name (str): Name of service requested
+
+        Raises:
+            ResourceNotFound: Service is not found
+            AmbiguousRequest: More than one service is found for 'name'
+
+        Returns:
+            Service: The Service instance for the requested service
+        """
         l = list(self.list_services(filter=f"name~='{name}'"))
         n = len(l)
         if n == 0:
@@ -110,7 +120,15 @@ class IVCAP:
         return l[0]
 
     def get_service(self, service_id: URN) -> Service:
-        return Service(service_id, self)
+        """Returns a Service instance for service 'service_id'
+
+        Args:
+            service_id (URN): URN of service
+
+        Returns:
+            Service: Returns a Service instance if service exists
+        """
+        return Service(self, id=service_id)
 
     ### ORDERS
 
@@ -157,8 +175,16 @@ class IVCAP:
         }
         return OrderIter(self, **kwargs)
 
-    def get_order(self, id: str) -> Order:
-        return Order(id, self)
+    def get_order(self, order_id: URN) -> Order:
+        """Returns a Service instance for service 'service_id'
+
+        Args:
+            order_id (URN): URN of order
+
+        Returns:
+            Order: Returns an Order instance if order exists
+        """
+        return Order(self, id=order_id)
 
     #### ASPECT
 
@@ -351,7 +377,8 @@ class IVCAP:
                         policy: Optional[URN] = None,
                         chunk_size: Optional[int] = MAXSIZE,
                         retries: Optional[int] = 0,
-                        retry_delay: Optional[int] = 30
+                        retry_delay: Optional[int] = 30,
+                        force_upload: Optional[bool] = False,
     ) -> Artifact:
         """Uploads content which is either identified as a `file_path` or `io_stream`. In the
         latter case, content type need to be provided.
@@ -366,13 +393,22 @@ class IVCAP:
             chunk_size (Optional[int]): Chunk size to use for each individual upload. Defaults to MAXSIZE.
             retries (Optional[int]): The number of attempts should be made in the case of a failed upload. Defaults to 0.
             retry_delay (Optional[int], optional): How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
+            force_upload (Optional[bool], optional): Upload file even if it has been uploaded before.
         """
 
         if not (file_path or io_stream):
-            raise ValueError(f"require either 'file_path' or 'io_stream'")
+            raise ValueError("require either 'file_path' or 'io_stream'")
+        if file_path:
+            if not (os.path.isfile(file_path) and os.access(file_path, os.R_OK)):
+                raise ValueError(f"file '{file_path}' doesn't exist or is not readable.")
+
+        if not force_upload:
+            aurn = check_file_already_uploaded(file_path)
+            if aurn is not None:
+                return self.get_artifact(aurn)
 
         if not content_type and file_path:
-            content_type, encoding= mimetypes.guess_type(file_path)
+            content_type, _ = mimetypes.guess_type(file_path)
 
         if not content_type:
             raise ValueError("missing 'content-type'")
@@ -418,16 +454,46 @@ class IVCAP:
         uploader.upload()
 
         kwargs = res.to_dict()
+        mark_file_already_uploaded(res.id, file_path)
         kwargs["status"] = None
         a = Artifact(self, **kwargs)
         a.status # force status update as it will have change
         return a
 
-    def get_artifact(self, id: str) -> Artifact:
-        return Artifact(id, self)
+    def artifact_for_file(self, file_path: str) -> Optional[Artifact]:
+        """Return an Artifact instance if local file 'file_path'
+        has already been uploaded as artifact.
+
+        Args:
+            file_path (str): Path to local file
+
+        Returns:
+            Optional[Artifact]: Return artifact instance if file has been uploaded,
+            otherwise return None
+        """
+        aurn = check_file_already_uploaded(file_path)
+        if aurn is not None:
+            return self.get_artifact(aurn)
+
+
+    def get_artifact(self, id: URN) -> Artifact:
+        """Returns an Artifact instance for artifact 'id'
+
+        Args:
+            id (URN): URN of artifact
+
+        Returns:
+            Artifact: Returns an Artifact instance if artifact exists
+        """
+        return Artifact(self, id=id).refresh()
 
     @property
     def url(self) -> str:
+        """Returns the URL of the IVCAP deployment
+
+        Returns:
+            str: URL of IVCAP deployment
+        """
         return self._url
 
     def __repr__(self):

@@ -108,7 +108,8 @@ class BaseIter(ABC, Generic[T, L]):
                 return []
             else:
                 self._kwargs['page'] = set_page(self._links.next)
-        if self._remaining: self._kwargs['limit'] = self._remaining
+        limit = self._remaining if self._remaining <= 50 else 50
+        if self._remaining: self._kwargs['limit'] = limit
         return self._get_list()
 
     @abstractmethod

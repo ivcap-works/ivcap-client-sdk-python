@@ -12,7 +12,7 @@ from typing import IO, Dict, Iterator, Optional, Union
 from ivcap_client.api.artifact import artifact_upload
 from ivcap_client.api.aspect import aspect_create
 from ivcap_client.artifact import Artifact, ArtifactIter, check_file_already_uploaded, mark_file_already_uploaded
-from ivcap_client.aspect import Aspect, AspectIter
+from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
 from tusclient.client import TusClient
 from sys import maxsize as MAXSIZE
@@ -207,50 +207,30 @@ class IVCAP:
         Returns:
             aspect: The created aspect record
         """
-        if not entity:
-            raise MissingParameterValue("Missing entity")
-        if isinstance(aspect, dict):
-            b = aspect
-        else:
-            b = aspect.to_dict()
+        return _add_update_aspect(self, False, entity, aspect, schema=schema, policy=policy)
 
-        if not schema:
-            schema = b.get("$schema")
-        if not schema:
-            raise MissingParameterValue("Missing schema (also not in aspect '$schema')")
+    def update_aspect(self,
+                     entity: str,
+                     aspect: Dict[str,any],
+                     *,
+                     schema: Optional[str]=None,
+                     policy: Optional[URN] = None,
+                     ) -> Aspect:
+        """Create an 'aspect' to an 'entity', but also retract a
+        potentially existing aspect for the same entity with the same schema.
+        The 'schema' of the aspect, if not defined
+        is expected to found in the 'aspect' under the '$schema' key.
 
-        b = {
-            "$schema": schema,
-            "$entity": entity,
-            **b
-        }
-        # api is calling to_dict on body
-        body = types.SimpleNamespace()
-        body.to_dict = lambda: b
+        Args:
+            entity (str): URN of the entity to attach the aspect to
+            aspect (dict): The aspect to be attached
+            schema (Optional[str], optional): Schema of the aspect. Defaults to 'aspect["$schema"]'.
+            policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
 
-        kwargs = {
-            "entity": entity,
-            "schema": schema,
-            "body": body,
-            "client": self._client,
-            "content_type": "application/json",
-        }
-        if policy:
-            if not policy.startswith("urn:ivcap:policy:"):
-                raise ValueError(f"policy '{policy} is not a policy URN.")
-            kwargs['policy'] = policy
-
-        r = aspect_create.sync_detailed(**kwargs)
-        if r.status_code >= 300 :
-            return process_error('add_aspect', r)
-
-        res:AddMetaRT = r.parsed
-        d = res.to_dict()
-        d['entity'] = entity
-        d['schema'] = schema
-        d['content'] = aspect
-        d['content-type'] = "application/json"
-        return Aspect(self, **d)
+        Returns:
+            aspect: The created aspect record
+        """
+        return _add_update_aspect(self, True, entity, aspect, schema=schema, policy=policy)
 
     def list_aspect(self,
         *,

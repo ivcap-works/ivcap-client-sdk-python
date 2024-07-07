@@ -10,7 +10,7 @@ from ...models.aspectupdate_body import AspectupdateBody
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
-from ...types import UNSET, Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
@@ -18,6 +18,7 @@ def _get_kwargs(
     body: AspectupdateBody,
     entity: str,
     schema: str,
+    policy: Union[Unset, str] = UNSET,
     content_type: str,
 ) -> Dict[str, Any]:
     headers: Dict[str, Any] = {}
@@ -28,6 +29,8 @@ def _get_kwargs(
     params["entity"] = entity
 
     params["schema"] = schema
+
+    params["policy"] = policy
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -102,6 +105,7 @@ def sync_detailed(
     body: AspectupdateBody,
     entity: str,
     schema: str,
+    policy: Union[Unset, str] = UNSET,
     content_type: str,
 ) -> Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """update aspect
@@ -112,6 +116,8 @@ def sync_detailed(
     Args:
         entity (str): Entity to which attach aspect Example: urn:some_ns:schema:some_schema.1.
         schema (str): Schema of aspect Example: urn:url:.....
+        policy (Union[Unset, str]): Policy guiding visibility and actions performed Example:
+            urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (AspectupdateBody): Aspect content Example: {"$schema": ...}.
@@ -128,6 +134,7 @@ def sync_detailed(
         body=body,
         entity=entity,
         schema=schema,
+        policy=policy,
         content_type=content_type,
     )
 
@@ -144,6 +151,7 @@ def sync(
     body: AspectupdateBody,
     entity: str,
     schema: str,
+    policy: Union[Unset, str] = UNSET,
     content_type: str,
 ) -> Optional[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """update aspect
@@ -154,6 +162,8 @@ def sync(
     Args:
         entity (str): Entity to which attach aspect Example: urn:some_ns:schema:some_schema.1.
         schema (str): Schema of aspect Example: urn:url:.....
+        policy (Union[Unset, str]): Policy guiding visibility and actions performed Example:
+            urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (AspectupdateBody): Aspect content Example: {"$schema": ...}.
@@ -171,6 +181,7 @@ def sync(
         body=body,
         entity=entity,
         schema=schema,
+        policy=policy,
         content_type=content_type,
     ).parsed
 
@@ -181,6 +192,7 @@ async def asyncio_detailed(
     body: AspectupdateBody,
     entity: str,
     schema: str,
+    policy: Union[Unset, str] = UNSET,
     content_type: str,
 ) -> Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """update aspect
@@ -191,6 +203,8 @@ async def asyncio_detailed(
     Args:
         entity (str): Entity to which attach aspect Example: urn:some_ns:schema:some_schema.1.
         schema (str): Schema of aspect Example: urn:url:.....
+        policy (Union[Unset, str]): Policy guiding visibility and actions performed Example:
+            urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (AspectupdateBody): Aspect content Example: {"$schema": ...}.
@@ -207,6 +221,7 @@ async def asyncio_detailed(
         body=body,
         entity=entity,
         schema=schema,
+        policy=policy,
         content_type=content_type,
     )
 
@@ -221,6 +236,7 @@ async def asyncio(
     body: AspectupdateBody,
     entity: str,
     schema: str,
+    policy: Union[Unset, str] = UNSET,
     content_type: str,
 ) -> Optional[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """update aspect
@@ -231,6 +247,8 @@ async def asyncio(
     Args:
         entity (str): Entity to which attach aspect Example: urn:some_ns:schema:some_schema.1.
         schema (str): Schema of aspect Example: urn:url:.....
+        policy (Union[Unset, str]): Policy guiding visibility and actions performed Example:
+            urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (AspectupdateBody): Aspect content Example: {"$schema": ...}.
@@ -249,6 +267,7 @@ async def asyncio(
             body=body,
             entity=entity,
             schema=schema,
+            policy=policy,
             content_type=content_type,
         )
     ).parsed

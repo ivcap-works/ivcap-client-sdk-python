@@ -184,6 +184,25 @@ Attributes
       :rtype: aspect
 
 
+   .. py:method:: update_aspect(entity: str, aspect: Dict[str, any], *, schema: Optional[str] = None, policy: Optional[URN] = None) -> ivcap_client.aspect.Aspect
+
+      Create an 'aspect' to an 'entity', but also retract a
+      potentially existing aspect for the same entity with the same schema.
+      The 'schema' of the aspect, if not defined
+      is expected to found in the 'aspect' under the '$schema' key.
+
+      :param entity: URN of the entity to attach the aspect to
+      :type entity: str
+      :param aspect: The aspect to be attached
+      :type aspect: dict
+      :param schema: Schema of the aspect. Defaults to 'aspect["$schema"]'.
+      :type schema: Optional[str], optional
+      :param policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
+
+      :returns: The created aspect record
+      :rtype: aspect
+
+
    .. py:method:: list_aspect(*, entity: Optional[str] = None, schema: Optional[str] = None, content_path: Optional[str] = None, at_time: Optional[datetime.datetime.datetime] = None, limit: Optional[int] = 10, filter: Optional[str] = None, order_by: Optional[str] = 'valid_from', order_direction: Optional[str] = 'DESC', include_content: Optional[bool] = True) -> Iterator[ivcap_client.aspect.Aspect]
 
       Return an iterator over all the aspect records fulfilling certain constraints.

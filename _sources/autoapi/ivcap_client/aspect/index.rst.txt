@@ -18,6 +18,14 @@ Classes
 
 
 
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ivcap_client.aspect._add_update_aspect
+
+
 
 .. py:class:: Aspect(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
 
@@ -80,7 +88,12 @@ Classes
    .. py:method:: __update__(**kwargs)
 
 
-   .. py:method:: refresh()
+   .. py:method:: refresh() -> Aspect
+
+
+   .. py:method:: retract() -> Aspect
+
+      Retract this aspect
 
 
    .. py:method:: __repr__()
@@ -115,5 +128,22 @@ Classes
 
    .. py:method:: _get_list() -> List[ivcap_client.models.aspect_list_item_rt.AspectListItemRT]
 
+
+
+.. py:function:: _add_update_aspect(ivcap: ivcap_client.ivcap.IVCAP, is_update: bool, entity: str, aspect: Dict[str, any], *, schema: Optional[str] = None, policy: Optional[ivcap_client.ivcap.URN] = None) -> Aspect
+
+   Add an 'aspect' to an 'entity'. The 'schema' of the aspect, if not defined
+   is expected to found in the 'aspect' under the '$schema' key.
+
+   :param entity: URN of the entity to attach the aspect to
+   :type entity: str
+   :param aspect: The aspect to be attached
+   :type aspect: dict
+   :param schema: Schema of the aspect. Defaults to 'aspect["$schema"]'.
+   :type schema: Optional[str], optional
+   :param policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
+
+   :returns: The created aspect record
+   :rtype: aspect
 
 

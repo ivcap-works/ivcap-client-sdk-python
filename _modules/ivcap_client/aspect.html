@@ -81,18 +81,23 @@
 <span class="c1">#</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span> <span class="c1"># postpone evaluation of annotations</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="kn">from</span> <span class="nn">ivcap_client.excpetions</span> <span class="kn">import</span> <span class="n">MissingParameterValue</span>
+
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">ivcap_client.ivcap</span> <span class="kn">import</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="n">URN</span>
 
+<span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 
 <span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">ivcap_client.api.aspect</span> <span class="kn">import</span> <span class="n">aspect_list</span><span class="p">,</span> <span class="n">aspect_read</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.api.aspect</span> <span class="kn">import</span> <span class="n">aspect_create</span><span class="p">,</span> <span class="n">aspect_list</span><span class="p">,</span> <span class="n">aspect_read</span><span class="p">,</span> <span class="n">aspect_retract</span><span class="p">,</span> <span class="n">aspect_update</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.models.list_meta_rt</span> <span class="kn">import</span> <span class="n">ListMetaRT</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.models.aspect_list_item_rt</span> <span class="kn">import</span> <span class="n">AspectListItemRT</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.models.aspect_rt</span> <span class="kn">import</span> <span class="n">AspectRT</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.models.aspect_idrt</span> <span class="kn">import</span> <span class="n">AspectIDRT</span>
 
 <span class="kn">from</span> <span class="nn">ivcap_client.utils</span> <span class="kn">import</span> <span class="n">BaseIter</span><span class="p">,</span> <span class="n">Links</span><span class="p">,</span> <span class="n">_set_fields</span><span class="p">,</span> <span class="n">process_error</span><span class="p">,</span> <span class="n">set_page</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.types</span> <span class="kn">import</span> <span class="n">UNSET</span>
@@ -149,12 +154,23 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span>
 
-<div class="viewcode-block" id="Aspect.refresh"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.Aspect.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Aspect.refresh"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.Aspect.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Aspect</span><span class="p">:</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_read</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
             <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;aspect&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
         <span class="n">res</span><span class="p">:</span><span class="n">AspectRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">res</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">res</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Aspect.retract"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.Aspect.retract">[docs]</a>    <span class="k">def</span> <span class="nf">retract</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Aspect</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retract this aspect&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_to</span><span class="p">:</span>
+            <span class="c1"># already retracted</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_retract</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;aspect&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Aspect.__repr__"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.Aspect.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Aspect id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">, entity=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="si">}</span><span class="s2"> schema=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div></div>
@@ -207,6 +223,75 @@
         <span class="n">l</span><span class="p">:</span> <span class="n">ListMetaRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_links</span> <span class="o">=</span> <span class="n">Links</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">links</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">items</span></div></div>
+
+
+<div class="viewcode-block" id="_add_update_aspect"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect._add_update_aspect">[docs]</a><span class="k">def</span> <span class="nf">_add_update_aspect</span><span class="p">(</span><span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">,</span>
+                       <span class="n">is_update</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                       <span class="n">entity</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                       <span class="n">aspect</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">any</span><span class="p">],</span>
+                       <span class="o">*</span><span class="p">,</span>
+                       <span class="n">schema</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">policy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">URN</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Aspect</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add an &#39;aspect&#39; to an &#39;entity&#39;. The &#39;schema&#39; of the aspect, if not defined</span>
+<span class="sd">    is expected to found in the &#39;aspect&#39; under the &#39;$schema&#39; key.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        entity (str): URN of the entity to attach the aspect to</span>
+<span class="sd">        aspect (dict): The aspect to be attached</span>
+<span class="sd">        schema (Optional[str], optional): Schema of the aspect. Defaults to &#39;aspect[&quot;$schema&quot;]&#39;.</span>
+<span class="sd">        policy: Optional[URN]: Set specific policy controlling access (&#39;urn:ivcap:policy:...&#39;).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        aspect: The created aspect record</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">entity</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">MissingParameterValue</span><span class="p">(</span><span class="s2">&quot;Missing entity&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aspect</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">aspect</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">aspect</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">schema</span><span class="p">:</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;$schema&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">schema</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">MissingParameterValue</span><span class="p">(</span><span class="s2">&quot;Missing schema (also not in aspect &#39;$schema&#39;)&quot;</span><span class="p">)</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="n">schema</span><span class="p">,</span>
+        <span class="s2">&quot;$entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">b</span>
+    <span class="p">}</span>
+    <span class="c1"># api is calling to_dict on body</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">SimpleNamespace</span><span class="p">()</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">to_dict</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">b</span>
+
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
+        <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">schema</span><span class="p">,</span>
+        <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="n">body</span><span class="p">,</span>
+        <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
+        <span class="s2">&quot;content_type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">policy</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">policy</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:policy:&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;policy &#39;</span><span class="si">{</span><span class="n">policy</span><span class="si">}</span><span class="s2"> is not a policy URN.&quot;</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;policy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">policy</span>
+
+    <span class="k">if</span> <span class="n">is_update</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_update</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_create</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
+        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;add_aspect&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+
+    <span class="n">res</span><span class="p">:</span><span class="n">AspectIDRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;entity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span>
+    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;schema&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schema</span>
+    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aspect</span>
+    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;content-type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;application/json&quot;</span>
+    <span class="k">return</span> <span class="n">Aspect</span><span class="p">(</span><span class="n">ivcap</span><span class="p">,</span> <span class="o">**</span><span class="n">d</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

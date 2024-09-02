@@ -6,16 +6,25 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.bad_request_t import BadRequestT
+from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
-from ...types import Response
+from ...types import UNSET, Response
 
 
 def _get_kwargs(
-    id: str,
+    *,
+    tag: str,
 ) -> Dict[str, Any]:
+    params: Dict[str, Any] = {}
+
+    params["tag"] = tag
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
+
     _kwargs: Dict[str, Any] = {
         "method": "delete",
-        "url": f"/1/queues/{id}",
+        "url": "/1/packages/remove",
+        "params": params,
     }
 
     return _kwargs
@@ -23,7 +32,7 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidScopesT]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     if response.status_code == HTTPStatus.NO_CONTENT:
         response_204 = cast(Any, None)
         return response_204
@@ -38,6 +47,10 @@ def _parse_response(
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
+        response_422 = InvalidParameterT.from_dict(response.json())
+
+        return response_422
     if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
@@ -53,7 +66,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidScopesT]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -63,27 +76,27 @@ def _build_response(
 
 
 def sync_detailed(
-    id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, BadRequestT, InvalidScopesT]]:
-    """delete queue
+    tag: str,
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+    """remove package
 
-     Delete an existing queues.
+     remove ivcap service's docker image
 
     Args:
-        id (str): ID of queues to update Example: Rem perferendis..
+        tag (str): docker image tag Example: test_app:1.0.1.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidScopesT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]
     """
 
     kwargs = _get_kwargs(
-        id=id,
+        tag=tag,
     )
 
     response = client.get_httpx_client().request(
@@ -94,53 +107,53 @@ def sync_detailed(
 
 
 def sync(
-    id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, BadRequestT, InvalidScopesT]]:
-    """delete queue
+    tag: str,
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+    """remove package
 
-     Delete an existing queues.
+     remove ivcap service's docker image
 
     Args:
-        id (str): ID of queues to update Example: Rem perferendis..
+        tag (str): docker image tag Example: test_app:1.0.1.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidScopesT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]
     """
 
     return sync_detailed(
-        id=id,
         client=client,
+        tag=tag,
     ).parsed
 
 
 async def asyncio_detailed(
-    id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, BadRequestT, InvalidScopesT]]:
-    """delete queue
+    tag: str,
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+    """remove package
 
-     Delete an existing queues.
+     remove ivcap service's docker image
 
     Args:
-        id (str): ID of queues to update Example: Rem perferendis..
+        tag (str): docker image tag Example: test_app:1.0.1.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidScopesT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]
     """
 
     kwargs = _get_kwargs(
-        id=id,
+        tag=tag,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -149,28 +162,28 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, BadRequestT, InvalidScopesT]]:
-    """delete queue
+    tag: str,
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+    """remove package
 
-     Delete an existing queues.
+     remove ivcap service's docker image
 
     Args:
-        id (str): ID of queues to update Example: Rem perferendis..
+        tag (str): docker image tag Example: test_app:1.0.1.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidScopesT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT]
     """
 
     return (
         await asyncio_detailed(
-            id=id,
             client=client,
+            tag=tag,
         )
     ).parsed

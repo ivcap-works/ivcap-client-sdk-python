@@ -9,23 +9,24 @@ from datetime import datetime
 import types
 import os
 from typing import IO, Dict, Iterator, Optional, Union
-from ivcap_client.api.artifact import artifact_upload
-from ivcap_client.api.aspect import aspect_create
-from ivcap_client.artifact import Artifact, ArtifactIter, check_file_already_uploaded, mark_file_already_uploaded
-from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
-from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
 from tusclient.client import TusClient
 from sys import maxsize as MAXSIZE
 import mimetypes
 import base64
 
+from ivcap_client.api.artifact import artifact_upload
+from ivcap_client.api.aspect import aspect_create
+from ivcap_client.api.search import search_search
+from ivcap_client.artifact import Artifact, ArtifactIter, check_file_already_uploaded, mark_file_already_uploaded
+from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
+from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
 from ivcap_client.client.client import AuthenticatedClient
 from ivcap_client.excpetions import AmbiguousRequest, MissingParameterValue, ResourceNotFound
 from ivcap_client.models.add_meta_rt import AddMetaRT
 from ivcap_client.models.aspect_list_item_rt import AspectListItemRT
 from ivcap_client.order import Order, OrderIter
 from ivcap_client.service import Service, ServiceIter
-from ivcap_client.types import UNSET, Unset
+from ivcap_client.types import UNSET, File, Unset
 from ivcap_client.utils import _wrap, process_error
 
 URN = str
@@ -232,7 +233,7 @@ class IVCAP:
         """
         return _add_update_aspect(self, True, entity, aspect, schema=schema, policy=policy)
 
-    def list_aspect(self,
+    def list_aspects(self,
         *,
         entity: Optional[str] = None,
         schema: Optional[str] = None,
@@ -466,6 +467,34 @@ class IVCAP:
             Artifact: Returns an Artifact instance if artifact exists
         """
         return Artifact(self, id=id).refresh()
+
+    #### SEARCH
+
+    def search(self, query):
+        """Execute query provided in body and return a list of search result.
+
+        Args:
+            at_time (datetime.datetime): Return search which where valid at that time
+                [now] Example: 1996-12-19T16:39:57-08:00.
+            limit (int): The number of items to be included in the result. Default: 10. Example: 10.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]
+
+        """
+        body = File(query)
+        kwargs = {
+            "body": body,
+            "content_type": "application/datalog+mangle",
+        }
+        r = search_search.sync_detailed(client=self._client, **kwargs)
+        if r.status_code >= 300:
+            raise Exception(f"unexpected response - {r.status_code}")
+        return r.parsed
 
     @property
     def url(self) -> str:

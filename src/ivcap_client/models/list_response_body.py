@@ -1,35 +1,29 @@
-import datetime
-from io import BytesIO
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-from dateutil.parser import isoparse
-
-from ..types import File
 
 if TYPE_CHECKING:
     from ..models.link_t import LinkT
 
 
-T = TypeVar("T", bound="SearchListRT")
+T = TypeVar("T", bound="ListResponseBody")
 
 
 @_attrs_define
-class SearchListRT:
+class ListResponseBody:
     """
     Example:
-        {'at-time': '1996-12-19T16:39:57-08:00', 'items': ['Assumenda dolore.', 'Assumenda dolorem eveniet illo
-            repellendus atque ad.'], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
-            'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
-            {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
-            'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
+        {'items': ['Consequuntur commodi beatae commodi optio.', 'Magni reprehenderit reprehenderit ratione accusamus.',
+            'Iusto iste iusto quisquam consequatur voluptas eius.'], 'links': [{'href': 'https://api.ivcap.net/1/....',
+            'rel': 'self', 'type': 'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type':
+            'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'},
+            {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}]}
 
     Attributes:
-        at_time (datetime.datetime): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
-        items (List[File]): List of search result Example: ['Quas fuga.', 'A aut temporibus omnis dolores quod.', 'Est
-            soluta est iure accusamus tenetur.'].
+        items (List[str]): docker image tags Example: ['Consequatur qui voluptatem.', 'Earum aliquid quia repellat
+            ipsum.', 'Adipisci optio aut officia.'].
         links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
@@ -37,19 +31,12 @@ class SearchListRT:
             'application/openapi3+json'}].
     """
 
-    at_time: datetime.datetime
-    items: List[File]
+    items: List[str]
     links: List["LinkT"]
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        at_time = self.at_time.isoformat()
-
-        items = []
-        for items_item_data in self.items:
-            items_item = items_item_data.to_tuple()
-
-            items.append(items_item)
+        items = self.items
 
         links = []
         for links_item_data in self.links:
@@ -60,7 +47,6 @@ class SearchListRT:
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "at-time": at_time,
                 "items": items,
                 "links": links,
             }
@@ -73,14 +59,7 @@ class SearchListRT:
         from ..models.link_t import LinkT
 
         d = src_dict.copy()
-        at_time = isoparse(d.pop("at-time"))
-
-        items = []
-        _items = d.pop("items")
-        for items_item_data in _items:
-            items_item = items_item_data
-
-            items.append(items_item)
+        items = cast(List[str], d.pop("items"))
 
         links = []
         _links = d.pop("links")
@@ -89,14 +68,13 @@ class SearchListRT:
 
             links.append(links_item)
 
-        search_list_rt = cls(
-            at_time=at_time,
+        list_response_body = cls(
             items=items,
             links=links,
         )
 
-        search_list_rt.additional_properties = d
-        return search_list_rt
+        list_response_body.additional_properties = d
+        return list_response_body
 
     @property
     def additional_keys(self) -> List[str]:

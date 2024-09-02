@@ -31,7 +31,7 @@ class OrderStatusRT:
             'mime-type': 'image/geo+tiff', 'name': 'fire risk map', 'size': 1234963}], 'links': [{'href':
             'https://api.ivcap.net/1/....', 'rel': 'next'}]}, 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'error', 'tags': ['tag1', 'tag2']}
+            'failed', 'tags': ['tag1', 'tag2']}
 
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.

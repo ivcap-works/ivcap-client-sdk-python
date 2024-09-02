@@ -152,7 +152,7 @@ def sync_detailed(
             on
                                         property EndsAt in descending order. Default: ''. Example: name.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the default.
+            order is the default. Example: True.
         include_content (Union[Unset, bool]): When set, also include aspect content in list.
             Default: True.
         page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
@@ -232,7 +232,7 @@ def sync(
             on
                                         property EndsAt in descending order. Default: ''. Example: name.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the default.
+            order is the default. Example: True.
         include_content (Union[Unset, bool]): When set, also include aspect content in list.
             Default: True.
         page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
@@ -307,7 +307,7 @@ async def asyncio_detailed(
             on
                                         property EndsAt in descending order. Default: ''. Example: name.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the default.
+            order is the default. Example: True.
         include_content (Union[Unset, bool]): When set, also include aspect content in list.
             Default: True.
         page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
@@ -385,7 +385,7 @@ async def asyncio(
             on
                                         property EndsAt in descending order. Default: ''. Example: name.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the default.
+            order is the default. Example: True.
         include_content (Union[Unset, bool]): When set, also include aspect content in list.
             Default: True.
         page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a

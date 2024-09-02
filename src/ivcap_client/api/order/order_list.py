@@ -129,7 +129,7 @@ def sync_detailed(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True.
+            order is the lt. Default: True. Example: True.
         at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
             that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -190,7 +190,7 @@ def sync(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True.
+            order is the lt. Default: True. Example: True.
         at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
             that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -246,7 +246,7 @@ async def asyncio_detailed(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True.
+            order is the lt. Default: True. Example: True.
         at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
             that time [now] Example: 1996-12-19T16:39:57-08:00.
 
@@ -305,7 +305,7 @@ async def asyncio(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True.
+            order is the lt. Default: True. Example: True.
         at_time (Union[Unset, datetime.datetime]): Return the state of the respective resources at
             that time [now] Example: 1996-12-19T16:39:57-08:00.
 

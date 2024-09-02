@@ -16,27 +16,28 @@ T = TypeVar("T", bound="ParameterDefT")
 class ParameterDefT:
     """
     Example:
-        {'constant': True, 'default': 'Repudiandae debitis.', 'description': 'Sapiente at ratione aut illo doloremque
-            aut.', 'label': 'Quas voluptatem deserunt dolores vel iure.', 'name': 'Quia qui perspiciatis laboriosam et ea.',
-            'optional': True, 'options': [{'description': 'Quo corporis temporibus nostrum et temporibus et.', 'value': 'In
-            alias accusamus.'}, {'description': 'Quo corporis temporibus nostrum et temporibus et.', 'value': 'In alias
-            accusamus.'}, {'description': 'Quo corporis temporibus nostrum et temporibus et.', 'value': 'In alias
-            accusamus.'}], 'type': 'Maxime rerum aut voluptates possimus nam.', 'unary': True, 'unit': 'Est sequi quisquam
-            sunt.'}
+        {'constant': True, 'default': 'Natus quaerat veritatis at aut sed.', 'description': 'Omnis dicta incidunt
+            impedit necessitatibus.', 'label': 'Quidem eum.', 'name': 'Quia molestiae id magni.', 'optional': True,
+            'options': [{'description': 'Vel sequi repudiandae doloremque sit doloribus optio.', 'value': 'Blanditiis ullam
+            nemo necessitatibus.'}, {'description': 'Vel sequi repudiandae doloremque sit doloribus optio.', 'value':
+            'Blanditiis ullam nemo necessitatibus.'}, {'description': 'Vel sequi repudiandae doloremque sit doloribus
+            optio.', 'value': 'Blanditiis ullam nemo necessitatibus.'}], 'type': 'Molestiae quo.', 'unary': True, 'unit':
+            'Accusantium suscipit nisi labore.'}
 
     Attributes:
-        description (str):  Example: Suscipit officiis..
-        name (str):  Example: Eos labore..
-        type (str):  Example: Occaecati quia ut nostrum..
-        constant (Union[Unset, bool]):
-        default (Union[Unset, str]):  Example: Quibusdam dolore magni..
-        label (Union[Unset, str]):  Example: Assumenda aut quia commodi..
-        optional (Union[Unset, bool]):  Example: True.
-        options (Union[Unset, List['ParameterOptT']]):  Example: [{'description': 'Quo corporis temporibus nostrum et
-            temporibus et.', 'value': 'In alias accusamus.'}, {'description': 'Quo corporis temporibus nostrum et temporibus
-            et.', 'value': 'In alias accusamus.'}].
+        description (str):  Example: Optio minima et quisquam ipsum rem dolore..
+        name (str):  Example: Et vel beatae..
+        type (str):  Example: Quibusdam nemo maxime qui expedita quasi natus..
+        constant (Union[Unset, bool]):  Example: True.
+        default (Union[Unset, str]):  Example: Ex dolores culpa vero asperiores aliquid..
+        label (Union[Unset, str]):  Example: Quis voluptate quis ipsa repudiandae quidem eos..
+        optional (Union[Unset, bool]):
+        options (Union[Unset, List['ParameterOptT']]):  Example: [{'description': 'Vel sequi repudiandae doloremque sit
+            doloribus optio.', 'value': 'Blanditiis ullam nemo necessitatibus.'}, {'description': 'Vel sequi repudiandae
+            doloremque sit doloribus optio.', 'value': 'Blanditiis ullam nemo necessitatibus.'}, {'description': 'Vel sequi
+            repudiandae doloremque sit doloribus optio.', 'value': 'Blanditiis ullam nemo necessitatibus.'}].
         unary (Union[Unset, bool]):  Example: True.
-        unit (Union[Unset, str]):  Example: Non occaecati sit..
+        unit (Union[Unset, str]):  Example: Qui est nostrum..
     """
 
     description: str

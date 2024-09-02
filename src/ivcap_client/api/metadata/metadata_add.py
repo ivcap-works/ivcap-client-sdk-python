@@ -108,10 +108,11 @@ def sync_detailed(
      Attach new metadata to an entity.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example: http://lehner.info/bryana_lang.
-        schema (str): Schema of metadata Example: http://halvorson.com/gabe.
+        entity_id (str): Entity to which attach metadata Example:
+            http://ratkekeeling.net/darian.wehner.
+        schema (str): Schema of metadata Example: http://leschtremblay.net/era_kub.
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://ankunding.com/geo.harris.
+            http://mckenzie.org/adela.luettgen.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (File): Aspect content Example: {"$schema": ...}.
@@ -153,10 +154,11 @@ def sync(
      Attach new metadata to an entity.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example: http://lehner.info/bryana_lang.
-        schema (str): Schema of metadata Example: http://halvorson.com/gabe.
+        entity_id (str): Entity to which attach metadata Example:
+            http://ratkekeeling.net/darian.wehner.
+        schema (str): Schema of metadata Example: http://leschtremblay.net/era_kub.
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://ankunding.com/geo.harris.
+            http://mckenzie.org/adela.luettgen.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (File): Aspect content Example: {"$schema": ...}.
@@ -193,10 +195,11 @@ async def asyncio_detailed(
      Attach new metadata to an entity.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example: http://lehner.info/bryana_lang.
-        schema (str): Schema of metadata Example: http://halvorson.com/gabe.
+        entity_id (str): Entity to which attach metadata Example:
+            http://ratkekeeling.net/darian.wehner.
+        schema (str): Schema of metadata Example: http://leschtremblay.net/era_kub.
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://ankunding.com/geo.harris.
+            http://mckenzie.org/adela.luettgen.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (File): Aspect content Example: {"$schema": ...}.
@@ -236,10 +239,11 @@ async def asyncio(
      Attach new metadata to an entity.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example: http://lehner.info/bryana_lang.
-        schema (str): Schema of metadata Example: http://halvorson.com/gabe.
+        entity_id (str): Entity to which attach metadata Example:
+            http://ratkekeeling.net/darian.wehner.
+        schema (str): Schema of metadata Example: http://leschtremblay.net/era_kub.
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://ankunding.com/geo.harris.
+            http://mckenzie.org/adela.luettgen.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (File): Aspect content Example: {"$schema": ...}.

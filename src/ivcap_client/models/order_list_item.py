@@ -19,14 +19,14 @@ class OrderListItem:
             '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
             'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for Lot2', 'ordered-at':
             '1996-12-19T16:39:57-08:00', 'service': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at':
-            '1996-12-19T16:39:57-08:00', 'status': 'unknown'}
+            '1996-12-19T16:39:57-08:00', 'status': 'failed'}
 
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
         href (str):  Example: https://api.ivcap.net/1/orders/....
         id (str): ID Example: urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
         service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        status (OrderListItemStatus): Order status Example: scheduled.
+        status (OrderListItemStatus): Order status Example: unknown.
         finished_at (Union[Unset, datetime.datetime]): DateTime order processing finished Example:
             1996-12-19T16:39:57-08:00.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.

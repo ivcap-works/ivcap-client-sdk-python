@@ -5,53 +5,44 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ParameterOptT")
+T = TypeVar("T", bound="PushResponseBody")
 
 
 @_attrs_define
-class ParameterOptT:
+class PushResponseBody:
     """
     Example:
-        {'description': 'Asperiores ipsa labore.', 'value': 'Vel vero.'}
+        {'digest': 'Tenetur ratione qui amet reiciendis debitis.'}
 
     Attributes:
-        description (Union[Unset, str]):  Example: Harum vitae eum dolor deserunt quas ut..
-        value (Union[Unset, str]):  Example: Neque animi inventore officiis repellendus ipsum..
+        digest (Union[Unset, str]): uploaded image digest or tag Example: Error id et..
     """
 
-    description: Union[Unset, str] = UNSET
-    value: Union[Unset, str] = UNSET
+    digest: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        description = self.description
-
-        value = self.value
+        digest = self.digest
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if description is not UNSET:
-            field_dict["description"] = description
-        if value is not UNSET:
-            field_dict["value"] = value
+        if digest is not UNSET:
+            field_dict["digest"] = digest
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        description = d.pop("description", UNSET)
+        digest = d.pop("digest", UNSET)
 
-        value = d.pop("value", UNSET)
-
-        parameter_opt_t = cls(
-            description=description,
-            value=value,
+        push_response_body = cls(
+            digest=digest,
         )
 
-        parameter_opt_t.additional_properties = d
-        return parameter_opt_t
+        push_response_body.additional_properties = d
+        return push_response_body
 
     @property
     def additional_keys(self) -> List[str]:

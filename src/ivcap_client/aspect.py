@@ -78,6 +78,10 @@ class Aspect:
             self.refresh()
         return self._content
 
+    @property
+    def content(self) -> dict:
+        return self.aspect
+
     def refresh(self) -> Aspect:
         r = aspect_read.sync_detailed(self.id, client=self._ivcap._client)
         if r.status_code >= 300 :
@@ -100,38 +104,38 @@ class Aspect:
         return f"<Aspect id={self.id}, entity={self.entity} schema={self.schema}>"
 
 
-class XAspectIter:
-    def __init__(self, ivcap: 'IVCAP', **kwargs):
-        self._ivcap = ivcap
-        self._kwargs = kwargs
-        self._links = None # init navigation
-        self._items = self._fill()
+# class XAspectIter:
+#     def __init__(self, ivcap: 'IVCAP', **kwargs):
+#         self._ivcap = ivcap
+#         self._kwargs = kwargs
+#         self._links = None # init navigation
+#         self._items = self._fill()
 
-    def __iter__(self):
-        return self
+#     def __iter__(self):
+#         return self
 
-    def __next__(self):
-        if len(self._items) == 0:
-            self._items = self._fill()
+#     def __next__(self):
+#         if len(self._items) == 0:
+#             self._items = self._fill()
 
-        if len(self._items) == 0:
-            raise StopIteration
+#         if len(self._items) == 0:
+#             raise StopIteration
 
-        el = self._items.pop(0)
-        return Aspect(el.id, self._ivcap, el)
+#         el = self._items.pop(0)
+#         return Aspect(el.id, self._ivcap, el)
 
-    def _fill(self) ->  List[AspectListItemRT]:
-        if self._links:
-            if not self._links.next:
-                return []
-            else:
-                self._kwargs['page'] = set_page(self._links.next)
-        r = aspect_list.sync_detailed(**self._kwargs)
-        if r.status_code >= 300 :
-            return process_error('artifact_list', r)
-        l: ListMetaRT = r.parsed
-        self._links = Links(l.links)
-        return l.items
+#     def _fill(self) ->  List[AspectListItemRT]:
+#         if self._links:
+#             if not self._links.next:
+#                 return []
+#             else:
+#                 self._kwargs['page'] = set_page(self._links.next)
+#         r = aspect_list.sync_detailed(**self._kwargs)
+#         if r.status_code >= 300 :
+#             return process_error('artifact_list', r)
+#         l: ListMetaRT = r.parsed
+#         self._links = Links(l.links)
+#         return l.items
 
 class AspectIter(BaseIter[Aspect, AspectListItemRT]):
     def __init__(self, ivcap: 'IVCAP', **kwargs):

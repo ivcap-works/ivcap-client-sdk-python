@@ -14,11 +14,13 @@ class ResourceMemoryT:
     units
 
         Example:
-            {'limit': 'Fugit alias velit.', 'request': 'Reiciendis similique repellendus et.'}
+            {'limit': 'Pariatur sint corrupti.', 'request': 'Porro blanditiis nihil eligendi perferendis cumque.'}
 
         Attributes:
-            limit (Union[Unset, str]): minimal requirements [system limit] Example: Perspiciatis sit pariatur sunt..
-            request (Union[Unset, str]): minimal requirements [0] Example: Consequatur accusamus reiciendis incidunt..
+            limit (Union[Unset, str]): minimal requirements [system limit] Example: Aut ipsum qui necessitatibus quidem
+                sint..
+            request (Union[Unset, str]): minimal requirements [0] Example: Deserunt placeat excepturi impedit cupiditate et
+                nihil..
     """
 
     limit: Union[Unset, str] = UNSET

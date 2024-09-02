@@ -25,7 +25,10 @@ class MessageList:
             'application/json', 'id': 'urn:ivcap:Message identifier:123e4567-e89b-12d3-a456-426614174000', 'schema':
             'urn:ivcap:schema:queue:message.1'}, {'content': '{"temperature": "21", "location": "Buoy101", "timestamp":
             "2024-05-20T14:30:00Z"}', 'content-type': 'application/json', 'id': 'urn:ivcap:Message
-            identifier:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:ivcap:schema:queue:message.1'}]}
+            identifier:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:ivcap:schema:queue:message.1'}, {'content':
+            '{"temperature": "21", "location": "Buoy101", "timestamp": "2024-05-20T14:30:00Z"}', 'content-type':
+            'application/json', 'id': 'urn:ivcap:Message identifier:123e4567-e89b-12d3-a456-426614174000', 'schema':
+            'urn:ivcap:schema:queue:message.1'}]}
 
     Attributes:
         messages (List['Publishedmessage']): Messages in the queue Example: [{'content': '{"temperature": "21",
@@ -33,10 +36,7 @@ class MessageList:
             'urn:ivcap:Message identifier:123e4567-e89b-12d3-a456-426614174000', 'schema':
             'urn:ivcap:schema:queue:message.1'}, {'content': '{"temperature": "21", "location": "Buoy101", "timestamp":
             "2024-05-20T14:30:00Z"}', 'content-type': 'application/json', 'id': 'urn:ivcap:Message
-            identifier:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:ivcap:schema:queue:message.1'}, {'content':
-            '{"temperature": "21", "location": "Buoy101", "timestamp": "2024-05-20T14:30:00Z"}', 'content-type':
-            'application/json', 'id': 'urn:ivcap:Message identifier:123e4567-e89b-12d3-a456-426614174000', 'schema':
-            'urn:ivcap:schema:queue:message.1'}].
+            identifier:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:ivcap:schema:queue:message.1'}].
         at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
     """
 

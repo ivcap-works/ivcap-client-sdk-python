@@ -85,23 +85,24 @@
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">IO</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">ivcap_client.api.artifact</span> <span class="kn">import</span> <span class="n">artifact_upload</span>
-<span class="kn">from</span> <span class="nn">ivcap_client.api.aspect</span> <span class="kn">import</span> <span class="n">aspect_create</span>
-<span class="kn">from</span> <span class="nn">ivcap_client.artifact</span> <span class="kn">import</span> <span class="n">Artifact</span><span class="p">,</span> <span class="n">ArtifactIter</span><span class="p">,</span> <span class="n">check_file_already_uploaded</span><span class="p">,</span> <span class="n">mark_file_already_uploaded</span>
-<span class="kn">from</span> <span class="nn">ivcap_client.aspect</span> <span class="kn">import</span> <span class="n">Aspect</span><span class="p">,</span> <span class="n">AspectIter</span><span class="p">,</span> <span class="n">_add_update_aspect</span>
-<span class="kn">from</span> <span class="nn">ivcap_client.models.artifact_status_rt</span> <span class="kn">import</span> <span class="n">ArtifactStatusRT</span>
 <span class="kn">from</span> <span class="nn">tusclient.client</span> <span class="kn">import</span> <span class="n">TusClient</span>
 <span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">maxsize</span> <span class="k">as</span> <span class="n">MAXSIZE</span>
 <span class="kn">import</span> <span class="nn">mimetypes</span>
 <span class="kn">import</span> <span class="nn">base64</span>
 
+<span class="kn">from</span> <span class="nn">ivcap_client.api.artifact</span> <span class="kn">import</span> <span class="n">artifact_upload</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.api.aspect</span> <span class="kn">import</span> <span class="n">aspect_create</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.api.search</span> <span class="kn">import</span> <span class="n">search_search</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.artifact</span> <span class="kn">import</span> <span class="n">Artifact</span><span class="p">,</span> <span class="n">ArtifactIter</span><span class="p">,</span> <span class="n">check_file_already_uploaded</span><span class="p">,</span> <span class="n">mark_file_already_uploaded</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.aspect</span> <span class="kn">import</span> <span class="n">Aspect</span><span class="p">,</span> <span class="n">AspectIter</span><span class="p">,</span> <span class="n">_add_update_aspect</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.models.artifact_status_rt</span> <span class="kn">import</span> <span class="n">ArtifactStatusRT</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.client.client</span> <span class="kn">import</span> <span class="n">AuthenticatedClient</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.excpetions</span> <span class="kn">import</span> <span class="n">AmbiguousRequest</span><span class="p">,</span> <span class="n">MissingParameterValue</span><span class="p">,</span> <span class="n">ResourceNotFound</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.models.add_meta_rt</span> <span class="kn">import</span> <span class="n">AddMetaRT</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.models.aspect_list_item_rt</span> <span class="kn">import</span> <span class="n">AspectListItemRT</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.order</span> <span class="kn">import</span> <span class="n">Order</span><span class="p">,</span> <span class="n">OrderIter</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.service</span> <span class="kn">import</span> <span class="n">Service</span><span class="p">,</span> <span class="n">ServiceIter</span>
-<span class="kn">from</span> <span class="nn">ivcap_client.types</span> <span class="kn">import</span> <span class="n">UNSET</span><span class="p">,</span> <span class="n">Unset</span>
+<span class="kn">from</span> <span class="nn">ivcap_client.types</span> <span class="kn">import</span> <span class="n">UNSET</span><span class="p">,</span> <span class="n">File</span><span class="p">,</span> <span class="n">Unset</span>
 <span class="kn">from</span> <span class="nn">ivcap_client.utils</span> <span class="kn">import</span> <span class="n">_wrap</span><span class="p">,</span> <span class="n">process_error</span>
 
 <span class="n">URN</span> <span class="o">=</span> <span class="nb">str</span>
@@ -308,7 +309,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">_add_update_aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">aspect</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="n">policy</span><span class="o">=</span><span class="n">policy</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="IVCAP.list_aspect"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.list_aspect">[docs]</a>    <span class="k">def</span> <span class="nf">list_aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="IVCAP.list_aspects"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.list_aspects">[docs]</a>    <span class="k">def</span> <span class="nf">list_aspects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">entity</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">schema</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -542,6 +543,34 @@
 <span class="sd">            Artifact: Returns an Artifact instance if artifact exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span></div>
+
+    <span class="c1">#### SEARCH</span>
+
+<div class="viewcode-block" id="IVCAP.search"><a class="viewcode-back" href="../../autoapi/ivcap_client/ivcap/index.html#ivcap_client.IVCAP.search">[docs]</a>    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute query provided in body and return a list of search result.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            at_time (datetime.datetime): Return search which where valid at that time</span>
+<span class="sd">                [now] Example: 1996-12-19T16:39:57-08:00.</span>
+<span class="sd">            limit (int): The number of items to be included in the result. Default: 10. Example: 10.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.</span>
+<span class="sd">            httpx.TimeoutException: If the request takes longer than Client.timeout.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="n">body</span><span class="p">,</span>
+            <span class="s2">&quot;content_type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/datalog+mangle&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">search_search</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unexpected response - </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>

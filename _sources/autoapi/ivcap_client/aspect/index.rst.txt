@@ -13,7 +13,6 @@ Classes
 .. autoapisummary::
 
    ivcap_client.aspect.Aspect
-   ivcap_client.aspect.XAspectIter
    ivcap_client.aspect.AspectIter
 
 
@@ -38,6 +37,10 @@ Functions
 
 
    .. py:property:: aspect
+      :type: dict
+
+
+   .. py:property:: content
       :type: dict
 
 
@@ -99,19 +102,6 @@ Functions
    .. py:method:: __repr__()
 
       Return repr(self).
-
-
-
-.. py:class:: XAspectIter(ivcap: ivcap_client.ivcap.IVCAP, **kwargs)
-
-
-   .. py:method:: __iter__()
-
-
-   .. py:method:: __next__()
-
-
-   .. py:method:: _fill() -> List[ivcap_client.models.aspect_list_item_rt.AspectListItemRT]
 
 
 

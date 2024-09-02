@@ -107,10 +107,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_client.aspect.Aspect" title="ivcap_client.aspect.Aspect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Aspect</span></code></a></p></td>
 <td><p>This class represents a aspect record</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#ivcap_client.aspect.XAspectIter" title="ivcap_client.aspect.XAspectIter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XAspectIter</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ivcap_client.aspect.AspectIter" title="ivcap_client.aspect.AspectIter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AspectIter</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#ivcap_client.aspect.AspectIter" title="ivcap_client.aspect.AspectIter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AspectIter</span></code></a></p></td>
 <td><p>Helper class that provides a standard way to create an ABC using</p></td>
 </tr>
 </tbody>
@@ -138,6 +135,11 @@ stored at a particular IVCAP deployment</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="ivcap_client.aspect.Aspect.aspect">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aspect</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#ivcap_client.aspect.Aspect.aspect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ivcap_client.aspect.Aspect.content">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#ivcap_client.aspect.Aspect.content" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -206,26 +208,6 @@ stored at a particular IVCAP deployment</p>
 <span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/aspect.html#Aspect.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.aspect.Aspect.__repr__" title="Permalink to this definition"></a></dt>
 <dd><p>Return repr(self).</p>
 </dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="ivcap_client.aspect.XAspectIter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ivcap_client.aspect.</span></span><span class="sig-name descname"><span class="pre">XAspectIter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivcap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../ivcap/index.html#ivcap_client.ivcap.IVCAP" title="ivcap_client.ivcap.IVCAP"><span class="pre">ivcap_client.ivcap.IVCAP</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/aspect.html#XAspectIter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.aspect.XAspectIter" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="ivcap_client.aspect.XAspectIter.__iter__">
-<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/aspect.html#XAspectIter.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.aspect.XAspectIter.__iter__" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ivcap_client.aspect.XAspectIter.__next__">
-<span class="sig-name descname"><span class="pre">__next__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ivcap_client/aspect.html#XAspectIter.__next__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.aspect.XAspectIter.__next__" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ivcap_client.aspect.XAspectIter._fill">
-<span class="sig-name descname"><span class="pre">_fill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ivcap_client.models.aspect_list_item_rt.AspectListItemRT</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/ivcap_client/aspect.html#XAspectIter._fill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ivcap_client.aspect.XAspectIter._fill" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 

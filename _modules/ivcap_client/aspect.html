@@ -154,6 +154,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span>
+
 <div class="viewcode-block" id="Aspect.refresh"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.Aspect.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Aspect</span><span class="p">:</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_read</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
@@ -176,38 +180,38 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Aspect id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">, entity=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="si">}</span><span class="s2"> schema=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div></div>
 
 
-<div class="viewcode-block" id="XAspectIter"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.XAspectIter">[docs]</a><span class="k">class</span> <span class="nc">XAspectIter</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="s1">&#39;IVCAP&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span> <span class="o">=</span> <span class="n">ivcap</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_links</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># init navigation</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill</span><span class="p">()</span>
+<span class="c1"># class XAspectIter:</span>
+<span class="c1">#     def __init__(self, ivcap: &#39;IVCAP&#39;, **kwargs):</span>
+<span class="c1">#         self._ivcap = ivcap</span>
+<span class="c1">#         self._kwargs = kwargs</span>
+<span class="c1">#         self._links = None # init navigation</span>
+<span class="c1">#         self._items = self._fill()</span>
 
-<div class="viewcode-block" id="XAspectIter.__iter__"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.XAspectIter.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
+<span class="c1">#     def __iter__(self):</span>
+<span class="c1">#         return self</span>
 
-<div class="viewcode-block" id="XAspectIter.__next__"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.XAspectIter.__next__">[docs]</a>    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill</span><span class="p">()</span>
+<span class="c1">#     def __next__(self):</span>
+<span class="c1">#         if len(self._items) == 0:</span>
+<span class="c1">#             self._items = self._fill()</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">StopIteration</span>
+<span class="c1">#         if len(self._items) == 0:</span>
+<span class="c1">#             raise StopIteration</span>
 
-        <span class="n">el</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Aspect</span><span class="p">(</span><span class="n">el</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="p">,</span> <span class="n">el</span><span class="p">)</span></div>
+<span class="c1">#         el = self._items.pop(0)</span>
+<span class="c1">#         return Aspect(el.id, self._ivcap, el)</span>
 
-<div class="viewcode-block" id="XAspectIter._fill"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.XAspectIter._fill">[docs]</a>    <span class="k">def</span> <span class="nf">_fill</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span>  <span class="n">List</span><span class="p">[</span><span class="n">AspectListItemRT</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_links</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_links</span><span class="o">.</span><span class="n">next</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">[]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">set_page</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_links</span><span class="o">.</span><span class="n">next</span><span class="p">)</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span> <span class="p">:</span>
-            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s1">&#39;artifact_list&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-        <span class="n">l</span><span class="p">:</span> <span class="n">ListMetaRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_links</span> <span class="o">=</span> <span class="n">Links</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">links</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">items</span></div></div>
+<span class="c1">#     def _fill(self) -&gt;  List[AspectListItemRT]:</span>
+<span class="c1">#         if self._links:</span>
+<span class="c1">#             if not self._links.next:</span>
+<span class="c1">#                 return []</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 self._kwargs[&#39;page&#39;] = set_page(self._links.next)</span>
+<span class="c1">#         r = aspect_list.sync_detailed(**self._kwargs)</span>
+<span class="c1">#         if r.status_code &gt;= 300 :</span>
+<span class="c1">#             return process_error(&#39;artifact_list&#39;, r)</span>
+<span class="c1">#         l: ListMetaRT = r.parsed</span>
+<span class="c1">#         self._links = Links(l.links)</span>
+<span class="c1">#         return l.items</span>
 
 <div class="viewcode-block" id="AspectIter"><a class="viewcode-back" href="../../autoapi/ivcap_client/aspect/index.html#ivcap_client.aspect.AspectIter">[docs]</a><span class="k">class</span> <span class="nc">AspectIter</span><span class="p">(</span><span class="n">BaseIter</span><span class="p">[</span><span class="n">Aspect</span><span class="p">,</span> <span class="n">AspectListItemRT</span><span class="p">]):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="s1">&#39;IVCAP&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

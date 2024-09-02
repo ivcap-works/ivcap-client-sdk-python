@@ -177,7 +177,7 @@ Attributes
       :rtype: aspect
 
 
-   .. py:method:: list_aspect(*, entity: Optional[str] = None, schema: Optional[str] = None, content_path: Optional[str] = None, at_time: Optional[datetime.datetime.datetime] = None, limit: Optional[int] = 10, filter: Optional[str] = None, order_by: Optional[str] = 'valid_from', order_direction: Optional[str] = 'DESC', include_content: Optional[bool] = True) -> Iterator[ivcap_client.aspect.Aspect]
+   .. py:method:: list_aspects(*, entity: Optional[str] = None, schema: Optional[str] = None, content_path: Optional[str] = None, at_time: Optional[datetime.datetime.datetime] = None, limit: Optional[int] = 10, filter: Optional[str] = None, order_by: Optional[str] = 'valid_from', order_direction: Optional[str] = 'DESC', include_content: Optional[bool] = True) -> Iterator[ivcap_client.aspect.Aspect]
 
       Return an iterator over all the aspect records fulfilling certain constraints.
 
@@ -310,6 +310,22 @@ Attributes
 
       :returns: Returns an Artifact instance if artifact exists
       :rtype: Artifact
+
+
+   .. py:method:: search(query)
+
+      Execute query provided in body and return a list of search result.
+
+      :param at_time: Return search which where valid at that time
+                      [now] Example: 1996-12-19T16:39:57-08:00.
+      :type at_time: datetime.datetime
+      :param limit: The number of items to be included in the result. Default: 10. Example: 10.
+      :type limit: int
+
+      :raises errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+      :raises httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+      :returns: Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]
 
 
    .. py:method:: __repr__()

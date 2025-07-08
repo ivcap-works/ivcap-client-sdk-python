@@ -117,7 +117,7 @@ def sync_detailed(
         entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
         schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://upton.com/troy.
+            http://corkery.name/randy_wiegand.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         body (File): Aspect content Example: {"$schema": ...}.
@@ -167,7 +167,7 @@ def sync(
         entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
         schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://upton.com/troy.
+            http://corkery.name/randy_wiegand.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         body (File): Aspect content Example: {"$schema": ...}.
@@ -212,7 +212,7 @@ async def asyncio_detailed(
         entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
         schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://upton.com/troy.
+            http://corkery.name/randy_wiegand.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         body (File): Aspect content Example: {"$schema": ...}.
@@ -260,7 +260,7 @@ async def asyncio(
         entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
         schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://upton.com/troy.
+            http://corkery.name/randy_wiegand.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
         body (File): Aspect content Example: {"$schema": ...}.

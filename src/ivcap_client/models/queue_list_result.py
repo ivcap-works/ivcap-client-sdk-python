@@ -22,11 +22,9 @@ class QueueListResult:
             'https://api.ivcap.net/1/queues/...', 'id': 'urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000', 'name':
             'events'}, {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'description': 'Events for the
             event service', 'href': 'https://api.ivcap.net/1/queues/...', 'id':
-            'urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000', 'name': 'events'}, {'account':
-            'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'description': 'Events for the event service', 'href':
-            'https://api.ivcap.net/1/queues/...', 'id': 'urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000', 'name':
-            'events'}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'},
-            {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
+            'urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000', 'name': 'events'}], 'links': [{'href':
+            'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}]}

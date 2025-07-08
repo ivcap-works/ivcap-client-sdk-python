@@ -105,23 +105,25 @@ def sync_detailed(
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Cum nobis natus..
-        force_create (Union[Unset, bool]): Create if not already exist Example: True.
-        body (ServiceDefinitionT):  Example: {'banner': 'http://ondricka.info/maci',
+        id (str): ID of services to update Example: Omnis neque et sit omnis iste..
+        force_create (Union[Unset, bool]): Create if not already exist
+        body (ServiceDefinitionT):  Example: {'banner': 'http://hillshilll.net/jamal_mcdermott',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
             'threshold', 'type': 'float', 'unit': 'm'}], 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}], 'tags':
-            ['tag1', 'tag2'], 'workflow': {'argo': 'Alias ab amet accusamus assumenda nobis.',
-            'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request':
-            '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-
-            type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Atque exercitationem
-            nobis perspiciatis voluptate quia nihil.', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}}.
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title':
+            'Eligendi perspiciatis fugiat repudiandae mollitia aliquam labore.', 'uri':
+            'http://buckridge.name/eve'}, {'title': 'Eligendi perspiciatis fugiat repudiandae mollitia
+            aliquam labore.', 'uri': 'http://buckridge.name/eve'}, {'title': 'Eligendi perspiciatis
+            fugiat repudiandae mollitia aliquam labore.', 'uri': 'http://buckridge.name/eve'},
+            {'title': 'Eligendi perspiciatis fugiat repudiandae mollitia aliquam labore.', 'uri':
+            'http://buckridge.name/eve'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Qui aut
+            quod est maiores recusandae.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'],
+            'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi',
+            'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-tesla-t4', 'image': 'alpine',
+            'image-pull-policy': 'Illo voluptate.', 'memory': {'limit': '100Mi', 'request': '10Mi'},
+            'shared-memory': '1Gi'}, 'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -156,23 +158,25 @@ def sync(
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Cum nobis natus..
-        force_create (Union[Unset, bool]): Create if not already exist Example: True.
-        body (ServiceDefinitionT):  Example: {'banner': 'http://ondricka.info/maci',
+        id (str): ID of services to update Example: Omnis neque et sit omnis iste..
+        force_create (Union[Unset, bool]): Create if not already exist
+        body (ServiceDefinitionT):  Example: {'banner': 'http://hillshilll.net/jamal_mcdermott',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
             'threshold', 'type': 'float', 'unit': 'm'}], 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}], 'tags':
-            ['tag1', 'tag2'], 'workflow': {'argo': 'Alias ab amet accusamus assumenda nobis.',
-            'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request':
-            '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-
-            type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Atque exercitationem
-            nobis perspiciatis voluptate quia nihil.', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}}.
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title':
+            'Eligendi perspiciatis fugiat repudiandae mollitia aliquam labore.', 'uri':
+            'http://buckridge.name/eve'}, {'title': 'Eligendi perspiciatis fugiat repudiandae mollitia
+            aliquam labore.', 'uri': 'http://buckridge.name/eve'}, {'title': 'Eligendi perspiciatis
+            fugiat repudiandae mollitia aliquam labore.', 'uri': 'http://buckridge.name/eve'},
+            {'title': 'Eligendi perspiciatis fugiat repudiandae mollitia aliquam labore.', 'uri':
+            'http://buckridge.name/eve'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Qui aut
+            quod est maiores recusandae.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'],
+            'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi',
+            'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-tesla-t4', 'image': 'alpine',
+            'image-pull-policy': 'Illo voluptate.', 'memory': {'limit': '100Mi', 'request': '10Mi'},
+            'shared-memory': '1Gi'}, 'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -202,23 +206,25 @@ async def asyncio_detailed(
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Cum nobis natus..
-        force_create (Union[Unset, bool]): Create if not already exist Example: True.
-        body (ServiceDefinitionT):  Example: {'banner': 'http://ondricka.info/maci',
+        id (str): ID of services to update Example: Omnis neque et sit omnis iste..
+        force_create (Union[Unset, bool]): Create if not already exist
+        body (ServiceDefinitionT):  Example: {'banner': 'http://hillshilll.net/jamal_mcdermott',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
             'threshold', 'type': 'float', 'unit': 'm'}], 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}], 'tags':
-            ['tag1', 'tag2'], 'workflow': {'argo': 'Alias ab amet accusamus assumenda nobis.',
-            'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request':
-            '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-
-            type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Atque exercitationem
-            nobis perspiciatis voluptate quia nihil.', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}}.
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title':
+            'Eligendi perspiciatis fugiat repudiandae mollitia aliquam labore.', 'uri':
+            'http://buckridge.name/eve'}, {'title': 'Eligendi perspiciatis fugiat repudiandae mollitia
+            aliquam labore.', 'uri': 'http://buckridge.name/eve'}, {'title': 'Eligendi perspiciatis
+            fugiat repudiandae mollitia aliquam labore.', 'uri': 'http://buckridge.name/eve'},
+            {'title': 'Eligendi perspiciatis fugiat repudiandae mollitia aliquam labore.', 'uri':
+            'http://buckridge.name/eve'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Qui aut
+            quod est maiores recusandae.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'],
+            'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi',
+            'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-tesla-t4', 'image': 'alpine',
+            'image-pull-policy': 'Illo voluptate.', 'memory': {'limit': '100Mi', 'request': '10Mi'},
+            'shared-memory': '1Gi'}, 'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -251,23 +257,25 @@ async def asyncio(
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Cum nobis natus..
-        force_create (Union[Unset, bool]): Create if not already exist Example: True.
-        body (ServiceDefinitionT):  Example: {'banner': 'http://ondricka.info/maci',
+        id (str): ID of services to update Example: Omnis neque et sit omnis iste..
+        force_create (Union[Unset, bool]): Create if not already exist
+        body (ServiceDefinitionT):  Example: {'banner': 'http://hillshilll.net/jamal_mcdermott',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
             'threshold', 'type': 'float', 'unit': 'm'}], 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}, {'title': 'Autem
-            corporis omnis ullam ipsum.', 'uri': 'http://smitham.net/adela.koelpin'}], 'tags':
-            ['tag1', 'tag2'], 'workflow': {'argo': 'Alias ab amet accusamus assumenda nobis.',
-            'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request':
-            '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-
-            type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Atque exercitationem
-            nobis perspiciatis voluptate quia nihil.', 'memory': {'limit': '100Mi', 'request':
-            '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}}.
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title':
+            'Eligendi perspiciatis fugiat repudiandae mollitia aliquam labore.', 'uri':
+            'http://buckridge.name/eve'}, {'title': 'Eligendi perspiciatis fugiat repudiandae mollitia
+            aliquam labore.', 'uri': 'http://buckridge.name/eve'}, {'title': 'Eligendi perspiciatis
+            fugiat repudiandae mollitia aliquam labore.', 'uri': 'http://buckridge.name/eve'},
+            {'title': 'Eligendi perspiciatis fugiat repudiandae mollitia aliquam labore.', 'uri':
+            'http://buckridge.name/eve'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Qui aut
+            quod est maiores recusandae.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'],
+            'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi',
+            'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-tesla-t4', 'image': 'alpine',
+            'image-pull-policy': 'Illo voluptate.', 'memory': {'limit': '100Mi', 'request': '10Mi'},
+            'shared-memory': '1Gi'}, 'type': 'basic'}}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

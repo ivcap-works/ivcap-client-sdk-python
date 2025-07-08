@@ -1,57 +1,56 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, List, Type, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
-T = TypeVar("T", bound="ParameterOptT")
+T = TypeVar("T", bound="PushStatusT")
 
 
 @_attrs_define
-class ParameterOptT:
+class PushStatusT:
     """
     Example:
-        {'description': 'Asperiores ipsa labore.', 'value': 'Vel vero.'}
+        {'message': 'Iure facere excepturi voluptatem provident.', 'status': 'Voluptatum nihil optio sit.'}
 
     Attributes:
-        description (Union[Unset, str]):  Example: Harum vitae eum dolor deserunt quas ut..
-        value (Union[Unset, str]):  Example: Neque animi inventore officiis repellendus ipsum..
+        message (str): Message Example: Neque sapiente commodi dolorem..
+        status (str): Push status Example: Reprehenderit voluptate nostrum quibusdam quia..
     """
 
-    description: Union[Unset, str] = UNSET
-    value: Union[Unset, str] = UNSET
+    message: str
+    status: str
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        description = self.description
+        message = self.message
 
-        value = self.value
+        status = self.status
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
-        if description is not UNSET:
-            field_dict["description"] = description
-        if value is not UNSET:
-            field_dict["value"] = value
+        field_dict.update(
+            {
+                "message": message,
+                "status": status,
+            }
+        )
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        description = d.pop("description", UNSET)
+        message = d.pop("message")
 
-        value = d.pop("value", UNSET)
+        status = d.pop("status")
 
-        parameter_opt_t = cls(
-            description=description,
-            value=value,
+        push_status_t = cls(
+            message=message,
+            status=status,
         )
 
-        parameter_opt_t.additional_properties = d
-        return parameter_opt_t
+        push_status_t.additional_properties = d
+        return push_status_t
 
     @property
     def additional_keys(self) -> List[str]:

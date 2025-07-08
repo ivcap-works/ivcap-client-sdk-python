@@ -82,7 +82,7 @@ class BaseIter(ABC, Generic[T, L]):
         self._ivcap = ivcap
         self._kwargs = kwargs
         self._links = None # init navigation
-        self._remaining = kwargs.get("limit")
+        self._remaining = kwargs.get("limit") if not isinstance(kwargs.get("limit"), Unset) else None
         self._items = self._fill()
 
     def __iter__(self):
@@ -99,7 +99,7 @@ class BaseIter(ABC, Generic[T, L]):
             raise StopIteration
 
         el = self._items.pop(0)
-        self._remaining -= 1
+        if self._remaining: self._remaining -= 1
         return self._next_el(el)
 
     def _fill(self) ->  List[L]:
@@ -108,7 +108,8 @@ class BaseIter(ABC, Generic[T, L]):
                 return []
             else:
                 self._kwargs['page'] = set_page(self._links.next)
-        if self._remaining: self._kwargs['limit'] = self._remaining
+        limit = self._remaining if self._remaining and self._remaining <= 50 else 50
+        self._kwargs['limit'] = limit
         return self._get_list()
 
     @abstractmethod

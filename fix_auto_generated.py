@@ -32,11 +32,41 @@ for root, dir, files in os.walk(api_dir):
         newn = f"{root}/{svc}_{el[len(svc):]}"
         fix_file(orig, newn, fix_api)
 
+def fix_model(name, fix_f):
+    f = f"{model_dir}/{name}.py"
+    tmp_f = f"{model_dir}/{name}2.py"
+    fix_file(f, tmp_f, fix_f)
+    os.rename(tmp_f, f)
+
 # search_list_rt.py
 def fix_search(line):
     return line.replace("items_item = File(payload=BytesIO(items_item_data))", "items_item = items_item_data")
 
-search_f = f"{model_dir}/search_list_rt.py"
-tmp_f = f"{model_dir}/search_list_rt2.py"
-fix_file(search_f, tmp_f, fix_search)
-os.rename(tmp_f, search_f)
+fix_model("search_list_rt", fix_search)
+# search_f = f"{model_dir}/search_list_rt.py"
+# tmp_f = f"{model_dir}/search_list_rt2.py"
+# fix_file(search_f, tmp_f, fix_search)
+# os.rename(tmp_f, search_f)
+
+# service_status_rt.py
+def fix_controller(line):
+    line = line.replace('controller = File(payload=BytesIO(d.pop("controller")))', 'controller = d.pop("controller")')
+    return line.replace('controller = self.controller.to_tuple()', 'controller = self.controller')
+
+fix_model("service_status_rt", fix_controller)
+
+def fix_job_status(line):
+    line = line.replace('request_content: Union[Unset, File]', 'request_content: Union[Unset, Any]')
+    line = line.replace('request_content = File(payload=BytesIO(_request_content))', 'request_content = _request_content')
+
+    line = line.replace('result_content: Union[Unset, File]', 'result_content: Union[Unset, Any]')
+    line = line.replace('result_content = File(payload=BytesIO(_result_content))', 'result_content = _result_content')
+
+    line = line.replace('request_content: Union[Unset, FileJsonType] = UNSET', 'request_content: Union[Unset, Any] = UNSET')
+    line = line.replace('request_content = self.request_content.to_tuple()', 'request_content = self.request_content')
+
+    line = line.replace('result_content: Union[Unset, FileJsonType] = UNSET', 'result_content: Union[Unset, Any] = UNSET'
+    line = line.replace('result_content = self.result_content.to_tuple()', 'result_content = self.result_content')
+    return line
+
+fix_model("job_status_rt", fix_job_status)

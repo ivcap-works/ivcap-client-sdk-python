@@ -8,16 +8,14 @@ authors = ["Max Ott <max.ott@csiro.au>",
 
 readme = "README.md"
 
-include = ["CHANGELOG.md", "src/ivcap_sdk_client/py.typed"]
+include = ["CHANGELOG.md", "ivcap_sdk_client/py.typed"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<4.0"
 httpx = ">=0.15.4,<0.24.0"
 attrs = ">=21.3.0"
 python-dateutil = "^2.8.0"
 tuspy = ">=1.0.0"
-
-[tool.poetry.dev-dependencies]
 
 [tool.poetry.group.dev.dependencies]
 openapi-python-client = ">=0.15.0"
@@ -29,6 +27,7 @@ autoapi = "^2.0.1"
 sphinx-autoapi = "^2.0.0"
 sphinx-rtd-theme = "^1.0.0"
 licenseheaders = "^0.8.8"
+mypy = "^1.16.0"
 
 [tool.semantic_release]
 version_variable = "pyproject.toml:version" # version location

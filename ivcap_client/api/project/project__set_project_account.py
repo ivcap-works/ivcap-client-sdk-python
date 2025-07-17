@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, Dict, Optional, Union, cast
 
 import httpx
 
@@ -16,54 +16,51 @@ from ...types import Response
 def _get_kwargs(
     project_urn: str,
     *,
-    body: AccountResult,
-) -> dict[str, Any]:
-    headers: dict[str, Any] = {}
+    json_body: AccountResult,
+) -> Dict[str, Any]:
+    pass
 
-    _kwargs: dict[str, Any] = {
+    json_json_body = json_body.to_dict()
+
+    return {
         "method": "put",
-        "url": f"/1/project/{project_urn}/account",
+        "url": "/1/project/{project_urn}/account".format(
+            project_urn=project_urn,
+        ),
+        "json": json_json_body,
     }
-
-    _body = body.to_dict()
-
-    _kwargs["json"] = _body
-    headers["Content-Type"] = "application/json"
-
-    _kwargs["headers"] = headers
-    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
-    if response.status_code == 204:
+    if response.status_code == HTTPStatus.NO_CONTENT:
         response_204 = cast(Any, None)
         return response_204
-    if response.status_code == 400:
+    if response.status_code == HTTPStatus.BAD_REQUEST:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == 401:
+    if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == 403:
+    if response.status_code == HTTPStatus.FORBIDDEN:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == 404:
+    if response.status_code == HTTPStatus.NOT_FOUND:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
-    if response.status_code == 422:
+    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == 501:
+    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == 503:
+    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -87,7 +84,7 @@ def sync_detailed(
     project_urn: str,
     *,
     client: AuthenticatedClient,
-    body: AccountResult,
+    json_body: AccountResult,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """Set Project's Billing Account
 
@@ -96,7 +93,7 @@ def sync_detailed(
     Args:
         project_urn (str): Project URN Example:
             urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        body (AccountResult):  Example: {'account_urn': 'Eius voluptatem.'}.
+        json_body (AccountResult):  Example: {'account_urn': 'Eius voluptatem.'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -108,7 +105,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         project_urn=project_urn,
-        body=body,
+        json_body=json_body,
     )
 
     response = client.get_httpx_client().request(
@@ -122,7 +119,7 @@ def sync(
     project_urn: str,
     *,
     client: AuthenticatedClient,
-    body: AccountResult,
+    json_body: AccountResult,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """Set Project's Billing Account
 
@@ -131,7 +128,7 @@ def sync(
     Args:
         project_urn (str): Project URN Example:
             urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        body (AccountResult):  Example: {'account_urn': 'Eius voluptatem.'}.
+        json_body (AccountResult):  Example: {'account_urn': 'Eius voluptatem.'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -144,7 +141,7 @@ def sync(
     return sync_detailed(
         project_urn=project_urn,
         client=client,
-        body=body,
+        json_body=json_body,
     ).parsed
 
 
@@ -152,7 +149,7 @@ async def asyncio_detailed(
     project_urn: str,
     *,
     client: AuthenticatedClient,
-    body: AccountResult,
+    json_body: AccountResult,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """Set Project's Billing Account
 
@@ -161,7 +158,7 @@ async def asyncio_detailed(
     Args:
         project_urn (str): Project URN Example:
             urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        body (AccountResult):  Example: {'account_urn': 'Eius voluptatem.'}.
+        json_body (AccountResult):  Example: {'account_urn': 'Eius voluptatem.'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -173,7 +170,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         project_urn=project_urn,
-        body=body,
+        json_body=json_body,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -185,7 +182,7 @@ async def asyncio(
     project_urn: str,
     *,
     client: AuthenticatedClient,
-    body: AccountResult,
+    json_body: AccountResult,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """Set Project's Billing Account
 
@@ -194,7 +191,7 @@ async def asyncio(
     Args:
         project_urn (str): Project URN Example:
             urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        body (AccountResult):  Example: {'account_urn': 'Eius voluptatem.'}.
+        json_body (AccountResult):  Example: {'account_urn': 'Eius voluptatem.'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -208,6 +205,6 @@ async def asyncio(
         await asyncio_detailed(
             project_urn=project_urn,
             client=client,
-            body=body,
+            json_body=json_body,
         )
     ).parsed

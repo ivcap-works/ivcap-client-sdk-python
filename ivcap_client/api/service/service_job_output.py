@@ -1,6 +1,6 @@
 from http import HTTPStatus
 from io import BytesIO
-from typing import Any, Optional, Union, cast
+from typing import Any, Dict, Optional, Union, cast
 
 import httpx
 
@@ -16,54 +16,57 @@ from ...types import File, Response
 def _get_kwargs(
     service_id: str,
     job_id: str,
-) -> dict[str, Any]:
-    _kwargs: dict[str, Any] = {
-        "method": "get",
-        "url": f"/1/services2/{service_id}/jobs/{job_id}/output",
-    }
+) -> Dict[str, Any]:
+    pass
 
-    return _kwargs
+    return {
+        "method": "get",
+        "url": "/1/services2/{service_id}/jobs/{job_id}/output".format(
+            service_id=service_id,
+            job_id=job_id,
+        ),
+    }
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
-    if response.status_code == 200:
+    if response.status_code == HTTPStatus.OK:
         response_200 = File(payload=BytesIO(response.json()))
 
         return response_200
-    if response.status_code == 204:
+    if response.status_code == HTTPStatus.NO_CONTENT:
         response_204 = cast(Any, None)
         return response_204
-    if response.status_code == 400:
+    if response.status_code == HTTPStatus.BAD_REQUEST:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == 401:
+    if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = File(payload=BytesIO(response.json()))
 
         return response_401
-    if response.status_code == 403:
+    if response.status_code == HTTPStatus.FORBIDDEN:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == 404:
+    if response.status_code == HTTPStatus.NOT_FOUND:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
-    if response.status_code == 422:
+    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == 500:
+    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
         response_500 = BadRequestT.from_dict(response.json())
 
         return response_500
-    if response.status_code == 501:
+    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == 503:
+    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
         response_503 = File(payload=BytesIO(response.json()))
 
         return response_503

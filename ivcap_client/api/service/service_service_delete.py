@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, Dict, Optional, Union, cast
 
 import httpx
 
@@ -12,37 +12,39 @@ from ...types import Response
 
 def _get_kwargs(
     id: str,
-) -> dict[str, Any]:
-    _kwargs: dict[str, Any] = {
-        "method": "delete",
-        "url": f"/1/services2/{id}",
-    }
+) -> Dict[str, Any]:
+    pass
 
-    return _kwargs
+    return {
+        "method": "delete",
+        "url": "/1/services2/{id}".format(
+            id=id,
+        ),
+    }
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidScopesT]]:
-    if response.status_code == 204:
+    if response.status_code == HTTPStatus.NO_CONTENT:
         response_204 = cast(Any, None)
         return response_204
-    if response.status_code == 400:
+    if response.status_code == HTTPStatus.BAD_REQUEST:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == 401:
+    if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == 403:
+    if response.status_code == HTTPStatus.FORBIDDEN:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == 501:
+    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == 503:
+    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:

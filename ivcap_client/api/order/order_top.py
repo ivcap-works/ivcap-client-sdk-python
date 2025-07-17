@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, Dict, List, Optional, Union, cast
 
 import httpx
 
@@ -15,21 +15,23 @@ from ...types import Response
 
 def _get_kwargs(
     order_id: str,
-) -> dict[str, Any]:
-    _kwargs: dict[str, Any] = {
-        "method": "get",
-        "url": f"/1/orders/{order_id}/top",
-    }
+) -> Dict[str, Any]:
+    pass
 
-    return _kwargs
+    return {
+        "method": "get",
+        "url": "/1/orders/{orderID}/top".format(
+            orderID=order_id,
+        ),
+    }
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, List["OrderTopResultItem"], ResourceNotFoundT]
 ]:
-    if response.status_code == 200:
+    if response.status_code == HTTPStatus.OK:
         response_200 = []
         _response_200 = response.json()
         for componentsschemas_order_top_result_item_collection_item_data in _response_200:
@@ -40,30 +42,30 @@ def _parse_response(
             response_200.append(componentsschemas_order_top_result_item_collection_item)
 
         return response_200
-    if response.status_code == 400:
+    if response.status_code == HTTPStatus.BAD_REQUEST:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == 401:
+    if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == 403:
+    if response.status_code == HTTPStatus.FORBIDDEN:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == 404:
+    if response.status_code == HTTPStatus.NOT_FOUND:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
-    if response.status_code == 422:
+    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == 501:
+    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == 503:
+    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -75,7 +77,7 @@ def _parse_response(
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, List["OrderTopResultItem"], ResourceNotFoundT]
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -90,7 +92,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, List["OrderTopResultItem"], ResourceNotFoundT]
 ]:
     """top order
 
@@ -105,7 +107,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list['OrderTopResultItem']]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, List['OrderTopResultItem'], ResourceNotFoundT]]
     """
 
     kwargs = _get_kwargs(
@@ -124,7 +126,7 @@ def sync(
     *,
     client: AuthenticatedClient,
 ) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, List["OrderTopResultItem"], ResourceNotFoundT]
 ]:
     """top order
 
@@ -139,7 +141,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list['OrderTopResultItem']]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, List['OrderTopResultItem'], ResourceNotFoundT]
     """
 
     return sync_detailed(
@@ -153,7 +155,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, List["OrderTopResultItem"], ResourceNotFoundT]
 ]:
     """top order
 
@@ -168,7 +170,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list['OrderTopResultItem']]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, List['OrderTopResultItem'], ResourceNotFoundT]]
     """
 
     kwargs = _get_kwargs(
@@ -185,7 +187,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
 ) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, List["OrderTopResultItem"], ResourceNotFoundT]
 ]:
     """top order
 
@@ -200,7 +202,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list['OrderTopResultItem']]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, List['OrderTopResultItem'], ResourceNotFoundT]
     """
 
     return (

@@ -65,7 +65,7 @@ def fix_job_status(line):
     line = line.replace('request_content: Union[Unset, FileJsonType] = UNSET', 'request_content: Union[Unset, Any] = UNSET')
     line = line.replace('request_content = self.request_content.to_tuple()', 'request_content = self.request_content')
 
-    line = line.replace('result_content: Union[Unset, FileJsonType] = UNSET', 'result_content: Union[Unset, Any] = UNSET'
+    line = line.replace('result_content: Union[Unset, FileJsonType] = UNSET', 'result_content: Union[Unset, Any] = UNSET')
     line = line.replace('result_content = self.result_content.to_tuple()', 'result_content = self.result_content')
     return line
 

@@ -1,5 +1,4 @@
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -33,22 +32,19 @@ class MetadataListItemRT:
     schema: str
     aspect: Union[Unset, "MetadataListItemRTAspect"] = UNSET
     aspect_context: Union[Unset, str] = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         entity = self.entity
-
         id = self.id
-
         schema = self.schema
-
-        aspect: Union[Unset, dict[str, Any]] = UNSET
+        aspect: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.aspect, Unset):
             aspect = self.aspect.to_dict()
 
         aspect_context = self.aspect_context
 
-        field_dict: dict[str, Any] = {}
+        field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -65,10 +61,10 @@ class MetadataListItemRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.metadata_list_item_rt_aspect import MetadataListItemRTAspect
 
-        d = dict(src_dict)
+        d = src_dict.copy()
         entity = d.pop("entity")
 
         id = d.pop("id")
@@ -96,7 +92,7 @@ class MetadataListItemRT:
         return metadata_list_item_rt
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

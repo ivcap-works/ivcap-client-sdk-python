@@ -1,4 +1,5 @@
-from _common import ivcap, pp
+from pathlib import Path
+from _common import create_log_file, ivcap, pp
 from time import sleep, time
 import csv
 
@@ -21,16 +22,14 @@ pp.pprint(req_model)
 passreq = req_model(**req)
 pp.pprint(passreq)
 
-count = 10
+count = 1
 jobs = []
 for i in range(count):
     job = svc.request_job(passreq)
     print(f"{i:03}: Created job '{job.id}'")
     jobs.append(job)
 
-log_file = f"exp-{int(time())}.csv"
-print(f"... using log file '{job.id}'")
-with open(f"exp-{int(time())}.csv", "w", newline="") as csvfile:
+with open(create_log_file("find-unique-gene"), "w", newline="") as csvfile:
     w = csv.writer(csvfile)
 
     start_time = time()

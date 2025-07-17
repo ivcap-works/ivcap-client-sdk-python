@@ -6,7 +6,7 @@
 from __future__ import annotations # postpone evaluation of annotations
 from typing import TYPE_CHECKING, Dict, List, Optional, List, Optional, Dict
 
-from ivcap_client.excpetions import MissingParameterValue
+from ivcap_client.exception import MissingParameterValue
 
 if TYPE_CHECKING:
     from ivcap_client.ivcap import IVCAP, URN

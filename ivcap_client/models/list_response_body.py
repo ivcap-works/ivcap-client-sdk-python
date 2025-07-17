@@ -1,5 +1,4 @@
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -23,28 +22,29 @@ class ListResponseBody:
             'application/openapi3+json'}]}
 
     Attributes:
-        items (list[str]): docker image tags Example: ['Repellendus eum.', 'Autem qui maxime hic soluta quis.',
+        items (List[str]): docker image tags Example: ['Repellendus eum.', 'Autem qui maxime hic soluta quis.',
             'Dignissimos impedit accusamus aut sint et.', 'Molestias expedita ea recusandae rerum dolor eum.'].
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}].
     """
 
-    items: list[str]
-    links: list["LinkT"]
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    items: List[str]
+    links: List["LinkT"]
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         items = self.items
 
         links = []
         for links_item_data in self.links:
             links_item = links_item_data.to_dict()
+
             links.append(links_item)
 
-        field_dict: dict[str, Any] = {}
+        field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -56,11 +56,11 @@ class ListResponseBody:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.link_t import LinkT
 
-        d = dict(src_dict)
-        items = cast(list[str], d.pop("items"))
+        d = src_dict.copy()
+        items = cast(List[str], d.pop("items"))
 
         links = []
         _links = d.pop("links")
@@ -78,7 +78,7 @@ class ListResponseBody:
         return list_response_body
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

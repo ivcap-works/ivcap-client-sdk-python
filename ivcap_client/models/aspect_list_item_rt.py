@@ -1,6 +1,5 @@
 import datetime
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -40,20 +39,16 @@ class AspectListItemRT:
     valid_from: datetime.datetime
     content: Union[Unset, "AspectListItemRTContent"] = UNSET
     valid_to: Union[Unset, datetime.datetime] = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         content_type = self.content_type
-
         entity = self.entity
-
         id = self.id
-
         schema = self.schema
-
         valid_from = self.valid_from.isoformat()
 
-        content: Union[Unset, dict[str, Any]] = UNSET
+        content: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.content, Unset):
             content = self.content.to_dict()
 
@@ -61,7 +56,7 @@ class AspectListItemRT:
         if not isinstance(self.valid_to, Unset):
             valid_to = self.valid_to.isoformat()
 
-        field_dict: dict[str, Any] = {}
+        field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -80,10 +75,10 @@ class AspectListItemRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.aspect_list_item_rt_content import AspectListItemRTContent
 
-        d = dict(src_dict)
+        d = src_dict.copy()
         content_type = d.pop("content-type")
 
         entity = d.pop("entity")
@@ -122,7 +117,7 @@ class AspectListItemRT:
         return aspect_list_item_rt
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

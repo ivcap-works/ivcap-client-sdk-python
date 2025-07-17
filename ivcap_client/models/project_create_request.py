@@ -1,5 +1,4 @@
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -34,20 +33,17 @@ class ProjectCreateRequest:
     account_urn: Union[Unset, str] = UNSET
     parent_project_urn: Union[Unset, str] = UNSET
     properties: Union[Unset, "ProjectProperties"] = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         name = self.name
-
         account_urn = self.account_urn
-
         parent_project_urn = self.parent_project_urn
-
-        properties: Union[Unset, dict[str, Any]] = UNSET
+        properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
 
-        field_dict: dict[str, Any] = {}
+        field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -64,10 +60,10 @@ class ProjectCreateRequest:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.project_properties import ProjectProperties
 
-        d = dict(src_dict)
+        d = src_dict.copy()
         name = d.pop("name")
 
         account_urn = d.pop("account_urn", UNSET)
@@ -92,7 +88,7 @@ class ProjectCreateRequest:
         return project_create_request
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

@@ -19,7 +19,7 @@ from ivcap_client.artifact import Artifact, ArtifactIter, check_file_already_upl
 from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
 from ivcap_client.client.client import AuthenticatedClient
-from ivcap_client.excpetions import AmbiguousRequest, ResourceNotFound
+from ivcap_client.exception import AmbiguousRequest, ResourceNotFound
 from ivcap_client.order import Order, OrderIter
 from ivcap_client.secret import Secret, SecretIter
 from ivcap_client.service import Service, ServiceIter
@@ -466,25 +466,6 @@ class IVCAP:
         return Artifact(self, id=id).refresh()
 
     #### SECRETS
-
-    def set_secret(self,
-                     name: str,
-                     value: Any,
-                ) -> Secret:
-        """Add an 'aspect' to an 'entity'. The 'schema' of the aspect, if not defined
-        is expected to found in the 'aspect' under the '$schema' key.
-
-        Args:
-            entity (str): URN of the entity to attach the aspect to
-            aspect (dict): The aspect to be attached
-            schema (Optional[str], optional): Schema of the aspect. Defaults to 'aspect["$schema"]'.
-            policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
-
-        Returns:
-            aspect: The created aspect record
-        """
-        s = Secret(self, ) _add_update_aspect(self, False, entity, aspect, schema=schema, policy=policy)
-
 
     def list_secrets(self,
             *,

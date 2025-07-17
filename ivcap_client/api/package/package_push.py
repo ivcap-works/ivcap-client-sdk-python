@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, Dict, Optional, Union, cast
 
 import httpx
 
@@ -17,21 +17,23 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     tag: str,
-    force: Union[Unset, bool] = UNSET,
-    type_: PackagepushType,
+    force: Union[Unset, None, bool] = UNSET,
+    type: PackagepushType,
     digest: str,
-    total: Union[Unset, int] = UNSET,
-    start: Union[Unset, int] = UNSET,
-    end: Union[Unset, int] = UNSET,
-) -> dict[str, Any]:
-    params: dict[str, Any] = {}
+    total: Union[Unset, None, int] = UNSET,
+    start: Union[Unset, None, int] = UNSET,
+    end: Union[Unset, None, int] = UNSET,
+) -> Dict[str, Any]:
+    pass
 
+    params: Dict[str, Any] = {}
     params["tag"] = tag
 
     params["force"] = force
 
-    json_type_ = type_.value
-    params["type"] = json_type_
+    json_type = type.value
+
+    params["type"] = json_type
 
     params["digest"] = digest
 
@@ -43,46 +45,44 @@ def _get_kwargs(
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    _kwargs: dict[str, Any] = {
+    return {
         "method": "post",
         "url": "/1/packages/push",
         "params": params,
     }
 
-    return _kwargs
-
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PushResponseBody, ResourceNotFoundT]]:
-    if response.status_code == 201:
+    if response.status_code == HTTPStatus.CREATED:
         response_201 = PushResponseBody.from_dict(response.json())
 
         return response_201
-    if response.status_code == 400:
+    if response.status_code == HTTPStatus.BAD_REQUEST:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == 401:
+    if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == 403:
+    if response.status_code == HTTPStatus.FORBIDDEN:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == 409:
+    if response.status_code == HTTPStatus.CONFLICT:
         response_409 = ResourceNotFoundT.from_dict(response.json())
 
         return response_409
-    if response.status_code == 422:
+    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == 501:
+    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == 503:
+    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -106,12 +106,12 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     tag: str,
-    force: Union[Unset, bool] = UNSET,
-    type_: PackagepushType,
+    force: Union[Unset, None, bool] = UNSET,
+    type: PackagepushType,
     digest: str,
-    total: Union[Unset, int] = UNSET,
-    start: Union[Unset, int] = UNSET,
-    end: Union[Unset, int] = UNSET,
+    total: Union[Unset, None, int] = UNSET,
+    start: Union[Unset, None, int] = UNSET,
+    end: Union[Unset, None, int] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PushResponseBody, ResourceNotFoundT]]:
     """push package
 
@@ -119,13 +119,13 @@ def sync_detailed(
 
     Args:
         tag (str): docker image tag Example: test_app:1.0.1.
-        force (Union[Unset, bool]): force to override Example: True.
-        type_ (PackagepushType): push type, either be manifest, config or layer Example: layer.
+        force (Union[Unset, None, bool]): force to override Example: True.
+        type (PackagepushType): push type, either be manifest, config or layer Example: layer.
         digest (str): digest of the push Example:
             sha:209820a1b307ce3ab81b7f2a944224159259b580eb94e96ab30fc4683f5b96a1.
-        total (Union[Unset, int]): total size of the layer Example: 102403457.
-        start (Union[Unset, int]): start of the layer chunk
-        end (Union[Unset, int]): end of the layer chunk Example: 10240.
+        total (Union[Unset, None, int]): total size of the layer Example: 102403457.
+        start (Union[Unset, None, int]): start of the layer chunk
+        end (Union[Unset, None, int]): end of the layer chunk Example: 10240.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -138,7 +138,7 @@ def sync_detailed(
     kwargs = _get_kwargs(
         tag=tag,
         force=force,
-        type_=type_,
+        type=type,
         digest=digest,
         total=total,
         start=start,
@@ -156,12 +156,12 @@ def sync(
     *,
     client: AuthenticatedClient,
     tag: str,
-    force: Union[Unset, bool] = UNSET,
-    type_: PackagepushType,
+    force: Union[Unset, None, bool] = UNSET,
+    type: PackagepushType,
     digest: str,
-    total: Union[Unset, int] = UNSET,
-    start: Union[Unset, int] = UNSET,
-    end: Union[Unset, int] = UNSET,
+    total: Union[Unset, None, int] = UNSET,
+    start: Union[Unset, None, int] = UNSET,
+    end: Union[Unset, None, int] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PushResponseBody, ResourceNotFoundT]]:
     """push package
 
@@ -169,13 +169,13 @@ def sync(
 
     Args:
         tag (str): docker image tag Example: test_app:1.0.1.
-        force (Union[Unset, bool]): force to override Example: True.
-        type_ (PackagepushType): push type, either be manifest, config or layer Example: layer.
+        force (Union[Unset, None, bool]): force to override Example: True.
+        type (PackagepushType): push type, either be manifest, config or layer Example: layer.
         digest (str): digest of the push Example:
             sha:209820a1b307ce3ab81b7f2a944224159259b580eb94e96ab30fc4683f5b96a1.
-        total (Union[Unset, int]): total size of the layer Example: 102403457.
-        start (Union[Unset, int]): start of the layer chunk
-        end (Union[Unset, int]): end of the layer chunk Example: 10240.
+        total (Union[Unset, None, int]): total size of the layer Example: 102403457.
+        start (Union[Unset, None, int]): start of the layer chunk
+        end (Union[Unset, None, int]): end of the layer chunk Example: 10240.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -189,7 +189,7 @@ def sync(
         client=client,
         tag=tag,
         force=force,
-        type_=type_,
+        type=type,
         digest=digest,
         total=total,
         start=start,
@@ -201,12 +201,12 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     tag: str,
-    force: Union[Unset, bool] = UNSET,
-    type_: PackagepushType,
+    force: Union[Unset, None, bool] = UNSET,
+    type: PackagepushType,
     digest: str,
-    total: Union[Unset, int] = UNSET,
-    start: Union[Unset, int] = UNSET,
-    end: Union[Unset, int] = UNSET,
+    total: Union[Unset, None, int] = UNSET,
+    start: Union[Unset, None, int] = UNSET,
+    end: Union[Unset, None, int] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PushResponseBody, ResourceNotFoundT]]:
     """push package
 
@@ -214,13 +214,13 @@ async def asyncio_detailed(
 
     Args:
         tag (str): docker image tag Example: test_app:1.0.1.
-        force (Union[Unset, bool]): force to override Example: True.
-        type_ (PackagepushType): push type, either be manifest, config or layer Example: layer.
+        force (Union[Unset, None, bool]): force to override Example: True.
+        type (PackagepushType): push type, either be manifest, config or layer Example: layer.
         digest (str): digest of the push Example:
             sha:209820a1b307ce3ab81b7f2a944224159259b580eb94e96ab30fc4683f5b96a1.
-        total (Union[Unset, int]): total size of the layer Example: 102403457.
-        start (Union[Unset, int]): start of the layer chunk
-        end (Union[Unset, int]): end of the layer chunk Example: 10240.
+        total (Union[Unset, None, int]): total size of the layer Example: 102403457.
+        start (Union[Unset, None, int]): start of the layer chunk
+        end (Union[Unset, None, int]): end of the layer chunk Example: 10240.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -233,7 +233,7 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         tag=tag,
         force=force,
-        type_=type_,
+        type=type,
         digest=digest,
         total=total,
         start=start,
@@ -249,12 +249,12 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     tag: str,
-    force: Union[Unset, bool] = UNSET,
-    type_: PackagepushType,
+    force: Union[Unset, None, bool] = UNSET,
+    type: PackagepushType,
     digest: str,
-    total: Union[Unset, int] = UNSET,
-    start: Union[Unset, int] = UNSET,
-    end: Union[Unset, int] = UNSET,
+    total: Union[Unset, None, int] = UNSET,
+    start: Union[Unset, None, int] = UNSET,
+    end: Union[Unset, None, int] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PushResponseBody, ResourceNotFoundT]]:
     """push package
 
@@ -262,13 +262,13 @@ async def asyncio(
 
     Args:
         tag (str): docker image tag Example: test_app:1.0.1.
-        force (Union[Unset, bool]): force to override Example: True.
-        type_ (PackagepushType): push type, either be manifest, config or layer Example: layer.
+        force (Union[Unset, None, bool]): force to override Example: True.
+        type (PackagepushType): push type, either be manifest, config or layer Example: layer.
         digest (str): digest of the push Example:
             sha:209820a1b307ce3ab81b7f2a944224159259b580eb94e96ab30fc4683f5b96a1.
-        total (Union[Unset, int]): total size of the layer Example: 102403457.
-        start (Union[Unset, int]): start of the layer chunk
-        end (Union[Unset, int]): end of the layer chunk Example: 10240.
+        total (Union[Unset, None, int]): total size of the layer Example: 102403457.
+        start (Union[Unset, None, int]): start of the layer chunk
+        end (Union[Unset, None, int]): end of the layer chunk Example: 10240.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -283,7 +283,7 @@ async def asyncio(
             client=client,
             tag=tag,
             force=force,
-            type_=type_,
+            type=type,
             digest=digest,
             total=total,
             start=start,

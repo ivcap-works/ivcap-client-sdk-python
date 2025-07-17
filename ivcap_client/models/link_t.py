@@ -1,5 +1,4 @@
-from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, Dict, List, Type, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,53 +15,51 @@ class LinkT:
     Attributes:
         href (str): web link Example: https://acme.com/...
         rel (str): relation type Example: self, describedBy, next, first.
-        type_ (str): mime type Example: application/json.
+        type (str): mime type Example: application/json.
     """
 
     href: str
     rel: str
-    type_: str
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    type: str
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         href = self.href
-
         rel = self.rel
+        type = self.type
 
-        type_ = self.type_
-
-        field_dict: dict[str, Any] = {}
+        field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "href": href,
                 "rel": rel,
-                "type": type_,
+                "type": type,
             }
         )
 
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        d = dict(src_dict)
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        d = src_dict.copy()
         href = d.pop("href")
 
         rel = d.pop("rel")
 
-        type_ = d.pop("type")
+        type = d.pop("type")
 
         link_t = cls(
             href=href,
             rel=rel,
-            type_=type_,
+            type=type,
         )
 
         link_t.additional_properties = d
         return link_t
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

@@ -17,17 +17,17 @@ test:
 	poetry run pytest ${ROOT_DIR}/tests/ --cov=ivcap_sdk_client --cov-report=xml
 
 
-SRC_DIR=${ROOT_DIR}/src/ivcap_client
+SRC_DIR=${ROOT_DIR}/ivcap_client
 OPENAPI_URL=https://raw.githubusercontent.com/ivcap-works/ivcap-core-api/develop/openapi3.json
 gen:
-	@if ! type "openapi-python-client" > /dev/null; then \
+	@if ! poetry run type "openapi-python-client" > /dev/null; then \
 		echo ">>>\n>>> You need to first install 'openapi-python-client'\n>>>"; \
 		exit -1; \
 	fi
 	rm -rf ${ROOT_DIR}/build && mkdir -p ${ROOT_DIR}/build
 	cd ${ROOT_DIR}/build \
 	  && curl ${OPENAPI_URL} > openapi3.json \
-		&& openapi-python-client generate --path openapi3.json --config ${ROOT_DIR}/config.yml \
+		&& poetry run openapi-python-client generate --path openapi3.json --config ${ROOT_DIR}/config.yml \
 		&& poetry run python ${ROOT_DIR}/fix_auto_generated.py \
 		&& cd sdk_client/ivcap_client && mkdir client && mv *.py client \
 		&& cd ${ROOT_DIR}

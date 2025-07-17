@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, Dict, Optional, Union, cast
 
 import httpx
 
@@ -15,50 +15,51 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     id: str,
     *,
-    limit: Union[Unset, int] = UNSET,
-) -> dict[str, Any]:
-    params: dict[str, Any] = {}
+    limit: Union[Unset, None, int] = UNSET,
+) -> Dict[str, Any]:
+    pass
 
+    params: Dict[str, Any] = {}
     params["limit"] = limit
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    _kwargs: dict[str, Any] = {
+    return {
         "method": "get",
-        "url": f"/1/queues/{id}/messages",
+        "url": "/1/queues/{id}/messages".format(
+            id=id,
+        ),
         "params": params,
     }
-
-    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MessageList]]:
-    if response.status_code == 200:
+    if response.status_code == HTTPStatus.OK:
         response_200 = MessageList.from_dict(response.json())
 
         return response_200
-    if response.status_code == 400:
+    if response.status_code == HTTPStatus.BAD_REQUEST:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == 401:
+    if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == 403:
+    if response.status_code == HTTPStatus.FORBIDDEN:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == 422:
+    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == 501:
+    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == 503:
+    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -82,7 +83,7 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MessageList]]:
     """dequeue queue
 
@@ -90,7 +91,7 @@ def sync_detailed(
 
     Args:
         id (str): queue Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
-        limit (Union[Unset, int]): Maximum number of messages to dequeue Example: 3.
+        limit (Union[Unset, None, int]): Maximum number of messages to dequeue Example: 3.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -116,7 +117,7 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MessageList]]:
     """dequeue queue
 
@@ -124,7 +125,7 @@ def sync(
 
     Args:
         id (str): queue Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
-        limit (Union[Unset, int]): Maximum number of messages to dequeue Example: 3.
+        limit (Union[Unset, None, int]): Maximum number of messages to dequeue Example: 3.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -145,7 +146,7 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MessageList]]:
     """dequeue queue
 
@@ -153,7 +154,7 @@ async def asyncio_detailed(
 
     Args:
         id (str): queue Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
-        limit (Union[Unset, int]): Maximum number of messages to dequeue Example: 3.
+        limit (Union[Unset, None, int]): Maximum number of messages to dequeue Example: 3.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -177,7 +178,7 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, int] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MessageList]]:
     """dequeue queue
 
@@ -185,7 +186,7 @@ async def asyncio(
 
     Args:
         id (str): queue Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
-        limit (Union[Unset, int]): Maximum number of messages to dequeue Example: 3.
+        limit (Union[Unset, None, int]): Maximum number of messages to dequeue Example: 3.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

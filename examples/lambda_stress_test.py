@@ -1,4 +1,4 @@
-from _common import ivcap, pp
+from _common import create_log_file, ivcap, pp
 from time import sleep, time
 import csv
 
@@ -35,9 +35,7 @@ for i in range(count):
     print(f"{i:03}: Created job '{job.id}'")
     jobs.append(job)
 
-log_file = f"metric/lambda-stress-{int(time())}.csv"
-print(f"... using log file '{log_file}'")
-with open(log_file, "w", newline="") as csvfile:
+with open(create_log_file("lambda-stress"), "w", newline="") as csvfile:
     w = csv.writer(csvfile)
 
     start_time = time()

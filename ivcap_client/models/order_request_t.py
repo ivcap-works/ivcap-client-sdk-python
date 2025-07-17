@@ -1,5 +1,4 @@
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,39 +21,37 @@ class OrderRequestT:
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'tags': ['tag1', 'tag2']}
 
     Attributes:
-        parameters (list['ParameterT']): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
+        parameters (List['ParameterT']): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
             {'name': 'threshold', 'value': '10'}].
         service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
         policy (Union[Unset, str]): Reference to policy used Example:
             urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
-        tags (Union[Unset, list[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
+        tags (Union[Unset, List[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
     """
 
-    parameters: list["ParameterT"]
+    parameters: List["ParameterT"]
     service: str
     name: Union[Unset, str] = UNSET
     policy: Union[Unset, str] = UNSET
-    tags: Union[Unset, list[str]] = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    tags: Union[Unset, List[str]] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         parameters = []
         for parameters_item_data in self.parameters:
             parameters_item = parameters_item_data.to_dict()
+
             parameters.append(parameters_item)
 
         service = self.service
-
         name = self.name
-
         policy = self.policy
-
-        tags: Union[Unset, list[str]] = UNSET
+        tags: Union[Unset, List[str]] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
-        field_dict: dict[str, Any] = {}
+        field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -72,10 +69,10 @@ class OrderRequestT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.parameter_t import ParameterT
 
-        d = dict(src_dict)
+        d = src_dict.copy()
         parameters = []
         _parameters = d.pop("parameters")
         for parameters_item_data in _parameters:
@@ -89,7 +86,7 @@ class OrderRequestT:
 
         policy = d.pop("policy", UNSET)
 
-        tags = cast(list[str], d.pop("tags", UNSET))
+        tags = cast(List[str], d.pop("tags", UNSET))
 
         order_request_t = cls(
             parameters=parameters,
@@ -103,7 +100,7 @@ class OrderRequestT:
         return order_request_t
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

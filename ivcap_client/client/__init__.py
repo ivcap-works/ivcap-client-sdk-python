@@ -1,5 +1,4 @@
-"""A client library for accessing IVCAP"""
-
+""" A client library for accessing IVCAP """
 from .client import AuthenticatedClient, Client
 
 __all__ = (

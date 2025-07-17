@@ -1,5 +1,4 @@
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,29 +20,31 @@ class PartialMetaListT:
             1234963}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'next'}]}
 
     Attributes:
-        items (list['OrderMetadataListItemRT']): (Partial) list of metadata associated with this order Example: [{'data-
+        items (List['OrderMetadataListItemRT']): (Partial) list of metadata associated with this order Example: [{'data-
             href': 'https:/.../1/artifacts/0000-00001220/blob', 'href': 'https:/.../1/artifacts/0000-00001220', 'mime-type':
             'image/geo+tiff', 'name': 'fire risk map', 'size': 1234963}].
-        links (list['LinkT']): Links to more metadata, if there are any Example: [{'href':
+        links (List['LinkT']): Links to more metadata, if there are any Example: [{'href':
             'https://api.ivcap.net/1/....', 'rel': 'next'}].
     """
 
-    items: list["OrderMetadataListItemRT"]
-    links: list["LinkT"]
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    items: List["OrderMetadataListItemRT"]
+    links: List["LinkT"]
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         items = []
         for items_item_data in self.items:
             items_item = items_item_data.to_dict()
+
             items.append(items_item)
 
         links = []
         for links_item_data in self.links:
             links_item = links_item_data.to_dict()
+
             links.append(links_item)
 
-        field_dict: dict[str, Any] = {}
+        field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -55,11 +56,11 @@ class PartialMetaListT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.order_metadata_list_item_rt import OrderMetadataListItemRT
 
-        d = dict(src_dict)
+        d = src_dict.copy()
         items = []
         _items = d.pop("items")
         for items_item_data in _items:
@@ -83,7 +84,7 @@ class PartialMetaListT:
         return partial_meta_list_t
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

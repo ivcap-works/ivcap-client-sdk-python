@@ -1,5 +1,4 @@
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -34,7 +33,7 @@ class XServiceDefinitionT:
 
     Attributes:
         description (str): More detailed description of the service Example: This service ....
-        parameters (list['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
+        parameters (List['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
             region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
             'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}].
         workflow (XWorkflowT): Defines the workflow to use to execute this service. Currently supported 'types' are
@@ -50,51 +49,49 @@ class XServiceDefinitionT:
         name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
         policy (Union[Unset, str]): Reference to policy used Example:
             urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
-        references (Union[Unset, list['XReferenceT']]): Reference to account revenues for this service should be
+        references (Union[Unset, List['XReferenceT']]): Reference to account revenues for this service should be
             credited to Example: [{'title': 'Assumenda sit.', 'uri': 'http://stoltenberg.name/aletha.howell'}, {'title':
             'Assumenda sit.', 'uri': 'http://stoltenberg.name/aletha.howell'}, {'title': 'Assumenda sit.', 'uri':
             'http://stoltenberg.name/aletha.howell'}].
-        tags (Union[Unset, list[str]]): Optional provider provided tags Example: ['tag1', 'tag2'].
+        tags (Union[Unset, List[str]]): Optional provider provided tags Example: ['tag1', 'tag2'].
     """
 
     description: str
-    parameters: list["ParameterDefT"]
+    parameters: List["ParameterDefT"]
     workflow: "XWorkflowT"
     banner: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
     policy: Union[Unset, str] = UNSET
-    references: Union[Unset, list["XReferenceT"]] = UNSET
-    tags: Union[Unset, list[str]] = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    references: Union[Unset, List["XReferenceT"]] = UNSET
+    tags: Union[Unset, List[str]] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         description = self.description
-
         parameters = []
         for parameters_item_data in self.parameters:
             parameters_item = parameters_item_data.to_dict()
+
             parameters.append(parameters_item)
 
         workflow = self.workflow.to_dict()
 
         banner = self.banner
-
         name = self.name
-
         policy = self.policy
-
-        references: Union[Unset, list[dict[str, Any]]] = UNSET
+        references: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.references, Unset):
             references = []
             for references_item_data in self.references:
                 references_item = references_item_data.to_dict()
+
                 references.append(references_item)
 
-        tags: Union[Unset, list[str]] = UNSET
+        tags: Union[Unset, List[str]] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
-        field_dict: dict[str, Any] = {}
+        field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -117,12 +114,12 @@ class XServiceDefinitionT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.parameter_def_t import ParameterDefT
         from ..models.x_reference_t import XReferenceT
         from ..models.x_workflow_t import XWorkflowT
 
-        d = dict(src_dict)
+        d = src_dict.copy()
         description = d.pop("description")
 
         parameters = []
@@ -147,7 +144,7 @@ class XServiceDefinitionT:
 
             references.append(references_item)
 
-        tags = cast(list[str], d.pop("tags", UNSET))
+        tags = cast(List[str], d.pop("tags", UNSET))
 
         x_service_definition_t = cls(
             description=description,
@@ -164,7 +161,7 @@ class XServiceDefinitionT:
         return x_service_definition_t
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

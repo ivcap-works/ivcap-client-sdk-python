@@ -1,6 +1,5 @@
 import datetime
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -44,13 +43,11 @@ class ProjectStatusRT:
     parent: Union[Unset, str] = UNSET
     properties: Union[Unset, "ProjectProperties"] = UNSET
     status: Union[Unset, ProjectStatusRTStatus] = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         urn = self.urn
-
         account = self.account
-
         created_at: Union[Unset, str] = UNSET
         if not isinstance(self.created_at, Unset):
             created_at = self.created_at.isoformat()
@@ -60,10 +57,8 @@ class ProjectStatusRT:
             modified_at = self.modified_at.isoformat()
 
         name = self.name
-
         parent = self.parent
-
-        properties: Union[Unset, dict[str, Any]] = UNSET
+        properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
 
@@ -71,7 +66,7 @@ class ProjectStatusRT:
         if not isinstance(self.status, Unset):
             status = self.status.value
 
-        field_dict: dict[str, Any] = {}
+        field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -96,10 +91,10 @@ class ProjectStatusRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.project_properties import ProjectProperties
 
-        d = dict(src_dict)
+        d = src_dict.copy()
         urn = d.pop("urn")
 
         account = d.pop("account", UNSET)
@@ -151,7 +146,7 @@ class ProjectStatusRT:
         return project_status_rt
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

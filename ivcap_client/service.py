@@ -201,7 +201,7 @@ class ServiceParameter:
 
     def __init__(self, p: ParameterDefT):
         self.name = p.name
-        self.type = PType(p.type_)
+        self.type = PType(p.type)
         self.description = p.description
         self.label = _unset(p.label)
         self.unit = _unset(p.unit)

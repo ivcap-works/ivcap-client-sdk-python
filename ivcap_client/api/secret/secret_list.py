@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, Dict, Optional, Union, cast
 
 import httpx
 
@@ -14,13 +14,14 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    page: Union[Unset, str] = UNSET,
-    filter_: Union[Unset, str] = UNSET,
-    offset: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = UNSET,
-) -> dict[str, Any]:
-    params: dict[str, Any] = {}
+    page: Union[Unset, None, str] = UNSET,
+    filter_: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, str] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
+) -> Dict[str, Any]:
+    pass
 
+    params: Dict[str, Any] = {}
     params["page"] = page
 
     params["filter"] = filter_
@@ -31,42 +32,40 @@ def _get_kwargs(
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    _kwargs: dict[str, Any] = {
+    return {
         "method": "get",
         "url": "/1/secrets/list",
         "params": params,
     }
 
-    return _kwargs
-
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]:
-    if response.status_code == 200:
+    if response.status_code == HTTPStatus.OK:
         response_200 = ListResponseBody2.from_dict(response.json())
 
         return response_200
-    if response.status_code == 400:
+    if response.status_code == HTTPStatus.BAD_REQUEST:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == 401:
+    if response.status_code == HTTPStatus.UNAUTHORIZED:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == 403:
+    if response.status_code == HTTPStatus.FORBIDDEN:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == 422:
+    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == 501:
+    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == 503:
+    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -89,20 +88,20 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    page: Union[Unset, str] = UNSET,
-    filter_: Union[Unset, str] = UNSET,
-    offset: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = UNSET,
+    page: Union[Unset, None, str] = UNSET,
+    filter_: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, str] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]:
     """list secret
 
      list secrets under account
 
     Args:
-        page (Union[Unset, str]): page url to list Example: https://.
-        filter_ (Union[Unset, str]): filter of name pattern Example: test.*.
-        offset (Union[Unset, str]): offset token of secrets Example: 10.
-        limit (Union[Unset, int]): maximum number of secrets Example: 10.
+        page (Union[Unset, None, str]): page url to list Example: https://.
+        filter_ (Union[Unset, None, str]): filter of name pattern Example: test.*.
+        offset (Union[Unset, None, str]): offset token of secrets Example: 10.
+        limit (Union[Unset, None, int]): maximum number of secrets Example: 10.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -129,20 +128,20 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    page: Union[Unset, str] = UNSET,
-    filter_: Union[Unset, str] = UNSET,
-    offset: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = UNSET,
+    page: Union[Unset, None, str] = UNSET,
+    filter_: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, str] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]:
     """list secret
 
      list secrets under account
 
     Args:
-        page (Union[Unset, str]): page url to list Example: https://.
-        filter_ (Union[Unset, str]): filter of name pattern Example: test.*.
-        offset (Union[Unset, str]): offset token of secrets Example: 10.
-        limit (Union[Unset, int]): maximum number of secrets Example: 10.
+        page (Union[Unset, None, str]): page url to list Example: https://.
+        filter_ (Union[Unset, None, str]): filter of name pattern Example: test.*.
+        offset (Union[Unset, None, str]): offset token of secrets Example: 10.
+        limit (Union[Unset, None, int]): maximum number of secrets Example: 10.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -164,20 +163,20 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    page: Union[Unset, str] = UNSET,
-    filter_: Union[Unset, str] = UNSET,
-    offset: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = UNSET,
+    page: Union[Unset, None, str] = UNSET,
+    filter_: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, str] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]:
     """list secret
 
      list secrets under account
 
     Args:
-        page (Union[Unset, str]): page url to list Example: https://.
-        filter_ (Union[Unset, str]): filter of name pattern Example: test.*.
-        offset (Union[Unset, str]): offset token of secrets Example: 10.
-        limit (Union[Unset, int]): maximum number of secrets Example: 10.
+        page (Union[Unset, None, str]): page url to list Example: https://.
+        filter_ (Union[Unset, None, str]): filter of name pattern Example: test.*.
+        offset (Union[Unset, None, str]): offset token of secrets Example: 10.
+        limit (Union[Unset, None, int]): maximum number of secrets Example: 10.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -202,20 +201,20 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    page: Union[Unset, str] = UNSET,
-    filter_: Union[Unset, str] = UNSET,
-    offset: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = UNSET,
+    page: Union[Unset, None, str] = UNSET,
+    filter_: Union[Unset, None, str] = UNSET,
+    offset: Union[Unset, None, str] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]:
     """list secret
 
      list secrets under account
 
     Args:
-        page (Union[Unset, str]): page url to list Example: https://.
-        filter_ (Union[Unset, str]): filter of name pattern Example: test.*.
-        offset (Union[Unset, str]): offset token of secrets Example: 10.
-        limit (Union[Unset, int]): maximum number of secrets Example: 10.
+        page (Union[Unset, None, str]): page url to list Example: https://.
+        filter_ (Union[Unset, None, str]): filter of name pattern Example: test.*.
+        offset (Union[Unset, None, str]): offset token of secrets Example: 10.
+        limit (Union[Unset, None, int]): maximum number of secrets Example: 10.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

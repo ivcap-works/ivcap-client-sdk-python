@@ -4,7 +4,7 @@
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
 from __future__ import annotations # postpone evaluation of annotations
-from typing import TYPE_CHECKING, Dict, List, Optional, Any, List, Optional, Dict, Set
+from typing import TYPE_CHECKING, Dict, List, Optional, List, Optional, Dict
 
 from ivcap_client.excpetions import MissingParameterValue
 
@@ -13,18 +13,15 @@ if TYPE_CHECKING:
 
 import types
 import datetime
-from dataclasses import dataclass, field
-from enum import Enum
+from dataclasses import dataclass
 
-import json
 from ivcap_client.api.aspect import aspect_create, aspect_list, aspect_read, aspect_retract, aspect_update
 from ivcap_client.models.list_meta_rt import ListMetaRT
 from ivcap_client.models.aspect_list_item_rt import AspectListItemRT
 from ivcap_client.models.aspect_rt import AspectRT
 from ivcap_client.models.aspect_idrt import AspectIDRT
 
-from ivcap_client.utils import BaseIter, Links, _set_fields, process_error, set_page
-from ivcap_client.types import UNSET
+from ivcap_client.utils import BaseIter, Links, _set_fields, process_error
 
 @dataclass
 class Aspect:

@@ -6,27 +6,24 @@
 
 from __future__ import annotations # postpone evaluation of annotations
 from datetime import datetime
-import types
 import os
-from typing import IO, Dict, Iterator, Optional, Union
+from typing import IO, Any, Dict, Iterator, Optional
 from tusclient.client import TusClient
 from sys import maxsize as MAXSIZE
 import mimetypes
 import base64
 
 from ivcap_client.api.artifact import artifact_upload
-from ivcap_client.api.aspect import aspect_create
 from ivcap_client.api.search import search_search
 from ivcap_client.artifact import Artifact, ArtifactIter, check_file_already_uploaded, mark_file_already_uploaded
 from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
 from ivcap_client.client.client import AuthenticatedClient
-from ivcap_client.excpetions import AmbiguousRequest, MissingParameterValue, ResourceNotFound
-from ivcap_client.models.add_meta_rt import AddMetaRT
-from ivcap_client.models.aspect_list_item_rt import AspectListItemRT
+from ivcap_client.excpetions import AmbiguousRequest, ResourceNotFound
 from ivcap_client.order import Order, OrderIter
+from ivcap_client.secret import Secret, SecretIter
 from ivcap_client.service import Service, ServiceIter
-from ivcap_client.types import UNSET, File, Unset
+from ivcap_client.types import UNSET, File
 from ivcap_client.utils import _wrap, process_error
 
 URN = str
@@ -467,6 +464,58 @@ class IVCAP:
             Artifact: Returns an Artifact instance if artifact exists
         """
         return Artifact(self, id=id).refresh()
+
+    #### SECRETS
+
+    def set_secret(self,
+                     name: str,
+                     value: Any,
+                ) -> Secret:
+        """Add an 'aspect' to an 'entity'. The 'schema' of the aspect, if not defined
+        is expected to found in the 'aspect' under the '$schema' key.
+
+        Args:
+            entity (str): URN of the entity to attach the aspect to
+            aspect (dict): The aspect to be attached
+            schema (Optional[str], optional): Schema of the aspect. Defaults to 'aspect["$schema"]'.
+            policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
+
+        Returns:
+            aspect: The created aspect record
+        """
+        s = Secret(self, ) _add_update_aspect(self, False, entity, aspect, schema=schema, policy=policy)
+
+
+    def list_secrets(self,
+            *,
+            filter: Optional[str] = None,
+            limit: Optional[int] = 10,
+            order_by: Optional[str] = None,
+            order_desc: Optional[bool] = False,
+            at_time: Optional[datetime.datetime] = UNSET,
+    ) -> Iterator[Secret]:
+        """Return an iterator over all the available secrets fulfilling certain constraints.
+
+        Args:
+            limit (Optional[int]): The 'limit' query option sets the maximum number of items
+                                    to be included in the result. Default: 10. Example: 10.
+            filter_ (Optional[str]): The 'filter' system query option allows clients to filter a
+                collection of resources that are addressed by a request URL. The expression specified with 'filter'
+                                            is evaluated for each resource in the collection, and only items where the expression
+                                            evaluates to true are included in the response. Example: name ~= 'Scott%'.
+
+        Returns:
+            Iterator[Secret]: An iterator over a list of secrets
+
+        Yields:
+            Secret: A secret object
+        """
+        kwargs = {
+            "filter_": _wrap(filter),
+            "limit": _wrap(limit),
+            "client": self._client,
+        }
+        return SecretIter(self, **kwargs)
 
     #### SEARCH
 

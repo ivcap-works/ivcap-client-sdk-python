@@ -4,7 +4,7 @@
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
 from __future__ import annotations # postpone evaluation of annotations
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from ivcap_client.service import Service
 from ivcap_client.types import Response
@@ -15,15 +15,11 @@ import datetime
 from dataclasses import dataclass
 from datetime import datetime
 
-
-from ivcap_client.api.service import service_job_list, service_job_read
-from ivcap_client.aspect import Aspect
+from ivcap_client.api.service import service_job_read
 from ivcap_client.models.job_list_item import JobListItem
 from ivcap_client.models.job_list_rt import JobListRT
-from ivcap_client.models.job_status_rt_status import JobStatusRTStatus
-from ivcap_client.models.job_status_rt import JobStatusRT
 from ivcap_client.models.parameter_t import ParameterT
-from ivcap_client.utils import BaseIter, Links, _set_fields, _unset, process_error, set_page
+from ivcap_client.utils import BaseIter, Links, _set_fields, _unset, process_error
 
 from enum import Enum
 
@@ -65,8 +61,16 @@ class Job:
         return cls(ivcap, **kwargs)
 
     @classmethod
-    def from_create_order_response(cls, response: Response, service: Service):
-        if response.status_code == 202:
+    def from_create_job_response(cls, response: Response, service: Service):
+        if response.status_code == 200:
+            kwargs = {
+                "id": response.headers.get("ivcap-job-id"),
+                "service": service,
+                "result-content": response.json(),
+                "result-content-type": response.headers.get("content-type")
+            }
+            return cls(service._ivcap, **kwargs)
+        elif response.status_code == 202:
             j = response.json()
             id = j.get("job-id")
             return cls(service._ivcap, id=id, service=service)
@@ -113,6 +117,12 @@ class Job:
     @property
     def service(self) -> Service:
         return self._service
+
+    @property
+    def result(self):
+        if self._result_content == None:
+            self.refresh()
+        return self._result_content
 
     def refresh(self) -> Job:
         if self.finished:

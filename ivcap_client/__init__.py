@@ -19,6 +19,7 @@ from .ivcap import IVCAP, URN
 from .service import Service
 from .order import Order
 from .artifact import Artifact
+from .secret import Secret
 # from .metadata import Metadata
 
 # __all__ = (

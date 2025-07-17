@@ -18,7 +18,7 @@ from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
 from ivcap_client.models.artifact_list_item import ArtifactListItem
 from ivcap_client.models.artifact_status_rt_status import ArtifactStatusRTStatus
 
-from ivcap_client.utils import BaseIter, Links, _set_fields, process_error, set_page
+from ivcap_client.utils import BaseIter, Links, _set_fields, process_error
 from ivcap_client.aspect import Aspect
 
 @dataclass

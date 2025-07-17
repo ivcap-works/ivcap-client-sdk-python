@@ -1,0 +1,100 @@
+{
+  "$defs": {
+    "CallTester": {
+      "properties": {
+        "data": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional JSON payload to be sent in the request body (for POST/PUT).",
+          "title": "Data"
+        },
+        "headers": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional dictionary of headers to include in the request.",
+          "title": "Headers"
+        },
+        "method": {
+          "description": "The HTTP method to use (GET, POST, PUT, DELETE, etc.).",
+          "pattern": "^(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)$",
+          "title": "Method",
+          "type": "string"
+        },
+        "params": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional dictionary of query parameters to be appended to the URL.",
+          "title": "Params"
+        },
+        "timeout": {
+          "default": 5,
+          "description": "The timeout duration for the request in seconds.",
+          "minimum": 1,
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "url": {
+          "description": "The full URL of the API endpoint.",
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "method",
+        "url"
+      ],
+      "title": "CallTester",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "$schema": {
+      "default": "urn:sd:schema:ai-tester.request.1",
+      "title": "$Schema",
+      "type": "string"
+    },
+    "call": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CallTester"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optionally call a service"
+    }
+  },
+  "title": "Request",
+  "type": "object"
+}

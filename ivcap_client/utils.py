@@ -128,16 +128,31 @@ class BaseIter(ABC, Generic[T, L]):
     def _get_list(self) -> List[L]:
         pass
 
-def model_from_json_schema(schema: dict, model_name: str = "DynamicModel") -> type[BaseModel]:
-    """Generate a pydantic model from a json schema definition.
+def model_from_json_schema(schema: dict, model_name: str = "DynamicModel", root_schema: dict = None) -> type[BaseModel]:
+    """Generate a pydantic model from a json schema definition, with $ref/$defs support."""
 
-        This may not be completely generic and somewhat tested with the 'creating' method
-        in ivcap-service's `_generate_function_description`
-    """
     from pydantic import create_model
     from enum import Enum
 
+    if root_schema is None:
+        root_schema = schema
+
+    def resolve_ref(ref: str):
+        # Only supports local refs like "#/$defs/Name"
+        if not ref.startswith("#/"):
+            raise NotImplementedError(f"Only local refs are supported, got: {ref}")
+        parts = ref.lstrip("#/").split("/")
+        obj = root_schema
+        for part in parts:
+            obj = obj[part]
+        return obj
+
     def parse_type(details, prop_name=None, parent_name=""):
+        # Handle $ref
+        if "$ref" in details:
+            ref_schema = resolve_ref(details["$ref"])
+            return parse_type(ref_schema, prop_name, parent_name)
+
         # Handle enums
         if "enum" in details:
             enum_name = f"{parent_name}_{prop_name}_Enum" if prop_name else "Enum"
@@ -151,11 +166,16 @@ def model_from_json_schema(schema: dict, model_name: str = "DynamicModel") -> ty
             types = []
             has_null = False
             for v in variants:
-                t = v.get("type")
-                if t == "null":
-                    has_null = True
+                # $ref or type
+                if "$ref" in v:
+                    t = parse_type(v, prop_name, parent_name)
                 else:
-                    types.append(parse_type(v, prop_name, parent_name))
+                    t = v.get("type")
+                    if t == "null":
+                        has_null = True
+                        continue
+                    t = parse_type(v, prop_name, parent_name)
+                types.append(t)
             if has_null:
                 if len(types) == 1:
                     return Optional[types[0]]
@@ -177,7 +197,7 @@ def model_from_json_schema(schema: dict, model_name: str = "DynamicModel") -> ty
         if details.get("type") == "object":
             # Recursively create nested model
             nested_model_name = f"{parent_name}_{prop_name}_Model" if prop_name else "NestedModel"
-            nested_model = model_from_json_schema(details, nested_model_name)
+            nested_model = model_from_json_schema(details, nested_model_name, root_schema)
             return nested_model
 
         # Handle primitive types

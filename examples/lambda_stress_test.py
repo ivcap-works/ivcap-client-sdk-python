@@ -4,32 +4,38 @@ import csv
 
 from ivcap_client.job import JobStatus
 
+# req = {
+#   "$schema": "urn:sd:schema:ai-tester.request.1",
+#   "call": {
+#     "method": "GET",
+#     "url": "http://ivcap.local/1/services2"
+#   }
+# }
+
 req = {
-    "duration_seconds": 6,
-    "target_cpu_percent": 90,
-    "throw_exception_at_end": False,
-    "create_oom_error_at_end": False,
+  "$schema": "urn:sd:schema:ai-tester.request.1",
+  "wordle": {
+    "-maxattempts": 2,
+    "thinking_time": 1
+  }
 }
 
-#svc = ivcap.get_service_by_name("Batch service example")
-svc = ivcap.get_service("urn:ivcap:service:3678e5f1-8fb7-5ad6-b65b-8bd8c23c0948")
+svc = ivcap.get_service("urn:ivcap:service:3165bf7f-5851-5c32-bbf5-3d89c476368e")
 pp.pprint(svc)
 req_model = svc.request_model
-pp.pprint(req_model)
 passreq = req_model(**req)
 pp.pprint(passreq)
 
-count = 1
+count = 100
 interval = 3
 jobs = []
 max_time = 15 + count * interval
 for i in range(count):
-    passreq.duration_seconds = max_time - i * interval
-    job = svc.request_job(passreq)
+    job = svc.request_job(passreq, timeout=0)
     print(f"{i:03}: Created job '{job.id}'")
     jobs.append(job)
 
-log_file = f"metric/batch-stress-{int(time())}.csv"
+log_file = f"metric/lambda-stress-{int(time())}.csv"
 print(f"... using log file '{log_file}'")
 with open(log_file, "w", newline="") as csvfile:
     w = csv.writer(csvfile)

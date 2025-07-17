@@ -17,10 +17,9 @@ from ivcap_client.api.order import order_list, order_read
 from ivcap_client.aspect import Aspect
 from ivcap_client.models.order_list_item import OrderListItem
 from ivcap_client.models.order_list_rt import OrderListRT
-from ivcap_client.models.order_status_rt_status import OrderStatusRTStatus
 from ivcap_client.models.order_status_rt import OrderStatusRT
 from ivcap_client.models.parameter_t import ParameterT
-from ivcap_client.utils import BaseIter, Links, _set_fields, _unset, process_error, set_page
+from ivcap_client.utils import BaseIter, Links, _set_fields, _unset, process_error
 
 @dataclass
 class Order:

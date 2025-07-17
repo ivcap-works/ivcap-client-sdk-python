@@ -18,20 +18,15 @@ import datetime
 from dataclasses import asdict, dataclass, field, is_dataclass
 from enum import Enum
 
-from ivcap_client.api.order import order_create
 from ivcap_client.api.service import service_service_list, service_service_read
 
-from ivcap_client.models.order_request_t import OrderRequestT
-from ivcap_client.models.order_status_rt import OrderStatusRT
 from ivcap_client.models.parameter_def_t import ParameterDefT
 from ivcap_client.models.parameter_opt_t import ParameterOptT
-from ivcap_client.models.parameter_t import ParameterT
 from ivcap_client.models.service_list_item_t import ServiceListItemT
 from ivcap_client.models.service_list_rt import ServiceListRT
 from ivcap_client.models.service_status_rt import ServiceStatusRT
 from ivcap_client.models.service_status_rt_status import ServiceStatusRTStatus
 
-from ivcap_client.order import Order
 from ivcap_client.utils import BaseIter, Links, _set_fields, _unset, _unset_bool, model_from_json_schema, process_error
 
 @dataclass
@@ -106,28 +101,6 @@ class Service:
             self._request_model = model_from_json_schema(js, f"Service{id(self)}")
         return self._request_model
 
-    # def place_order(self, **kwargs) -> Order:
-    #     pl:list[ParameterT] = []
-    #     params = self.parameters
-    #     mandatory = self.mandatory_parameters
-    #     for name, value in kwargs.items():
-    #         p = params.get(name)
-    #         if not p:
-    #             raise ValueError(f"Unknown parameter '{name}'")
-    #         p.verify(value)
-    #         mandatory.discard(name)
-    #         pl.append(ParameterT(name=name, value=value))
-    #     if len(mandatory) > 0:
-    #         raise ValueError(f"missing mandatory parameters '{mandatory}'")
-
-    #     req = OrderRequestT(parameters=pl,
-    #                         service=self.id)
-    #     r = order_create.sync_detailed(client=self._ivcap._client, body=req)
-    #     if r.status_code >= 300:
-    #         return process_error('place_order', r)
-    #     status:OrderStatusRT = r.parsed
-    #     return Order(status.id, self._ivcap, status)
-
     def request_job(self, data: Union[BaseModel, object, IO[str]], timeout:Optional[int]=0) -> Job:
 
         headers: dict[str, Any] = {
@@ -164,7 +137,7 @@ class Service:
             return process_error('place_order', response)
 
         from ivcap_client.job import Job
-        return Job.from_create_order_response(response, self)
+        return Job.from_create_job_response(response, self)
 
     def refresh(self) -> Service:
         r = service_service_read.sync_detailed(self.id, client=self._ivcap._client)

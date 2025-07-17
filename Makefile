@@ -48,8 +48,8 @@ gen-test:
 
 
 add-license:
-	licenseheaders -t .license.tmpl -y 2023 -f src/ivcap_client/*.py
-	licenseheaders -t .license.tmpl -y 2023 -d src/ivcap_client/client
+	licenseheaders -t .license.tmpl -y 2023 -f ivcap_client/*.py
+	licenseheaders -t .license.tmpl -y 2023 -d ivcap_client/client
 
 docs:
 	rm -rf ${ROOT_DIR}/docs/_build

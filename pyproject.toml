@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ivcap_client"
-version = "0.44.0"
+version = "0.44.1"
 description = "A client library for accessing an IVCAP cluster"
 
 authors = ["Max Ott <max.ott@csiro.au>",
@@ -12,9 +12,9 @@ include = ["CHANGELOG.md", "ivcap_sdk_client/py.typed"]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
-httpx = ">=0.15.4,<0.24.0"
+httpx = ">=0.15.4,<0.29"
 attrs = ">=21.3.0"
-python-dateutil = "^2.8.0"
+python-dateutil = ">=2.8.0,<2.9.0"
 tuspy = ">=1.0.0"
 
 [tool.poetry.group.dev.dependencies]

@@ -1,4 +1,4 @@
-""" Contains all the data models used in inputs/outputs """
+"""Contains all the data models used in inputs/outputs"""
 
 from .account_result import AccountResult
 from .add_meta_rt import AddMetaRT
@@ -13,8 +13,8 @@ from .aspect_list_item_rt_content import AspectListItemRTContent
 from .aspect_list_rt import AspectListRT
 from .aspect_rt import AspectRT
 from .aspect_rt_content import AspectRTContent
-from .aspectcreate_json_body import AspectcreateJsonBody
-from .aspectupdate_json_body import AspectupdateJsonBody
+from .aspectcreate_body import AspectcreateBody
+from .aspectupdate_body import AspectupdateBody
 from .bad_request_t import BadRequestT
 from .createqueueresponse import Createqueueresponse
 from .dashboard_list_item import DashboardListItem
@@ -98,14 +98,14 @@ __all__ = (
     "ArtifactListRT",
     "ArtifactStatusRT",
     "ArtifactStatusRTStatus",
-    "AspectcreateJsonBody",
+    "AspectcreateBody",
     "AspectIDRT",
     "AspectListItemRT",
     "AspectListItemRTContent",
     "AspectListRT",
     "AspectRT",
     "AspectRTContent",
-    "AspectupdateJsonBody",
+    "AspectupdateBody",
     "BadRequestT",
     "Createqueueresponse",
     "DashboardListItem",

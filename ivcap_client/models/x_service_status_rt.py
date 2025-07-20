@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -29,52 +29,54 @@ class XServiceStatusRT:
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
         id (str): ID Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
-        parameters (List['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
+        parameters (list['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
             region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
             'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}].
         status (XServiceStatusRTStatus): Service status Example: active.
         description (Union[Unset, str]): More detailed description of the service Example: This service ....
         name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
-        tags (Union[Unset, List[str]]): Optional provider provided tags Example: ['tag1', 'tag2'].
+        tags (Union[Unset, list[str]]): Optional provider provided tags Example: ['tag1', 'tag2'].
     """
 
     account: str
     id: str
-    links: List["LinkT"]
-    parameters: List["ParameterDefT"]
+    links: list["LinkT"]
+    parameters: list["ParameterDefT"]
     status: XServiceStatusRTStatus
     description: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
-    tags: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    tags: Union[Unset, list[str]] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         account = self.account
+
         id = self.id
+
         links = []
         for links_item_data in self.links:
             links_item = links_item_data.to_dict()
-
             links.append(links_item)
 
         parameters = []
         for parameters_item_data in self.parameters:
             parameters_item = parameters_item_data.to_dict()
-
             parameters.append(parameters_item)
 
         status = self.status.value
 
         description = self.description
+
         name = self.name
-        tags: Union[Unset, List[str]] = UNSET
+
+        tags: Union[Unset, list[str]] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -95,7 +97,7 @@ class XServiceStatusRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.parameter_def_t import ParameterDefT
 
@@ -124,7 +126,7 @@ class XServiceStatusRT:
 
         name = d.pop("name", UNSET)
 
-        tags = cast(List[str], d.pop("tags", UNSET))
+        tags = cast(list[str], d.pop("tags", UNSET))
 
         x_service_status_rt = cls(
             account=account,
@@ -141,7 +143,7 @@ class XServiceStatusRT:
         return x_service_status_rt
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

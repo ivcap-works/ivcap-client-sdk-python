@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -28,7 +28,7 @@ class MessageList:
             identifier:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:ivcap:schema:queue:message.1'}]}
 
     Attributes:
-        messages (List['Publishedmessage']): Messages in the queue Example: [{'content': '{"temperature": "21",
+        messages (list['Publishedmessage']): Messages in the queue Example: [{'content': '{"temperature": "21",
             "location": "Buoy101", "timestamp": "2024-05-20T14:30:00Z"}', 'content-type': 'application/json', 'id':
             'urn:ivcap:Message identifier:123e4567-e89b-12d3-a456-426614174000', 'schema':
             'urn:ivcap:schema:queue:message.1'}, {'content': '{"temperature": "21", "location": "Buoy101", "timestamp":
@@ -37,22 +37,21 @@ class MessageList:
         at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
     """
 
-    messages: List["Publishedmessage"]
+    messages: list["Publishedmessage"]
     at_time: Union[Unset, datetime.datetime] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         messages = []
         for messages_item_data in self.messages:
             messages_item = messages_item_data.to_dict()
-
             messages.append(messages_item)
 
         at_time: Union[Unset, str] = UNSET
         if not isinstance(self.at_time, Unset):
             at_time = self.at_time.isoformat()
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -65,7 +64,7 @@ class MessageList:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.publishedmessage import Publishedmessage
 
         d = src_dict.copy()
@@ -92,7 +91,7 @@ class MessageList:
         return message_list
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

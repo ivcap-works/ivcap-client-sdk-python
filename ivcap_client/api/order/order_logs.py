@@ -1,6 +1,6 @@
 from http import HTTPStatus
 from io import BytesIO
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional, Union
 
 import httpx
 
@@ -16,59 +16,58 @@ from ...types import UNSET, File, Response, Unset
 def _get_kwargs(
     order_id: str,
     *,
-    from_: Union[Unset, None, int] = UNSET,
-    to: Union[Unset, None, int] = UNSET,
-) -> Dict[str, Any]:
-    pass
+    from_: Union[Unset, int] = UNSET,
+    to: Union[Unset, int] = UNSET,
+) -> dict[str, Any]:
+    params: dict[str, Any] = {}
 
-    params: Dict[str, Any] = {}
     params["from"] = from_
 
     params["to"] = to
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/1/orders/{orderID}/logs".format(
-            orderID=order_id,
-        ),
+        "url": f"/1/orders/{order_id}/logs",
         "params": params,
     }
+
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
-    if response.status_code == HTTPStatus.OK:
+    if response.status_code == 200:
         response_200 = File(payload=BytesIO(response.json()))
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+    if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+    if response.status_code == 401:
         response_401 = File(payload=BytesIO(response.json()))
 
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+    if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.NOT_FOUND:
+    if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
+    if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
+    if response.status_code == 501:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+    if response.status_code == 503:
         response_503 = File(payload=BytesIO(response.json()))
 
         return response_503
@@ -93,8 +92,8 @@ def sync_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Union[Unset, None, int] = UNSET,
-    to: Union[Unset, None, int] = UNSET,
+    from_: Union[Unset, int] = UNSET,
+    to: Union[Unset, int] = UNSET,
 ) -> Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """logs order
 
@@ -103,9 +102,8 @@ def sync_detailed(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        from_ (Union[Unset, None, int]): From unix time, seconds since 1970-01-01 Example:
-            1257894000.
-        to (Union[Unset, None, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
+        from_ (Union[Unset, int]): From unix time, seconds since 1970-01-01 Example: 1257894000.
+        to (Union[Unset, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -132,8 +130,8 @@ def sync(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Union[Unset, None, int] = UNSET,
-    to: Union[Unset, None, int] = UNSET,
+    from_: Union[Unset, int] = UNSET,
+    to: Union[Unset, int] = UNSET,
 ) -> Optional[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """logs order
 
@@ -142,9 +140,8 @@ def sync(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        from_ (Union[Unset, None, int]): From unix time, seconds since 1970-01-01 Example:
-            1257894000.
-        to (Union[Unset, None, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
+        from_ (Union[Unset, int]): From unix time, seconds since 1970-01-01 Example: 1257894000.
+        to (Union[Unset, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -166,8 +163,8 @@ async def asyncio_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Union[Unset, None, int] = UNSET,
-    to: Union[Unset, None, int] = UNSET,
+    from_: Union[Unset, int] = UNSET,
+    to: Union[Unset, int] = UNSET,
 ) -> Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """logs order
 
@@ -176,9 +173,8 @@ async def asyncio_detailed(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        from_ (Union[Unset, None, int]): From unix time, seconds since 1970-01-01 Example:
-            1257894000.
-        to (Union[Unset, None, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
+        from_ (Union[Unset, int]): From unix time, seconds since 1970-01-01 Example: 1257894000.
+        to (Union[Unset, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -203,8 +199,8 @@ async def asyncio(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Union[Unset, None, int] = UNSET,
-    to: Union[Unset, None, int] = UNSET,
+    from_: Union[Unset, int] = UNSET,
+    to: Union[Unset, int] = UNSET,
 ) -> Optional[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """logs order
 
@@ -213,9 +209,8 @@ async def asyncio(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        from_ (Union[Unset, None, int]): From unix time, seconds since 1970-01-01 Example:
-            1257894000.
-        to (Union[Unset, None, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
+        from_ (Union[Unset, int]): From unix time, seconds since 1970-01-01 Example: 1257894000.
+        to (Union[Unset, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

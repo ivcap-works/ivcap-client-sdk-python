@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 import httpx
 
@@ -15,59 +15,62 @@ from ...types import UNSET, File, Response, Unset
 def _get_kwargs(
     id: str,
     *,
-    json_body: Dict,
-    schema: Union[Unset, None, str] = UNSET,
+    body: File,
+    schema: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
-) -> Dict[str, Any]:
-    headers = {}
+) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
     if not isinstance(content_type, Unset):
         headers["Content-Type"] = content_type
 
-    params: Dict[str, Any] = {}
+    params: dict[str, Any] = {}
+
     params["schema"] = schema
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    json_json_body = json_body
-
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/1/queues/{id}/messages".format(
-            id=id,
-        ),
-        "json": json_json_body,
+        "url": f"/1/queues/{id}/messages",
         "params": params,
-        "headers": headers,
     }
+
+    _body = body.to_tuple()
+
+    _kwargs["json"] = _body
+    headers["Content-Type"] = "application/json"
+
+    _kwargs["headers"] = headers
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]:
-    if response.status_code == HTTPStatus.OK:
+    if response.status_code == 200:
         response_200 = Messagestatus.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+    if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+    if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+    if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
+    if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
+    if response.status_code == 501:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+    if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -91,8 +94,8 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    json_body: Dict,
-    schema: Union[Unset, None, str] = UNSET,
+    body: File,
+    schema: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]:
     """enqueue queue
@@ -101,11 +104,11 @@ def sync_detailed(
 
     Args:
         id (str): queue Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
-        schema (Union[Unset, None, str]): Schema used for message Example:
+        schema (Union[Unset, str]): Schema used for message Example:
             urn:ivcap:schema:queue:message.1.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        json_body (Dict): Message content Example: {"temperature": "21", "location": "Buoy101",
+        body (File): Message content Example: {"temperature": "21", "location": "Buoy101",
             "timestamp": "2024-05-20T14:30:00Z"}.
 
     Raises:
@@ -118,7 +121,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         id=id,
-        json_body=json_body,
+        body=body,
         schema=schema,
         content_type=content_type,
     )
@@ -134,8 +137,8 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    json_body: Dict,
-    schema: Union[Unset, None, str] = UNSET,
+    body: File,
+    schema: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]:
     """enqueue queue
@@ -144,11 +147,11 @@ def sync(
 
     Args:
         id (str): queue Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
-        schema (Union[Unset, None, str]): Schema used for message Example:
+        schema (Union[Unset, str]): Schema used for message Example:
             urn:ivcap:schema:queue:message.1.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        json_body (Dict): Message content Example: {"temperature": "21", "location": "Buoy101",
+        body (File): Message content Example: {"temperature": "21", "location": "Buoy101",
             "timestamp": "2024-05-20T14:30:00Z"}.
 
     Raises:
@@ -162,7 +165,7 @@ def sync(
     return sync_detailed(
         id=id,
         client=client,
-        json_body=json_body,
+        body=body,
         schema=schema,
         content_type=content_type,
     ).parsed
@@ -172,8 +175,8 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    json_body: Dict,
-    schema: Union[Unset, None, str] = UNSET,
+    body: File,
+    schema: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]:
     """enqueue queue
@@ -182,11 +185,11 @@ async def asyncio_detailed(
 
     Args:
         id (str): queue Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
-        schema (Union[Unset, None, str]): Schema used for message Example:
+        schema (Union[Unset, str]): Schema used for message Example:
             urn:ivcap:schema:queue:message.1.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        json_body (Dict): Message content Example: {"temperature": "21", "location": "Buoy101",
+        body (File): Message content Example: {"temperature": "21", "location": "Buoy101",
             "timestamp": "2024-05-20T14:30:00Z"}.
 
     Raises:
@@ -199,7 +202,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         id=id,
-        json_body=json_body,
+        body=body,
         schema=schema,
         content_type=content_type,
     )
@@ -213,8 +216,8 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    json_body: Dict,
-    schema: Union[Unset, None, str] = UNSET,
+    body: File,
+    schema: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]:
     """enqueue queue
@@ -223,11 +226,11 @@ async def asyncio(
 
     Args:
         id (str): queue Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
-        schema (Union[Unset, None, str]): Schema used for message Example:
+        schema (Union[Unset, str]): Schema used for message Example:
             urn:ivcap:schema:queue:message.1.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        json_body (Dict): Message content Example: {"temperature": "21", "location": "Buoy101",
+        body (File): Message content Example: {"temperature": "21", "location": "Buoy101",
             "timestamp": "2024-05-20T14:30:00Z"}.
 
     Raises:
@@ -242,7 +245,7 @@ async def asyncio(
         await asyncio_detailed(
             id=id,
             client=client,
-            json_body=json_body,
+            body=body,
             schema=schema,
             content_type=content_type,
         )

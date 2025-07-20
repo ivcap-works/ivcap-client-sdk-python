@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 import httpx
 
@@ -16,55 +16,53 @@ def _get_kwargs(
     service_id: str,
     id: str,
     *,
-    with_request_content: Union[Unset, None, bool] = UNSET,
-    with_result_content: Union[Unset, None, bool] = UNSET,
-) -> Dict[str, Any]:
-    pass
+    with_request_content: Union[Unset, bool] = UNSET,
+    with_result_content: Union[Unset, bool] = UNSET,
+) -> dict[str, Any]:
+    params: dict[str, Any] = {}
 
-    params: Dict[str, Any] = {}
     params["with-request-content"] = with_request_content
 
     params["with-result-content"] = with_result_content
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/1/services2/{service_id}/jobs/{id}".format(
-            service_id=service_id,
-            id=id,
-        ),
+        "url": f"/1/services2/{service_id}/jobs/{id}",
         "params": params,
     }
+
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, ResourceNotFoundT]]:
-    if response.status_code == HTTPStatus.OK:
+    if response.status_code == 200:
         response_200 = JobStatusRT.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+    if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+    if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+    if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.NOT_FOUND:
+    if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
-    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
+    if response.status_code == 501:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+    if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -89,8 +87,8 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Union[Unset, None, bool] = UNSET,
-    with_result_content: Union[Unset, None, bool] = UNSET,
+    with_request_content: Union[Unset, bool] = UNSET,
+    with_result_content: Union[Unset, bool] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, ResourceNotFoundT]]:
     """job-read service
 
@@ -100,9 +98,9 @@ def sync_detailed(
         service_id (str): ID of service for which to show the list of jobs Example:
             urn:ivcap:services.
         id (str): ID of job to show Example: urn:ivcap:job.
-        with_request_content (Union[Unset, None, bool]): include request content if possible
-            Example: True.
-        with_result_content (Union[Unset, None, bool]): include result content if possible
+        with_request_content (Union[Unset, bool]): include request content if possible Example:
+            True.
+        with_result_content (Union[Unset, bool]): include result content if possible
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -131,8 +129,8 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Union[Unset, None, bool] = UNSET,
-    with_result_content: Union[Unset, None, bool] = UNSET,
+    with_request_content: Union[Unset, bool] = UNSET,
+    with_result_content: Union[Unset, bool] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, ResourceNotFoundT]]:
     """job-read service
 
@@ -142,9 +140,9 @@ def sync(
         service_id (str): ID of service for which to show the list of jobs Example:
             urn:ivcap:services.
         id (str): ID of job to show Example: urn:ivcap:job.
-        with_request_content (Union[Unset, None, bool]): include request content if possible
-            Example: True.
-        with_result_content (Union[Unset, None, bool]): include result content if possible
+        with_request_content (Union[Unset, bool]): include request content if possible Example:
+            True.
+        with_result_content (Union[Unset, bool]): include result content if possible
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -168,8 +166,8 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Union[Unset, None, bool] = UNSET,
-    with_result_content: Union[Unset, None, bool] = UNSET,
+    with_request_content: Union[Unset, bool] = UNSET,
+    with_result_content: Union[Unset, bool] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, ResourceNotFoundT]]:
     """job-read service
 
@@ -179,9 +177,9 @@ async def asyncio_detailed(
         service_id (str): ID of service for which to show the list of jobs Example:
             urn:ivcap:services.
         id (str): ID of job to show Example: urn:ivcap:job.
-        with_request_content (Union[Unset, None, bool]): include request content if possible
-            Example: True.
-        with_result_content (Union[Unset, None, bool]): include result content if possible
+        with_request_content (Union[Unset, bool]): include request content if possible Example:
+            True.
+        with_result_content (Union[Unset, bool]): include result content if possible
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -208,8 +206,8 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Union[Unset, None, bool] = UNSET,
-    with_result_content: Union[Unset, None, bool] = UNSET,
+    with_request_content: Union[Unset, bool] = UNSET,
+    with_result_content: Union[Unset, bool] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, ResourceNotFoundT]]:
     """job-read service
 
@@ -219,9 +217,9 @@ async def asyncio(
         service_id (str): ID of service for which to show the list of jobs Example:
             urn:ivcap:services.
         id (str): ID of job to show Example: urn:ivcap:job.
-        with_request_content (Union[Unset, None, bool]): include request content if possible
-            Example: True.
-        with_result_content (Union[Unset, None, bool]): include result content if possible
+        with_request_content (Union[Unset, bool]): include request content if possible Example:
+            True.
+        with_result_content (Union[Unset, bool]): include result content if possible
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

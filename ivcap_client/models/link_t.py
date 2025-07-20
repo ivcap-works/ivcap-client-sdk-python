@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Type, TypeVar
+from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -15,51 +15,53 @@ class LinkT:
     Attributes:
         href (str): web link Example: https://acme.com/...
         rel (str): relation type Example: self, describedBy, next, first.
-        type (str): mime type Example: application/json.
+        type_ (str): mime type Example: application/json.
     """
 
     href: str
     rel: str
-    type: str
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    type_: str
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         href = self.href
-        rel = self.rel
-        type = self.type
 
-        field_dict: Dict[str, Any] = {}
+        rel = self.rel
+
+        type_ = self.type_
+
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "href": href,
                 "rel": rel,
-                "type": type,
+                "type": type_,
             }
         )
 
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         d = src_dict.copy()
         href = d.pop("href")
 
         rel = d.pop("rel")
 
-        type = d.pop("type")
+        type_ = d.pop("type")
 
         link_t = cls(
             href=href,
             rel=rel,
-            type=type,
+            type_=type_,
         )
 
         link_t.additional_properties = d
         return link_t
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

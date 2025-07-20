@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -29,7 +29,7 @@ class ProjectListRT:
             'urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4'}]}
 
     Attributes:
-        projects (List['ProjectListItem']):  Example: [{'at-time': '1996-12-19T16:39:57-08:00', 'created_at':
+        projects (list['ProjectListItem']):  Example: [{'at-time': '1996-12-19T16:39:57-08:00', 'created_at':
             '2023-03-17T04:57:00Z', 'modified_at': '2023-03-17T04:57:00Z', 'name': 'MineralsCollection', 'role': 'Member',
             'urn': 'urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4'}, {'at-time': '1996-12-19T16:39:57-08:00',
             'created_at': '2023-03-17T04:57:00Z', 'modified_at': '2023-03-17T04:57:00Z', 'name': 'MineralsCollection',
@@ -42,18 +42,17 @@ class ProjectListRT:
             results Example: Est reiciendis enim..
     """
 
-    projects: List["ProjectListItem"]
+    projects: list["ProjectListItem"]
     at_time: Union[Unset, datetime.datetime] = UNSET
     page: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         projects = []
         for componentsschemas_project_list_item_collection_item_data in self.projects:
             componentsschemas_project_list_item_collection_item = (
                 componentsschemas_project_list_item_collection_item_data.to_dict()
             )
-
             projects.append(componentsschemas_project_list_item_collection_item)
 
         at_time: Union[Unset, str] = UNSET
@@ -62,7 +61,7 @@ class ProjectListRT:
 
         page = self.page
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -77,7 +76,7 @@ class ProjectListRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.project_list_item import ProjectListItem
 
         d = src_dict.copy()
@@ -109,7 +108,7 @@ class ProjectListRT:
         return project_list_rt
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

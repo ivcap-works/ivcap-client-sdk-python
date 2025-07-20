@@ -1,6 +1,6 @@
 import datetime
 from io import BytesIO
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -38,7 +38,7 @@ class JobStatusRT:
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
         id (str): ID Example: urn:ivcap:job:123e4567-e89b-12d3-a456-426614174000.
-        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
         order (str): Reference to order Example: urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
@@ -61,12 +61,12 @@ class JobStatusRT:
         result_content_type (Union[Unset, str]): Mime type of result Example: application/json.
         started_at (Union[Unset, datetime.datetime]): DateTime job processing started Example:
             1996-12-19T16:39:57-08:00.
-        tags (Union[Unset, List[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
+        tags (Union[Unset, list[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
     """
 
     account: str
     id: str
-    links: List["LinkT"]
+    links: list["LinkT"]
     order: str
     policy: str
     request_content_type: str
@@ -81,33 +81,40 @@ class JobStatusRT:
     result_content: Union[Unset, Any] = UNSET
     result_content_type: Union[Unset, str] = UNSET
     started_at: Union[Unset, datetime.datetime] = UNSET
-    tags: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    tags: Union[Unset, list[str]] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         account = self.account
+
         id = self.id
+
         links = []
         for links_item_data in self.links:
             links_item = links_item_data.to_dict()
-
             links.append(links_item)
 
         order = self.order
+
         policy = self.policy
+
         request_content_type = self.request_content_type
+
         requested_at = self.requested_at.isoformat()
 
         service = self.service
+
         status = self.status.value
 
         error_message = self.error_message
+
         finished_at: Union[Unset, str] = UNSET
         if not isinstance(self.finished_at, Unset):
             finished_at = self.finished_at.isoformat()
 
         name = self.name
-        products: Union[Unset, Dict[str, Any]] = UNSET
+
+        products: Union[Unset, dict[str, Any]] = UNSET
         if not isinstance(self.products, Unset):
             products = self.products.to_dict()
 
@@ -120,15 +127,16 @@ class JobStatusRT:
             result_content = self.result_content
 
         result_content_type = self.result_content_type
+
         started_at: Union[Unset, str] = UNSET
         if not isinstance(self.started_at, Unset):
             started_at = self.started_at.isoformat()
 
-        tags: Union[Unset, List[str]] = UNSET
+        tags: Union[Unset, list[str]] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -165,7 +173,7 @@ class JobStatusRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.partial_product_list_2t import PartialProductList2T
 
@@ -234,7 +242,7 @@ class JobStatusRT:
         else:
             started_at = isoparse(_started_at)
 
-        tags = cast(List[str], d.pop("tags", UNSET))
+        tags = cast(list[str], d.pop("tags", UNSET))
 
         job_status_rt = cls(
             account=account,
@@ -261,7 +269,7 @@ class JobStatusRT:
         return job_status_rt
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

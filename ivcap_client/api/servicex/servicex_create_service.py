@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 import httpx
 
@@ -16,54 +16,59 @@ from ...types import Response
 
 def _get_kwargs(
     *,
-    json_body: XServiceDefinitionT,
-) -> Dict[str, Any]:
-    pass
+    body: XServiceDefinitionT,
+) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
 
-    json_json_body = json_body.to_dict()
-
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "post",
         "url": "/1/services",
-        "json": json_json_body,
     }
+
+    _body = body.to_dict()
+
+    _kwargs["json"] = _body
+    headers["Content-Type"] = "application/json"
+
+    _kwargs["headers"] = headers
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, XServiceStatusRT]]:
-    if response.status_code == HTTPStatus.CREATED:
+    if response.status_code == 201:
         response_201 = XServiceStatusRT.from_dict(response.json())
 
         return response_201
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+    if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+    if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+    if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.NOT_FOUND:
+    if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
-    if response.status_code == HTTPStatus.CONFLICT:
+    if response.status_code == 409:
         response_409 = ResourceNotFoundT.from_dict(response.json())
 
         return response_409
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
+    if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
+    if response.status_code == 501:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+    if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -86,14 +91,14 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    json_body: XServiceDefinitionT,
+    body: XServiceDefinitionT,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, XServiceStatusRT]]:
     """create_service servicex
 
      Create a new services and return its status.
 
     Args:
-        json_body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
+        body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
@@ -118,7 +123,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        json_body=json_body,
+        body=body,
     )
 
     response = client.get_httpx_client().request(
@@ -131,14 +136,14 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    json_body: XServiceDefinitionT,
+    body: XServiceDefinitionT,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, XServiceStatusRT]]:
     """create_service servicex
 
      Create a new services and return its status.
 
     Args:
-        json_body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
+        body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
@@ -164,21 +169,21 @@ def sync(
 
     return sync_detailed(
         client=client,
-        json_body=json_body,
+        body=body,
     ).parsed
 
 
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    json_body: XServiceDefinitionT,
+    body: XServiceDefinitionT,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, XServiceStatusRT]]:
     """create_service servicex
 
      Create a new services and return its status.
 
     Args:
-        json_body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
+        body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
@@ -203,7 +208,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        json_body=json_body,
+        body=body,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -214,14 +219,14 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    json_body: XServiceDefinitionT,
+    body: XServiceDefinitionT,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, XServiceStatusRT]]:
     """create_service servicex
 
      Create a new services and return its status.
 
     Args:
-        json_body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
+        body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
@@ -248,6 +253,6 @@ async def asyncio(
     return (
         await asyncio_detailed(
             client=client,
-            json_body=json_body,
+            body=body,
         )
     ).parsed

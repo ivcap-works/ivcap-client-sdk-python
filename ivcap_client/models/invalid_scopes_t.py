@@ -1,4 +1,5 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, TypeVar, Union
+from uuid import UUID
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -17,18 +18,21 @@ class InvalidScopesT:
 
     Attributes:
         message (str): Message of error Example: Not authorized to perform this action.
-        id (Union[Unset, str]): ID of involved resource Example: 123e4567-e89b-12d3-a456-426614174000.
+        id (Union[Unset, UUID]): ID of involved resource Example: 123e4567-e89b-12d3-a456-426614174000.
     """
 
     message: str
-    id: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    id: Union[Unset, UUID] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         message = self.message
-        id = self.id
 
-        field_dict: Dict[str, Any] = {}
+        id: Union[Unset, str] = UNSET
+        if not isinstance(self.id, Unset):
+            id = str(self.id)
+
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -41,11 +45,16 @@ class InvalidScopesT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         d = src_dict.copy()
         message = d.pop("message")
 
-        id = d.pop("id", UNSET)
+        _id = d.pop("id", UNSET)
+        id: Union[Unset, UUID]
+        if isinstance(_id, Unset):
+            id = UNSET
+        else:
+            id = UUID(_id)
 
         invalid_scopes_t = cls(
             message=message,
@@ -56,7 +65,7 @@ class InvalidScopesT:
         return invalid_scopes_t
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

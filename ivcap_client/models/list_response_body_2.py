@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -26,35 +26,33 @@ class ListResponseBody2:
             'application/openapi3+json'}]}
 
     Attributes:
-        items (List['SecretListItem']): secrets Example: [{'expiry-time': 4932954319159294728, 'secret-name': 'Sint
+        items (list['SecretListItem']): secrets Example: [{'expiry-time': 4932954319159294728, 'secret-name': 'Sint
             suscipit atque exercitationem nobis perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728, 'secret-
             name': 'Sint suscipit atque exercitationem nobis perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728,
             'secret-name': 'Sint suscipit atque exercitationem nobis perspiciatis voluptate.'}].
-        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}].
     """
 
-    items: List["SecretListItem"]
-    links: List["LinkT"]
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    items: list["SecretListItem"]
+    links: list["LinkT"]
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         items = []
         for items_item_data in self.items:
             items_item = items_item_data.to_dict()
-
             items.append(items_item)
 
         links = []
         for links_item_data in self.links:
             links_item = links_item_data.to_dict()
-
             links.append(links_item)
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -66,7 +64,7 @@ class ListResponseBody2:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.secret_list_item import SecretListItem
 
@@ -94,7 +92,7 @@ class ListResponseBody2:
         return list_response_body_2
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

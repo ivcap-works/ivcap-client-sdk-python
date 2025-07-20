@@ -1,6 +1,6 @@
 import datetime
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 import httpx
 
@@ -15,30 +15,28 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    entity: Union[Unset, None, str] = UNSET,
-    schema: Union[Unset, None, str] = UNSET,
-    content_path: Union[Unset, None, str] = UNSET,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    filter_: Union[Unset, None, str] = "",
-    order_by: Union[Unset, None, str] = "valid_from",
-    order_direction: Union[Unset, None, str] = "DESC",
-    include_content: Union[Unset, None, bool] = UNSET,
-    page: Union[Unset, None, str] = UNSET,
-) -> Dict[str, Any]:
-    pass
+    entity: Union[Unset, str] = UNSET,
+    schema: Union[Unset, str] = UNSET,
+    content_path: Union[Unset, str] = UNSET,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+    limit: Union[Unset, int] = 10,
+    filter_: Union[Unset, str] = "",
+    order_by: Union[Unset, str] = "valid_from",
+    order_direction: Union[Unset, str] = "DESC",
+    include_content: Union[Unset, bool] = UNSET,
+    page: Union[Unset, str] = UNSET,
+) -> dict[str, Any]:
+    params: dict[str, Any] = {}
 
-    params: Dict[str, Any] = {}
     params["entity"] = entity
 
     params["schema"] = schema
 
     params["content-path"] = content_path
 
-    json_at_time: Union[Unset, None, str] = UNSET
+    json_at_time: Union[Unset, str] = UNSET
     if not isinstance(at_time, Unset):
-        json_at_time = at_time.isoformat() if at_time else None
-
+        json_at_time = at_time.isoformat()
     params["at-time"] = json_at_time
 
     params["limit"] = limit
@@ -55,44 +53,46 @@ def _get_kwargs(
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "get",
         "url": "/1/aspects",
         "params": params,
     }
 
+    return _kwargs
+
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
-    if response.status_code == HTTPStatus.OK:
+    if response.status_code == 200:
         response_200 = AspectListRT.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+    if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+    if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+    if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.UNSUPPORTED_MEDIA_TYPE:
+    if response.status_code == 415:
         response_415 = BadRequestT.from_dict(response.json())
 
         return response_415
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
+    if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
+    if response.status_code == 501:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+    if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -115,42 +115,42 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    entity: Union[Unset, None, str] = UNSET,
-    schema: Union[Unset, None, str] = UNSET,
-    content_path: Union[Unset, None, str] = UNSET,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    filter_: Union[Unset, None, str] = "",
-    order_by: Union[Unset, None, str] = "valid_from",
-    order_direction: Union[Unset, None, str] = "DESC",
-    include_content: Union[Unset, None, bool] = UNSET,
-    page: Union[Unset, None, str] = UNSET,
+    entity: Union[Unset, str] = UNSET,
+    schema: Union[Unset, str] = UNSET,
+    content_path: Union[Unset, str] = UNSET,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+    limit: Union[Unset, int] = 10,
+    filter_: Union[Unset, str] = "",
+    order_by: Union[Unset, str] = "valid_from",
+    order_direction: Union[Unset, str] = "DESC",
+    include_content: Union[Unset, bool] = UNSET,
+    page: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """list aspect
 
      Return a list of aspect aspects.
 
     Args:
-        entity (Union[Unset, None, str]): Optional entity for which to request aspects Example:
+        entity (Union[Unset, str]): Optional entity for which to request aspects Example:
             urn:blue:image.collA#12.
-        schema (Union[Unset, None, str]): Schema prefix using '%' as wildcard indicator Example:
+        schema (Union[Unset, str]): Schema prefix using '%' as wildcard indicator Example:
             urn:blue:schema:image%.
-        content_path (Union[Unset, None, str]): To learn more about the supported format, see
+        content_path (Union[Unset, str]): To learn more about the supported format, see
                                                 https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH Example:
             $.images[*] ? (@.size > 10000).
-        at_time (Union[Unset, None, datetime.datetime]): Return aspect which where valid at that
-            time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
-            items in the queried
+        at_time (Union[Unset, datetime.datetime]): Return aspect which where valid at that time
+            [now] Example: 1996-12-19T16:39:57-08:00.
+        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
+            the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
-            filter a collection of
+        filter_ (Union[Unset, str]): The 'filter' system query option allows clients to filter a
+            collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
                                         evaluates to true are included in the response. Default: ''. Example: FirstName eq
             'Scott'.
-        order_by (Union[Unset, None, str]): Optional comma-separated list of attributes to sort
-            the list by.
+        order_by (Union[Unset, str]): Optional comma-separated list of attributes to sort the list
+            by.
             * entity
             * schema
             * content
@@ -162,12 +162,12 @@ def sync_detailed(
             * valid_from
             * valid_to
              Default: 'valid_from'. Example: entity,created-at.
-        order_direction (Union[Unset, None, str]): Set the sort direction 'ASC', 'DESC' for each
-            order-by element. Default: 'DESC'. Example: desc.
-        include_content (Union[Unset, None, bool]): When set, also include aspect content in list.
+        order_direction (Union[Unset, str]): Set the sort direction 'ASC', 'DESC' for each order-
+            by element. Default: 'DESC'. Example: desc.
+        include_content (Union[Unset, bool]): When set, also include aspect content in list.
             Example: True.
-        page (Union[Unset, None, str]): The content of '$page' is returned in the 'links' part of
-            a previous query and
+        page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
+            previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
 
@@ -202,42 +202,42 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    entity: Union[Unset, None, str] = UNSET,
-    schema: Union[Unset, None, str] = UNSET,
-    content_path: Union[Unset, None, str] = UNSET,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    filter_: Union[Unset, None, str] = "",
-    order_by: Union[Unset, None, str] = "valid_from",
-    order_direction: Union[Unset, None, str] = "DESC",
-    include_content: Union[Unset, None, bool] = UNSET,
-    page: Union[Unset, None, str] = UNSET,
+    entity: Union[Unset, str] = UNSET,
+    schema: Union[Unset, str] = UNSET,
+    content_path: Union[Unset, str] = UNSET,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+    limit: Union[Unset, int] = 10,
+    filter_: Union[Unset, str] = "",
+    order_by: Union[Unset, str] = "valid_from",
+    order_direction: Union[Unset, str] = "DESC",
+    include_content: Union[Unset, bool] = UNSET,
+    page: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """list aspect
 
      Return a list of aspect aspects.
 
     Args:
-        entity (Union[Unset, None, str]): Optional entity for which to request aspects Example:
+        entity (Union[Unset, str]): Optional entity for which to request aspects Example:
             urn:blue:image.collA#12.
-        schema (Union[Unset, None, str]): Schema prefix using '%' as wildcard indicator Example:
+        schema (Union[Unset, str]): Schema prefix using '%' as wildcard indicator Example:
             urn:blue:schema:image%.
-        content_path (Union[Unset, None, str]): To learn more about the supported format, see
+        content_path (Union[Unset, str]): To learn more about the supported format, see
                                                 https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH Example:
             $.images[*] ? (@.size > 10000).
-        at_time (Union[Unset, None, datetime.datetime]): Return aspect which where valid at that
-            time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
-            items in the queried
+        at_time (Union[Unset, datetime.datetime]): Return aspect which where valid at that time
+            [now] Example: 1996-12-19T16:39:57-08:00.
+        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
+            the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
-            filter a collection of
+        filter_ (Union[Unset, str]): The 'filter' system query option allows clients to filter a
+            collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
                                         evaluates to true are included in the response. Default: ''. Example: FirstName eq
             'Scott'.
-        order_by (Union[Unset, None, str]): Optional comma-separated list of attributes to sort
-            the list by.
+        order_by (Union[Unset, str]): Optional comma-separated list of attributes to sort the list
+            by.
             * entity
             * schema
             * content
@@ -249,12 +249,12 @@ def sync(
             * valid_from
             * valid_to
              Default: 'valid_from'. Example: entity,created-at.
-        order_direction (Union[Unset, None, str]): Set the sort direction 'ASC', 'DESC' for each
-            order-by element. Default: 'DESC'. Example: desc.
-        include_content (Union[Unset, None, bool]): When set, also include aspect content in list.
+        order_direction (Union[Unset, str]): Set the sort direction 'ASC', 'DESC' for each order-
+            by element. Default: 'DESC'. Example: desc.
+        include_content (Union[Unset, bool]): When set, also include aspect content in list.
             Example: True.
-        page (Union[Unset, None, str]): The content of '$page' is returned in the 'links' part of
-            a previous query and
+        page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
+            previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
 
@@ -284,42 +284,42 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    entity: Union[Unset, None, str] = UNSET,
-    schema: Union[Unset, None, str] = UNSET,
-    content_path: Union[Unset, None, str] = UNSET,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    filter_: Union[Unset, None, str] = "",
-    order_by: Union[Unset, None, str] = "valid_from",
-    order_direction: Union[Unset, None, str] = "DESC",
-    include_content: Union[Unset, None, bool] = UNSET,
-    page: Union[Unset, None, str] = UNSET,
+    entity: Union[Unset, str] = UNSET,
+    schema: Union[Unset, str] = UNSET,
+    content_path: Union[Unset, str] = UNSET,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+    limit: Union[Unset, int] = 10,
+    filter_: Union[Unset, str] = "",
+    order_by: Union[Unset, str] = "valid_from",
+    order_direction: Union[Unset, str] = "DESC",
+    include_content: Union[Unset, bool] = UNSET,
+    page: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """list aspect
 
      Return a list of aspect aspects.
 
     Args:
-        entity (Union[Unset, None, str]): Optional entity for which to request aspects Example:
+        entity (Union[Unset, str]): Optional entity for which to request aspects Example:
             urn:blue:image.collA#12.
-        schema (Union[Unset, None, str]): Schema prefix using '%' as wildcard indicator Example:
+        schema (Union[Unset, str]): Schema prefix using '%' as wildcard indicator Example:
             urn:blue:schema:image%.
-        content_path (Union[Unset, None, str]): To learn more about the supported format, see
+        content_path (Union[Unset, str]): To learn more about the supported format, see
                                                 https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH Example:
             $.images[*] ? (@.size > 10000).
-        at_time (Union[Unset, None, datetime.datetime]): Return aspect which where valid at that
-            time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
-            items in the queried
+        at_time (Union[Unset, datetime.datetime]): Return aspect which where valid at that time
+            [now] Example: 1996-12-19T16:39:57-08:00.
+        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
+            the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
-            filter a collection of
+        filter_ (Union[Unset, str]): The 'filter' system query option allows clients to filter a
+            collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
                                         evaluates to true are included in the response. Default: ''. Example: FirstName eq
             'Scott'.
-        order_by (Union[Unset, None, str]): Optional comma-separated list of attributes to sort
-            the list by.
+        order_by (Union[Unset, str]): Optional comma-separated list of attributes to sort the list
+            by.
             * entity
             * schema
             * content
@@ -331,12 +331,12 @@ async def asyncio_detailed(
             * valid_from
             * valid_to
              Default: 'valid_from'. Example: entity,created-at.
-        order_direction (Union[Unset, None, str]): Set the sort direction 'ASC', 'DESC' for each
-            order-by element. Default: 'DESC'. Example: desc.
-        include_content (Union[Unset, None, bool]): When set, also include aspect content in list.
+        order_direction (Union[Unset, str]): Set the sort direction 'ASC', 'DESC' for each order-
+            by element. Default: 'DESC'. Example: desc.
+        include_content (Union[Unset, bool]): When set, also include aspect content in list.
             Example: True.
-        page (Union[Unset, None, str]): The content of '$page' is returned in the 'links' part of
-            a previous query and
+        page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
+            previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
 
@@ -369,42 +369,42 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    entity: Union[Unset, None, str] = UNSET,
-    schema: Union[Unset, None, str] = UNSET,
-    content_path: Union[Unset, None, str] = UNSET,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    filter_: Union[Unset, None, str] = "",
-    order_by: Union[Unset, None, str] = "valid_from",
-    order_direction: Union[Unset, None, str] = "DESC",
-    include_content: Union[Unset, None, bool] = UNSET,
-    page: Union[Unset, None, str] = UNSET,
+    entity: Union[Unset, str] = UNSET,
+    schema: Union[Unset, str] = UNSET,
+    content_path: Union[Unset, str] = UNSET,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+    limit: Union[Unset, int] = 10,
+    filter_: Union[Unset, str] = "",
+    order_by: Union[Unset, str] = "valid_from",
+    order_direction: Union[Unset, str] = "DESC",
+    include_content: Union[Unset, bool] = UNSET,
+    page: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
     """list aspect
 
      Return a list of aspect aspects.
 
     Args:
-        entity (Union[Unset, None, str]): Optional entity for which to request aspects Example:
+        entity (Union[Unset, str]): Optional entity for which to request aspects Example:
             urn:blue:image.collA#12.
-        schema (Union[Unset, None, str]): Schema prefix using '%' as wildcard indicator Example:
+        schema (Union[Unset, str]): Schema prefix using '%' as wildcard indicator Example:
             urn:blue:schema:image%.
-        content_path (Union[Unset, None, str]): To learn more about the supported format, see
+        content_path (Union[Unset, str]): To learn more about the supported format, see
                                                 https://www.postgresql.org/docs/current/datatype-json.html#DATATYPE-JSONPATH Example:
             $.images[*] ? (@.size > 10000).
-        at_time (Union[Unset, None, datetime.datetime]): Return aspect which where valid at that
-            time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
-            items in the queried
+        at_time (Union[Unset, datetime.datetime]): Return aspect which where valid at that time
+            [now] Example: 1996-12-19T16:39:57-08:00.
+        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
+            the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        filter_ (Union[Unset, None, str]): The 'filter' system query option allows clients to
-            filter a collection of
+        filter_ (Union[Unset, str]): The 'filter' system query option allows clients to filter a
+            collection of
                                         resources that are addressed by a request URL. The expression specified with 'filter'
                                         is evaluated for each resource in the collection, and only items where the expression
                                         evaluates to true are included in the response. Default: ''. Example: FirstName eq
             'Scott'.
-        order_by (Union[Unset, None, str]): Optional comma-separated list of attributes to sort
-            the list by.
+        order_by (Union[Unset, str]): Optional comma-separated list of attributes to sort the list
+            by.
             * entity
             * schema
             * content
@@ -416,12 +416,12 @@ async def asyncio(
             * valid_from
             * valid_to
              Default: 'valid_from'. Example: entity,created-at.
-        order_direction (Union[Unset, None, str]): Set the sort direction 'ASC', 'DESC' for each
-            order-by element. Default: 'DESC'. Example: desc.
-        include_content (Union[Unset, None, bool]): When set, also include aspect content in list.
+        order_direction (Union[Unset, str]): Set the sort direction 'ASC', 'DESC' for each order-
+            by element. Default: 'DESC'. Example: desc.
+        include_content (Union[Unset, bool]): When set, also include aspect content in list.
             Example: True.
-        page (Union[Unset, None, str]): The content of '$page' is returned in the 'links' part of
-            a previous query and
+        page (Union[Unset, str]): The content of '$page' is returned in the 'links' part of a
+            previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
 

@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 import httpx
 
@@ -16,14 +16,13 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     order_id: str,
     *,
-    order_by: Union[Unset, None, str] = UNSET,
-    order_desc: Union[Unset, None, bool] = True,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
-) -> Dict[str, Any]:
-    pass
+    order_by: Union[Unset, str] = UNSET,
+    order_desc: Union[Unset, bool] = True,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
+) -> dict[str, Any]:
+    params: dict[str, Any] = {}
 
-    params: Dict[str, Any] = {}
     params["order-by"] = order_by
 
     params["order-desc"] = order_desc
@@ -34,46 +33,46 @@ def _get_kwargs(
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/1/orders/{orderID}/products".format(
-            orderID=order_id,
-        ),
+        "url": f"/1/orders/{order_id}/products",
         "params": params,
     }
+
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]:
-    if response.status_code == HTTPStatus.OK:
+    if response.status_code == 200:
         response_200 = PartialProductList2T.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+    if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+    if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+    if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.NOT_FOUND:
+    if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
+    if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
+    if response.status_code == 501:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+    if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -97,10 +96,10 @@ def sync_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Union[Unset, None, str] = UNSET,
-    order_desc: Union[Unset, None, bool] = True,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
+    order_by: Union[Unset, str] = UNSET,
+    order_desc: Union[Unset, bool] = True,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]:
     """products order
 
@@ -109,17 +108,17 @@ def sync_detailed(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
+        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
             resources in either
                                 ascending order using asc or descending order using desc. If asc or desc not specified,
                                 then the resources will be ordered in ascending order. The request below orders Trips
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the lt. Default: True. Example: True.
-        limit (Union[Unset, None, int]): The 'limit' query option sets the maximum number of items
+        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
+            order is the lt. Default: True. Example: True.
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): The content of 'page' is returned in the 'links' part of a
+        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
             previous query and
                                 will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
@@ -151,10 +150,10 @@ def sync(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Union[Unset, None, str] = UNSET,
-    order_desc: Union[Unset, None, bool] = True,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
+    order_by: Union[Unset, str] = UNSET,
+    order_desc: Union[Unset, bool] = True,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]:
     """products order
 
@@ -163,17 +162,17 @@ def sync(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
+        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
             resources in either
                                 ascending order using asc or descending order using desc. If asc or desc not specified,
                                 then the resources will be ordered in ascending order. The request below orders Trips
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the lt. Default: True. Example: True.
-        limit (Union[Unset, None, int]): The 'limit' query option sets the maximum number of items
+        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
+            order is the lt. Default: True. Example: True.
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): The content of 'page' is returned in the 'links' part of a
+        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
             previous query and
                                 will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
@@ -200,10 +199,10 @@ async def asyncio_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Union[Unset, None, str] = UNSET,
-    order_desc: Union[Unset, None, bool] = True,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
+    order_by: Union[Unset, str] = UNSET,
+    order_desc: Union[Unset, bool] = True,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]:
     """products order
 
@@ -212,17 +211,17 @@ async def asyncio_detailed(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
+        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
             resources in either
                                 ascending order using asc or descending order using desc. If asc or desc not specified,
                                 then the resources will be ordered in ascending order. The request below orders Trips
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the lt. Default: True. Example: True.
-        limit (Union[Unset, None, int]): The 'limit' query option sets the maximum number of items
+        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
+            order is the lt. Default: True. Example: True.
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): The content of 'page' is returned in the 'links' part of a
+        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
             previous query and
                                 will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
@@ -252,10 +251,10 @@ async def asyncio(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Union[Unset, None, str] = UNSET,
-    order_desc: Union[Unset, None, bool] = True,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
+    order_by: Union[Unset, str] = UNSET,
+    order_desc: Union[Unset, bool] = True,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]:
     """products order
 
@@ -264,17 +263,17 @@ async def asyncio(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        order_by (Union[Unset, None, str]): The 'orderby' query option allows clients to request
+        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
             resources in either
                                 ascending order using asc or descending order using desc. If asc or desc not specified,
                                 then the resources will be ordered in ascending order. The request below orders Trips
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, None, bool]): When set order result in descending order.
-            Ascending order is the lt. Default: True. Example: True.
-        limit (Union[Unset, None, int]): The 'limit' query option sets the maximum number of items
+        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
+            order is the lt. Default: True. Example: True.
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): The content of 'page' is returned in the 'links' part of a
+        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
             previous query and
                                 will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.

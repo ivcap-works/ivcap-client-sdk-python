@@ -1,6 +1,6 @@
 import datetime
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 import httpx
 
@@ -15,70 +15,78 @@ from ...types import UNSET, File, FileJsonType, Response, Unset
 
 def _get_kwargs(
     *,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, File] = UNSET,
+    body: File,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, File] = UNSET,
     content_type: str,
-) -> Dict[str, Any]:
-    headers = {}
+) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
     headers["Content-Type"] = content_type
 
-    params: Dict[str, Any] = {}
-    json_at_time: Union[Unset, None, str] = UNSET
-    if not isinstance(at_time, Unset):
-        json_at_time = at_time.isoformat() if at_time else None
+    params: dict[str, Any] = {}
 
+    json_at_time: Union[Unset, str] = UNSET
+    if not isinstance(at_time, Unset):
+        json_at_time = at_time.isoformat()
     params["at-time"] = json_at_time
 
     params["limit"] = limit
 
-    json_page: Union[Unset, None, FileJsonType] = UNSET
+    json_page: Union[Unset, FileJsonType] = UNSET
     if not isinstance(page, Unset):
-        json_page = page.to_tuple() if page else None
+        json_page = page.to_tuple()
 
     params["page"] = json_page
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "post",
         "url": "/1/search",
         "params": params,
-        "headers": headers,
     }
+
+    _body = body.payload
+
+    _kwargs["content"] = _body
+    headers["Content-Type"] = "application/datalog+mangle"
+
+    _kwargs["headers"] = headers
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
-    if response.status_code == HTTPStatus.OK:
+    if response.status_code == 200:
         response_200 = SearchListRT.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+    if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+    if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+    if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.UNSUPPORTED_MEDIA_TYPE:
+    if response.status_code == 415:
         response_415 = BadRequestT.from_dict(response.json())
 
         return response_415
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
+    if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
+    if response.status_code == 501:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+    if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -101,9 +109,10 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, File] = UNSET,
+    body: File,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, File] = UNSET,
     content_type: str,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
     """search search
@@ -111,17 +120,34 @@ def sync_detailed(
      Execute query provided in body and return a list of search result.
 
     Args:
-        at_time (Union[Unset, None, datetime.datetime]): Return search which where valid at that
-            time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
-            items in the queried
+        at_time (Union[Unset, datetime.datetime]): Return search which where valid at that time
+            [now] Example: 1996-12-19T16:39:57-08:00.
+        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
+            the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, File]): The content of '$page' is returned in the 'links' part of
-            a previous query and
+        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
+            previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/datalog+mangle.
+        body (File): Query Example:
+            # Find all the artifacts in the input collection for a specific order
+            #
+
+            # order_parameter(orderID, parameterName, parameterValue)
+            :load_aspect(/order_parameter, "urn:ivcap:schema:order-placed.1", ["entity",
+            ".parameters[*].name|value"]).
+            # collection(collectionID, artifactID)
+            :load_aspect(/collection, "urn:ivcap:schema:artifact-collection.1", [".collection",
+            ".artifacts[*]"]).
+
+            query(Artifact) :-
+              # The collection ID is the 'image' parameter of the order
+              order_parameter("urn:ivcap:order:550e8400-e29b-41d4-a716-446655440000", "images",
+            Collection),
+              collection(Collection, Artifact).
+                                        .
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -132,6 +158,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
+        body=body,
         at_time=at_time,
         limit=limit,
         page=page,
@@ -148,9 +175,10 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, File] = UNSET,
+    body: File,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, File] = UNSET,
     content_type: str,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
     """search search
@@ -158,17 +186,34 @@ def sync(
      Execute query provided in body and return a list of search result.
 
     Args:
-        at_time (Union[Unset, None, datetime.datetime]): Return search which where valid at that
-            time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
-            items in the queried
+        at_time (Union[Unset, datetime.datetime]): Return search which where valid at that time
+            [now] Example: 1996-12-19T16:39:57-08:00.
+        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
+            the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, File]): The content of '$page' is returned in the 'links' part of
-            a previous query and
+        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
+            previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/datalog+mangle.
+        body (File): Query Example:
+            # Find all the artifacts in the input collection for a specific order
+            #
+
+            # order_parameter(orderID, parameterName, parameterValue)
+            :load_aspect(/order_parameter, "urn:ivcap:schema:order-placed.1", ["entity",
+            ".parameters[*].name|value"]).
+            # collection(collectionID, artifactID)
+            :load_aspect(/collection, "urn:ivcap:schema:artifact-collection.1", [".collection",
+            ".artifacts[*]"]).
+
+            query(Artifact) :-
+              # The collection ID is the 'image' parameter of the order
+              order_parameter("urn:ivcap:order:550e8400-e29b-41d4-a716-446655440000", "images",
+            Collection),
+              collection(Collection, Artifact).
+                                        .
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -180,6 +225,7 @@ def sync(
 
     return sync_detailed(
         client=client,
+        body=body,
         at_time=at_time,
         limit=limit,
         page=page,
@@ -190,9 +236,10 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, File] = UNSET,
+    body: File,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, File] = UNSET,
     content_type: str,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
     """search search
@@ -200,17 +247,34 @@ async def asyncio_detailed(
      Execute query provided in body and return a list of search result.
 
     Args:
-        at_time (Union[Unset, None, datetime.datetime]): Return search which where valid at that
-            time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
-            items in the queried
+        at_time (Union[Unset, datetime.datetime]): Return search which where valid at that time
+            [now] Example: 1996-12-19T16:39:57-08:00.
+        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
+            the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, File]): The content of '$page' is returned in the 'links' part of
-            a previous query and
+        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
+            previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/datalog+mangle.
+        body (File): Query Example:
+            # Find all the artifacts in the input collection for a specific order
+            #
+
+            # order_parameter(orderID, parameterName, parameterValue)
+            :load_aspect(/order_parameter, "urn:ivcap:schema:order-placed.1", ["entity",
+            ".parameters[*].name|value"]).
+            # collection(collectionID, artifactID)
+            :load_aspect(/collection, "urn:ivcap:schema:artifact-collection.1", [".collection",
+            ".artifacts[*]"]).
+
+            query(Artifact) :-
+              # The collection ID is the 'image' parameter of the order
+              order_parameter("urn:ivcap:order:550e8400-e29b-41d4-a716-446655440000", "images",
+            Collection),
+              collection(Collection, Artifact).
+                                        .
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -221,6 +285,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
+        body=body,
         at_time=at_time,
         limit=limit,
         page=page,
@@ -235,9 +300,10 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    at_time: Union[Unset, None, datetime.datetime] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, File] = UNSET,
+    body: File,
+    at_time: Union[Unset, datetime.datetime] = UNSET,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, File] = UNSET,
     content_type: str,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
     """search search
@@ -245,17 +311,34 @@ async def asyncio(
      Execute query provided in body and return a list of search result.
 
     Args:
-        at_time (Union[Unset, None, datetime.datetime]): Return search which where valid at that
-            time [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, None, int]): The 'limit' system query option requests the number of
-            items in the queried
+        at_time (Union[Unset, datetime.datetime]): Return search which where valid at that time
+            [now] Example: 1996-12-19T16:39:57-08:00.
+        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
+            the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, File]): The content of '$page' is returned in the 'links' part of
-            a previous query and
+        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
+            previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/datalog+mangle.
+        body (File): Query Example:
+            # Find all the artifacts in the input collection for a specific order
+            #
+
+            # order_parameter(orderID, parameterName, parameterValue)
+            :load_aspect(/order_parameter, "urn:ivcap:schema:order-placed.1", ["entity",
+            ".parameters[*].name|value"]).
+            # collection(collectionID, artifactID)
+            :load_aspect(/collection, "urn:ivcap:schema:artifact-collection.1", [".collection",
+            ".artifacts[*]"]).
+
+            query(Artifact) :-
+              # The collection ID is the 'image' parameter of the order
+              order_parameter("urn:ivcap:order:550e8400-e29b-41d4-a716-446655440000", "images",
+            Collection),
+              collection(Collection, Artifact).
+                                        .
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -268,6 +351,7 @@ async def asyncio(
     return (
         await asyncio_detailed(
             client=client,
+            body=body,
             at_time=at_time,
             limit=limit,
             page=page,

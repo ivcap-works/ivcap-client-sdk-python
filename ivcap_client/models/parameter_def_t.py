@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -27,12 +27,12 @@ class ParameterDefT:
     Attributes:
         description (str):  Example: Eius vel..
         name (str):  Example: Earum aliquid aut cum..
-        type (str):  Example: Veniam sunt quibusdam dolores officiis reprehenderit..
+        type_ (str):  Example: Veniam sunt quibusdam dolores officiis reprehenderit..
         constant (Union[Unset, bool]):  Example: True.
         default (Union[Unset, str]):  Example: Consequuntur incidunt iste..
         label (Union[Unset, str]):  Example: Perferendis rerum explicabo consequatur..
         optional (Union[Unset, bool]):  Example: True.
-        options (Union[Unset, List['ParameterOptT']]):  Example: [{'description': 'Quo fugiat non qui nihil voluptatem
+        options (Union[Unset, list['ParameterOptT']]):  Example: [{'description': 'Quo fugiat non qui nihil voluptatem
             ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}, {'description': 'Quo fugiat non qui
             nihil voluptatem ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}].
         unary (Union[Unset, bool]):  Example: True.
@@ -41,42 +41,49 @@ class ParameterDefT:
 
     description: str
     name: str
-    type: str
+    type_: str
     constant: Union[Unset, bool] = UNSET
     default: Union[Unset, str] = UNSET
     label: Union[Unset, str] = UNSET
     optional: Union[Unset, bool] = UNSET
-    options: Union[Unset, List["ParameterOptT"]] = UNSET
+    options: Union[Unset, list["ParameterOptT"]] = UNSET
     unary: Union[Unset, bool] = UNSET
     unit: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         description = self.description
+
         name = self.name
-        type = self.type
+
+        type_ = self.type_
+
         constant = self.constant
+
         default = self.default
+
         label = self.label
+
         optional = self.optional
-        options: Union[Unset, List[Dict[str, Any]]] = UNSET
+
+        options: Union[Unset, list[dict[str, Any]]] = UNSET
         if not isinstance(self.options, Unset):
             options = []
             for options_item_data in self.options:
                 options_item = options_item_data.to_dict()
-
                 options.append(options_item)
 
         unary = self.unary
+
         unit = self.unit
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "description": description,
                 "name": name,
-                "type": type,
+                "type": type_,
             }
         )
         if constant is not UNSET:
@@ -97,7 +104,7 @@ class ParameterDefT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.parameter_opt_t import ParameterOptT
 
         d = src_dict.copy()
@@ -105,7 +112,7 @@ class ParameterDefT:
 
         name = d.pop("name")
 
-        type = d.pop("type")
+        type_ = d.pop("type")
 
         constant = d.pop("constant", UNSET)
 
@@ -129,7 +136,7 @@ class ParameterDefT:
         parameter_def_t = cls(
             description=description,
             name=name,
-            type=type,
+            type_=type_,
             constant=constant,
             default=default,
             label=label,
@@ -143,7 +150,7 @@ class ParameterDefT:
         return parameter_def_t
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

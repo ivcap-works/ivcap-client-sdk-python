@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -38,7 +38,7 @@ class AspectRT:
         content_type (str): Content-Type header, MUST be of application/json. Example: application/json.
         entity (str): Entity URN Example: urn:blue:transect.1.
         id (str): ID Example: urn:ivcap:record:123e4567-e89b-12d3-a456-426614174000.
-        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
         policy (str): Reference to policy used Example: urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
@@ -57,40 +57,48 @@ class AspectRT:
     content_type: str
     entity: str
     id: str
-    links: List["LinkT"]
+    links: list["LinkT"]
     policy: str
     schema: str
     valid_from: datetime.datetime
     replaces: Union[Unset, str] = UNSET
     retracter: Union[Unset, str] = UNSET
     valid_to: Union[Unset, datetime.datetime] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         account = self.account
+
         asserter = self.asserter
+
         content = self.content.to_dict()
 
         content_type = self.content_type
+
         entity = self.entity
+
         id = self.id
+
         links = []
         for links_item_data in self.links:
             links_item = links_item_data.to_dict()
-
             links.append(links_item)
 
         policy = self.policy
+
         schema = self.schema
+
         valid_from = self.valid_from.isoformat()
 
         replaces = self.replaces
+
         retracter = self.retracter
+
         valid_to: Union[Unset, str] = UNSET
         if not isinstance(self.valid_to, Unset):
             valid_to = self.valid_to.isoformat()
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -116,7 +124,7 @@ class AspectRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.aspect_rt_content import AspectRTContent
         from ..models.link_t import LinkT
 
@@ -177,7 +185,7 @@ class AspectRT:
         return aspect_rt
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

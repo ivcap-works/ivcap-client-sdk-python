@@ -1,5 +1,5 @@
 import datetime
-from typing import Any, Dict, List, Type, TypeVar, Union, cast
+from typing import Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -26,7 +26,7 @@ class ServiceListItemT:
         description (Union[Unset, str]): Optional description of the service Example: Some lengthy description of fire
             risk.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for region.
-        tags (Union[Unset, List[str]]): Optional tags defined for service to help in categorising them Example: ['tag1',
+        tags (Union[Unset, list[str]]): Optional tags defined for service to help in categorising them Example: ['tag1',
             'tag2'].
         valid_from (Union[Unset, datetime.datetime]): time this service has been available from Example:
             1996-12-19T16:39:57-08:00.
@@ -39,18 +39,23 @@ class ServiceListItemT:
     id: str
     description: Union[Unset, str] = UNSET
     name: Union[Unset, str] = UNSET
-    tags: Union[Unset, List[str]] = UNSET
+    tags: Union[Unset, list[str]] = UNSET
     valid_from: Union[Unset, datetime.datetime] = UNSET
     valid_to: Union[Unset, datetime.datetime] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         controller_schema = self.controller_schema
+
         href = self.href
+
         id = self.id
+
         description = self.description
+
         name = self.name
-        tags: Union[Unset, List[str]] = UNSET
+
+        tags: Union[Unset, list[str]] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
@@ -62,7 +67,7 @@ class ServiceListItemT:
         if not isinstance(self.valid_to, Unset):
             valid_to = self.valid_to.isoformat()
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -85,7 +90,7 @@ class ServiceListItemT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         d = src_dict.copy()
         controller_schema = d.pop("controller-schema")
 
@@ -97,7 +102,7 @@ class ServiceListItemT:
 
         name = d.pop("name", UNSET)
 
-        tags = cast(List[str], d.pop("tags", UNSET))
+        tags = cast(list[str], d.pop("tags", UNSET))
 
         _valid_from = d.pop("valid-from", UNSET)
         valid_from: Union[Unset, datetime.datetime]
@@ -128,7 +133,7 @@ class ServiceListItemT:
         return service_list_item_t
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

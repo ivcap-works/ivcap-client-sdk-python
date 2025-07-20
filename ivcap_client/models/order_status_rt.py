@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -36,10 +36,10 @@ class OrderStatusRT:
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
         id (str): ID Example: urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
-        parameters (List['ParameterT']): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
+        parameters (list['ParameterT']): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
             {'name': 'threshold', 'value': '10'}].
         products (PartialProductList2T):  Example: {'items': [{'data-href': 'https:/.../1/artifacts/0000-00001220/blob',
             'href': 'https:/.../1/artifacts/0000-00001220', 'mime-type': 'image/geo+tiff', 'name': 'fire risk map', 'size':
@@ -52,13 +52,13 @@ class OrderStatusRT:
         ordered_at (Union[Unset, datetime.datetime]): DateTime order was placed Example: 1996-12-19T16:39:57-08:00.
         started_at (Union[Unset, datetime.datetime]): DateTime order processing started Example:
             1996-12-19T16:39:57-08:00.
-        tags (Union[Unset, List[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
+        tags (Union[Unset, list[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
     """
 
     account: str
     id: str
-    links: List["LinkT"]
-    parameters: List["ParameterT"]
+    links: list["LinkT"]
+    parameters: list["ParameterT"]
     products: "PartialProductList2T"
     service: str
     status: OrderStatusRTStatus
@@ -66,27 +66,28 @@ class OrderStatusRT:
     name: Union[Unset, str] = UNSET
     ordered_at: Union[Unset, datetime.datetime] = UNSET
     started_at: Union[Unset, datetime.datetime] = UNSET
-    tags: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    tags: Union[Unset, list[str]] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         account = self.account
+
         id = self.id
+
         links = []
         for links_item_data in self.links:
             links_item = links_item_data.to_dict()
-
             links.append(links_item)
 
         parameters = []
         for parameters_item_data in self.parameters:
             parameters_item = parameters_item_data.to_dict()
-
             parameters.append(parameters_item)
 
         products = self.products.to_dict()
 
         service = self.service
+
         status = self.status.value
 
         finished_at: Union[Unset, str] = UNSET
@@ -94,6 +95,7 @@ class OrderStatusRT:
             finished_at = self.finished_at.isoformat()
 
         name = self.name
+
         ordered_at: Union[Unset, str] = UNSET
         if not isinstance(self.ordered_at, Unset):
             ordered_at = self.ordered_at.isoformat()
@@ -102,11 +104,11 @@ class OrderStatusRT:
         if not isinstance(self.started_at, Unset):
             started_at = self.started_at.isoformat()
 
-        tags: Union[Unset, List[str]] = UNSET
+        tags: Union[Unset, list[str]] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -133,7 +135,7 @@ class OrderStatusRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.parameter_t import ParameterT
         from ..models.partial_product_list_2t import PartialProductList2T
@@ -186,7 +188,7 @@ class OrderStatusRT:
         else:
             started_at = isoparse(_started_at)
 
-        tags = cast(List[str], d.pop("tags", UNSET))
+        tags = cast(list[str], d.pop("tags", UNSET))
 
         order_status_rt = cls(
             account=account,
@@ -207,7 +209,7 @@ class OrderStatusRT:
         return order_status_rt
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

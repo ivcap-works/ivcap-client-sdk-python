@@ -1,5 +1,5 @@
 import datetime
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -42,16 +42,21 @@ class Readqueueresponse:
     first_time: Union[Unset, datetime.datetime] = UNSET
     last_time: Union[Unset, datetime.datetime] = UNSET
     total_messages: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         created_at = self.created_at.isoformat()
 
         id = self.id
+
         name = self.name
+
         bytes_ = self.bytes_
+
         consumer_count = self.consumer_count
+
         description = self.description
+
         first_time: Union[Unset, str] = UNSET
         if not isinstance(self.first_time, Unset):
             first_time = self.first_time.isoformat()
@@ -62,7 +67,7 @@ class Readqueueresponse:
 
         total_messages = self.total_messages
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -87,7 +92,7 @@ class Readqueueresponse:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         d = src_dict.copy()
         created_at = isoparse(d.pop("created-at"))
 
@@ -133,7 +138,7 @@ class Readqueueresponse:
         return readqueueresponse
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

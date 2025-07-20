@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 import httpx
 
@@ -16,13 +16,12 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     urn: str,
     *,
-    role: Union[Unset, None, str] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
-) -> Dict[str, Any]:
-    pass
+    role: Union[Unset, str] = UNSET,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
+) -> dict[str, Any]:
+    params: dict[str, Any] = {}
 
-    params: Dict[str, Any] = {}
     params["role"] = role
 
     params["limit"] = limit
@@ -31,46 +30,46 @@ def _get_kwargs(
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/1/project/{urn}/members".format(
-            urn=urn,
-        ),
+        "url": f"/1/project/{urn}/members",
         "params": params,
     }
+
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, ResourceNotFoundT]]:
-    if response.status_code == HTTPStatus.OK:
+    if response.status_code == 200:
         response_200 = MembersList.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+    if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+    if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+    if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.NOT_FOUND:
+    if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
+    if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
+    if response.status_code == 501:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+    if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -94,9 +93,9 @@ def sync_detailed(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Union[Unset, None, str] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
+    role: Union[Unset, str] = UNSET,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, ResourceNotFoundT]]:
     """List Project Members
 
@@ -104,11 +103,11 @@ def sync_detailed(
 
     Args:
         urn (str): Project URN Example: urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        role (Union[Unset, None, str]): Role Example: all.
-        limit (Union[Unset, None, int]): The 'limit' query option sets the maximum number of items
+        role (Union[Unset, str]): Role Example: all.
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): A pagination token to retrieve the next set of results.
-            Empty if there are no more results Example: Harum minima perspiciatis delectus nihil..
+        page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if
+            there are no more results Example: Harum minima perspiciatis delectus nihil..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -136,9 +135,9 @@ def sync(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Union[Unset, None, str] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
+    role: Union[Unset, str] = UNSET,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, ResourceNotFoundT]]:
     """List Project Members
 
@@ -146,11 +145,11 @@ def sync(
 
     Args:
         urn (str): Project URN Example: urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        role (Union[Unset, None, str]): Role Example: all.
-        limit (Union[Unset, None, int]): The 'limit' query option sets the maximum number of items
+        role (Union[Unset, str]): Role Example: all.
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): A pagination token to retrieve the next set of results.
-            Empty if there are no more results Example: Harum minima perspiciatis delectus nihil..
+        page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if
+            there are no more results Example: Harum minima perspiciatis delectus nihil..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -173,9 +172,9 @@ async def asyncio_detailed(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Union[Unset, None, str] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
+    role: Union[Unset, str] = UNSET,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, ResourceNotFoundT]]:
     """List Project Members
 
@@ -183,11 +182,11 @@ async def asyncio_detailed(
 
     Args:
         urn (str): Project URN Example: urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        role (Union[Unset, None, str]): Role Example: all.
-        limit (Union[Unset, None, int]): The 'limit' query option sets the maximum number of items
+        role (Union[Unset, str]): Role Example: all.
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): A pagination token to retrieve the next set of results.
-            Empty if there are no more results Example: Harum minima perspiciatis delectus nihil..
+        page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if
+            there are no more results Example: Harum minima perspiciatis delectus nihil..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -213,9 +212,9 @@ async def asyncio(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Union[Unset, None, str] = UNSET,
-    limit: Union[Unset, None, int] = 10,
-    page: Union[Unset, None, str] = UNSET,
+    role: Union[Unset, str] = UNSET,
+    limit: Union[Unset, int] = 10,
+    page: Union[Unset, str] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, ResourceNotFoundT]]:
     """List Project Members
 
@@ -223,11 +222,11 @@ async def asyncio(
 
     Args:
         urn (str): Project URN Example: urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        role (Union[Unset, None, str]): Role Example: all.
-        limit (Union[Unset, None, int]): The 'limit' query option sets the maximum number of items
+        role (Union[Unset, str]): Role Example: all.
+        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, None, str]): A pagination token to retrieve the next set of results.
-            Empty if there are no more results Example: Harum minima perspiciatis delectus nihil..
+        page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if
+            there are no more results Example: Harum minima perspiciatis delectus nihil..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

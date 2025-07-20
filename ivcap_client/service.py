@@ -4,10 +4,12 @@
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
 from __future__ import annotations # postpone evaluation of annotations
+import asyncio
 import io
 import json
-from typing import IO, TYPE_CHECKING, Dict, List, Optional, Any, List, Optional, Dict, Set, Union
+from typing import IO, TYPE_CHECKING, Awaitable, Dict, List, Optional, Any, List, Optional, Dict, Set, Union
 
+from httpx import Response
 from pydantic import BaseModel
 
 if TYPE_CHECKING:
@@ -31,7 +33,7 @@ from ivcap_client.utils import BaseIter, Links, _set_fields, _unset, _unset_bool
 
 @dataclass
 class Service:
-    """This clas represents a particular service available
+    """This class represents a particular service available
     in a particular IVCAP deployment"""
 
     id: Optional[URN] = None
@@ -69,7 +71,6 @@ class Service:
             pd = dict(map(lambda d: [d["name"].replace('-', '_'), ServiceParameter(ParameterDefT.from_dict(d))], params))
             self._parameters = pd
 
-
     def status(self, refresh = True) -> ServiceStatusRTStatus:
         if refresh:
             self.refresh()
@@ -90,6 +91,11 @@ class Service:
     @property
     def request_model(self) -> type[BaseModel]:
         if not self._request_model:
+            return self._fetch_request_model()
+        return self._request_model
+
+    def _fetch_request_model(self) -> type[BaseModel]:
+        if not self._request_model:
             schema = 'urn:sd-core:schema.ai-tool.1'
             l = self._ivcap.list_aspects(schema=schema, entity=self.id, include_content=False, limit=2)
             if not l.has_next():
@@ -101,8 +107,22 @@ class Service:
             self._request_model = model_from_json_schema(js, f"Service{id(self)}")
         return self._request_model
 
-    def request_job(self, data: Union[BaseModel, object, IO[str]], timeout:Optional[int]=0) -> Job:
+    async def request_model_async(self) -> Awaitable[type[BaseModel]]:
+        if self._request_model:
+            return self._request_model
+        return await asyncio.to_thread(self._fetch_request_model)
 
+    def request_job(self, data: Union[BaseModel, object, IO[str]], timeout:Optional[int]=0) -> Job:
+        kwargs = self._get_request_job_args(data, timeout)
+        response = self._ivcap._client.get_httpx_client().request(**kwargs)
+        return self._process_job_reply(response)
+
+    async def request_job_async(self, data: Union[BaseModel, object, IO[str]], timeout:Optional[int]=0) -> Awaitable[Job]:
+        kwargs = self._get_request_job_args(data, timeout)
+        response = await self._ivcap._client.get_async_httpx_client().request(**kwargs)
+        return self._process_job_reply(response)
+
+    def _get_request_job_args(self, data: Union[BaseModel, object, IO[str]], timeout:Optional[int]=0):
         headers: dict[str, Any] = {
             "Timeout": str(timeout if timeout != None else 0),
             "Content-Type": "application/json",
@@ -132,9 +152,11 @@ class Service:
 
         kwargs["data"] = body
         kwargs["headers"] = headers
-        response = self._ivcap._client.get_httpx_client().request(**kwargs)
+        return kwargs
+
+    def _process_job_reply(self, response: Response) -> Job:
         if response.status_code >= 300:
-            return process_error('place_order', response)
+            return process_error('request_job', response)
 
         from ivcap_client.job import Job
         return Job.from_create_job_response(response, self)

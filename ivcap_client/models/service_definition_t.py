@@ -1,5 +1,5 @@
 from io import BytesIO
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -34,12 +34,12 @@ class ServiceDefinitionT:
         controller_schema (str): type of controller used for this service Example: urn:ivcap:schema.service.argo.1.
         description (str): More detailed description of the service Example: This service ....
         id (str): ID Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        parameters (List['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
+        parameters (list['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
             region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
             'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}].
         policy (str): Reference to policy used Example: urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
         name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
-        tags (Union[Unset, List[str]]): Optional tags defined for service to help in categorising them Example: ['tag1',
+        tags (Union[Unset, list[str]]): Optional tags defined for service to help in categorising them Example: ['tag1',
             'tag2'].
     """
 
@@ -47,31 +47,35 @@ class ServiceDefinitionT:
     controller_schema: str
     description: str
     id: str
-    parameters: List["ParameterDefT"]
+    parameters: list["ParameterDefT"]
     policy: str
     name: Union[Unset, str] = UNSET
-    tags: Union[Unset, List[str]] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    tags: Union[Unset, list[str]] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         controller = self.controller.to_tuple()
 
         controller_schema = self.controller_schema
+
         description = self.description
+
         id = self.id
+
         parameters = []
         for parameters_item_data in self.parameters:
             parameters_item = parameters_item_data.to_dict()
-
             parameters.append(parameters_item)
 
         policy = self.policy
+
         name = self.name
-        tags: Union[Unset, List[str]] = UNSET
+
+        tags: Union[Unset, list[str]] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -91,7 +95,7 @@ class ServiceDefinitionT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.parameter_def_t import ParameterDefT
 
         d = src_dict.copy()
@@ -114,7 +118,7 @@ class ServiceDefinitionT:
 
         name = d.pop("name", UNSET)
 
-        tags = cast(List[str], d.pop("tags", UNSET))
+        tags = cast(list[str], d.pop("tags", UNSET))
 
         service_definition_t = cls(
             controller=controller,
@@ -131,7 +135,7 @@ class ServiceDefinitionT:
         return service_definition_t
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

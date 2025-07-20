@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 import httpx
 
@@ -17,52 +17,54 @@ def _get_kwargs(
     project_urn: str,
     user_urn: str,
     *,
-    json_body: UpdateMembershipRequestBody,
-) -> Dict[str, Any]:
-    pass
+    body: UpdateMembershipRequestBody,
+) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
 
-    json_json_body = json_body.to_dict()
-
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "put",
-        "url": "/1/project/{project_urn}/memberships/{user_urn}".format(
-            project_urn=project_urn,
-            user_urn=user_urn,
-        ),
-        "json": json_json_body,
+        "url": f"/1/project/{project_urn}/memberships/{user_urn}",
     }
+
+    _body = body.to_dict()
+
+    _kwargs["json"] = _body
+    headers["Content-Type"] = "application/json"
+
+    _kwargs["headers"] = headers
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
-    if response.status_code == HTTPStatus.NO_CONTENT:
+    if response.status_code == 204:
         response_204 = cast(Any, None)
         return response_204
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+    if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+    if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+    if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.NOT_FOUND:
+    if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
+    if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
+    if response.status_code == 501:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+    if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -87,7 +89,7 @@ def sync_detailed(
     user_urn: str,
     *,
     client: AuthenticatedClient,
-    json_body: UpdateMembershipRequestBody,
+    body: UpdateMembershipRequestBody,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """Add or Update User Membership
 
@@ -97,7 +99,7 @@ def sync_detailed(
         project_urn (str): Project URN Example:
             urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
         user_urn (str): User URN Example: urn:ivcap:user:0b755f67-4d03-4d82-b208-4d6a0ae16468.
-        json_body (UpdateMembershipRequestBody):  Example: {'role': 'owner'}.
+        body (UpdateMembershipRequestBody):  Example: {'role': 'owner'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -110,7 +112,7 @@ def sync_detailed(
     kwargs = _get_kwargs(
         project_urn=project_urn,
         user_urn=user_urn,
-        json_body=json_body,
+        body=body,
     )
 
     response = client.get_httpx_client().request(
@@ -125,7 +127,7 @@ def sync(
     user_urn: str,
     *,
     client: AuthenticatedClient,
-    json_body: UpdateMembershipRequestBody,
+    body: UpdateMembershipRequestBody,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """Add or Update User Membership
 
@@ -135,7 +137,7 @@ def sync(
         project_urn (str): Project URN Example:
             urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
         user_urn (str): User URN Example: urn:ivcap:user:0b755f67-4d03-4d82-b208-4d6a0ae16468.
-        json_body (UpdateMembershipRequestBody):  Example: {'role': 'owner'}.
+        body (UpdateMembershipRequestBody):  Example: {'role': 'owner'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -149,7 +151,7 @@ def sync(
         project_urn=project_urn,
         user_urn=user_urn,
         client=client,
-        json_body=json_body,
+        body=body,
     ).parsed
 
 
@@ -158,7 +160,7 @@ async def asyncio_detailed(
     user_urn: str,
     *,
     client: AuthenticatedClient,
-    json_body: UpdateMembershipRequestBody,
+    body: UpdateMembershipRequestBody,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """Add or Update User Membership
 
@@ -168,7 +170,7 @@ async def asyncio_detailed(
         project_urn (str): Project URN Example:
             urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
         user_urn (str): User URN Example: urn:ivcap:user:0b755f67-4d03-4d82-b208-4d6a0ae16468.
-        json_body (UpdateMembershipRequestBody):  Example: {'role': 'owner'}.
+        body (UpdateMembershipRequestBody):  Example: {'role': 'owner'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -181,7 +183,7 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         project_urn=project_urn,
         user_urn=user_urn,
-        json_body=json_body,
+        body=body,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -194,7 +196,7 @@ async def asyncio(
     user_urn: str,
     *,
     client: AuthenticatedClient,
-    json_body: UpdateMembershipRequestBody,
+    body: UpdateMembershipRequestBody,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
     """Add or Update User Membership
 
@@ -204,7 +206,7 @@ async def asyncio(
         project_urn (str): Project URN Example:
             urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
         user_urn (str): User URN Example: urn:ivcap:user:0b755f67-4d03-4d82-b208-4d6a0ae16468.
-        json_body (UpdateMembershipRequestBody):  Example: {'role': 'owner'}.
+        body (UpdateMembershipRequestBody):  Example: {'role': 'owner'}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -219,6 +221,6 @@ async def asyncio(
             project_urn=project_urn,
             user_urn=user_urn,
             client=client,
-            json_body=json_body,
+            body=body,
         )
     ).parsed

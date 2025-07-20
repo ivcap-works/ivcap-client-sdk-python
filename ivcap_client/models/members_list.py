@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -26,7 +26,7 @@ class MembersList:
             magnam.'}
 
     Attributes:
-        members (List['UserListItem']): Members Example: [{'email': 'example@domain.com', 'role': 'Owner', 'urn':
+        members (list['UserListItem']): Members Example: [{'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}, {'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}, {'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}].
@@ -35,16 +35,15 @@ class MembersList:
             results Example: Mollitia animi sapiente eos libero mollitia quis..
     """
 
-    members: List["UserListItem"]
+    members: list["UserListItem"]
     at_time: Union[Unset, datetime.datetime] = UNSET
     page: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         members = []
         for members_item_data in self.members:
             members_item = members_item_data.to_dict()
-
             members.append(members_item)
 
         at_time: Union[Unset, str] = UNSET
@@ -53,7 +52,7 @@ class MembersList:
 
         page = self.page
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -68,7 +67,7 @@ class MembersList:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.user_list_item import UserListItem
 
         d = src_dict.copy()
@@ -98,7 +97,7 @@ class MembersList:
         return members_list
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

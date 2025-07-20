@@ -1,5 +1,5 @@
 import datetime
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -44,13 +44,17 @@ class OrderListItem:
     name: Union[Unset, str] = UNSET
     ordered_at: Union[Unset, datetime.datetime] = UNSET
     started_at: Union[Unset, datetime.datetime] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         account = self.account
+
         href = self.href
+
         id = self.id
+
         service = self.service
+
         status = self.status.value
 
         finished_at: Union[Unset, str] = UNSET
@@ -58,6 +62,7 @@ class OrderListItem:
             finished_at = self.finished_at.isoformat()
 
         name = self.name
+
         ordered_at: Union[Unset, str] = UNSET
         if not isinstance(self.ordered_at, Unset):
             ordered_at = self.ordered_at.isoformat()
@@ -66,7 +71,7 @@ class OrderListItem:
         if not isinstance(self.started_at, Unset):
             started_at = self.started_at.isoformat()
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -89,7 +94,7 @@ class OrderListItem:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         d = src_dict.copy()
         account = d.pop("account")
 
@@ -140,7 +145,7 @@ class OrderListItem:
         return order_list_item
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

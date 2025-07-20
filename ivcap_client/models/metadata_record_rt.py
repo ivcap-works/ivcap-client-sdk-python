@@ -1,6 +1,6 @@
 import datetime
 from io import BytesIO
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -32,7 +32,7 @@ class MetadataRecordRT:
             urn:ivcap:principal:123e4567-e89b-12d3-a456-426614174000.
         entity (str): Entity ID Example: urn:blue:transect.1.
         id (str): ID Example: urn:ivcap:record:123e4567-e89b-12d3-a456-426614174000.
-        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
         schema (str): Schema ID Example: urn:blue:schema.image.
@@ -46,34 +46,38 @@ class MetadataRecordRT:
     asserter: str
     entity: str
     id: str
-    links: List["LinkT"]
+    links: list["LinkT"]
     schema: str
     valid_from: datetime.datetime
     revoker: Union[Unset, str] = UNSET
     valid_to: Union[Unset, datetime.datetime] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         aspect = self.aspect.to_tuple()
 
         asserter = self.asserter
+
         entity = self.entity
+
         id = self.id
+
         links = []
         for links_item_data in self.links:
             links_item = links_item_data.to_dict()
-
             links.append(links_item)
 
         schema = self.schema
+
         valid_from = self.valid_from.isoformat()
 
         revoker = self.revoker
+
         valid_to: Union[Unset, str] = UNSET
         if not isinstance(self.valid_to, Unset):
             valid_to = self.valid_to.isoformat()
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -94,7 +98,7 @@ class MetadataRecordRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.link_t import LinkT
 
         d = src_dict.copy()
@@ -142,7 +146,7 @@ class MetadataRecordRT:
         return metadata_record_rt
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

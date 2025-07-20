@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 import httpx
 
@@ -17,59 +17,63 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     id: str,
     *,
-    json_body: XServiceDefinitionT,
-    force_create: Union[Unset, None, bool] = UNSET,
-) -> Dict[str, Any]:
-    pass
+    body: XServiceDefinitionT,
+    force_create: Union[Unset, bool] = UNSET,
+) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
 
-    params: Dict[str, Any] = {}
+    params: dict[str, Any] = {}
+
     params["force-create"] = force_create
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    json_json_body = json_body.to_dict()
-
-    return {
+    _kwargs: dict[str, Any] = {
         "method": "put",
-        "url": "/1/services/{id}".format(
-            id=id,
-        ),
-        "json": json_json_body,
+        "url": f"/1/services/{id}",
         "params": params,
     }
+
+    _body = body.to_dict()
+
+    _kwargs["json"] = _body
+    headers["Content-Type"] = "application/json"
+
+    _kwargs["headers"] = headers
+    return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, XServiceStatusRT]]:
-    if response.status_code == HTTPStatus.OK:
+    if response.status_code == 200:
         response_200 = XServiceStatusRT.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.BAD_REQUEST:
+    if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
-    if response.status_code == HTTPStatus.UNAUTHORIZED:
+    if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
-    if response.status_code == HTTPStatus.FORBIDDEN:
+    if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
-    if response.status_code == HTTPStatus.NOT_FOUND:
+    if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
+    if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
-    if response.status_code == HTTPStatus.NOT_IMPLEMENTED:
+    if response.status_code == 501:
         response_501 = BadRequestT.from_dict(response.json())
 
         return response_501
-    if response.status_code == HTTPStatus.SERVICE_UNAVAILABLE:
+    if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
     if client.raise_on_unexpected_status:
@@ -93,8 +97,8 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    json_body: XServiceDefinitionT,
-    force_create: Union[Unset, None, bool] = UNSET,
+    body: XServiceDefinitionT,
+    force_create: Union[Unset, bool] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, XServiceStatusRT]]:
     """update servicex
 
@@ -102,8 +106,8 @@ def sync_detailed(
 
     Args:
         id (str): ID of services to update Example: Deserunt commodi consequatur facere atque..
-        force_create (Union[Unset, None, bool]): Create if not already exist
-        json_body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
+        force_create (Union[Unset, bool]): Create if not already exist
+        body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
@@ -129,7 +133,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         id=id,
-        json_body=json_body,
+        body=body,
         force_create=force_create,
     )
 
@@ -144,8 +148,8 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    json_body: XServiceDefinitionT,
-    force_create: Union[Unset, None, bool] = UNSET,
+    body: XServiceDefinitionT,
+    force_create: Union[Unset, bool] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, XServiceStatusRT]]:
     """update servicex
 
@@ -153,8 +157,8 @@ def sync(
 
     Args:
         id (str): ID of services to update Example: Deserunt commodi consequatur facere atque..
-        force_create (Union[Unset, None, bool]): Create if not already exist
-        json_body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
+        force_create (Union[Unset, bool]): Create if not already exist
+        body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
@@ -181,7 +185,7 @@ def sync(
     return sync_detailed(
         id=id,
         client=client,
-        json_body=json_body,
+        body=body,
         force_create=force_create,
     ).parsed
 
@@ -190,8 +194,8 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    json_body: XServiceDefinitionT,
-    force_create: Union[Unset, None, bool] = UNSET,
+    body: XServiceDefinitionT,
+    force_create: Union[Unset, bool] = UNSET,
 ) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, XServiceStatusRT]]:
     """update servicex
 
@@ -199,8 +203,8 @@ async def asyncio_detailed(
 
     Args:
         id (str): ID of services to update Example: Deserunt commodi consequatur facere atque..
-        force_create (Union[Unset, None, bool]): Create if not already exist
-        json_body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
+        force_create (Union[Unset, bool]): Create if not already exist
+        body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
@@ -226,7 +230,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         id=id,
-        json_body=json_body,
+        body=body,
         force_create=force_create,
     )
 
@@ -239,8 +243,8 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    json_body: XServiceDefinitionT,
-    force_create: Union[Unset, None, bool] = UNSET,
+    body: XServiceDefinitionT,
+    force_create: Union[Unset, bool] = UNSET,
 ) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, XServiceStatusRT]]:
     """update servicex
 
@@ -248,8 +252,8 @@ async def asyncio(
 
     Args:
         id (str): ID of services to update Example: Deserunt commodi consequatur facere atque..
-        force_create (Union[Unset, None, bool]): Create if not already exist
-        json_body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
+        force_create (Union[Unset, bool]): Create if not already exist
+        body (XServiceDefinitionT):  Example: {'banner': 'http://leffler.info/herminia',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
             'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name':
@@ -277,7 +281,7 @@ async def asyncio(
         await asyncio_detailed(
             id=id,
             client=client,
-            json_body=json_body,
+            body=body,
             force_create=force_create,
         )
     ).parsed

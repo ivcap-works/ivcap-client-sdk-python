@@ -13,12 +13,13 @@ from sys import maxsize as MAXSIZE
 import mimetypes
 import base64
 
+from ivcap_client.agent import Agent
 from ivcap_client.api.artifact import artifact_upload
 from ivcap_client.api.search import search_search
 from ivcap_client.artifact import Artifact, ArtifactIter, check_file_already_uploaded, mark_file_already_uploaded
 from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
-from ivcap_client.client.client import AuthenticatedClient
+from ivcap_client.client.client import AuthenticatedClient, Client
 from ivcap_client.exception import AmbiguousRequest, ResourceNotFound
 from ivcap_client.order import Order, OrderIter
 from ivcap_client.secret import Secret, SecretIter
@@ -42,14 +43,26 @@ class IVCAP:
             token (Optional[str], optional): _description_. Defaults to [env: IVCAP_JWT].
             account_id (Optional[str], optional): _description_. Defaults to [env: IVCAP_ACCOUNT_ID].
         """
+        inside_platform = False
         if not url:
-            url= os.environ['IVCAP_URL']
+            url= os.environ.get('IVCAP_URL')
+            if not url:
+                url= os.environ.get('IVCAP_BASE_URL')
+                inside_platform = url is not None
+        if not url:
+            raise ValueError("missing 'url' argument or environment variables 'IVCAP_URL' or 'IVCAP_BASE_URL' not set.")
+
         if not token:
-            token = os.environ['IVCAP_JWT']
+            token = os.environ.get('IVCAP_JWT')
         self._url = url
         self._token = token
-        self._client = AuthenticatedClient(base_url=url, token=token)
         self._account_id = account_id
+        if inside_platform:
+            self._client = Client(base_url=url)
+        else:
+            if not token:
+                raise ValueError("missing 'token' argument or environment variable 'IVCAP_JWT' not set.")
+            self._client = AuthenticatedClient(base_url=url, token=token)
 
     #### SERVICES
 
@@ -127,6 +140,19 @@ class IVCAP:
             Service: Returns a Service instance if service exists
         """
         return Service(self, id=service_id)
+
+    ### AGENTS
+
+    def get_agent(self, agent_id: URN) -> Agent:
+        """Returns an Agent instance for agent 'agent_id'
+
+        Args:
+            agent_id (URN): URN of agent
+
+        Returns:
+            Service: Returns an Agent instance if agent exists
+        """
+        return Agent(self, id=agent_id)
 
     ### ORDERS
 

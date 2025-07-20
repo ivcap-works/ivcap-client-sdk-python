@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,7 +22,7 @@ class XBasicWorkflowOptsT:
             'shared-memory': '1Gi'}
 
     Attributes:
-        command (List[str]): Command to start the container - needed for some container runtimes Example: ['/bin/sh',
+        command (list[str]): Command to start the container - needed for some container runtimes Example: ['/bin/sh',
             '-c', 'echo $PATH'].
         image (str): container image name Example: alpine.
         cpu (Union[Unset, XResourceMemoryT]): See https://kubernetes.io/docs/concepts/configuration/manage-resources-
@@ -41,7 +41,7 @@ class XBasicWorkflowOptsT:
         shared_memory (Union[Unset, str]): Defines needed amount of shared-memory Example: 1Gi.
     """
 
-    command: List[str]
+    command: list[str]
     image: str
     cpu: Union[Unset, "XResourceMemoryT"] = UNSET
     ephemeral_storage: Union[Unset, "XResourceMemoryT"] = UNSET
@@ -50,30 +50,34 @@ class XBasicWorkflowOptsT:
     image_pull_policy: Union[Unset, str] = "IfNotPresent"
     memory: Union[Unset, "XResourceMemoryT"] = UNSET
     shared_memory: Union[Unset, str] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         command = self.command
 
         image = self.image
-        cpu: Union[Unset, Dict[str, Any]] = UNSET
+
+        cpu: Union[Unset, dict[str, Any]] = UNSET
         if not isinstance(self.cpu, Unset):
             cpu = self.cpu.to_dict()
 
-        ephemeral_storage: Union[Unset, Dict[str, Any]] = UNSET
+        ephemeral_storage: Union[Unset, dict[str, Any]] = UNSET
         if not isinstance(self.ephemeral_storage, Unset):
             ephemeral_storage = self.ephemeral_storage.to_dict()
 
         gpu_number = self.gpu_number
+
         gpu_type = self.gpu_type
+
         image_pull_policy = self.image_pull_policy
-        memory: Union[Unset, Dict[str, Any]] = UNSET
+
+        memory: Union[Unset, dict[str, Any]] = UNSET
         if not isinstance(self.memory, Unset):
             memory = self.memory.to_dict()
 
         shared_memory = self.shared_memory
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -99,11 +103,11 @@ class XBasicWorkflowOptsT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.x_resource_memory_t import XResourceMemoryT
 
         d = src_dict.copy()
-        command = cast(List[str], d.pop("command"))
+        command = cast(list[str], d.pop("command"))
 
         image = d.pop("image")
 
@@ -152,7 +156,7 @@ class XBasicWorkflowOptsT:
         return x_basic_workflow_opts_t
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

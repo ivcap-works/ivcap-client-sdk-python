@@ -4,7 +4,7 @@
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
 from __future__ import annotations # postpone evaluation of annotations
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, Awaitable, List, Optional
 
 from ivcap_client.service import Service
 from ivcap_client.types import Response
@@ -110,9 +110,36 @@ class Job:
             self.refresh()
         return self._status
 
+    async def status_async(self, refresh=True) -> Awaitable[JobStatus]:
+        if refresh:
+            await self.refresh_async()
+        return self._status
+
     @property
     def finished(self):
+        if self._finished:
+            return True
+        self.refresh()
+        return self._finished
+
+    @property
+    def _finished(self):
         return self._status in [JobStatus.SUCCEEDED, JobStatus.FAILED, JobStatus.ERROR]
+
+    async def finished_async(self):
+        if self._status in [JobStatus.SUCCEEDED, JobStatus.FAILED, JobStatus.ERROR]:
+            return True
+        await self.refresh_async()
+        return self._status in [JobStatus.SUCCEEDED, JobStatus.FAILED, JobStatus.ERROR]
+
+    @property
+    def succeeded(self):
+        return self.finished and self._status == JobStatus.SUCCEEDED
+
+    @property
+    async def succeeded_async(self):
+        finished = await self.finished_async()
+        return finished and self._status == JobStatus.SUCCEEDED
 
     @property
     def service(self) -> Service:
@@ -124,18 +151,37 @@ class Job:
             self.refresh()
         return self._result_content
 
+    async def result_async(self):
+        if self._result_content == None:
+            await self.refresh_async()
+        return self._result_content
+
     def refresh(self) -> Job:
-        if self.finished:
+        if self._finished:
             return self # no need to refresh
 
-        kwargs = {
+        kwargs = self._refresh_top()
+        r = service_job_read.sync_detailed(**kwargs)
+        return self._refresh_bottom(r)
+
+    async def refresh_async(self) -> Awaitable[Job]:
+        if self._finished:
+            return self # no need to refresh
+
+        kwargs = self._refresh_top()
+        r = await service_job_read.asyncio_detailed(**kwargs)
+        return self._refresh_bottom(r)
+
+    def _refresh_top(self):
+        return {
             "client": self._ivcap._client,
             "id": self.id,
             "service_id": self._service,
             "with_request_content": self._request_content == None,
             "with_result_content": self._result_content == None,
         }
-        r = service_job_read.sync_detailed(**kwargs)
+
+    def _refresh_bottom(self, r: Response) -> Job:
         if r.status_code >= 300:
             return process_error('place_job', r)
         kwargs = r.parsed.to_dict()

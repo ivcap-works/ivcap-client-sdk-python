@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -30,7 +30,7 @@ class ArtifactStatusRT:
 
     Attributes:
         id (str): Artifact ID Example: urn:ivcap:Artifact ID:123e4567-e89b-12d3-a456-426614174000.
-        links (List['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
         status (ArtifactStatusRTStatus): Artifact status Example: pending.
@@ -50,7 +50,7 @@ class ArtifactStatusRT:
     """
 
     id: str
-    links: List["LinkT"]
+    links: list["LinkT"]
     status: ArtifactStatusRTStatus
     account: Union[Unset, str] = UNSET
     cache_of: Union[Unset, str] = UNSET
@@ -62,36 +62,43 @@ class ArtifactStatusRT:
     name: Union[Unset, str] = UNSET
     policy: Union[Unset, str] = UNSET
     size: Union[Unset, int] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         id = self.id
+
         links = []
         for links_item_data in self.links:
             links_item = links_item_data.to_dict()
-
             links.append(links_item)
 
         status = self.status.value
 
         account = self.account
+
         cache_of = self.cache_of
+
         created_at: Union[Unset, str] = UNSET
         if not isinstance(self.created_at, Unset):
             created_at = self.created_at.isoformat()
 
         data_href = self.data_href
+
         etag = self.etag
+
         last_modified_at: Union[Unset, str] = UNSET
         if not isinstance(self.last_modified_at, Unset):
             last_modified_at = self.last_modified_at.isoformat()
 
         mime_type = self.mime_type
+
         name = self.name
+
         policy = self.policy
+
         size = self.size
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -124,7 +131,7 @@ class ArtifactStatusRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.link_t import LinkT
 
         d = src_dict.copy()
@@ -189,7 +196,7 @@ class ArtifactStatusRT:
         return artifact_status_rt
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

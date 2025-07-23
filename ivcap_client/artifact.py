@@ -20,6 +20,8 @@ from ivcap_client.models.artifact_status_rt_status import ArtifactStatusRTStatus
 
 from ivcap_client.utils import BaseIter, Links, _set_fields, process_error
 from ivcap_client.aspect import Aspect
+import httpx
+import io
 
 @dataclass
 class Artifact:
@@ -53,7 +55,7 @@ class Artifact:
     def __update__(self, **kwargs):
         p = ["id", "name", "size", "mime-type", "last-modified-at",
              "created-at", "policy", "etag", "account"]
-        hp = ["status", "cache_of", "data_href"]
+        hp = ["status", "cache_of", "data-href"]
         _set_fields(self, p, hp, kwargs)
 
         if not self.id:
@@ -76,6 +78,29 @@ class Artifact:
         kwargs = r.parsed.to_dict()
         self.__update__(**kwargs)
         return self
+
+    def as_file(self) -> io.BytesIO:
+        """Return a file-like object for the artifact data"""
+        client = self._ivcap._client.get_httpx_client()
+        response = client.get(self._data_href)
+        response.raise_for_status()
+        return io.BytesIO(response.content)
+
+    def as_stream(self, chunk_size: int = 8192) -> Iterator[bytes]:
+        """
+        Stream the artifact data in chunks.
+
+        Args:
+            chunk_size (int): Number of bytes to read per chunk. Default is 8192.
+
+        Yields:
+            bytes: Next chunk of artifact data.
+        """
+        client = self._ivcap._client.get_httpx_client()
+        with client.stream("GET", self._data_href) as response:
+            response.raise_for_status()
+            for chunk in response.iter_bytes(chunk_size=chunk_size):
+                yield chunk
 
     @property
     def metadata(self) -> Iterator[Aspect]:

@@ -406,7 +406,7 @@ class IVCAP:
             if not (os.path.isfile(file_path) and os.access(file_path, os.R_OK)):
                 raise ValueError(f"file '{file_path}' doesn't exist or is not readable.")
 
-        if not force_upload:
+        if not force_upload and file_path:
             aurn = check_file_already_uploaded(file_path)
             if aurn is not None:
                 return self.get_artifact(aurn)
@@ -458,7 +458,8 @@ class IVCAP:
         uploader.upload()
 
         kwargs = res.to_dict()
-        mark_file_already_uploaded(res.id, file_path)
+        if file_path:
+            mark_file_already_uploaded(res.id, file_path)
         kwargs["status"] = None
         a = Artifact(self, **kwargs)
         a.status # force status update as it will have change

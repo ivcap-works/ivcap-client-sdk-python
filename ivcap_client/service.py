@@ -117,10 +117,18 @@ class Service:
         response = self._ivcap._client.get_httpx_client().request(**kwargs)
         return self._process_job_reply(response)
 
-    async def request_job_async(self, data: Union[BaseModel, object, IO[str]], timeout:Optional[int]=0) -> Awaitable[Job]:
-        kwargs = self._get_request_job_args(data, timeout)
+    async def request_job_async(self, data: Union[BaseModel, object, IO[str]], max_wait_time: Optional[float] = None, poll_interval: float = 5.0) -> Awaitable[Job]:
+        start_time = datetime.datetime.now()
+        kwargs = self._get_request_job_args(data, max_wait_time)
         response = await self._ivcap._client.get_async_httpx_client().request(**kwargs)
-        return self._process_job_reply(response)
+        job = self._process_job_reply(response)
+        remaining = max_wait_time
+        if max_wait_time:
+            elapsed = (datetime.datetime.now() - start_time).total_seconds()
+            remaining = max_wait_time - elapsed
+            if remaining <= 0:
+                raise TimeoutError(f"Job '{self.id}' did not finish within {max_wait_time} seconds")
+        return await job.wait_for_finished_async(max_wait_time=remaining, poll_interval=poll_interval)
 
     def _get_request_job_args(self, data: Union[BaseModel, object, IO[str]], timeout:Optional[int]=0):
         headers: dict[str, Any] = {

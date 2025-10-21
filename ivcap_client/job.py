@@ -126,11 +126,22 @@ class Job:
     def _finished(self):
         return self._status in [JobStatus.SUCCEEDED, JobStatus.FAILED, JobStatus.ERROR]
 
-    async def finished_async(self):
+    async def finished_async(self) -> Awaitable[bool]:
         if self._status in [JobStatus.SUCCEEDED, JobStatus.FAILED, JobStatus.ERROR]:
             return True
         await self.refresh_async()
         return self._status in [JobStatus.SUCCEEDED, JobStatus.FAILED, JobStatus.ERROR]
+
+    async def wait_for_finished_async(self, max_wait_time: Optional[float] = None, poll_interval: float = 5.0) -> Awaitable[Job]:
+        import asyncio
+        start_time = datetime.now()
+        while not await self.finished_async():
+            if max_wait_time is not None:
+                elapsed = (datetime.now() - start_time).total_seconds()
+                if elapsed >= max_wait_time:
+                    raise TimeoutError(f"Job '{self.id}' did not finish within {max_wait_time} seconds")
+            await asyncio.sleep(poll_interval)
+        return self
 
     @property
     def succeeded(self):

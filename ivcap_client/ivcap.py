@@ -395,7 +395,7 @@ class IVCAP:
             retry_delay (Optional[int], optional): How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
             force_upload (Optional[bool], optional): Upload file even if it has been uploaded before.
         """
-        from artifact import upload_artifact as upload
+        from ivcap_client.artifact import upload_artifact as upload
         return upload(
             ivcap=self,
             name=name,

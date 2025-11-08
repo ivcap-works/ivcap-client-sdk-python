@@ -208,7 +208,7 @@ class LocalFileArtifact:
 
 #### HELPER FUNCTIONS ####
 
-def upload_artifact(self,
+def upload_artifact(ivcap,
                     *,
                     name: Optional[str] = None,
                     file_path: Optional[str] = None,
@@ -247,7 +247,7 @@ def upload_artifact(self,
     if not force_upload and file_path:
         aurn = check_file_already_uploaded(file_path)
         if aurn is not None:
-            return self.get_artifact(aurn)
+            return ivcap.get_artifact(aurn)
 
     if not content_type and file_path:
         content_type, _ = mimetypes.guess_type(file_path)
@@ -276,12 +276,12 @@ def upload_artifact(self,
             raise ValueError(f"policy '{collection} is not a policy URN.")
         kwargs['x_policy'] = policy
 
-    r = artifact_upload.sync_detailed(client=self._client, **kwargs)
+    r = artifact_upload.sync_detailed(client=ivcap._client, **kwargs)
     if r.status_code >= 300 :
         return process_error('upload_artifact', r)
     res:ArtifactStatusRT = r.parsed
 
-    h = {'Authorization': f"Bearer {self._token}"}
+    h = {'Authorization': f"Bearer {ivcap._token}"}
     data_url = res.data_href
     c = TusClient(data_url, headers=h)
     kwargs = {
@@ -299,7 +299,7 @@ def upload_artifact(self,
     if file_path:
         mark_file_already_uploaded(res.id, file_path)
     kwargs["status"] = None
-    a = Artifact(self, **kwargs)
+    a = Artifact(ivcap, **kwargs)
     a.status # force status update as it will have change
     return a
 

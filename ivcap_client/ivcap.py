@@ -396,8 +396,7 @@ class IVCAP:
             force_upload (Optional[bool], optional): Upload file even if it has been uploaded before.
         """
         from ivcap_client.artifact import upload_artifact as upload
-        return upload(
-            ivcap=self,
+        return upload(self,
             name=name,
             file_path=file_path,
             io_stream=io_stream,

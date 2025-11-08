@@ -395,7 +395,8 @@ class IVCAP:
             retry_delay (Optional[int], optional): How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
             force_upload (Optional[bool], optional): Upload file even if it has been uploaded before.
         """
-        return artifact_upload.upload_artifact(
+        from artifact import upload_artifact as upload
+        return upload(
             ivcap=self,
             name=name,
             file_path=file_path,
@@ -409,70 +410,6 @@ class IVCAP:
             retry_delay=retry_delay,
             force_upload=force_upload,
         )
-        # if not (file_path or io_stream):
-        #     raise ValueError("require either 'file_path' or 'io_stream'")
-        # if file_path:
-        #     if not (os.path.isfile(file_path) and os.access(file_path, os.R_OK)):
-        #         raise ValueError(f"file '{file_path}' doesn't exist or is not readable.")
-
-        # if not force_upload and file_path:
-        #     aurn = check_file_already_uploaded(file_path)
-        #     if aurn is not None:
-        #         return self.get_artifact(aurn)
-
-        # if not content_type and file_path:
-        #     content_type, _ = mimetypes.guess_type(file_path)
-
-        # if not content_type:
-        #     raise ValueError("missing 'content-type'")
-
-        # if content_size < 0 and file_path:
-        #     # generate size of file from file_path
-        #     content_size = os.path.getsize(file_path)
-
-        # kwargs = {
-        #     'x_content_type': content_type,
-        #     'x_content_length': content_size,
-        #     'tus_resumable': "1.0.0",
-        # }
-        # if name:
-        #     n = base64.b64encode(bytes(name, 'utf-8'))
-        #     kwargs['x_name'] = n
-        # if collection:
-        #     if not collection.startswith("urn:"):
-        #         raise ValueError(f"collection '{collection} is not a URN.")
-        #     kwargs['x_collection'] = collection
-        # if policy:
-        #     if not policy.startswith("urn:ivcap:policy:"):
-        #         raise ValueError(f"policy '{collection} is not a policy URN.")
-        #     kwargs['x_policy'] = policy
-
-        # r = artifact_upload.sync_detailed(client=self._client, **kwargs)
-        # if r.status_code >= 300 :
-        #     return process_error('upload_artifact', r)
-        # res:ArtifactStatusRT = r.parsed
-
-        # h = {'Authorization': f"Bearer {self._token}"}
-        # data_url = res.data_href
-        # c = TusClient(data_url, headers=h)
-        # kwargs = {
-        #     'file_path': file_path,
-        #     'file_stream': io_stream,
-        #     'chunk_size': chunk_size,
-        #     'retries': retries,
-        #     'retry_delay': retry_delay,
-        # }
-        # uploader = c.uploader(**kwargs)
-        # uploader.set_url(data_url) # not sure why I need to set it here again
-        # uploader.upload()
-
-        # kwargs = res.to_dict()
-        # if file_path:
-        #     mark_file_already_uploaded(res.id, file_path)
-        # kwargs["status"] = None
-        # a = Artifact(self, **kwargs)
-        # a.status # force status update as it will have change
-        # return a
 
     def artifact_for_file(self, file_path: str) -> Optional[Artifact]:
         """Return an Artifact instance if local file 'file_path'

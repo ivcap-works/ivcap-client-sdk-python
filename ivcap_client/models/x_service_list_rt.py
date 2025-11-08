@@ -25,14 +25,6 @@ class XServiceListRT:
             {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
             lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
-            {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
-            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
-            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
-            {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
-            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
             'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'}], 'links':
             [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
@@ -45,6 +37,10 @@ class XServiceListRT:
         items (list['XServiceListItem']): Services Example: [{'account':
             'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some lengthy
             description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
+            'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
+            {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some
+            lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'policy':
             'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'published-at': '1996-12-19T16:39:57-08:00'},
             {'account': 'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'banner': 'urn:....', 'description': 'Some

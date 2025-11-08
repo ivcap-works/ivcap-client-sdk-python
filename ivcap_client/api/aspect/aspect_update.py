@@ -10,6 +10,8 @@ from ...models.aspectupdate_body import AspectupdateBody
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
+from ...models.not_implemented_t import NotImplementedT
+from ...models.not_unique_resource_t import NotUniqueResourceT
 from ...types import UNSET, Response, Unset
 
 
@@ -51,7 +53,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Optional[
+    Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, NotUniqueResourceT]
+]:
     if response.status_code == 200:
         response_200 = AspectIDRT.from_dict(response.json())
 
@@ -72,11 +76,11 @@ def _parse_response(
 
         return response_422
     if response.status_code == 424:
-        response_424 = BadRequestT.from_dict(response.json())
+        response_424 = NotUniqueResourceT.from_dict(response.json())
 
         return response_424
     if response.status_code == 501:
-        response_501 = BadRequestT.from_dict(response.json())
+        response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
     if response.status_code == 503:
@@ -90,7 +94,9 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Response[
+    Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, NotUniqueResourceT]
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -107,7 +113,9 @@ def sync_detailed(
     schema: str,
     policy: Union[Unset, str] = UNSET,
     content_type: str,
-) -> Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Response[
+    Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, NotUniqueResourceT]
+]:
     """update aspect
 
      A convenience method which will create a new aspect, but will also
@@ -127,7 +135,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]
+        Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, NotUniqueResourceT]]
     """
 
     kwargs = _get_kwargs(
@@ -153,7 +161,9 @@ def sync(
     schema: str,
     policy: Union[Unset, str] = UNSET,
     content_type: str,
-) -> Optional[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Optional[
+    Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, NotUniqueResourceT]
+]:
     """update aspect
 
      A convenience method which will create a new aspect, but will also
@@ -173,7 +183,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]
+        Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, NotUniqueResourceT]
     """
 
     return sync_detailed(
@@ -194,7 +204,9 @@ async def asyncio_detailed(
     schema: str,
     policy: Union[Unset, str] = UNSET,
     content_type: str,
-) -> Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Response[
+    Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, NotUniqueResourceT]
+]:
     """update aspect
 
      A convenience method which will create a new aspect, but will also
@@ -214,7 +226,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]
+        Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, NotUniqueResourceT]]
     """
 
     kwargs = _get_kwargs(
@@ -238,7 +250,9 @@ async def asyncio(
     schema: str,
     policy: Union[Unset, str] = UNSET,
     content_type: str,
-) -> Optional[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Optional[
+    Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, NotUniqueResourceT]
+]:
     """update aspect
 
      A convenience method which will create a new aspect, but will also
@@ -258,7 +272,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT]
+        Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, NotUniqueResourceT]
     """
 
     return (

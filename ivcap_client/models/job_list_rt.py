@@ -21,15 +21,15 @@ class JobListRT:
             'https://api.ivcap.net/1/services/...', 'id': 'urn:ivcap:job:123e4567-e89b-12d3-a456-426614174000', 'name':
             'Fire risk for region', 'order': 'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'unknown'}, {'finished-at': '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'executing'}, {'finished-at': '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/services/...', 'id':
             'urn:ivcap:job:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'order':
             'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'unknown'}, {'finished-at': '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'executing'}, {'finished-at': '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/services/...', 'id':
             'urn:ivcap:job:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'order':
             'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'unknown'}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'},
+            'executing'}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
@@ -41,11 +41,15 @@ class JobListRT:
             'https://api.ivcap.net/1/services/...', 'id': 'urn:ivcap:job:123e4567-e89b-12d3-a456-426614174000', 'name':
             'Fire risk for region', 'order': 'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'unknown'}, {'finished-at': '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'executing'}, {'finished-at': '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/services/...', 'id':
             'urn:ivcap:job:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'order':
             'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'unknown'}].
+            'executing'}, {'finished-at': '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:job:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'order':
+            'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'service':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
+            'executing'}].
         links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':

@@ -9,6 +9,7 @@ from ...client import AuthenticatedClient, Client
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
+from ...models.not_implemented_t import NotImplementedT
 from ...models.x_service_list_rt import XServiceListRT
 from ...types import UNSET, Response, Unset
 
@@ -52,7 +53,7 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, XServiceListRT]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, XServiceListRT]]:
     if response.status_code == 200:
         response_200 = XServiceListRT.from_dict(response.json())
 
@@ -73,7 +74,7 @@ def _parse_response(
 
         return response_422
     if response.status_code == 501:
-        response_501 = BadRequestT.from_dict(response.json())
+        response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
     if response.status_code == 503:
@@ -87,7 +88,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, XServiceListRT]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, XServiceListRT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -105,7 +106,7 @@ def sync_detailed(
     order_by: Union[Unset, str] = UNSET,
     order_desc: Union[Unset, bool] = True,
     at_time: Union[Unset, datetime.datetime] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, XServiceListRT]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, XServiceListRT]]:
     """list servicex
 
      list services
@@ -138,7 +139,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, XServiceListRT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, XServiceListRT]]
     """
 
     kwargs = _get_kwargs(
@@ -166,7 +167,7 @@ def sync(
     order_by: Union[Unset, str] = UNSET,
     order_desc: Union[Unset, bool] = True,
     at_time: Union[Unset, datetime.datetime] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, XServiceListRT]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, XServiceListRT]]:
     """list servicex
 
      list services
@@ -199,7 +200,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, XServiceListRT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, XServiceListRT]
     """
 
     return sync_detailed(
@@ -222,7 +223,7 @@ async def asyncio_detailed(
     order_by: Union[Unset, str] = UNSET,
     order_desc: Union[Unset, bool] = True,
     at_time: Union[Unset, datetime.datetime] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, XServiceListRT]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, XServiceListRT]]:
     """list servicex
 
      list services
@@ -255,7 +256,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, XServiceListRT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, XServiceListRT]]
     """
 
     kwargs = _get_kwargs(
@@ -281,7 +282,7 @@ async def asyncio(
     order_by: Union[Unset, str] = UNSET,
     order_desc: Union[Unset, bool] = True,
     at_time: Union[Unset, datetime.datetime] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, XServiceListRT]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, XServiceListRT]]:
     """list servicex
 
      list services
@@ -314,7 +315,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, XServiceListRT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, XServiceListRT]
     """
 
     return (

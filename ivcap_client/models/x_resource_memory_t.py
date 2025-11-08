@@ -14,11 +14,12 @@ class XResourceMemoryT:
     units
 
         Example:
-            {'limit': 'Iste nemo et harum hic qui voluptas.', 'request': 'Minima ut ipsam.'}
+            {'limit': 'Dolor odit rerum quia.', 'request': 'Voluptatem facilis libero voluptatem quis quam.'}
 
         Attributes:
-            limit (Union[Unset, str]): minimal requirements [system limit] Example: At qui..
-            request (Union[Unset, str]): minimal requirements [0] Example: Alias velit adipisci..
+            limit (Union[Unset, str]): minimal requirements [system limit] Example: Nulla quo ut asperiores temporibus
+                quia..
+            request (Union[Unset, str]): minimal requirements [0] Example: Voluptas consectetur quia sint aut odit..
     """
 
     limit: Union[Unset, str] = UNSET

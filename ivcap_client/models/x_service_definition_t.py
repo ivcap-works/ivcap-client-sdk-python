@@ -18,18 +18,16 @@ T = TypeVar("T", bound="XServiceDefinitionT")
 class XServiceDefinitionT:
     """
     Example:
-        {'banner': 'http://leffler.info/herminia', 'description': 'This service ...', 'name': 'Fire risk for Lot2',
-            'parameters': [{'description': 'The name of the region as according to ...', 'label': 'Region Name', 'name':
-            'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit':
-            'm'}], 'policy': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Assumenda
-            sit.', 'uri': 'http://stoltenberg.name/aletha.howell'}, {'title': 'Assumenda sit.', 'uri':
-            'http://stoltenberg.name/aletha.howell'}, {'title': 'Assumenda sit.', 'uri':
-            'http://stoltenberg.name/aletha.howell'}, {'title': 'Assumenda sit.', 'uri':
-            'http://stoltenberg.name/aletha.howell'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Aut consequuntur
-            occaecati sint et dolor.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m',
-            'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type':
-            'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Natus officia quae sed blanditiis vero.', 'memory':
-            {'limit': '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}}
+        {'banner': 'http://rice.biz/rickie_christiansen', 'description': 'This service ...', 'name': 'Fire risk for
+            Lot2', 'parameters': [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
+            'name': 'region', 'type': 'string'}, {'label': 'Rainfall/month threshold', 'name': 'threshold', 'type': 'float',
+            'unit': 'm'}], 'policy': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'references': [{'title': 'Eius
+            officiis enim quam blanditiis soluta.', 'uri': 'http://reinger.name/wiley'}, {'title': 'Eius officiis enim quam
+            blanditiis soluta.', 'uri': 'http://reinger.name/wiley'}], 'tags': ['tag1', 'tag2'], 'workflow': {'argo': 'Et
+            quia quis ut quia.', 'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request':
+            '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-tesla-t4',
+            'image': 'alpine', 'image-pull-policy': 'Aliquam qui qui voluptates quo.', 'memory': {'limit': '100Mi',
+            'request': '10Mi'}, 'shared-memory': '1Gi'}, 'type': 'basic'}}
 
     Attributes:
         description (str): More detailed description of the service Example: This service ....
@@ -39,20 +37,20 @@ class XServiceDefinitionT:
         workflow (XWorkflowT): Defines the workflow to use to execute this service. Currently supported 'types' are
             'basic'
                     and 'argo'. In case of 'basic', use the 'basic' element for further parameters. In the current implementation
-                    'opts' is expected to contain the same schema as 'basic' Example: {'argo': 'Quia ut nostrum est suscipit.',
+                    'opts' is expected to contain the same schema as 'basic' Example: {'argo': 'Eos est vitae quos consequatur.',
             'basic': {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit': '100m', 'request': '10m'}, 'ephemeral-
             storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-tesla-t4', 'image': 'alpine',
-            'image-pull-policy': 'Natus officia quae sed blanditiis vero.', 'memory': {'limit': '100Mi', 'request': '10Mi'},
+            'image-pull-policy': 'Aliquam qui qui voluptates quo.', 'memory': {'limit': '100Mi', 'request': '10Mi'},
             'shared-memory': '1Gi'}, 'type': 'basic'}.
         banner (Union[Unset, str]): Link to banner image optionally used for this service Example:
-            http://stark.com/bruce.
+            http://fadelrohan.net/arnoldo_hayes.
         name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
         policy (Union[Unset, str]): Reference to policy used Example:
             urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
         references (Union[Unset, list['XReferenceT']]): Reference to account revenues for this service should be
-            credited to Example: [{'title': 'Assumenda sit.', 'uri': 'http://stoltenberg.name/aletha.howell'}, {'title':
-            'Assumenda sit.', 'uri': 'http://stoltenberg.name/aletha.howell'}, {'title': 'Assumenda sit.', 'uri':
-            'http://stoltenberg.name/aletha.howell'}].
+            credited to Example: [{'title': 'Eius officiis enim quam blanditiis soluta.', 'uri':
+            'http://reinger.name/wiley'}, {'title': 'Eius officiis enim quam blanditiis soluta.', 'uri':
+            'http://reinger.name/wiley'}].
         tags (Union[Unset, list[str]]): Optional provider provided tags Example: ['tag1', 'tag2'].
     """
 

@@ -18,9 +18,9 @@ T = TypeVar("T", bound="ProjectListRT")
 class ProjectListRT:
     """
     Example:
-        {'at-time': '1996-12-19T16:39:57-08:00', 'page': 'Et quibusdam.', 'projects': [{'at-time':
-            '1996-12-19T16:39:57-08:00', 'created_at': '2023-03-17T04:57:00Z', 'modified_at': '2023-03-17T04:57:00Z',
-            'name': 'MineralsCollection', 'role': 'Member', 'urn':
+        {'at-time': '1996-12-19T16:39:57-08:00', 'page': 'Eius in asperiores voluptatem ut deserunt.', 'projects':
+            [{'at-time': '1996-12-19T16:39:57-08:00', 'created_at': '2023-03-17T04:57:00Z', 'modified_at':
+            '2023-03-17T04:57:00Z', 'name': 'MineralsCollection', 'role': 'Member', 'urn':
             'urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4'}, {'at-time': '1996-12-19T16:39:57-08:00',
             'created_at': '2023-03-17T04:57:00Z', 'modified_at': '2023-03-17T04:57:00Z', 'name': 'MineralsCollection',
             'role': 'Member', 'urn': 'urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4'}, {'at-time':
@@ -39,7 +39,7 @@ class ProjectListRT:
             'urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4'}].
         at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
         page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if there are no more
-            results Example: Est reiciendis enim..
+            results Example: Perferendis qui omnis explicabo officiis..
     """
 
     projects: list["ProjectListItem"]

@@ -12,14 +12,15 @@ T = TypeVar("T", bound="SetSecretRequestT")
 class SetSecretRequestT:
     """
     Example:
-        {'expiry-time': 3640280021039679283, 'secret-name': 'Magni reprehenderit reprehenderit ratione accusamus.',
-            'secret-type': 'Iusto iste iusto quisquam consequatur voluptas eius.', 'secret-value': 'Error id et.'}
+        {'expiry-time': 8077806460880621072, 'secret-name': 'Et iure consequuntur commodi beatae commodi optio.',
+            'secret-type': 'Magni reprehenderit reprehenderit ratione accusamus.', 'secret-value': 'Iusto iste iusto
+            quisquam consequatur voluptas eius.'}
 
     Attributes:
-        expiry_time (int): Expiry time Example: 2773099974567600988.
-        secret_name (str): Secret name Example: Numquam adipisci..
-        secret_value (str): Secret value Example: Commodi beatae commodi..
-        secret_type (Union[Unset, str]): Secret type Example: Aut officia et iure..
+        expiry_time (int): Expiry time Example: 6351079993822416003.
+        secret_name (str): Secret name Example: Porro consequatur qui voluptatem et..
+        secret_value (str): Secret value Example: Ipsum numquam adipisci optio..
+        secret_type (Union[Unset, str]): Secret type Example: Aliquid quia..
     """
 
     expiry_time: int

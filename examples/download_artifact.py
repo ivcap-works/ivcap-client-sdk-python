@@ -1,7 +1,7 @@
 import os
 from _common import ivcap, pp, this_dir
 
-id = "urn:ivcap:artifact:09e0cb8c-d03f-46cd-bc20-5f269d9d0401"
+id = "urn:ivcap:artifact:8d487485-c288-459e-b4f6-7fe4c0fa41bb"
 artifact = ivcap.get_artifact(id)
 pp.pprint(artifact)
 

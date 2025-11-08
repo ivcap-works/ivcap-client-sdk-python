@@ -8,7 +8,8 @@ from ...client import AuthenticatedClient, Client
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
-from ...models.partial_product_list_2t import PartialProductList2T
+from ...models.not_implemented_t import NotImplementedT
+from ...models.partial_product_list_t import PartialProductListT
 from ...models.resource_not_found_t import ResourceNotFoundT
 from ...types import UNSET, Response, Unset
 
@@ -44,9 +45,11 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]:
+) -> Optional[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
+]:
     if response.status_code == 200:
-        response_200 = PartialProductList2T.from_dict(response.json())
+        response_200 = PartialProductListT.from_dict(response.json())
 
         return response_200
     if response.status_code == 400:
@@ -69,7 +72,7 @@ def _parse_response(
 
         return response_422
     if response.status_code == 501:
-        response_501 = BadRequestT.from_dict(response.json())
+        response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
     if response.status_code == 503:
@@ -83,7 +86,9 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]:
+) -> Response[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -100,7 +105,9 @@ def sync_detailed(
     order_desc: Union[Unset, bool] = True,
     limit: Union[Unset, int] = 10,
     page: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]:
+) -> Response[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
+]:
     """products order
 
      list products created by an order
@@ -115,7 +122,7 @@ def sync_detailed(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True. Example: True.
+            order is the lt. Default: True.
         limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
         page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
@@ -128,7 +135,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]]
     """
 
     kwargs = _get_kwargs(
@@ -154,7 +161,9 @@ def sync(
     order_desc: Union[Unset, bool] = True,
     limit: Union[Unset, int] = 10,
     page: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]:
+) -> Optional[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
+]:
     """products order
 
      list products created by an order
@@ -169,7 +178,7 @@ def sync(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True. Example: True.
+            order is the lt. Default: True.
         limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
         page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
@@ -182,7 +191,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
     """
 
     return sync_detailed(
@@ -203,7 +212,9 @@ async def asyncio_detailed(
     order_desc: Union[Unset, bool] = True,
     limit: Union[Unset, int] = 10,
     page: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]:
+) -> Response[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
+]:
     """products order
 
      list products created by an order
@@ -218,7 +229,7 @@ async def asyncio_detailed(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True. Example: True.
+            order is the lt. Default: True.
         limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
         page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
@@ -231,7 +242,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]]
     """
 
     kwargs = _get_kwargs(
@@ -255,7 +266,9 @@ async def asyncio(
     order_desc: Union[Unset, bool] = True,
     limit: Union[Unset, int] = 10,
     page: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]]:
+) -> Optional[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
+]:
     """products order
 
      list products created by an order
@@ -270,7 +283,7 @@ async def asyncio(
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
         order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True. Example: True.
+            order is the lt. Default: True.
         limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
         page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
@@ -283,7 +296,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, PartialProductList2T, ResourceNotFoundT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
     """
 
     return (

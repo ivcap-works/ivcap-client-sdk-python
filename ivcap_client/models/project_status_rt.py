@@ -22,7 +22,7 @@ class ProjectStatusRT:
         {'account': 'urn:ivcap:account:146d4ac9-244a-4aee-aa32-a28f4b91e60d', 'created_at': '2023-03-17T04:57:00Z',
             'modified_at': '2023-03-17T04:57:00Z', 'name': 'My project name', 'parent':
             'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1', 'properties': {'details': 'Created for to investigate
-            [objective]'}, 'status': 'unknown', 'urn': 'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1'}
+            [objective]'}, 'status': 'deleted', 'urn': 'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1'}
 
     Attributes:
         urn (str): Project URN Example: urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1.
@@ -32,7 +32,7 @@ class ProjectStatusRT:
         name (Union[Unset, str]): Project name Example: My project name.
         parent (Union[Unset, str]): Parent Project URN Example: urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1.
         properties (Union[Unset, ProjectProperties]):  Example: {'details': 'Created for to investigate [objective]'}.
-        status (Union[Unset, ProjectStatusRTStatus]): Project status Example: deleted.
+        status (Union[Unset, ProjectStatusRTStatus]): Project status Example: unknown.
     """
 
     urn: str

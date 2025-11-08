@@ -11,7 +11,7 @@ T = TypeVar("T", bound="InvalidScopesT")
 
 @_attrs_define
 class InvalidScopesT:
-    """Not authorised to access this scope
+    """Caller not authorized to access required scope.
 
     Example:
         {'id': '123e4567-e89b-12d3-a456-426614174000', 'message': 'Not authorized to perform this action'}

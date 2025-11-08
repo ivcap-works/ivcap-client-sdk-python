@@ -11,7 +11,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.link_t import LinkT
     from ..models.parameter_t import ParameterT
-    from ..models.partial_product_list_2t import PartialProductList2T
+    from ..models.partial_product_list_t import PartialProductListT
 
 
 T = TypeVar("T", bound="OrderStatusRT")
@@ -31,7 +31,7 @@ class OrderStatusRT:
             'mime-type': 'image/geo+tiff', 'name': 'fire risk map', 'size': 1234963}], 'links': [{'href':
             'https://api.ivcap.net/1/....', 'rel': 'next'}]}, 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'failed', 'tags': ['tag1', 'tag2']}
+            'unknown', 'tags': ['tag1', 'tag2']}
 
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
@@ -41,11 +41,11 @@ class OrderStatusRT:
             'describedBy', 'type': 'application/json'}].
         parameters (list['ParameterT']): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
             {'name': 'threshold', 'value': '10'}].
-        products (PartialProductList2T):  Example: {'items': [{'data-href': 'https:/.../1/artifacts/0000-00001220/blob',
+        products (PartialProductListT):  Example: {'items': [{'data-href': 'https:/.../1/artifacts/0000-00001220/blob',
             'href': 'https:/.../1/artifacts/0000-00001220', 'mime-type': 'image/geo+tiff', 'name': 'fire risk map', 'size':
             1234963}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'next'}]}.
         service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        status (OrderStatusRTStatus): Order status Example: failed.
+        status (OrderStatusRTStatus): Order status Example: pending.
         finished_at (Union[Unset, datetime.datetime]): DateTime order processing finished Example:
             1996-12-19T16:39:57-08:00.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
@@ -59,7 +59,7 @@ class OrderStatusRT:
     id: str
     links: list["LinkT"]
     parameters: list["ParameterT"]
-    products: "PartialProductList2T"
+    products: "PartialProductListT"
     service: str
     status: OrderStatusRTStatus
     finished_at: Union[Unset, datetime.datetime] = UNSET
@@ -138,7 +138,7 @@ class OrderStatusRT:
     def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.parameter_t import ParameterT
-        from ..models.partial_product_list_2t import PartialProductList2T
+        from ..models.partial_product_list_t import PartialProductListT
 
         d = src_dict.copy()
         account = d.pop("account")
@@ -159,7 +159,7 @@ class OrderStatusRT:
 
             parameters.append(parameters_item)
 
-        products = PartialProductList2T.from_dict(d.pop("products"))
+        products = PartialProductListT.from_dict(d.pop("products"))
 
         service = d.pop("service")
 

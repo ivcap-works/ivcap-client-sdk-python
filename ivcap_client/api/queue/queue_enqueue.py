@@ -9,13 +9,14 @@ from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
 from ...models.messagestatus import Messagestatus
-from ...types import UNSET, File, Response, Unset
+from ...models.not_implemented_t import NotImplementedT
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     id: str,
     *,
-    body: File,
+    body: Any,
     schema: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
 ) -> dict[str, Any]:
@@ -35,7 +36,7 @@ def _get_kwargs(
         "params": params,
     }
 
-    _body = body.to_tuple()
+    _body = body
 
     _kwargs["json"] = _body
     headers["Content-Type"] = "application/json"
@@ -46,7 +47,7 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
     if response.status_code == 200:
         response_200 = Messagestatus.from_dict(response.json())
 
@@ -67,7 +68,7 @@ def _parse_response(
 
         return response_422
     if response.status_code == 501:
-        response_501 = BadRequestT.from_dict(response.json())
+        response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
     if response.status_code == 503:
@@ -81,7 +82,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -94,10 +95,10 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: Any,
     schema: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
     """enqueue queue
 
      Send a message to a specific queues.
@@ -108,7 +109,7 @@ def sync_detailed(
             urn:ivcap:schema:queue:message.1.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        body (File): Message content Example: {"temperature": "21", "location": "Buoy101",
+        body (Any): Message content Example: {"temperature": "21", "location": "Buoy101",
             "timestamp": "2024-05-20T14:30:00Z"}.
 
     Raises:
@@ -116,7 +117,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]
     """
 
     kwargs = _get_kwargs(
@@ -137,10 +138,10 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: Any,
     schema: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
     """enqueue queue
 
      Send a message to a specific queues.
@@ -151,7 +152,7 @@ def sync(
             urn:ivcap:schema:queue:message.1.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        body (File): Message content Example: {"temperature": "21", "location": "Buoy101",
+        body (Any): Message content Example: {"temperature": "21", "location": "Buoy101",
             "timestamp": "2024-05-20T14:30:00Z"}.
 
     Raises:
@@ -159,7 +160,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]
     """
 
     return sync_detailed(
@@ -175,10 +176,10 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: Any,
     schema: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
     """enqueue queue
 
      Send a message to a specific queues.
@@ -189,7 +190,7 @@ async def asyncio_detailed(
             urn:ivcap:schema:queue:message.1.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        body (File): Message content Example: {"temperature": "21", "location": "Buoy101",
+        body (Any): Message content Example: {"temperature": "21", "location": "Buoy101",
             "timestamp": "2024-05-20T14:30:00Z"}.
 
     Raises:
@@ -197,7 +198,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]
     """
 
     kwargs = _get_kwargs(
@@ -216,10 +217,10 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: Any,
     schema: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
     """enqueue queue
 
      Send a message to a specific queues.
@@ -230,7 +231,7 @@ async def asyncio(
             urn:ivcap:schema:queue:message.1.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        body (File): Message content Example: {"temperature": "21", "location": "Buoy101",
+        body (Any): Message content Example: {"temperature": "21", "location": "Buoy101",
             "timestamp": "2024-05-20T14:30:00Z"}.
 
     Raises:
@@ -238,7 +239,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]
     """
 
     return (

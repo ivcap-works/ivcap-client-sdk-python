@@ -21,18 +21,17 @@ class MembersList:
         {'at-time': '1996-12-19T16:39:57-08:00', 'members': [{'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}, {'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}, {'email': 'example@domain.com', 'role': 'Owner', 'urn':
-            'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}, {'email': 'example@domain.com', 'role': 'Owner', 'urn':
-            'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}], 'page': 'Et inventore exercitationem blanditiis omnis
-            magnam.'}
+            'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}], 'page': 'Adipisci in similique qui cumque in.'}
 
     Attributes:
         members (list['UserListItem']): Members Example: [{'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}, {'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}, {'email': 'example@domain.com', 'role': 'Owner', 'urn':
+            'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}, {'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}].
         at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
         page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if there are no more
-            results Example: Mollitia animi sapiente eos libero mollitia quis..
+            results Example: Quae hic dignissimos..
     """
 
     members: list["UserListItem"]

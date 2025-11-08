@@ -9,13 +9,14 @@ from ...models.add_meta_rt import AddMetaRT
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
-from ...types import UNSET, File, Response, Unset
+from ...models.not_implemented_t import NotImplementedT
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     id: str,
     *,
-    body: File,
+    body: Any,
     entity_id: Union[Unset, str] = UNSET,
     schema: Union[Unset, str] = UNSET,
     policy_id: Union[Unset, str] = UNSET,
@@ -41,7 +42,7 @@ def _get_kwargs(
         "params": params,
     }
 
-    _body = body.to_tuple()
+    _body = body
 
     _kwargs["json"] = _body
     headers["Content-Type"] = "application/json"
@@ -52,7 +53,7 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
     if response.status_code == 200:
         response_200 = AddMetaRT.from_dict(response.json())
 
@@ -73,7 +74,7 @@ def _parse_response(
 
         return response_422
     if response.status_code == 501:
-        response_501 = BadRequestT.from_dict(response.json())
+        response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
     if response.status_code == 503:
@@ -87,7 +88,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -100,12 +101,12 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: Any,
     entity_id: Union[Unset, str] = UNSET,
     schema: Union[Unset, str] = UNSET,
     policy_id: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
-) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
     """update_record metadata
 
      Revoke this record and create a new one with the information provided.
@@ -117,17 +118,17 @@ def sync_detailed(
         entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
         schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://spencerwindler.biz/chandler.
+            http://krajciklemke.com/elouise.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        body (File): Aspect content Example: {"$schema": ...}.
+        body (Any): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT]]
+        Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]
     """
 
     kwargs = _get_kwargs(
@@ -150,12 +151,12 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: Any,
     entity_id: Union[Unset, str] = UNSET,
     schema: Union[Unset, str] = UNSET,
     policy_id: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
-) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
     """update_record metadata
 
      Revoke this record and create a new one with the information provided.
@@ -167,17 +168,17 @@ def sync(
         entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
         schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://spencerwindler.biz/chandler.
+            http://krajciklemke.com/elouise.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        body (File): Aspect content Example: {"$schema": ...}.
+        body (Any): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT]
+        Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]
     """
 
     return sync_detailed(
@@ -195,12 +196,12 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: Any,
     entity_id: Union[Unset, str] = UNSET,
     schema: Union[Unset, str] = UNSET,
     policy_id: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
-) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
     """update_record metadata
 
      Revoke this record and create a new one with the information provided.
@@ -212,17 +213,17 @@ async def asyncio_detailed(
         entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
         schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://spencerwindler.biz/chandler.
+            http://krajciklemke.com/elouise.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        body (File): Aspect content Example: {"$schema": ...}.
+        body (Any): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT]]
+        Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]
     """
 
     kwargs = _get_kwargs(
@@ -243,12 +244,12 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: File,
+    body: Any,
     entity_id: Union[Unset, str] = UNSET,
     schema: Union[Unset, str] = UNSET,
     policy_id: Union[Unset, str] = UNSET,
     content_type: Union[Unset, str] = UNSET,
-) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
     """update_record metadata
 
      Revoke this record and create a new one with the information provided.
@@ -260,17 +261,17 @@ async def asyncio(
         entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
         schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
         policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://spencerwindler.biz/chandler.
+            http://krajciklemke.com/elouise.
         content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
             Example: application/json.
-        body (File): Aspect content Example: {"$schema": ...}.
+        body (Any): Aspect content Example: {"$schema": ...}.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT]
+        Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]
     """
 
     return (

@@ -1,12 +1,9 @@
 import datetime
-from io import BytesIO
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 from dateutil.parser import isoparse
-
-from ..types import File
 
 if TYPE_CHECKING:
     from ..models.link_t import LinkT
@@ -19,18 +16,17 @@ T = TypeVar("T", bound="SearchListRT")
 class SearchListRT:
     """
     Example:
-        {'at-time': '1996-12-19T16:39:57-08:00', 'items': ['Aut ut perferendis reprehenderit.', 'Dolorum corrupti
-            nesciunt eum.', 'Dolore quisquam nobis et sint.', 'Voluptatem autem vel quis aliquam sint in.'], 'links':
-            [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
-            'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
-            'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
+        {'at-time': '1996-12-19T16:39:57-08:00', 'items': ['Voluptas dolor at ipsa.', 'Fuga corporis soluta voluptatibus
+            delectus nisi recusandae.'], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+            'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
+            {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}]}
 
     Attributes:
         at_time (datetime.datetime): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
-        items (list[File]): List of search result Example: ['Officia et ut nam alias.', 'Dolores maxime excepturi odio
-            laudantium.'].
+        items (list[Any]): List of search result Example: ['Et tenetur officiis et cumque sit sunt.', 'Necessitatibus
+            animi maiores sed.'].
         links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
@@ -39,18 +35,14 @@ class SearchListRT:
     """
 
     at_time: datetime.datetime
-    items: list[File]
+    items: list[Any]
     links: list["LinkT"]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         at_time = self.at_time.isoformat()
 
-        items = []
-        for items_item_data in self.items:
-            items_item = items_item_data.to_tuple()
-
-            items.append(items_item)
+        items = self.items
 
         links = []
         for links_item_data in self.links:
@@ -76,12 +68,7 @@ class SearchListRT:
         d = src_dict.copy()
         at_time = isoparse(d.pop("at-time"))
 
-        items = []
-        _items = d.pop("items")
-        for items_item_data in _items:
-            items_item = items_item_data
-
-            items.append(items_item)
+        items = cast(list[Any], d.pop("items"))
 
         links = []
         _links = d.pop("links")

@@ -22,6 +22,8 @@ class DashboardListRT:
     Attributes:
         items (list['DashboardListItem']): Dashboards Example: [{'id': 3, 'title': 'Kubernetes Cluster Monitoring',
             'uid': 'aeawr2d4xw7pcc', 'url': '/d/aeawr2d4xw7pcc'}, {'id': 3, 'title': 'Kubernetes Cluster Monitoring', 'uid':
+            'aeawr2d4xw7pcc', 'url': '/d/aeawr2d4xw7pcc'}, {'id': 3, 'title': 'Kubernetes Cluster Monitoring', 'uid':
+            'aeawr2d4xw7pcc', 'url': '/d/aeawr2d4xw7pcc'}, {'id': 3, 'title': 'Kubernetes Cluster Monitoring', 'uid':
             'aeawr2d4xw7pcc', 'url': '/d/aeawr2d4xw7pcc'}].
     """
 

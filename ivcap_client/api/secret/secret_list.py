@@ -9,6 +9,7 @@ from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
 from ...models.list_response_body_2 import ListResponseBody2
+from ...models.not_implemented_t import NotImplementedT
 from ...types import UNSET, Response, Unset
 
 
@@ -42,7 +43,7 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2, NotImplementedT]]:
     if response.status_code == 200:
         response_200 = ListResponseBody2.from_dict(response.json())
 
@@ -63,7 +64,7 @@ def _parse_response(
 
         return response_422
     if response.status_code == 501:
-        response_501 = BadRequestT.from_dict(response.json())
+        response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
     if response.status_code == 503:
@@ -77,7 +78,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2, NotImplementedT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -93,7 +94,7 @@ def sync_detailed(
     filter_: Union[Unset, str] = UNSET,
     offset: Union[Unset, str] = UNSET,
     limit: Union[Unset, int] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2, NotImplementedT]]:
     """list secret
 
      list secrets under account
@@ -109,7 +110,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2, NotImplementedT]]
     """
 
     kwargs = _get_kwargs(
@@ -133,7 +134,7 @@ def sync(
     filter_: Union[Unset, str] = UNSET,
     offset: Union[Unset, str] = UNSET,
     limit: Union[Unset, int] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2, NotImplementedT]]:
     """list secret
 
      list secrets under account
@@ -149,7 +150,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2, NotImplementedT]
     """
 
     return sync_detailed(
@@ -168,7 +169,7 @@ async def asyncio_detailed(
     filter_: Union[Unset, str] = UNSET,
     offset: Union[Unset, str] = UNSET,
     limit: Union[Unset, int] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]:
+) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2, NotImplementedT]]:
     """list secret
 
      list secrets under account
@@ -184,7 +185,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2, NotImplementedT]]
     """
 
     kwargs = _get_kwargs(
@@ -206,7 +207,7 @@ async def asyncio(
     filter_: Union[Unset, str] = UNSET,
     offset: Union[Unset, str] = UNSET,
     limit: Union[Unset, int] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]]:
+) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2, NotImplementedT]]:
     """list secret
 
      list secrets under account
@@ -222,7 +223,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody2, NotImplementedT]
     """
 
     return (

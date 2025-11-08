@@ -5,9 +5,10 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.artifact_status_rt import ArtifactStatusRT
+from ...models.artifact_upload_rt2 import ArtifactUploadRT2
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_scopes_t import InvalidScopesT
+from ...models.not_implemented_t import NotImplementedT
 from ...types import UNSET, Response, Unset
 
 
@@ -66,9 +67,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT]]:
+) -> Optional[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
     if response.status_code == 201:
-        response_201 = ArtifactStatusRT.from_dict(response.json())
+        response_201 = ArtifactUploadRT2.from_dict(response.json())
 
         return response_201
     if response.status_code == 400:
@@ -83,7 +84,7 @@ def _parse_response(
 
         return response_403
     if response.status_code == 501:
-        response_501 = BadRequestT.from_dict(response.json())
+        response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
     if response.status_code == 503:
@@ -97,7 +98,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT]]:
+) -> Response[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -119,7 +120,7 @@ def sync_detailed(
     x_content_length: Union[Unset, int] = UNSET,
     upload_length: Union[Unset, int] = UNSET,
     tus_resumable: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT]]:
+) -> Response[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
     """upload artifact
 
      Upload content and create a artifacts.
@@ -151,7 +152,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT]]
+        Response[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]
     """
 
     kwargs = _get_kwargs(
@@ -187,7 +188,7 @@ def sync(
     x_content_length: Union[Unset, int] = UNSET,
     upload_length: Union[Unset, int] = UNSET,
     tus_resumable: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT]]:
+) -> Optional[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
     """upload artifact
 
      Upload content and create a artifacts.
@@ -219,7 +220,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT]
+        Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]
     """
 
     return sync_detailed(
@@ -250,7 +251,7 @@ async def asyncio_detailed(
     x_content_length: Union[Unset, int] = UNSET,
     upload_length: Union[Unset, int] = UNSET,
     tus_resumable: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT]]:
+) -> Response[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
     """upload artifact
 
      Upload content and create a artifacts.
@@ -282,7 +283,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT]]
+        Response[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]
     """
 
     kwargs = _get_kwargs(
@@ -316,7 +317,7 @@ async def asyncio(
     x_content_length: Union[Unset, int] = UNSET,
     upload_length: Union[Unset, int] = UNSET,
     tus_resumable: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT]]:
+) -> Optional[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
     """upload artifact
 
      Upload content and create a artifacts.
@@ -348,7 +349,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT]
+        Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]
     """
 
     return (

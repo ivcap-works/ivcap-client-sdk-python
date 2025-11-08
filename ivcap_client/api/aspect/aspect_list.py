@@ -10,6 +10,8 @@ from ...models.aspect_list_rt import AspectListRT
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
+from ...models.not_implemented_t import NotImplementedT
+from ...models.unsupported_content_type_t import UnsupportedContentTypeT
 from ...types import UNSET, Response, Unset
 
 
@@ -64,7 +66,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Optional[
+    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
+]:
     if response.status_code == 200:
         response_200 = AspectListRT.from_dict(response.json())
 
@@ -81,7 +85,7 @@ def _parse_response(
 
         return response_403
     if response.status_code == 415:
-        response_415 = BadRequestT.from_dict(response.json())
+        response_415 = UnsupportedContentTypeT.from_dict(response.json())
 
         return response_415
     if response.status_code == 422:
@@ -89,7 +93,7 @@ def _parse_response(
 
         return response_422
     if response.status_code == 501:
-        response_501 = BadRequestT.from_dict(response.json())
+        response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
     if response.status_code == 503:
@@ -103,7 +107,9 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Response[
+    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -125,7 +131,9 @@ def sync_detailed(
     order_direction: Union[Unset, str] = "DESC",
     include_content: Union[Unset, bool] = UNSET,
     page: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Response[
+    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
+]:
     """list aspect
 
      Return a list of aspect aspects.
@@ -176,7 +184,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]
+        Response[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]]
     """
 
     kwargs = _get_kwargs(
@@ -212,7 +220,9 @@ def sync(
     order_direction: Union[Unset, str] = "DESC",
     include_content: Union[Unset, bool] = UNSET,
     page: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Optional[
+    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
+]:
     """list aspect
 
      Return a list of aspect aspects.
@@ -263,7 +273,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]
+        Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
     """
 
     return sync_detailed(
@@ -294,7 +304,9 @@ async def asyncio_detailed(
     order_direction: Union[Unset, str] = "DESC",
     include_content: Union[Unset, bool] = UNSET,
     page: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Response[
+    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
+]:
     """list aspect
 
      Return a list of aspect aspects.
@@ -345,7 +357,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]
+        Response[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]]
     """
 
     kwargs = _get_kwargs(
@@ -379,7 +391,9 @@ async def asyncio(
     order_direction: Union[Unset, str] = "DESC",
     include_content: Union[Unset, bool] = UNSET,
     page: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]]:
+) -> Optional[
+    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
+]:
     """list aspect
 
      Return a list of aspect aspects.
@@ -430,7 +444,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT]
+        Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
     """
 
     return (

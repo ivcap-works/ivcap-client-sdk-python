@@ -9,6 +9,8 @@ from ...client import AuthenticatedClient, Client
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
+from ...models.job_internal_error_t import JobInternalErrorT
+from ...models.not_implemented_t import NotImplementedT
 from ...models.resource_not_found_t import ResourceNotFoundT
 from ...types import File, Response
 
@@ -27,7 +29,11 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
+) -> Optional[
+    Union[
+        Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, JobInternalErrorT, NotImplementedT, ResourceNotFoundT
+    ]
+]:
     if response.status_code == 200:
         response_200 = File(payload=BytesIO(response.json()))
 
@@ -56,11 +62,11 @@ def _parse_response(
 
         return response_422
     if response.status_code == 500:
-        response_500 = BadRequestT.from_dict(response.json())
+        response_500 = JobInternalErrorT.from_dict(response.json())
 
         return response_500
     if response.status_code == 501:
-        response_501 = BadRequestT.from_dict(response.json())
+        response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
     if response.status_code == 503:
@@ -75,7 +81,11 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
+) -> Response[
+    Union[
+        Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, JobInternalErrorT, NotImplementedT, ResourceNotFoundT
+    ]
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -89,7 +99,11 @@ def sync_detailed(
     job_id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
+) -> Response[
+    Union[
+        Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, JobInternalErrorT, NotImplementedT, ResourceNotFoundT
+    ]
+]:
     """job-output service
 
      Return the result of a job.
@@ -104,7 +118,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]
+        Response[Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, JobInternalErrorT, NotImplementedT, ResourceNotFoundT]]
     """
 
     kwargs = _get_kwargs(
@@ -124,7 +138,11 @@ def sync(
     job_id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
+) -> Optional[
+    Union[
+        Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, JobInternalErrorT, NotImplementedT, ResourceNotFoundT
+    ]
+]:
     """job-output service
 
      Return the result of a job.
@@ -139,7 +157,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]
+        Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, JobInternalErrorT, NotImplementedT, ResourceNotFoundT]
     """
 
     return sync_detailed(
@@ -154,7 +172,11 @@ async def asyncio_detailed(
     job_id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
+) -> Response[
+    Union[
+        Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, JobInternalErrorT, NotImplementedT, ResourceNotFoundT
+    ]
+]:
     """job-output service
 
      Return the result of a job.
@@ -169,7 +191,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]
+        Response[Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, JobInternalErrorT, NotImplementedT, ResourceNotFoundT]]
     """
 
     kwargs = _get_kwargs(
@@ -187,7 +209,11 @@ async def asyncio(
     job_id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]]:
+) -> Optional[
+    Union[
+        Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, JobInternalErrorT, NotImplementedT, ResourceNotFoundT
+    ]
+]:
     """job-output service
 
      Return the result of a job.
@@ -202,7 +228,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, ResourceNotFoundT]
+        Union[Any, BadRequestT, File, InvalidParameterT, InvalidScopesT, JobInternalErrorT, NotImplementedT, ResourceNotFoundT]
     """
 
     return (

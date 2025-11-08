@@ -8,7 +8,7 @@ T = TypeVar("T", bound="BadRequestT")
 
 @_attrs_define
 class BadRequestT:
-    """Bad request
+    """Something wasn't right with this request
 
     Example:
         {'message': 'Having problem with some of the supplied information'}

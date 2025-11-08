@@ -14,7 +14,8 @@ T = TypeVar("T", bound="ListResponseBody")
 class ListResponseBody:
     """
     Example:
-        {'items': ['Id eligendi est autem sit quibusdam.', 'Dignissimos est autem.', 'Dolorum sed.'], 'links': [{'href':
+        {'items': ['Ipsum qui necessitatibus quidem sint doloremque.', 'Blanditiis nihil eligendi.', 'Cumque qui
+            pariatur sint corrupti.', 'Accusamus doloremque et dolor ullam dolorem hic.'], 'links': [{'href':
             'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
@@ -22,8 +23,8 @@ class ListResponseBody:
             'application/openapi3+json'}]}
 
     Attributes:
-        items (list[str]): docker image tags Example: ['Repellendus eum.', 'Autem qui maxime hic soluta quis.',
-            'Dignissimos impedit accusamus aut sint et.', 'Molestias expedita ea recusandae rerum dolor eum.'].
+        items (list[str]): docker image tags Example: ['Corporis unde aperiam et nihil.', 'Voluptas sit perferendis.',
+            'Deserunt placeat excepturi impedit cupiditate et nihil.'].
         links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':

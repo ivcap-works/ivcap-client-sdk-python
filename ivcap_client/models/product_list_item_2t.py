@@ -13,17 +13,17 @@ class ProductListItem2T:
     """
     Example:
         {'data-href': 'https://api.ivcap.net/1/artifacts/.../data', 'href': 'https://api.ivcap.net/1/artifacts/...',
-            'id': 'Qui est.', 'mime-type': 'Officiis quo vitae aspernatur.', 'name': 'Est accusantium ipsa et voluptatem
-            assumenda.', 'size': 7910494509620745857, 'status': 'Reiciendis voluptatem cum.'}
+            'id': 'Corrupti nesciunt eum.', 'mime-type': 'Veritatis aliquam.', 'name': 'Dolore quisquam nobis et sint.',
+            'size': 6233611672030094249, 'status': 'Voluptatem autem vel quis aliquam sint in.'}
 
     Attributes:
         href (str):  Example: https://api.ivcap.net/1/artifacts/....
-        id (str):  Example: Et ab facere deserunt sapiente..
-        status (str):  Example: Provident quis dolorum quod ducimus vero..
+        id (str):  Example: Facere quo cum veniam et rerum..
+        status (str):  Example: Dolores maxime excepturi odio laudantium..
         data_href (Union[Unset, str]):  Example: https://api.ivcap.net/1/artifacts/.../data.
-        mime_type (Union[Unset, str]):  Example: Quis fuga..
-        name (Union[Unset, str]):  Example: Dicta architecto similique nostrum..
-        size (Union[Unset, int]):  Example: 372020331949479593.
+        mime_type (Union[Unset, str]):  Example: Repudiandae aut ut perferendis reprehenderit..
+        name (Union[Unset, str]):  Example: Et ut nam alias..
+        size (Union[Unset, int]):  Example: 787893284358373318.
     """
 
     href: str

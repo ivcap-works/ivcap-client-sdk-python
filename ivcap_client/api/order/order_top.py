@@ -8,6 +8,7 @@ from ...client import AuthenticatedClient, Client
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
+from ...models.not_implemented_t import NotImplementedT
 from ...models.order_top_result_item import OrderTopResultItem
 from ...models.resource_not_found_t import ResourceNotFoundT
 from ...types import Response
@@ -27,7 +28,15 @@ def _get_kwargs(
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[
+        Any,
+        BadRequestT,
+        InvalidParameterT,
+        InvalidScopesT,
+        NotImplementedT,
+        ResourceNotFoundT,
+        list["OrderTopResultItem"],
+    ]
 ]:
     if response.status_code == 200:
         response_200 = []
@@ -60,7 +69,7 @@ def _parse_response(
 
         return response_422
     if response.status_code == 501:
-        response_501 = BadRequestT.from_dict(response.json())
+        response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
     if response.status_code == 503:
@@ -75,7 +84,15 @@ def _parse_response(
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[
+        Any,
+        BadRequestT,
+        InvalidParameterT,
+        InvalidScopesT,
+        NotImplementedT,
+        ResourceNotFoundT,
+        list["OrderTopResultItem"],
+    ]
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -90,7 +107,15 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[
+        Any,
+        BadRequestT,
+        InvalidParameterT,
+        InvalidScopesT,
+        NotImplementedT,
+        ResourceNotFoundT,
+        list["OrderTopResultItem"],
+    ]
 ]:
     """top order
 
@@ -105,7 +130,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list['OrderTopResultItem']]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, list['OrderTopResultItem']]]
     """
 
     kwargs = _get_kwargs(
@@ -124,7 +149,15 @@ def sync(
     *,
     client: AuthenticatedClient,
 ) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[
+        Any,
+        BadRequestT,
+        InvalidParameterT,
+        InvalidScopesT,
+        NotImplementedT,
+        ResourceNotFoundT,
+        list["OrderTopResultItem"],
+    ]
 ]:
     """top order
 
@@ -139,7 +172,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list['OrderTopResultItem']]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, list['OrderTopResultItem']]
     """
 
     return sync_detailed(
@@ -153,7 +186,15 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[
+        Any,
+        BadRequestT,
+        InvalidParameterT,
+        InvalidScopesT,
+        NotImplementedT,
+        ResourceNotFoundT,
+        list["OrderTopResultItem"],
+    ]
 ]:
     """top order
 
@@ -168,7 +209,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list['OrderTopResultItem']]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, list['OrderTopResultItem']]]
     """
 
     kwargs = _get_kwargs(
@@ -185,7 +226,15 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
 ) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list["OrderTopResultItem"]]
+    Union[
+        Any,
+        BadRequestT,
+        InvalidParameterT,
+        InvalidScopesT,
+        NotImplementedT,
+        ResourceNotFoundT,
+        list["OrderTopResultItem"],
+    ]
 ]:
     """top order
 
@@ -200,7 +249,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ResourceNotFoundT, list['OrderTopResultItem']]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, list['OrderTopResultItem']]
     """
 
     return (

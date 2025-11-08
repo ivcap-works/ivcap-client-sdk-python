@@ -10,7 +10,7 @@ T = TypeVar("T", bound="InvalidParameterT")
 
 @_attrs_define
 class InvalidParameterT:
-    """Invalid parameter value
+    """InvalidParameterT is the error returned when a parameter has the wrong value.
 
     Example:
         {'message': 'cannot parse date', 'name': 'timestamp', 'value': 'today'}

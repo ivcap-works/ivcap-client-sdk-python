@@ -12,12 +12,11 @@ T = TypeVar("T", bound="ParameterOptT")
 class ParameterOptT:
     """
     Example:
-        {'description': 'Dolorem pariatur repudiandae excepturi commodi autem ad.', 'value': 'Aut accusantium quo
-            suscipit ducimus fugiat.'}
+        {'description': 'Voluptate explicabo blanditiis eum.', 'value': 'Quidem velit et eveniet.'}
 
     Attributes:
-        description (Union[Unset, str]):  Example: Ut sint dolorum qui corrupti..
-        value (Union[Unset, str]):  Example: Facere sunt inventore at dolorem..
+        description (Union[Unset, str]):  Example: Quasi quia ducimus culpa..
+        value (Union[Unset, str]):  Example: Rem eius nulla similique officiis..
     """
 
     description: Union[Unset, str] = UNSET

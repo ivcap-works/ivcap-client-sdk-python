@@ -16,27 +16,28 @@ T = TypeVar("T", bound="ParameterDefT")
 class ParameterDefT:
     """
     Example:
-        {'constant': False, 'default': 'Mollitia velit.', 'description': 'Cumque consequatur at est.', 'label': 'Et nemo
-            excepturi ex.', 'name': 'Facilis et cum.', 'optional': True, 'options': [{'description': 'Quo fugiat non qui
-            nihil voluptatem ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}, {'description':
-            'Quo fugiat non qui nihil voluptatem ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'},
-            {'description': 'Quo fugiat non qui nihil voluptatem ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi
-            qui occaecati.'}], 'type': 'Corrupti laborum qui incidunt.', 'unary': True, 'unit': 'Praesentium eaque explicabo
-            facilis quos.'}
+        {'constant': False, 'default': 'Ratione repudiandae et sed.', 'description': 'Dolor porro est inventore eius
+            aperiam tempora.', 'label': 'Aperiam reiciendis earum minima laborum dicta dolorum.', 'name': 'Quis sunt libero
+            et.', 'optional': True, 'options': [{'description': 'Quo fugiat non qui nihil voluptatem ea.', 'value': 'Beatae
+            voluptatem reprehenderit enim nisi qui occaecati.'}, {'description': 'Quo fugiat non qui nihil voluptatem ea.',
+            'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}, {'description': 'Quo fugiat non qui nihil
+            voluptatem ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}, {'description': 'Quo
+            fugiat non qui nihil voluptatem ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}],
+            'type': 'Repellat doloremque.', 'unary': False, 'unit': 'Dolorem nemo.'}
 
     Attributes:
-        description (str):  Example: Eius vel..
-        name (str):  Example: Earum aliquid aut cum..
-        type_ (str):  Example: Veniam sunt quibusdam dolores officiis reprehenderit..
-        constant (Union[Unset, bool]):  Example: True.
-        default (Union[Unset, str]):  Example: Consequuntur incidunt iste..
-        label (Union[Unset, str]):  Example: Perferendis rerum explicabo consequatur..
-        optional (Union[Unset, bool]):  Example: True.
+        description (str):  Example: Qui maiores reprehenderit fuga harum impedit..
+        name (str):  Example: Omnis dolor dicta quo..
+        type_ (str):  Example: Ex ut consequatur pariatur rerum est et..
+        constant (Union[Unset, bool]):
+        default (Union[Unset, str]):  Example: Id vel voluptas quis autem..
+        label (Union[Unset, str]):  Example: Natus sit..
+        optional (Union[Unset, bool]):
         options (Union[Unset, list['ParameterOptT']]):  Example: [{'description': 'Quo fugiat non qui nihil voluptatem
             ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}, {'description': 'Quo fugiat non qui
             nihil voluptatem ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}].
         unary (Union[Unset, bool]):  Example: True.
-        unit (Union[Unset, str]):  Example: Quaerat cupiditate quidem corporis..
+        unit (Union[Unset, str]):  Example: Voluptatibus doloremque ea molestiae ratione commodi..
     """
 
     description: str

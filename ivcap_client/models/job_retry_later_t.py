@@ -10,16 +10,16 @@ T = TypeVar("T", bound="JobRetryLaterT")
 
 @_attrs_define
 class JobRetryLaterT:
-    """Requested job hasn't finished yet, call back later
+    """The information returned if the job hasn't finished yet
 
     Example:
-        {'job-id': 'Ut vel.', 'location': 'Rerum voluptates molestiae perferendis quis a aut.', 'retry-later':
-            2954767685796848223}
+        {'job-id': 'Cupiditate quidem corporis.', 'location': 'Nobis exercitationem consequuntur incidunt iste ducimus
+            facere.', 'retry-later': 5622257056223433059}
 
     Attributes:
-        location (str): the URL for the job Example: Ab aspernatur architecto ullam dolore et..
-        retry_later (int): The time in seconds after which an update may be available Example: 6518556580877944646.
-        job_id (Union[Unset, str]): the ID of the job Example: Non sapiente labore iste..
+        location (str): the URL for the job Example: Eius vel..
+        retry_later (int): The time in seconds after which an update may be available Example: 6693500484784064230.
+        job_id (Union[Unset, str]): the ID of the job Example: Veniam sunt quibusdam dolores officiis reprehenderit..
     """
 
     location: str

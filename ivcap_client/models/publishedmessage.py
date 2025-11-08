@@ -1,10 +1,9 @@
-from io import BytesIO
 from typing import Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, File, FileJsonType, Unset
+from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="Publishedmessage")
 
@@ -18,7 +17,7 @@ class Publishedmessage:
             'urn:ivcap:schema:queue:message.1'}
 
     Attributes:
-        content (Union[Unset, File]): Message content in JSON format. Example: {"temperature": "21", "location":
+        content (Union[Unset, Any]): Message content in JSON format. Example: {"temperature": "21", "location":
             "Buoy101", "timestamp": "2024-05-20T14:30:00Z"}.
         content_type (Union[Unset, str]): Encoding type of message content (defaults to 'application/json') Example:
             application/json.
@@ -27,16 +26,14 @@ class Publishedmessage:
         schema (Union[Unset, str]): Schema used for message Example: urn:ivcap:schema:queue:message.1.
     """
 
-    content: Union[Unset, File] = UNSET
+    content: Union[Unset, Any] = UNSET
     content_type: Union[Unset, str] = UNSET
     id: Union[Unset, str] = UNSET
     schema: Union[Unset, str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        content: Union[Unset, FileJsonType] = UNSET
-        if not isinstance(self.content, Unset):
-            content = self.content.to_tuple()
+        content = self.content
 
         content_type = self.content_type
 
@@ -61,12 +58,7 @@ class Publishedmessage:
     @classmethod
     def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         d = src_dict.copy()
-        _content = d.pop("content", UNSET)
-        content: Union[Unset, File]
-        if isinstance(_content, Unset):
-            content = UNSET
-        else:
-            content = File(payload=BytesIO(_content))
+        content = d.pop("content", UNSET)
 
         content_type = d.pop("content-type", UNSET)
 

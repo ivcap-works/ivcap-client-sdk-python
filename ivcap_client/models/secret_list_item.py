@@ -10,11 +10,11 @@ T = TypeVar("T", bound="SecretListItem")
 class SecretListItem:
     """
     Example:
-        {'expiry-time': 802817397779052927, 'secret-name': 'Commodi dolorem provident ab et.'}
+        {'expiry-time': 3857724532390883046, 'secret-name': 'Provident ducimus voluptas odit aut molestiae.'}
 
     Attributes:
-        expiry_time (int): Expiry time Example: 4099636861052818756.
-        secret_name (str): Secret name Example: Dolor quas sed magni aliquam in voluptatem..
+        expiry_time (int): Expiry time Example: 4199864869145858587.
+        secret_name (str): Secret name Example: Nihil optio sit ipsum iure facere..
     """
 
     expiry_time: int

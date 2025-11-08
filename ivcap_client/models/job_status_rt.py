@@ -1,5 +1,4 @@
 import datetime
-from io import BytesIO
 from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
@@ -7,7 +6,7 @@ from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..models.job_status_rt_status import JobStatusRTStatus
-from ..types import UNSET, File, FileJsonType, Unset
+from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.link_t import LinkT
@@ -30,10 +29,11 @@ class JobStatusRT:
             'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'products': {'items': [{'data-href':
             'https:/.../1/artifacts/0000-00001220/blob', 'href': 'https:/.../1/artifacts/0000-00001220', 'mime-type':
             'image/geo+tiff', 'name': 'fire risk map', 'size': 1234963}], 'links': [{'href': 'https://api.ivcap.net/1/....',
-            'rel': 'next'}]}, 'request-content': 'Consequuntur tempora illum vel odio.', 'request-content-type':
-            'application/json', 'requested-at': '1996-12-19T16:39:57-08:00', 'result-content': 'Iusto quis ut ipsum fugit.',
-            'result-content-type': 'application/json', 'service': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000',
-            'started-at': '1996-12-19T16:39:57-08:00', 'status': 'executing', 'tags': ['tag1', 'tag2']}
+            'rel': 'next'}]}, 'request-content': 'Earum aliquid aut cum.', 'request-content-type': 'application/json',
+            'requested-at': '1996-12-19T16:39:57-08:00', 'result-content': 'Perferendis rerum explicabo consequatur.',
+            'result-content-type': 'application/json', 'result-content-urn': 'urn:ivcap:aspect:000', 'service':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
+            'succeeded', 'tags': ['tag1', 'tag2']}
 
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
@@ -46,7 +46,7 @@ class JobStatusRT:
         request_content_type (str): Mime type of request Example: application/json.
         requested_at (datetime.datetime): DateTime job was submitted Example: 1996-12-19T16:39:57-08:00.
         service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        status (JobStatusRTStatus): Job status Example: scheduled.
+        status (JobStatusRTStatus): Job status Example: pending.
         error_message (Union[Unset, str]): Additional error message id status is 'Error' or 'Failed' Example: parameter
             out of range.
         finished_at (Union[Unset, datetime.datetime]): DateTime job processing finished Example:
@@ -56,9 +56,10 @@ class JobStatusRT:
             'https:/.../1/artifacts/0000-00001220/blob', 'href': 'https:/.../1/artifacts/0000-00001220', 'mime-type':
             'image/geo+tiff', 'name': 'fire risk map', 'size': 1234963}], 'links': [{'href': 'https://api.ivcap.net/1/....',
             'rel': 'next'}]}.
-        request_content (Union[Unset, File]): Request content Example: Dolor nostrum eveniet..
-        result_content (Union[Unset, File]): Result content Example: Eius similique..
+        request_content (Union[Unset, Any]): Request content Example: Accusantium maiores placeat assumenda similique..
+        result_content (Union[Unset, Any]): Result content Example: Asperiores quidem nisi unde quibusdam..
         result_content_type (Union[Unset, str]): Mime type of result Example: application/json.
+        result_content_urn (Union[Unset, str]): Result content URN Example: urn:ivcap:aspect:000.
         started_at (Union[Unset, datetime.datetime]): DateTime job processing started Example:
             1996-12-19T16:39:57-08:00.
         tags (Union[Unset, list[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
@@ -80,6 +81,7 @@ class JobStatusRT:
     request_content: Union[Unset, Any] = UNSET
     result_content: Union[Unset, Any] = UNSET
     result_content_type: Union[Unset, str] = UNSET
+    result_content_urn: Union[Unset, str] = UNSET
     started_at: Union[Unset, datetime.datetime] = UNSET
     tags: Union[Unset, list[str]] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -118,15 +120,13 @@ class JobStatusRT:
         if not isinstance(self.products, Unset):
             products = self.products.to_dict()
 
-        request_content: Union[Unset, Any] = UNSET
-        if not isinstance(self.request_content, Unset):
-            request_content = self.request_content
+        request_content = self.request_content
 
-        result_content: Union[Unset, Any] = UNSET
-        if not isinstance(self.result_content, Unset):
-            result_content = self.result_content
+        result_content = self.result_content
 
         result_content_type = self.result_content_type
+
+        result_content_urn = self.result_content_urn
 
         started_at: Union[Unset, str] = UNSET
         if not isinstance(self.started_at, Unset):
@@ -165,6 +165,8 @@ class JobStatusRT:
             field_dict["result-content"] = result_content
         if result_content_type is not UNSET:
             field_dict["result-content-type"] = result_content_type
+        if result_content_urn is not UNSET:
+            field_dict["result-content-urn"] = result_content_urn
         if started_at is not UNSET:
             field_dict["started-at"] = started_at
         if tags is not UNSET:
@@ -219,21 +221,13 @@ class JobStatusRT:
         else:
             products = PartialProductList2T.from_dict(_products)
 
-        _request_content = d.pop("request-content", UNSET)
-        request_content: Union[Unset, Any]
-        if isinstance(_request_content, Unset):
-            request_content = UNSET
-        else:
-            request_content = _request_content
+        request_content = d.pop("request-content", UNSET)
 
-        _result_content = d.pop("result-content", UNSET)
-        result_content: Union[Unset, Any]
-        if isinstance(_result_content, Unset):
-            result_content = UNSET
-        else:
-            result_content = _result_content
+        result_content = d.pop("result-content", UNSET)
 
         result_content_type = d.pop("result-content-type", UNSET)
+
+        result_content_urn = d.pop("result-content-urn", UNSET)
 
         _started_at = d.pop("started-at", UNSET)
         started_at: Union[Unset, datetime.datetime]
@@ -261,6 +255,7 @@ class JobStatusRT:
             request_content=request_content,
             result_content=result_content,
             result_content_type=result_content_type,
+            result_content_urn=result_content_urn,
             started_at=started_at,
             tags=tags,
         )

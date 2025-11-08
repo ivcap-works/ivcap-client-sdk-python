@@ -17,36 +17,38 @@ T = TypeVar("T", bound="ServiceListRT")
 class ServiceListRT:
     """
     Example:
-        {'at-time': '1996-12-19T16:39:57-08:00', 'items': [{'controller-schema': 'Ut eveniet voluptate.', 'description':
-            'Some lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'tags': ['tag1',
-            'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to': '1996-12-19T16:39:57-08:00'}, {'controller-
-            schema': 'Ut eveniet voluptate.', 'description': 'Some lengthy description of fire risk', 'href':
+        {'at-time': '1996-12-19T16:39:57-08:00', 'items': [{'controller-schema': 'Excepturi illo reprehenderit aliquid
+            quaerat odit.', 'description': 'Some lengthy description of fire risk', 'href':
             'https://api.ivcap.net/1/services/...', 'id': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name':
             'Fire risk for region', 'tags': ['tag1', 'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to':
-            '1996-12-19T16:39:57-08:00'}, {'controller-schema': 'Ut eveniet voluptate.', 'description': 'Some lengthy
-            description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            '1996-12-19T16:39:57-08:00'}, {'controller-schema': 'Excepturi illo reprehenderit aliquid quaerat odit.',
+            'description': 'Some lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'tags': ['tag1',
-            'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to': '1996-12-19T16:39:57-08:00'}, {'controller-
-            schema': 'Ut eveniet voluptate.', 'description': 'Some lengthy description of fire risk', 'href':
-            'https://api.ivcap.net/1/services/...', 'id': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name':
-            'Fire risk for region', 'tags': ['tag1', 'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to':
-            '1996-12-19T16:39:57-08:00'}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
-            'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
-            {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
+            'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to': '1996-12-19T16:39:57-08:00'}], 'links':
+            [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
+            'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}]}
 
     Attributes:
         at_time (datetime.datetime): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
-        items (list['ServiceListItemT']): Services Example: [{'controller-schema': 'Ut eveniet voluptate.',
+        items (list['ServiceListItemT']): Services Example: [{'controller-schema': 'Excepturi illo reprehenderit aliquid
+            quaerat odit.', 'description': 'Some lengthy description of fire risk', 'href':
+            'https://api.ivcap.net/1/services/...', 'id': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name':
+            'Fire risk for region', 'tags': ['tag1', 'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to':
+            '1996-12-19T16:39:57-08:00'}, {'controller-schema': 'Excepturi illo reprehenderit aliquid quaerat odit.',
             'description': 'Some lengthy description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'tags': ['tag1',
             'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to': '1996-12-19T16:39:57-08:00'}, {'controller-
-            schema': 'Ut eveniet voluptate.', 'description': 'Some lengthy description of fire risk', 'href':
-            'https://api.ivcap.net/1/services/...', 'id': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name':
-            'Fire risk for region', 'tags': ['tag1', 'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to':
-            '1996-12-19T16:39:57-08:00'}].
+            schema': 'Excepturi illo reprehenderit aliquid quaerat odit.', 'description': 'Some lengthy description of fire
+            risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'tags': ['tag1',
+            'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to': '1996-12-19T16:39:57-08:00'}, {'controller-
+            schema': 'Excepturi illo reprehenderit aliquid quaerat odit.', 'description': 'Some lengthy description of fire
+            risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
+            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'tags': ['tag1',
+            'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to': '1996-12-19T16:39:57-08:00'}].
         links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':

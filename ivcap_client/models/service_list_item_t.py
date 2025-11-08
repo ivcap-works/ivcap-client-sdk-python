@@ -14,13 +14,13 @@ T = TypeVar("T", bound="ServiceListItemT")
 class ServiceListItemT:
     """
     Example:
-        {'controller-schema': 'Accusantium maiores placeat assumenda similique.', 'description': 'Some lengthy
-            description of fire risk', 'href': 'https://api.ivcap.net/1/services/...', 'id':
-            'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'tags': ['tag1',
-            'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to': '1996-12-19T16:39:57-08:00'}
+        {'controller-schema': 'Cumque consequatur at est.', 'description': 'Some lengthy description of fire risk',
+            'href': 'https://api.ivcap.net/1/services/...', 'id': 'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000',
+            'name': 'Fire risk for region', 'tags': ['tag1', 'tag2'], 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to':
+            '1996-12-19T16:39:57-08:00'}
 
     Attributes:
-        controller_schema (str): type of controller used for this service Example: Ab non est qui voluptates..
+        controller_schema (str): type of controller used for this service Example: Corrupti laborum qui incidunt..
         href (str):  Example: https://api.ivcap.net/1/services/....
         id (str): ID Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
         description (Union[Unset, str]): Optional description of the service Example: Some lengthy description of fire

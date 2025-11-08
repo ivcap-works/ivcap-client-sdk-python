@@ -14,23 +14,23 @@ T = TypeVar("T", bound="Readqueueresponse")
 class Readqueueresponse:
     """
     Example:
-        {'bytes': 8546472240716057001, 'consumer-count': 4756321449003009517, 'created-at': '1996-12-19T16:39:57-08:00',
+        {'bytes': 8823655499316616494, 'consumer-count': 3537273299306973285, 'created-at': '1996-12-19T16:39:57-08:00',
             'description': 'Events for the event service', 'first-time': '1996-12-19T16:39:57-08:00', 'id':
             'urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000', 'last-time': '1996-12-19T16:39:57-08:00', 'name':
-            'events', 'total-messages': 5305886294136564151}
+            'events', 'total-messages': 12593076062238485984}
 
     Attributes:
         created_at (datetime.datetime): Timestamp when the queue was created Example: 1996-12-19T16:39:57-08:00.
         id (str): ID Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
         name (str): Name of the queue. Example: events.
-        bytes_ (Union[Unset, int]): Number of bytes in the queue Example: 9827842800300236144.
-        consumer_count (Union[Unset, int]): Number of consumers Example: 7813520277473754881.
+        bytes_ (Union[Unset, int]): Number of bytes in the queue Example: 7409664754160475411.
+        consumer_count (Union[Unset, int]): Number of consumers Example: 8220973392880417104.
         description (Union[Unset, str]): Description of the queue. Example: Events for the event service.
         first_time (Union[Unset, datetime.datetime]): Timestamp of the first message in the queue Example:
             1996-12-19T16:39:57-08:00.
         last_time (Union[Unset, datetime.datetime]): Timestamp of the last message in the queue Example:
             1996-12-19T16:39:57-08:00.
-        total_messages (Union[Unset, int]): Number of messages sent to the queue Example: 1674046094350039205.
+        total_messages (Union[Unset, int]): Number of messages sent to the queue Example: 18085974087404329575.
     """
 
     created_at: datetime.datetime

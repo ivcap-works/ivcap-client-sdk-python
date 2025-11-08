@@ -13,11 +13,11 @@ class JobRetryLaterT2:
     """Requested job hasn't finished yet, call back later
 
     Example:
-        {'job-id': 'Laudantium exercitationem.', 'retry-later': 6557700639310868297}
+        {'job-id': 'Veniam non eaque.', 'retry-later': 5897998025569623663}
 
     Attributes:
-        retry_later (int): The time in seconds after which an update may be available Example: 2725599725000718993.
-        job_id (Union[Unset, str]): the ID of the job Example: Porro et ut dolores expedita..
+        retry_later (int): The time in seconds after which an update may be available Example: 3196025698816427112.
+        job_id (Union[Unset, str]): the ID of the job Example: Quibusdam harum dignissimos quisquam earum dolores unde..
     """
 
     retry_later: int

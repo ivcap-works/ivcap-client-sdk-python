@@ -19,13 +19,13 @@ class JobListItem:
             'urn:ivcap:job:123e4567-e89b-12d3-a456-426614174000', 'name': 'Fire risk for region', 'order':
             'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
-            'executing'}
+            'scheduled'}
 
     Attributes:
         href (str):  Example: https://api.ivcap.net/1/services/....
         id (str): ID Example: urn:ivcap:job:123e4567-e89b-12d3-a456-426614174000.
         service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        status (JobListItemStatus): Job status Example: failed.
+        status (JobListItemStatus): Job status Example: executing.
         finished_at (Union[Unset, datetime.datetime]): DateTime job processing finished Example:
             1996-12-19T16:39:57-08:00.
         name (Union[Unset, str]): Optional customer provided name Example: Fire risk for region.

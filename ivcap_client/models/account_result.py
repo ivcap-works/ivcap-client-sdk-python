@@ -10,10 +10,10 @@ T = TypeVar("T", bound="AccountResult")
 class AccountResult:
     """
     Example:
-        {'account_urn': 'Eius voluptatem.'}
+        {'account_urn': 'Ab et nihil nostrum reprehenderit.'}
 
     Attributes:
-        account_urn (str): Account URN Example: Impedit ullam iste cupiditate..
+        account_urn (str): Account URN Example: Aliquam in voluptatem doloremque omnis commodi dolorem..
     """
 
     account_urn: str

@@ -1,12 +1,11 @@
 import datetime
-from io import BytesIO
 from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
-from ..types import UNSET, File, Unset
+from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.link_t import LinkT
@@ -27,7 +26,7 @@ class MetadataRecordRT:
             'urn:blue:schema.image', 'valid-from': '1996-12-19T16:39:57-08:00', 'valid-to': '1996-12-19T16:39:57-08:00'}
 
     Attributes:
-        aspect (File): Attached metadata aspect Example: {...}.
+        aspect (Any): Attached metadata aspect Example: {...}.
         asserter (str): Entity asserting this metadata record at 'valid-from' Example:
             urn:ivcap:principal:123e4567-e89b-12d3-a456-426614174000.
         entity (str): Entity ID Example: urn:blue:transect.1.
@@ -42,7 +41,7 @@ class MetadataRecordRT:
         valid_to (Union[Unset, datetime.datetime]): Time this record was retracted Example: 1996-12-19T16:39:57-08:00.
     """
 
-    aspect: File
+    aspect: Any
     asserter: str
     entity: str
     id: str
@@ -54,7 +53,7 @@ class MetadataRecordRT:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        aspect = self.aspect.to_tuple()
+        aspect = self.aspect
 
         asserter = self.asserter
 
@@ -102,7 +101,7 @@ class MetadataRecordRT:
         from ..models.link_t import LinkT
 
         d = src_dict.copy()
-        aspect = File(payload=BytesIO(d.pop("aspect")))
+        aspect = d.pop("aspect")
 
         asserter = d.pop("asserter")
 

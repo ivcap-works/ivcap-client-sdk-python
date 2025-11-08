@@ -1,10 +1,9 @@
-from io import BytesIO
 from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, File, Unset
+from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.parameter_def_t import ParameterDefT
@@ -27,7 +26,7 @@ class ServiceDefinitionT:
             'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'tags': ['tag1', 'tag2']}
 
     Attributes:
-        controller (File): controller definition Example: [{'$schema': 'urn:ivcap:schema.service.rest.1', 'command':
+        controller (Any): controller definition Example: [{'$schema': 'urn:ivcap:schema.service.rest.1', 'command':
             ['python', '/app/tool-service.py'], 'image': 'your-docker-image:latest', 'port': 8090, 'ready-url': '/_healtz',
             'resources': {'limits': {'cpu': '500m', 'ephemeral-storage': '1Gi', 'memory': '1Gi'}, 'requests': {'cpu':
             '500m', 'ephemeral-storage': '1Gi', 'memory': '1Gi'}}}].
@@ -43,7 +42,7 @@ class ServiceDefinitionT:
             'tag2'].
     """
 
-    controller: File
+    controller: Any
     controller_schema: str
     description: str
     id: str
@@ -54,7 +53,7 @@ class ServiceDefinitionT:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        controller = self.controller.to_tuple()
+        controller = self.controller
 
         controller_schema = self.controller_schema
 
@@ -99,7 +98,7 @@ class ServiceDefinitionT:
         from ..models.parameter_def_t import ParameterDefT
 
         d = src_dict.copy()
-        controller = File(payload=BytesIO(d.pop("controller")))
+        controller = d.pop("controller")
 
         controller_schema = d.pop("controller-schema")
 

@@ -9,8 +9,10 @@ from ...client import AuthenticatedClient, Client
 from ...models.bad_request_t import BadRequestT
 from ...models.invalid_parameter_t import InvalidParameterT
 from ...models.invalid_scopes_t import InvalidScopesT
+from ...models.not_implemented_t import NotImplementedT
 from ...models.search_list_rt import SearchListRT
-from ...types import UNSET, File, FileJsonType, Response, Unset
+from ...models.unsupported_content_type_t import UnsupportedContentTypeT
+from ...types import UNSET, File, Response, Unset
 
 
 def _get_kwargs(
@@ -18,7 +20,7 @@ def _get_kwargs(
     body: File,
     at_time: Union[Unset, datetime.datetime] = UNSET,
     limit: Union[Unset, int] = 10,
-    page: Union[Unset, File] = UNSET,
+    page: Union[Unset, Any] = UNSET,
     content_type: str,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
@@ -33,11 +35,7 @@ def _get_kwargs(
 
     params["limit"] = limit
 
-    json_page: Union[Unset, FileJsonType] = UNSET
-    if not isinstance(page, Unset):
-        json_page = page.to_tuple()
-
-    params["page"] = json_page
+    params["page"] = page
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -58,7 +56,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
+) -> Optional[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
+]:
     if response.status_code == 200:
         response_200 = SearchListRT.from_dict(response.json())
 
@@ -75,7 +75,7 @@ def _parse_response(
 
         return response_403
     if response.status_code == 415:
-        response_415 = BadRequestT.from_dict(response.json())
+        response_415 = UnsupportedContentTypeT.from_dict(response.json())
 
         return response_415
     if response.status_code == 422:
@@ -83,7 +83,7 @@ def _parse_response(
 
         return response_422
     if response.status_code == 501:
-        response_501 = BadRequestT.from_dict(response.json())
+        response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
     if response.status_code == 503:
@@ -97,7 +97,9 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
+) -> Response[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -112,9 +114,11 @@ def sync_detailed(
     body: File,
     at_time: Union[Unset, datetime.datetime] = UNSET,
     limit: Union[Unset, int] = 10,
-    page: Union[Unset, File] = UNSET,
+    page: Union[Unset, Any] = UNSET,
     content_type: str,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
+) -> Response[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
+]:
     """search search
 
      Execute query provided in body and return a list of search result.
@@ -125,7 +129,7 @@ def sync_detailed(
         limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
             the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
+        page (Union[Unset, Any]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
@@ -154,7 +158,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]]
     """
 
     kwargs = _get_kwargs(
@@ -178,9 +182,11 @@ def sync(
     body: File,
     at_time: Union[Unset, datetime.datetime] = UNSET,
     limit: Union[Unset, int] = 10,
-    page: Union[Unset, File] = UNSET,
+    page: Union[Unset, Any] = UNSET,
     content_type: str,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
+) -> Optional[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
+]:
     """search search
 
      Execute query provided in body and return a list of search result.
@@ -191,7 +197,7 @@ def sync(
         limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
             the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
+        page (Union[Unset, Any]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
@@ -220,7 +226,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
     """
 
     return sync_detailed(
@@ -239,9 +245,11 @@ async def asyncio_detailed(
     body: File,
     at_time: Union[Unset, datetime.datetime] = UNSET,
     limit: Union[Unset, int] = 10,
-    page: Union[Unset, File] = UNSET,
+    page: Union[Unset, Any] = UNSET,
     content_type: str,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
+) -> Response[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
+]:
     """search search
 
      Execute query provided in body and return a list of search result.
@@ -252,7 +260,7 @@ async def asyncio_detailed(
         limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
             the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
+        page (Union[Unset, Any]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
@@ -281,7 +289,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]
+        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]]
     """
 
     kwargs = _get_kwargs(
@@ -303,9 +311,11 @@ async def asyncio(
     body: File,
     at_time: Union[Unset, datetime.datetime] = UNSET,
     limit: Union[Unset, int] = 10,
-    page: Union[Unset, File] = UNSET,
+    page: Union[Unset, Any] = UNSET,
     content_type: str,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]:
+) -> Optional[
+    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
+]:
     """search search
 
      Execute query provided in body and return a list of search result.
@@ -316,7 +326,7 @@ async def asyncio(
         limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
             the queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, File]): The content of '$page' is returned in the 'links' part of a
+        page (Union[Unset, Any]): The content of '$page' is returned in the 'links' part of a
             previous query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
@@ -345,7 +355,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]
+        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
     """
 
     return (

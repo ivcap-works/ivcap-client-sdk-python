@@ -10,13 +10,13 @@ T = TypeVar("T", bound="SecretResultT")
 class SecretResultT:
     """
     Example:
-        {'expiry-time': 6738241350103868904, 'secret-name': 'Qui cumque in nulla porro.', 'secret-value': 'Qui
-            voluptatem et earum aliquid quia.'}
+        {'expiry-time': 5171408676313242593, 'secret-name': 'Nostrum quibusdam quia aut.', 'secret-value': 'Sapiente
+            commodi dolorem.'}
 
     Attributes:
-        expiry_time (int): Expiry time Example: 5494263333639440690.
-        secret_name (str): Secret name Example: Eos quae..
-        secret_value (str): Secret value Example: Dignissimos vero consequatur adipisci..
+        expiry_time (int): Expiry time Example: 3916875198971840530.
+        secret_name (str): Secret name Example: Id et cupiditate tenetur ratione qui amet..
+        secret_value (str): Secret value Example: Debitis perferendis..
     """
 
     expiry_time: int

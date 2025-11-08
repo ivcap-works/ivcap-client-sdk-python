@@ -1,5 +1,4 @@
 import datetime
-from io import BytesIO
 from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
@@ -7,7 +6,7 @@ from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
 from ..models.service_status_rt_status import ServiceStatusRTStatus
-from ..types import UNSET, File, Unset
+from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.link_t import LinkT
@@ -37,7 +36,7 @@ class ServiceStatusRT:
 
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
-        controller (File): controller definition Example: [{'$schema': 'urn:ivcap:schema.service.rest.1', 'command':
+        controller (Any): controller definition Example: [{'$schema': 'urn:ivcap:schema.service.rest.1', 'command':
             ['python', '/app/tool-service.py'], 'image': 'your-docker-image:latest', 'port': 8090, 'ready-url': '/_healtz',
             'resources': {'limits': {'cpu': '500m', 'ephemeral-storage': '1Gi', 'memory': '1Gi'}, 'requests': {'cpu':
             '500m', 'ephemeral-storage': '1Gi', 'memory': '1Gi'}}}].
@@ -51,7 +50,7 @@ class ServiceStatusRT:
             region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
             'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}].
         policy (str): Reference to policy used Example: urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
-        status (ServiceStatusRTStatus): Service status Example: error.
+        status (ServiceStatusRTStatus): Service status Example: inactive.
         name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
         tags (Union[Unset, list[str]]): Optional tags defined for service to help in categorising them Example: ['tag1',
             'tag2'].
@@ -62,7 +61,7 @@ class ServiceStatusRT:
     """
 
     account: str
-    controller: File
+    controller: Any
     controller_schema: str
     description: str
     id: str

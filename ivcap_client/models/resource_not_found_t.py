@@ -8,7 +8,7 @@ T = TypeVar("T", bound="ResourceNotFoundT")
 
 @_attrs_define
 class ResourceNotFoundT:
-    """Resource not found
+    """NotFound is the type returned when attempting to manage a resource that does not exist.
 
     Example:
         {'id': 'cayp:type:123e4567-e89b-12d3-a456-426614174000', 'message': 'Resource 123...00 not found'}

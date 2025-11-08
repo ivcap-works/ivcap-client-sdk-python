@@ -10,11 +10,11 @@ T = TypeVar("T", bound="PushStatusT")
 class PushStatusT:
     """
     Example:
-        {'message': 'Voluptas ut aut placeat autem aut.', 'status': 'Consectetur cumque debitis.'}
+        {'message': 'Eius voluptatem.', 'status': 'Impedit ullam iste cupiditate.'}
 
     Attributes:
-        message (str): Message Example: Quo qui..
-        status (str): Push status Example: Blanditiis nesciunt at qui suscipit..
+        message (str): Message Example: Et inventore exercitationem blanditiis omnis magnam..
+        status (str): Push status Example: Mollitia quis delectus..
     """
 
     message: str

@@ -10,10 +10,10 @@ T = TypeVar("T", bound="PushResponseBody")
 class PushResponseBody:
     """
     Example:
-        {'digest': 'Omnis ipsam animi tempore.', 'exists': True}
+        {'digest': 'Voluptas quas ipsa consequatur distinctio necessitatibus quia.', 'exists': False}
 
     Attributes:
-        digest (str): uploaded image digest or tag Example: Rerum nulla est vel reiciendis facere inventore..
+        digest (str): uploaded image digest or tag Example: Et dolore qui dolores est dolorum rerum..
         exists (bool): layer exists or not Example: True.
     """
 

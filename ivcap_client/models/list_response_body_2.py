@@ -18,7 +18,8 @@ class ListResponseBody2:
         {'items': [{'expiry-time': 4932954319159294728, 'secret-name': 'Sint suscipit atque exercitationem nobis
             perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728, 'secret-name': 'Sint suscipit atque
             exercitationem nobis perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728, 'secret-name': 'Sint
-            suscipit atque exercitationem nobis perspiciatis voluptate.'}], 'links': [{'href':
+            suscipit atque exercitationem nobis perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728, 'secret-
+            name': 'Sint suscipit atque exercitationem nobis perspiciatis voluptate.'}], 'links': [{'href':
             'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
@@ -28,8 +29,7 @@ class ListResponseBody2:
     Attributes:
         items (list['SecretListItem']): secrets Example: [{'expiry-time': 4932954319159294728, 'secret-name': 'Sint
             suscipit atque exercitationem nobis perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728, 'secret-
-            name': 'Sint suscipit atque exercitationem nobis perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728,
-            'secret-name': 'Sint suscipit atque exercitationem nobis perspiciatis voluptate.'}].
+            name': 'Sint suscipit atque exercitationem nobis perspiciatis voluptate.'}].
         links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':

@@ -15,7 +15,7 @@ from ivcap_client.job import JobStatus
 req = {
   "$schema": "urn:sd:schema:ai-tester.request.1",
   "wordle": {
-    "-maxattempts": 2,
+    "maxattempts": 2,
     "thinking_time": 1
   }
 }
@@ -26,7 +26,7 @@ req_model = svc.request_model
 passreq = req_model(**req)
 pp.pprint(passreq)
 
-count = 100
+count = 10
 interval = 3
 jobs = []
 max_time = 15 + count * interval

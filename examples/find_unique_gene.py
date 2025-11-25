@@ -15,7 +15,8 @@ req = {
   "min_coverage": 0.9
 }
 
-svc = ivcap.get_service_by_name("Unique Gene Finder")
+#svc = ivcap.get_service_by_name("Unique Gene Finder")
+svc = ivcap.get_service("urn:ivcap:service:3b6fc7d5-d629-5a59-83b4-36aded2fca4f")
 pp.pprint(svc)
 req_model = svc.request_model
 pp.pprint(req_model)

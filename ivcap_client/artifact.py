@@ -118,7 +118,7 @@ class Artifact:
         with temp_file as f:
             for chunk in self.as_stream():
                 f.write(chunk)
-        return Path(temp_file.name)
+        return CMPath(temp_file.name)
 
     @property
     def metadata(self) -> Iterator[Aspect]:
@@ -185,7 +185,8 @@ class LocalFileArtifact:
         return open(self._fp, 'r', encoding='utf-8')
 
     def as_local_file(self) -> Path:
-        return SafePath(self._fp)
+        # Return the Path to the local file but ensure it won't be deleted
+        return CMPath(SafePath(self._fp))
 
     def refresh(self) -> Artifact:
         return self
@@ -414,3 +415,34 @@ class ProxyFile:
     # The object should be iterable (yield lines)
     def __iter__(self):
         return self._buffer.__iter__()
+
+# --- FIX for Path Subclassing ---
+# Dynamically get the platform-specific flavour object from an instance of Path.
+CONCRETE_PATH_FLAVOUR = Path()._flavour
+
+class CMPath(Path):
+    """
+    A pathlib.Path subclass that acts as a context manager
+    for a file and ensuring its cleanup on exit.
+    """
+
+    # 1. CRITICAL: Inherit the platform-specific flavour
+    _flavour = CONCRETE_PATH_FLAVOUR
+
+    def __new__(cls, filename: str) -> Self:
+        instance = super().__new__(cls, filename)
+        return instance
+
+    # --- Context Manager Protocol ---
+
+    def __enter__(self) -> Self:
+        """Returns the fully initialized CMPath instance."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Cleans up the file."""
+        try:
+            if self.exists():
+                self.unlink() # Path.unlink() is the correct deletion method
+        except Exception as e:
+            print(f"ERROR: Could not remove file {self._file_path}: {e}")

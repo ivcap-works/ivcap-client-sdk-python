@@ -7,6 +7,7 @@ from __future__ import annotations # postpone evaluation of annotations
 import mimetypes
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, Iterator, List, Optional, BinaryIO
+from urllib.parse import urlparse
 
 if TYPE_CHECKING:
     from ivcap_client.ivcap import IVCAP, URN
@@ -66,6 +67,12 @@ class Artifact:
         hp = ["status", "cache_of", "data-href"]
         _set_fields(self, p, hp, kwargs)
 
+        if self._data_href:
+            durl = urlparse(self._data_href)
+            # NOTE: the artifact API still provides the full 'external' data url
+            # which causes problems internally. So we strip off the host and let it
+            # default to self._ivcap's base_url. May fail in the future!
+            self._data_href = durl.path
         if not self.id:
             raise ValueError("missing 'id' for Artifact")
 

@@ -68,11 +68,7 @@ class Artifact:
         _set_fields(self, p, hp, kwargs)
 
         if self._data_href:
-            durl = urlparse(self._data_href)
-            # NOTE: the artifact API still provides the full 'external' data url
-            # which causes problems internally. So we strip off the host and let it
-            # default to self._ivcap's base_url. May fail in the future!
-            self._data_href = durl.path
+            self._data_href = fix_data_ref(self._data_href)
         if not self.id:
             raise ValueError("missing 'id' for Artifact")
 
@@ -290,7 +286,7 @@ def upload_artifact(ivcap,
     res:ArtifactStatusRT = r.parsed
 
     h = {'Authorization': f"Bearer {ivcap._token}"}
-    data_url = res.data_href
+    data_url = fix_data_ref(res.data_href)
     c = TusClient(data_url, headers=h)
     kwargs = {
         'file_path': file_path,
@@ -344,6 +340,16 @@ def md5sum(filename, blocksize=65536):
             h.update(block)
     return h.hexdigest()
 
+def fix_data_ref(data_href):
+    """NOTE: the artifact API still provides the full 'external' data url
+    which causes problems internally. So we strip off the host and let it
+    default to self._ivcap's base_url. May fail in the future!
+    """
+    durl = urlparse(data_href)
+    return durl.path
+
+
+### PROTECT FILES WHEN RUNNING LOCALLY ####
 class SafePath(Path):
     """
     A Path object that disables the destructive 'unlink' (delete) method.

@@ -285,9 +285,12 @@ def upload_artifact(ivcap: IVCAP,
         return process_error('upload_artifact', r)
     res:ArtifactStatusRT = r.parsed
 
-    h = {'Authorization': f"Bearer {ivcap._token}"}
+    h = {}
+    if ivcap._token:
+        h['Authorization'] = f"Bearer {ivcap._token}"
     # NOTE: See coment on fix_data_ref
     data_url = ivcap._url + fix_data_ref(res.data_href)
+    # print(f"... res.data_href: '{res.data_href}' data_url: '{data_url}")
     c = TusClient(data_url, headers=h)
     kwargs = {
         'file_path': file_path,

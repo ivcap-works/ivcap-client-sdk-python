@@ -212,7 +212,7 @@ class LocalFileArtifact:
 
 #### HELPER FUNCTIONS ####
 
-def upload_artifact(ivcap,
+def upload_artifact(ivcap: IVCAP,
                     *,
                     name: Optional[str] = None,
                     file_path: Optional[str] = None,
@@ -286,7 +286,8 @@ def upload_artifact(ivcap,
     res:ArtifactStatusRT = r.parsed
 
     h = {'Authorization': f"Bearer {ivcap._token}"}
-    data_url = fix_data_ref(res.data_href)
+    # NOTE: See coment on fix_data_ref
+    data_url = ivcap._url + fix_data_ref(res.data_href)
     c = TusClient(data_url, headers=h)
     kwargs = {
         'file_path': file_path,

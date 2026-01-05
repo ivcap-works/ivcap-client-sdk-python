@@ -3,35 +3,38 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
-from __future__ import annotations # postpone evaluation of annotations
+from __future__ import annotations  # postpone evaluation of annotations
+
+import base64
+import datetime
+import hashlib
+import io
 import mimetypes
+import os
+import tempfile
+from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, Iterator, List, Optional, BinaryIO
+from sys import maxsize as MAXSIZE
+from typing import TYPE_CHECKING, BinaryIO, Dict, Iterator, List, Optional
 from urllib.parse import urlparse
 
 if TYPE_CHECKING:
     from ivcap_client.ivcap import IVCAP, URN
     from typing import Self
 
-import datetime
-from dataclasses import dataclass
-from datetime import datetime
 from tusclient.client import TusClient
-import mimetypes
-import base64
-import os
-import io
-import tempfile
-from sys import maxsize as MAXSIZE
 
-from ivcap_client.api.artifact import artifact_list, artifact_read, artifact_upload
+from ivcap_client.api.artifact import (artifact_list, artifact_read,
+                                       artifact_upload)
+from ivcap_client.aspect import Aspect
+from ivcap_client.models.artifact_list_item import ArtifactListItem
 from ivcap_client.models.artifact_list_rt import ArtifactListRT
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
-from ivcap_client.models.artifact_list_item import ArtifactListItem
-from ivcap_client.models.artifact_status_rt_status import ArtifactStatusRTStatus
-
+from ivcap_client.models.artifact_status_rt_status import \
+    ArtifactStatusRTStatus
 from ivcap_client.utils import BaseIter, Links, _set_fields, process_error
-from ivcap_client.aspect import Aspect
+
 
 @dataclass
 class Artifact:
@@ -336,7 +339,8 @@ def _upload_marker(file_path: str):
     df = os.path.join(dn, ".ivcap-" + fn + ".txt")
     return df
 
-import hashlib
+
+
 def md5sum(filename, blocksize=65536):
     h = hashlib.md5()
     with open(filename, "rb") as f:

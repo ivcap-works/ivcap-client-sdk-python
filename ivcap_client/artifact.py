@@ -352,7 +352,10 @@ class SafePath(Path):
     """
     A Path object that disables the destructive 'unlink' (delete) method.
     """
-    _flavour = Path()._flavour
+    try:
+        _flavour = Path()._flavour
+    except AttributeError:
+        pass
 
     def unlink(self, missing_ok: bool = False):
         """
@@ -429,7 +432,11 @@ class ProxyFile:
 
 # --- FIX for Path Subclassing ---
 # Dynamically get the platform-specific flavour object from an instance of Path.
-CONCRETE_PATH_FLAVOUR = Path()._flavour
+# Not needed from python3.12
+try:
+    CONCRETE_PATH_FLAVOUR = Path()._flavour
+except AttributeError:
+    pass
 
 class CMPath(Path):
     """
@@ -438,7 +445,10 @@ class CMPath(Path):
     """
 
     # 1. CRITICAL: Inherit the platform-specific flavour
-    _flavour = CONCRETE_PATH_FLAVOUR
+    try:
+        _flavour = CONCRETE_PATH_FLAVOUR
+    except NameError:
+        pass
 
     def __new__(cls, filename: str) -> Self:
         instance = super().__new__(cls, filename)

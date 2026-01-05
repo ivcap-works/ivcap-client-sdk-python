@@ -7,7 +7,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u"ivcap_client"
-copyright = u"2022, CSIRO"
+copyright = u"2022-2026, CSIRO"
 author = u"Max Ott <max.ott@csiro.au>"
 
 # -- General configuration ---------------------------------------------------
@@ -21,9 +21,9 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
 ]
-autoapi_dirs = ["../src"]
+autoapi_dirs = ["../ivcap_client"]
 autoapi_ignore = [
-    "**/api/*", 
+    "**/api/*",
     "**/client/*",
     "**/models/*",
 ]

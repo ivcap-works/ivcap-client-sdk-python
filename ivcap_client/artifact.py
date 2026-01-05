@@ -21,6 +21,7 @@ import mimetypes
 import base64
 import os
 import io
+import tempfile
 from sys import maxsize as MAXSIZE
 
 from ivcap_client.api.artifact import artifact_list, artifact_read, artifact_upload
@@ -120,7 +121,6 @@ class Artifact:
 
     def as_local_file(self) -> Path:
         """Download the artifact data to a local temporary file and return the Path"""
-        import tempfile
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         with temp_file as f:
             for chunk in self.as_stream():

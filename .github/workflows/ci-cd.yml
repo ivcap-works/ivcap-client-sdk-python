@@ -10,9 +10,9 @@ jobs:
     # Define job steps
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.9"
+          python-version: "3.11"
 
       - name: Check-out repository
         uses: actions/checkout@v2
@@ -30,6 +30,12 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           files: ./coverage.xml # coverage report
+
+      - name: Packages
+        run: poetry show
+
+      - name: PackagesTree
+        run: poetry show --tree
 
       - name: Build documentation
         run: poetry run make html --directory docs/
@@ -49,7 +55,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.9"
+          python-version: "3.11"
 
       - name: Check-out repository
         uses: actions/checkout@v2
@@ -63,6 +69,8 @@ jobs:
         run: poetry install
 
       - name: Build documentation
+        env:
+          TZ: 'Australia/Sydney'
         run: poetry run make html --directory docs/
 
       - name: pushing to gh-pages
@@ -81,7 +89,7 @@ jobs:
           git add .
           git commit -m "docs update"
           git push
-          
+
       # - name: Use Python Semantic Release to prepare release
       #   env:
       #     # This token is created automatically by GH Actions

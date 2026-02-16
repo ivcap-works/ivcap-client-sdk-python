@@ -192,7 +192,7 @@ class LocalFileArtifact:
 
     def as_local_file(self) -> Path:
         # Return the Path to the local file but ensure it won't be deleted
-        return CMPath(SafePath(self._fp))
+        return SafePath(self._fp)
 
     def refresh(self) -> Artifact:
         return self
@@ -358,14 +358,13 @@ def fix_data_ref(data_href):
 
 
 ### PROTECT FILES WHEN RUNNING LOCALLY ####
-class SafePath(Path):
+_CONCRETE_PATH = type(Path())
+
+
+class SafePath(_CONCRETE_PATH):
     """
     A Path object that disables the destructive 'unlink' (delete) method.
     """
-    try:
-        _flavour = Path()._flavour
-    except AttributeError:
-        pass
 
     def unlink(self, missing_ok: bool = False):
         """
@@ -381,7 +380,7 @@ class ProxyFile:
     Implements the Context Manager protocol for use with 'with' statements.
     """
 
-    def __init__(self, buffer: io.BinaryIO):
+    def __init__(self, buffer: BinaryIO):
         self._buffer:BinaryIO = buffer
         self._closed = False
 
@@ -440,29 +439,16 @@ class ProxyFile:
     def __iter__(self):
         return self._buffer.__iter__()
 
-# --- FIX for Path Subclassing ---
-# Dynamically get the platform-specific flavour object from an instance of Path.
-# Not needed from python3.12
-try:
-    CONCRETE_PATH_FLAVOUR = Path()._flavour
-except AttributeError:
-    pass
 
-class CMPath(Path):
+class CMPath(_CONCRETE_PATH):
     """
     A pathlib.Path subclass that acts as a context manager
     for a file and ensuring its cleanup on exit.
     """
 
-    # 1. CRITICAL: Inherit the platform-specific flavour
-    try:
-        _flavour = CONCRETE_PATH_FLAVOUR
-    except NameError:
-        pass
-
-    def __new__(cls, filename: str) -> Self:
-        instance = super().__new__(cls, filename)
-        return instance
+    def __new__(cls, *pathsegments) -> Self:
+        # Path subclasses must implement __new__; delegate to the concrete path type.
+        return super().__new__(cls, *pathsegments)
 
     # --- Context Manager Protocol ---
 
@@ -476,4 +462,4 @@ class CMPath(Path):
             if self.exists():
                 self.unlink() # Path.unlink() is the correct deletion method
         except Exception as e:
-            print(f"ERROR: Could not remove file {self._file_path}: {e}")
+            print(f"ERROR: Could not remove file {self}: {e}")

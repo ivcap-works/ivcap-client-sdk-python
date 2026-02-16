@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ivcap_client"
-version = "0.47.9"
+version = "0.47.10"
 description = "A client library for accessing an IVCAP cluster"
 
 authors = ["Max Ott <max.ott@csiro.au>",
@@ -63,4 +63,3 @@ patch_without_tag = true                    # patch release by default
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-

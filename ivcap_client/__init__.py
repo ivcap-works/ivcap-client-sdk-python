@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2023-2025 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
+# Copyright (c) 2023-2026 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
@@ -20,6 +20,7 @@ from .service import Service
 from .order import Order
 from .artifact import Artifact
 from .secret import Secret
+from .job import Job, JobStatus
 # from .metadata import Metadata
 
 # __all__ = (

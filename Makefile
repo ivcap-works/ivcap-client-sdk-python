@@ -20,7 +20,7 @@ test:
 SRC_DIR=${ROOT_DIR}/ivcap_client
 OPENAPI_URL=https://raw.githubusercontent.com/ivcap-works/ivcap-core-api/develop/openapi3.json
 gen:
-	@if ! poetry run type "openapi-python-client" > /dev/null; then \
+	@if ! poetry run bash -c "command -v openapi-python-client > /dev/null 2>&1"; then \
 		echo ">>>\n>>> You need to first install 'openapi-python-client'\n>>>"; \
 		exit -1; \
 	fi

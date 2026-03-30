@@ -72,11 +72,7 @@ class Artifact:
         _set_fields(self, p, hp, kwargs)
 
         if self._data_href:
-            durl = urlparse(self._data_href)
-            # NOTE: the artifact API still provides the full 'external' data url
-            # which causes problems internally. So we strip off the host and let it
-            # default to self._ivcap's base_url. May fail in the future!
-            self._data_href = durl.path
+            self._data_href = fix_data_ref(self._data_href)
         if not self.id:
             raise ValueError("missing 'id' for Artifact")
 
@@ -196,7 +192,7 @@ class LocalFileArtifact:
 
     def as_local_file(self) -> Path:
         # Return the Path to the local file but ensure it won't be deleted
-        return CMPath(SafePath(self._fp))
+        return SafePath(self._fp)
 
     def refresh(self) -> Artifact:
         return self
@@ -219,7 +215,7 @@ class LocalFileArtifact:
 
 #### HELPER FUNCTIONS ####
 
-def upload_artifact(ivcap,
+def upload_artifact(ivcap: IVCAP,
                     *,
                     name: Optional[str] = None,
                     file_path: Optional[str] = None,
@@ -292,8 +288,12 @@ def upload_artifact(ivcap,
         return process_error('upload_artifact', r)
     res:ArtifactStatusRT = r.parsed
 
-    h = {'Authorization': f"Bearer {ivcap._token}"}
-    data_url = res.data_href
+    h = {}
+    if ivcap._token:
+        h['Authorization'] = f"Bearer {ivcap._token}"
+    # NOTE: See coment on fix_data_ref
+    data_url = ivcap._url + fix_data_ref(res.data_href)
+    # print(f"... res.data_href: '{res.data_href}' data_url: '{data_url}")
     c = TusClient(data_url, headers=h)
     kwargs = {
         'file_path': file_path,
@@ -348,14 +348,23 @@ def md5sum(filename, blocksize=65536):
             h.update(block)
     return h.hexdigest()
 
-class SafePath(Path):
+def fix_data_ref(data_href):
+    """NOTE: the artifact API still provides the full 'external' data url
+    which causes problems internally. So we strip off the host and let it
+    default to self._ivcap's base_url. May fail in the future!
+    """
+    durl = urlparse(data_href)
+    return durl.path
+
+
+### PROTECT FILES WHEN RUNNING LOCALLY ####
+_CONCRETE_PATH = type(Path())
+
+
+class SafePath(_CONCRETE_PATH):
     """
     A Path object that disables the destructive 'unlink' (delete) method.
     """
-    try:
-        _flavour = Path()._flavour
-    except AttributeError:
-        pass
 
     def unlink(self, missing_ok: bool = False):
         """
@@ -371,7 +380,7 @@ class ProxyFile:
     Implements the Context Manager protocol for use with 'with' statements.
     """
 
-    def __init__(self, buffer: io.BinaryIO):
+    def __init__(self, buffer: BinaryIO):
         self._buffer:BinaryIO = buffer
         self._closed = False
 
@@ -430,29 +439,16 @@ class ProxyFile:
     def __iter__(self):
         return self._buffer.__iter__()
 
-# --- FIX for Path Subclassing ---
-# Dynamically get the platform-specific flavour object from an instance of Path.
-# Not needed from python3.12
-try:
-    CONCRETE_PATH_FLAVOUR = Path()._flavour
-except AttributeError:
-    pass
 
-class CMPath(Path):
+class CMPath(_CONCRETE_PATH):
     """
     A pathlib.Path subclass that acts as a context manager
     for a file and ensuring its cleanup on exit.
     """
 
-    # 1. CRITICAL: Inherit the platform-specific flavour
-    try:
-        _flavour = CONCRETE_PATH_FLAVOUR
-    except NameError:
-        pass
-
-    def __new__(cls, filename: str) -> Self:
-        instance = super().__new__(cls, filename)
-        return instance
+    def __new__(cls, *pathsegments) -> Self:
+        # Path subclasses must implement __new__; delegate to the concrete path type.
+        return super().__new__(cls, *pathsegments)
 
     # --- Context Manager Protocol ---
 
@@ -466,4 +462,4 @@ class CMPath(Path):
             if self.exists():
                 self.unlink() # Path.unlink() is the correct deletion method
         except Exception as e:
-            print(f"ERROR: Could not remove file {self._file_path}: {e}")
+            print(f"ERROR: Could not remove file {self}: {e}")

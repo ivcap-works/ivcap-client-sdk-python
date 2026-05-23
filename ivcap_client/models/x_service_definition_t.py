@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -57,11 +57,11 @@ class XServiceDefinitionT:
     description: str
     parameters: list["ParameterDefT"]
     workflow: "XWorkflowT"
-    banner: Union[Unset, str] = UNSET
-    name: Union[Unset, str] = UNSET
-    policy: Union[Unset, str] = UNSET
-    references: Union[Unset, list["XReferenceT"]] = UNSET
-    tags: Union[Unset, list[str]] = UNSET
+    banner: Unset | str = UNSET
+    name: Unset | str = UNSET
+    policy: Unset | str = UNSET
+    references: Unset | list["XReferenceT"] = UNSET
+    tags: Unset | list[str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -80,14 +80,14 @@ class XServiceDefinitionT:
 
         policy = self.policy
 
-        references: Union[Unset, list[dict[str, Any]]] = UNSET
+        references: Unset | list[dict[str, Any]] = UNSET
         if not isinstance(self.references, Unset):
             references = []
             for references_item_data in self.references:
                 references_item = references_item_data.to_dict()
                 references.append(references_item)
 
-        tags: Union[Unset, list[str]] = UNSET
+        tags: Unset | list[str] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 

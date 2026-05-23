@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -37,19 +37,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        ServiceStatusRT,
-    ]
-]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | ServiceStatusRT | None:
     if response.status_code == 201:
         response_201 = ServiceStatusRT.from_dict(response.json())
 
@@ -91,18 +80,9 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+    *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        ServiceStatusRT,
-    ]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | ServiceStatusRT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -117,16 +97,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     body: ServiceDefinitionT,
 ) -> Response[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        ServiceStatusRT,
-    ]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | ServiceStatusRT
 ]:
     """service-create service
 
@@ -168,18 +139,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: ServiceDefinitionT,
-) -> Optional[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        ServiceStatusRT,
-    ]
-]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | ServiceStatusRT | None:
     """service-create service
 
      Create a new service and return its status.
@@ -216,16 +176,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     body: ServiceDefinitionT,
 ) -> Response[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        ServiceStatusRT,
-    ]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | ServiceStatusRT
 ]:
     """service-create service
 
@@ -265,18 +216,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: ServiceDefinitionT,
-) -> Optional[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        ServiceStatusRT,
-    ]
-]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | ServiceStatusRT | None:
     """service-create service
 
      Create a new service and return its status.

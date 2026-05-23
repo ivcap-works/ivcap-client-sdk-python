@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -14,16 +14,16 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    content_type: Union[Unset, str] = UNSET,
-    content_encoding: Union[Unset, str] = UNSET,
-    content_length: Union[Unset, int] = UNSET,
-    x_name: Union[Unset, str] = UNSET,
-    x_collection: Union[Unset, str] = UNSET,
-    x_policy: Union[Unset, str] = UNSET,
-    x_content_type: Union[Unset, str] = UNSET,
-    x_content_length: Union[Unset, int] = UNSET,
-    upload_length: Union[Unset, int] = UNSET,
-    tus_resumable: Union[Unset, str] = UNSET,
+    content_type: Unset | str = UNSET,
+    content_encoding: Unset | str = UNSET,
+    content_length: Unset | int = UNSET,
+    x_name: Unset | str = UNSET,
+    x_collection: Unset | str = UNSET,
+    x_policy: Unset | str = UNSET,
+    x_content_type: Unset | str = UNSET,
+    x_content_length: Unset | int = UNSET,
+    upload_length: Unset | int = UNSET,
+    tus_resumable: Unset | str = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
     if not isinstance(content_type, Unset):
@@ -66,8 +66,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT | None:
     if response.status_code == 201:
         response_201 = ArtifactUploadRT2.from_dict(response.json())
 
@@ -97,8 +97,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -110,17 +112,19 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    content_type: Union[Unset, str] = UNSET,
-    content_encoding: Union[Unset, str] = UNSET,
-    content_length: Union[Unset, int] = UNSET,
-    x_name: Union[Unset, str] = UNSET,
-    x_collection: Union[Unset, str] = UNSET,
-    x_policy: Union[Unset, str] = UNSET,
-    x_content_type: Union[Unset, str] = UNSET,
-    x_content_length: Union[Unset, int] = UNSET,
-    upload_length: Union[Unset, int] = UNSET,
-    tus_resumable: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
+    content_type: Unset | str = UNSET,
+    content_encoding: Unset | str = UNSET,
+    content_length: Unset | int = UNSET,
+    x_name: Unset | str = UNSET,
+    x_collection: Unset | str = UNSET,
+    x_policy: Unset | str = UNSET,
+    x_content_type: Unset | str = UNSET,
+    x_content_length: Unset | int = UNSET,
+    upload_length: Unset | int = UNSET,
+    tus_resumable: Unset | str = UNSET,
+) -> Response[
+    Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT
+]:
     """upload artifact
 
      Upload content and create a artifacts.
@@ -178,17 +182,17 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    content_type: Union[Unset, str] = UNSET,
-    content_encoding: Union[Unset, str] = UNSET,
-    content_length: Union[Unset, int] = UNSET,
-    x_name: Union[Unset, str] = UNSET,
-    x_collection: Union[Unset, str] = UNSET,
-    x_policy: Union[Unset, str] = UNSET,
-    x_content_type: Union[Unset, str] = UNSET,
-    x_content_length: Union[Unset, int] = UNSET,
-    upload_length: Union[Unset, int] = UNSET,
-    tus_resumable: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
+    content_type: Unset | str = UNSET,
+    content_encoding: Unset | str = UNSET,
+    content_length: Unset | int = UNSET,
+    x_name: Unset | str = UNSET,
+    x_collection: Unset | str = UNSET,
+    x_policy: Unset | str = UNSET,
+    x_content_type: Unset | str = UNSET,
+    x_content_length: Unset | int = UNSET,
+    upload_length: Unset | int = UNSET,
+    tus_resumable: Unset | str = UNSET,
+) -> Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT | None:
     """upload artifact
 
      Upload content and create a artifacts.
@@ -241,17 +245,19 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    content_type: Union[Unset, str] = UNSET,
-    content_encoding: Union[Unset, str] = UNSET,
-    content_length: Union[Unset, int] = UNSET,
-    x_name: Union[Unset, str] = UNSET,
-    x_collection: Union[Unset, str] = UNSET,
-    x_policy: Union[Unset, str] = UNSET,
-    x_content_type: Union[Unset, str] = UNSET,
-    x_content_length: Union[Unset, int] = UNSET,
-    upload_length: Union[Unset, int] = UNSET,
-    tus_resumable: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
+    content_type: Unset | str = UNSET,
+    content_encoding: Unset | str = UNSET,
+    content_length: Unset | int = UNSET,
+    x_name: Unset | str = UNSET,
+    x_collection: Unset | str = UNSET,
+    x_policy: Unset | str = UNSET,
+    x_content_type: Unset | str = UNSET,
+    x_content_length: Unset | int = UNSET,
+    upload_length: Unset | int = UNSET,
+    tus_resumable: Unset | str = UNSET,
+) -> Response[
+    Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT
+]:
     """upload artifact
 
      Upload content and create a artifacts.
@@ -307,17 +313,17 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    content_type: Union[Unset, str] = UNSET,
-    content_encoding: Union[Unset, str] = UNSET,
-    content_length: Union[Unset, int] = UNSET,
-    x_name: Union[Unset, str] = UNSET,
-    x_collection: Union[Unset, str] = UNSET,
-    x_policy: Union[Unset, str] = UNSET,
-    x_content_type: Union[Unset, str] = UNSET,
-    x_content_length: Union[Unset, int] = UNSET,
-    upload_length: Union[Unset, int] = UNSET,
-    tus_resumable: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]:
+    content_type: Unset | str = UNSET,
+    content_encoding: Unset | str = UNSET,
+    content_length: Unset | int = UNSET,
+    x_name: Unset | str = UNSET,
+    x_collection: Unset | str = UNSET,
+    x_policy: Unset | str = UNSET,
+    x_content_type: Unset | str = UNSET,
+    x_content_length: Unset | int = UNSET,
+    upload_length: Unset | int = UNSET,
+    tus_resumable: Unset | str = UNSET,
+) -> Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT | None:
     """upload artifact
 
      Upload content and create a artifacts.

@@ -1,6 +1,6 @@
 from http import HTTPStatus
 from io import BytesIO
-from typing import Any, Optional, Union
+from typing import Any
 
 import httpx
 
@@ -18,7 +18,7 @@ def _get_kwargs(
     *,
     ref: str,
     type_: PackagepullType,
-    offset: Union[Unset, int] = UNSET,
+    offset: Unset | int = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
@@ -41,8 +41,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     if response.status_code == 200:
         response_200 = File(payload=BytesIO(response.json()))
 
@@ -78,8 +78,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -93,8 +95,10 @@ def sync_detailed(
     client: AuthenticatedClient,
     ref: str,
     type_: PackagepullType,
-    offset: Union[Unset, int] = UNSET,
-) -> Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    offset: Unset | int = UNSET,
+) -> Response[
+    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """pull package
 
      pull ivcap service's docker image
@@ -130,8 +134,8 @@ def sync(
     client: AuthenticatedClient,
     ref: str,
     type_: PackagepullType,
-    offset: Union[Unset, int] = UNSET,
-) -> Optional[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    offset: Unset | int = UNSET,
+) -> BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """pull package
 
      pull ivcap service's docker image
@@ -162,8 +166,10 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     ref: str,
     type_: PackagepullType,
-    offset: Union[Unset, int] = UNSET,
-) -> Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    offset: Unset | int = UNSET,
+) -> Response[
+    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """pull package
 
      pull ivcap service's docker image
@@ -197,8 +203,8 @@ async def asyncio(
     client: AuthenticatedClient,
     ref: str,
     type_: PackagepullType,
-    offset: Union[Unset, int] = UNSET,
-) -> Optional[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    offset: Unset | int = UNSET,
+) -> BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """pull package
 
      pull ivcap service's docker image

@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -18,12 +18,12 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     tag: str,
-    force: Union[Unset, bool] = UNSET,
+    force: Unset | bool = UNSET,
     type_: PackagepushType,
     digest: str,
-    total: Union[Unset, int] = UNSET,
-    start: Union[Unset, int] = UNSET,
-    end: Union[Unset, int] = UNSET,
+    total: Unset | int = UNSET,
+    start: Unset | int = UNSET,
+    end: Unset | int = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
@@ -54,12 +54,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[
-        Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushResponseBody, ResourceAlreadyCreatedT
-    ]
-]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushResponseBody | ResourceAlreadyCreatedT | None:
     if response.status_code == 201:
         response_201 = PushResponseBody.from_dict(response.json())
 
@@ -97,11 +93,9 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+    *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Union[
-        Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushResponseBody, ResourceAlreadyCreatedT
-    ]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushResponseBody | ResourceAlreadyCreatedT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -115,16 +109,14 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     tag: str,
-    force: Union[Unset, bool] = UNSET,
+    force: Unset | bool = UNSET,
     type_: PackagepushType,
     digest: str,
-    total: Union[Unset, int] = UNSET,
-    start: Union[Unset, int] = UNSET,
-    end: Union[Unset, int] = UNSET,
+    total: Unset | int = UNSET,
+    start: Unset | int = UNSET,
+    end: Unset | int = UNSET,
 ) -> Response[
-    Union[
-        Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushResponseBody, ResourceAlreadyCreatedT
-    ]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushResponseBody | ResourceAlreadyCreatedT
 ]:
     """push package
 
@@ -169,17 +161,13 @@ def sync(
     *,
     client: AuthenticatedClient,
     tag: str,
-    force: Union[Unset, bool] = UNSET,
+    force: Unset | bool = UNSET,
     type_: PackagepushType,
     digest: str,
-    total: Union[Unset, int] = UNSET,
-    start: Union[Unset, int] = UNSET,
-    end: Union[Unset, int] = UNSET,
-) -> Optional[
-    Union[
-        Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushResponseBody, ResourceAlreadyCreatedT
-    ]
-]:
+    total: Unset | int = UNSET,
+    start: Unset | int = UNSET,
+    end: Unset | int = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushResponseBody | ResourceAlreadyCreatedT | None:
     """push package
 
      upload service's docker image to container registry
@@ -218,16 +206,14 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     tag: str,
-    force: Union[Unset, bool] = UNSET,
+    force: Unset | bool = UNSET,
     type_: PackagepushType,
     digest: str,
-    total: Union[Unset, int] = UNSET,
-    start: Union[Unset, int] = UNSET,
-    end: Union[Unset, int] = UNSET,
+    total: Unset | int = UNSET,
+    start: Unset | int = UNSET,
+    end: Unset | int = UNSET,
 ) -> Response[
-    Union[
-        Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushResponseBody, ResourceAlreadyCreatedT
-    ]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushResponseBody | ResourceAlreadyCreatedT
 ]:
     """push package
 
@@ -270,17 +256,13 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     tag: str,
-    force: Union[Unset, bool] = UNSET,
+    force: Unset | bool = UNSET,
     type_: PackagepushType,
     digest: str,
-    total: Union[Unset, int] = UNSET,
-    start: Union[Unset, int] = UNSET,
-    end: Union[Unset, int] = UNSET,
-) -> Optional[
-    Union[
-        Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushResponseBody, ResourceAlreadyCreatedT
-    ]
-]:
+    total: Unset | int = UNSET,
+    start: Unset | int = UNSET,
+    end: Unset | int = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushResponseBody | ResourceAlreadyCreatedT | None:
     """push package
 
      upload service's docker image to container registry

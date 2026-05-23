@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -37,19 +37,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[
-        Any,
-        BadRequestT,
-        Createqueueresponse,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-    ]
-]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | Createqueueresponse | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | None:
     if response.status_code == 201:
         response_201 = Createqueueresponse.from_dict(response.json())
 
@@ -91,18 +80,9 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+    *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Union[
-        Any,
-        BadRequestT,
-        Createqueueresponse,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-    ]
+    Any | BadRequestT | Createqueueresponse | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -117,16 +97,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     body: PayloadForCreateEndpoint,
 ) -> Response[
-    Union[
-        Any,
-        BadRequestT,
-        Createqueueresponse,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-    ]
+    Any | BadRequestT | Createqueueresponse | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT
 ]:
     """create queue
 
@@ -159,18 +130,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: PayloadForCreateEndpoint,
-) -> Optional[
-    Union[
-        Any,
-        BadRequestT,
-        Createqueueresponse,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-    ]
-]:
+) -> Any | BadRequestT | Createqueueresponse | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | None:
     """create queue
 
      Create a new queues and return its status.
@@ -198,16 +158,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     body: PayloadForCreateEndpoint,
 ) -> Response[
-    Union[
-        Any,
-        BadRequestT,
-        Createqueueresponse,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-    ]
+    Any | BadRequestT | Createqueueresponse | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT
 ]:
     """create queue
 
@@ -238,18 +189,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: PayloadForCreateEndpoint,
-) -> Optional[
-    Union[
-        Any,
-        BadRequestT,
-        Createqueueresponse,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-    ]
-]:
+) -> Any | BadRequestT | Createqueueresponse | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | None:
     """create queue
 
      Create a new queues and return its status.

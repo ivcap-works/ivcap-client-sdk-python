@@ -1,5 +1,5 @@
 import datetime
-from typing import Any, TypeVar, Union
+from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -38,10 +38,10 @@ class JobListItem:
     id: str
     service: str
     status: JobListItemStatus
-    finished_at: Union[Unset, datetime.datetime] = UNSET
-    name: Union[Unset, str] = UNSET
-    order: Union[Unset, str] = UNSET
-    started_at: Union[Unset, datetime.datetime] = UNSET
+    finished_at: Unset | datetime.datetime = UNSET
+    name: Unset | str = UNSET
+    order: Unset | str = UNSET
+    started_at: Unset | datetime.datetime = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -53,7 +53,7 @@ class JobListItem:
 
         status = self.status.value
 
-        finished_at: Union[Unset, str] = UNSET
+        finished_at: Unset | str = UNSET
         if not isinstance(self.finished_at, Unset):
             finished_at = self.finished_at.isoformat()
 
@@ -61,7 +61,7 @@ class JobListItem:
 
         order = self.order
 
-        started_at: Union[Unset, str] = UNSET
+        started_at: Unset | str = UNSET
         if not isinstance(self.started_at, Unset):
             started_at = self.started_at.isoformat()
 
@@ -98,7 +98,7 @@ class JobListItem:
         status = JobListItemStatus(d.pop("status"))
 
         _finished_at = d.pop("finished-at", UNSET)
-        finished_at: Union[Unset, datetime.datetime]
+        finished_at: Unset | datetime.datetime
         if isinstance(_finished_at, Unset):
             finished_at = UNSET
         else:
@@ -109,7 +109,7 @@ class JobListItem:
         order = d.pop("order", UNSET)
 
         _started_at = d.pop("started-at", UNSET)
-        started_at: Union[Unset, datetime.datetime]
+        started_at: Unset | datetime.datetime
         if isinstance(_started_at, Unset):
             started_at = UNSET
         else:

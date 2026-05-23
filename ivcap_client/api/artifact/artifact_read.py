@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -25,8 +25,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | ArtifactStatusRT | BadRequestT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     if response.status_code == 200:
         response_200 = ArtifactStatusRT.from_dict(response.json())
 
@@ -60,8 +60,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    Any | ArtifactStatusRT | BadRequestT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -74,7 +76,9 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+) -> Response[
+    Any | ArtifactStatusRT | BadRequestT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
+]:
     """read artifact
 
      Show artifacts by ID
@@ -105,7 +109,7 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+) -> Any | ArtifactStatusRT | BadRequestT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     """read artifact
 
      Show artifacts by ID
@@ -131,7 +135,9 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+) -> Response[
+    Any | ArtifactStatusRT | BadRequestT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
+]:
     """read artifact
 
      Show artifacts by ID
@@ -160,7 +166,7 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, ArtifactStatusRT, BadRequestT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+) -> Any | ArtifactStatusRT | BadRequestT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     """read artifact
 
      Show artifacts by ID

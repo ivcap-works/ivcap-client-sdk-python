@@ -4,17 +4,23 @@
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
 
-from __future__ import annotations # postpone evaluation of annotations
-from datetime import datetime
+from __future__ import annotations  # postpone evaluation of annotations
+
 import os
-from typing import IO, Any, Dict, Iterator, Optional
+from collections.abc import Iterator
+from datetime import datetime
 from sys import maxsize as MAXSIZE
+from typing import IO, Any
 
 from ivcap_client.agent import Agent
 from ivcap_client.api.search import search_search
-from ivcap_client.artifact import Artifact, ArtifactIter, LocalFileArtifact, check_file_already_uploaded, mark_file_already_uploaded
+from ivcap_client.artifact import (
+    Artifact,
+    ArtifactIter,
+    LocalFileArtifact,
+    check_file_already_uploaded,
+)
 from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
-from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
 from ivcap_client.client.client import AuthenticatedClient, Client
 from ivcap_client.exception import AmbiguousRequest, ResourceNotFound
 from ivcap_client.order import Order, OrderIter
@@ -25,11 +31,16 @@ from ivcap_client.utils import _wrap, process_error
 
 URN = str
 
-class IVCAP:
-    """A class to represent a particular IVCAP deployment and it's capabilities
-    """
 
-    def __init__(self, url:Optional[str]=None, token:Optional[str]=None, account_id:Optional[str]=None):
+class IVCAP:
+    """A class to represent a particular IVCAP deployment and it's capabilities"""
+
+    def __init__(
+        self,
+        url: str | None = None,
+        token: str | None = None,
+        account_id: str | None = None,
+    ):
         """Create a new IVCAP instance through which to interact with
         a specific IVCAP deployment identified by 'url'. Access is authorized
         by 'token'.
@@ -41,15 +52,17 @@ class IVCAP:
         """
         inside_platform = False
         if not url:
-            url= os.environ.get('IVCAP_URL')
+            url = os.environ.get("IVCAP_URL")
             if not url:
-                url= os.environ.get('IVCAP_BASE_URL')
+                url = os.environ.get("IVCAP_BASE_URL")
                 inside_platform = url is not None
         if not url:
-            raise ValueError("missing 'url' argument or environment variables 'IVCAP_URL' or 'IVCAP_BASE_URL' not set.")
+            raise ValueError(
+                "missing 'url' argument or environment variables 'IVCAP_URL' or 'IVCAP_BASE_URL' not set."
+            )
 
         if not token:
-            token = os.environ.get('IVCAP_JWT')
+            token = os.environ.get("IVCAP_JWT")
         self._url = url
         self._token = token
         self._account_id = account_id
@@ -57,25 +70,28 @@ class IVCAP:
             self._client = Client(base_url=url)
         else:
             if not token:
-                raise ValueError("missing 'token' argument or environment variable 'IVCAP_JWT' not set.")
+                raise ValueError(
+                    "missing 'token' argument or environment variable 'IVCAP_JWT' not set."
+                )
             self._client = AuthenticatedClient(base_url=url, token=token)
 
     #### SERVICES
 
-    def list_services(self,
-            *,
-            filter: Optional[str] = None,
-            limit: Optional[int] = 10,
-            order_by: Optional[str] = None,
-            order_desc: Optional[bool] = False,
-            at_time: Optional[datetime.datetime] = UNSET,
+    def list_services(
+        self,
+        *,
+        filter: str | None = None,
+        limit: int | None = 10,
+        order_by: str | None = None,
+        order_desc: bool | None = False,
+        at_time: datetime.datetime | None = UNSET,
     ) -> Iterator[Service]:
         """Return an iterator over all the available services fulfilling certain constraints.
 
         Args:
             limit (Optional[int]): The 'limit' query option sets the maximum number of items
                                     to be included in the result. Default: 10. Example: 10.
-            filter_ (Optional[str]): The 'filter' system query option allows clients to filter a
+            filter (Optional[str]): The 'filter' system query option allows clients to filter a
                 collection of resources that are addressed by a request URL. The expression specified with 'filter'
                                             is evaluated for each resource in the collection, and only items where the expression
                                             evaluates to true are included in the response. Example: name ~= 'Scott%'.
@@ -152,20 +168,21 @@ class IVCAP:
 
     ### ORDERS
 
-    def list_orders(self,
-            *,
-            filter: Optional[str] = None,
-            limit: Optional[int] = 10,
-            order_by: Optional[str] = None,
-            order_desc: Optional[bool] = False,
-            at_time: Optional[datetime.datetime] = UNSET,
+    def list_orders(
+        self,
+        *,
+        filter: str | None = None,
+        limit: int | None = 10,
+        order_by: str | None = None,
+        order_desc: bool | None = False,
+        at_time: datetime.datetime | None = UNSET,
     ) -> Iterator[Order]:
         """Return an iterator over all the available orders fulfilling certain constraints.
 
         Args:
             limit (Optional[int]): The 'limit' query option sets the maximum number of items
                                     to be included in the result. Default: 10. Example: 10.
-            filter_ (Optional[str]): The 'filter' system query option allows clients to filter a
+            filter (Optional[str]): The 'filter' system query option allows clients to filter a
                 collection of resources that are addressed by a request URL. The expression specified with 'filter'
                                             is evaluated for each resource in the collection, and only items where the expression
                                             evaluates to true are included in the response. Example: name ~= 'Scott%'.
@@ -208,13 +225,14 @@ class IVCAP:
 
     #### ASPECT
 
-    def add_aspect(self,
-                     entity: str,
-                     aspect: Dict[str,any],
-                     *,
-                     schema: Optional[str]=None,
-                     policy: Optional[URN] = None,
-                     ) -> Aspect:
+    def add_aspect(
+        self,
+        entity: str,
+        aspect: dict[str, any],
+        *,
+        schema: str | None = None,
+        policy: URN | None = None,
+    ) -> Aspect:
         """Add an 'aspect' to an 'entity'. The 'schema' of the aspect, if not defined
         is expected to found in the 'aspect' under the '$schema' key.
 
@@ -227,15 +245,18 @@ class IVCAP:
         Returns:
             aspect: The created aspect record
         """
-        return _add_update_aspect(self, False, entity, aspect, schema=schema, policy=policy)
+        return _add_update_aspect(
+            self, False, entity, aspect, schema=schema, policy=policy
+        )
 
-    def update_aspect(self,
-                     entity: str,
-                     aspect: Dict[str,any],
-                     *,
-                     schema: Optional[str]=None,
-                     policy: Optional[URN] = None,
-                     ) -> Aspect:
+    def update_aspect(
+        self,
+        entity: str,
+        aspect: dict[str, any],
+        *,
+        schema: str | None = None,
+        policy: URN | None = None,
+    ) -> Aspect:
         """Create an 'aspect' to an 'entity', but also retract a
         potentially existing aspect for the same entity with the same schema.
         The 'schema' of the aspect, if not defined
@@ -250,20 +271,23 @@ class IVCAP:
         Returns:
             aspect: The created aspect record
         """
-        return _add_update_aspect(self, True, entity, aspect, schema=schema, policy=policy)
+        return _add_update_aspect(
+            self, True, entity, aspect, schema=schema, policy=policy
+        )
 
-    def list_aspects(self,
+    def list_aspects(
+        self,
         *,
-        entity: Optional[str] = None,
-        schema: Optional[str] = None,
-        content_path: Optional[str] = None,
-        at_time: Optional[datetime.datetime] = None,
-        limit: Optional[int] = 10,
-        filter: Optional[str] = None,
-        order_by: Optional[str] = "valid_from",
-        order_direction: Optional[str] = "DESC",
-        include_content: Optional[bool] = True,
-    )-> Iterator[Aspect]:
+        entity: str | None = None,
+        schema: str | None = None,
+        content_path: str | None = None,
+        at_time: datetime.datetime | None = None,
+        limit: int | None = 10,
+        filter: str | None = None,
+        order_by: str | None = "valid_from",
+        order_direction: str | None = "DESC",
+        include_content: bool | None = True,
+    ) -> Iterator[Aspect]:
         """Return an iterator over all the aspect records fulfilling certain constraints.
 
         Args:
@@ -279,7 +303,7 @@ class IVCAP:
             limit (Optional[int]): The 'limit' system query option requests the number of items in
                 the queried
                                             collection to be included in the result. Default: 10. Example: 10.
-            filter_ (Optional[str]): The 'filter' system query option allows clients to filter a collection of
+            filter (Optional[str]): The 'filter' system query option allows clients to filter a collection of
                                             resources that are addressed by a request URL. The expression specified with 'filter'
                                             is evaluated for each resource in the collection, and only items where the expression
                                             evaluates to true are included in the response. Default: ''. Example: FirstName eq
@@ -323,20 +347,21 @@ class IVCAP:
 
     #### ARTIFACTS
 
-    def list_artifacts(self,
-            *,
-            filter: Optional[str] = None,
-            limit: Optional[int] = 10,
-            order_by: Optional[str] = None,
-            order_desc: Optional[bool] = False,
-            at_time: Optional[datetime.datetime] = UNSET,
+    def list_artifacts(
+        self,
+        *,
+        filter: str | None = None,
+        limit: int | None = 10,
+        order_by: str | None = None,
+        order_desc: bool | None = False,
+        at_time: datetime.datetime | None = UNSET,
     ) -> Iterator[Artifact]:
         """Return an iterator over all the available artifacts fulfilling certain constraints.
 
         Args:
             limit (Optional[int]): The 'limit' query option sets the maximum number of items
                                     to be included in the result. Default: 10. Example: 10.
-            filter_ (Optional[str]): The 'filter' system query option allows clients to filter a
+            filter (Optional[str]): The 'filter' system query option allows clients to filter a
                 collection of resources that are addressed by a request URL. The expression specified with 'filter'
                                             is evaluated for each resource in the collection, and only items where the expression
                                             evaluates to true are included in the response. Example: name ~= 'Scott%'.
@@ -366,19 +391,20 @@ class IVCAP:
         }
         return ArtifactIter(self, **kwargs)
 
-    def upload_artifact(self,
-                        *,
-                        name: Optional[str] = None,
-                        file_path: Optional[str] = None,
-                        io_stream: Optional[IO] = None,
-                        content_type:  Optional[str] = None,
-                        content_size: Optional[int] = -1,
-                        collection: Optional[URN] = None,
-                        policy: Optional[URN] = None,
-                        chunk_size: Optional[int] = MAXSIZE,
-                        retries: Optional[int] = 0,
-                        retry_delay: Optional[int] = 30,
-                        force_upload: Optional[bool] = False,
+    def upload_artifact(
+        self,
+        *,
+        name: str | None = None,
+        file_path: str | None = None,
+        io_stream: IO | None = None,
+        content_type: str | None = None,
+        content_size: int | None = -1,
+        collection: URN | None = None,
+        policy: URN | None = None,
+        chunk_size: int | None = MAXSIZE,
+        retries: int | None = 0,
+        retry_delay: int | None = 30,
+        force_upload: bool | None = False,
     ) -> Artifact:
         """Uploads content which is either identified as a `file_path` or `io_stream`. In the
         latter case, content type need to be provided.
@@ -396,7 +422,9 @@ class IVCAP:
             force_upload (Optional[bool], optional): Upload file even if it has been uploaded before.
         """
         from ivcap_client.artifact import upload_artifact as upload
-        return upload(self,
+
+        return upload(
+            self,
             name=name,
             file_path=file_path,
             io_stream=io_stream,
@@ -410,7 +438,7 @@ class IVCAP:
             force_upload=force_upload,
         )
 
-    def artifact_for_file(self, file_path: str) -> Optional[Artifact]:
+    def artifact_for_file(self, file_path: str) -> Artifact | None:
         """Return an Artifact instance if local file 'file_path'
         has already been uploaded as artifact.
 
@@ -424,7 +452,6 @@ class IVCAP:
         aurn = check_file_already_uploaded(file_path)
         if aurn is not None:
             return self.get_artifact(aurn)
-
 
     def get_artifact(self, id: URN) -> Artifact:
         """Returns an Artifact instance for artifact 'id'
@@ -441,20 +468,21 @@ class IVCAP:
 
     #### SECRETS
 
-    def list_secrets(self,
-            *,
-            filter: Optional[str] = None,
-            limit: Optional[int] = 10,
-            order_by: Optional[str] = None,
-            order_desc: Optional[bool] = False,
-            at_time: Optional[datetime.datetime] = UNSET,
+    def list_secrets(
+        self,
+        *,
+        filter: str | None = None,
+        limit: int | None = 10,
+        order_by: str | None = None,
+        order_desc: bool | None = False,
+        at_time: datetime.datetime | None = UNSET,
     ) -> Iterator[Secret]:
         """Return an iterator over all the available secrets fulfilling certain constraints.
 
         Args:
             limit (Optional[int]): The 'limit' query option sets the maximum number of items
                                     to be included in the result. Default: 10. Example: 10.
-            filter_ (Optional[str]): The 'filter' system query option allows clients to filter a
+            filter (Optional[str]): The 'filter' system query option allows clients to filter a
                 collection of resources that are addressed by a request URL. The expression specified with 'filter'
                                             is evaluated for each resource in the collection, and only items where the expression
                                             evaluates to true are included in the response. Example: name ~= 'Scott%'.
@@ -474,20 +502,18 @@ class IVCAP:
 
     #### SEARCH
 
-    def search(self, query):
+    def search(self, query: str) -> Any:
         """Execute query provided in body and return a list of search result.
 
         Args:
-            at_time (datetime.datetime): Return search which where valid at that time
-                [now] Example: 1996-12-19T16:39:57-08:00.
-            limit (int): The number of items to be included in the result. Default: 10. Example: 10.
+            query: The search query to execute.
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
             httpx.TimeoutException: If the request takes longer than Client.timeout.
 
         Returns:
-            Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, SearchListRT]]
+            Search results.
 
         """
         body = File(query)
@@ -497,7 +523,7 @@ class IVCAP:
         }
         r = search_search.sync_detailed(client=self._client, **kwargs)
         if r.status_code >= 300:
-            raise Exception(f"unexpected response - {r.status_code}")
+            return process_error("search", r)
         return r.parsed
 
     @property

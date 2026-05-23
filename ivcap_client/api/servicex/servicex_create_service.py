@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -37,19 +37,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        XServiceStatusRT,
-    ]
-]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | XServiceStatusRT | None:
     if response.status_code == 201:
         response_201 = XServiceStatusRT.from_dict(response.json())
 
@@ -91,18 +80,9 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+    *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        XServiceStatusRT,
-    ]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | XServiceStatusRT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -117,16 +97,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
 ) -> Response[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        XServiceStatusRT,
-    ]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | XServiceStatusRT
 ]:
     """create_service servicex
 
@@ -171,18 +142,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
-) -> Optional[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        XServiceStatusRT,
-    ]
-]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | XServiceStatusRT | None:
     """create_service servicex
 
      Create a new services and return its status.
@@ -222,16 +182,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
 ) -> Response[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        XServiceStatusRT,
-    ]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | XServiceStatusRT
 ]:
     """create_service servicex
 
@@ -274,18 +225,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
-) -> Optional[
-    Union[
-        Any,
-        BadRequestT,
-        InvalidParameterT,
-        InvalidScopesT,
-        NotImplementedT,
-        ResourceAlreadyCreatedT,
-        ResourceNotFoundT,
-        XServiceStatusRT,
-    ]
-]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceAlreadyCreatedT | ResourceNotFoundT | XServiceStatusRT | None:
     """create_service servicex
 
      Create a new services and return its status.

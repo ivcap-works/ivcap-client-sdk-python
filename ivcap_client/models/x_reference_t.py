@@ -1,4 +1,4 @@
-from typing import Any, TypeVar, Union
+from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -19,8 +19,8 @@ class XReferenceT:
         uri (Union[Unset, str]): Link to document Example: http://renner.com/nicolas_swift.
     """
 
-    title: Union[Unset, str] = UNSET
-    uri: Union[Unset, str] = UNSET
+    title: Unset | str = UNSET
+    uri: Unset | str = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

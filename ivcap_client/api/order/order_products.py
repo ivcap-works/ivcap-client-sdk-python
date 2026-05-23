@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -17,10 +17,10 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     order_id: str,
     *,
-    order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
+    order_by: Unset | str = UNSET,
+    order_desc: Unset | bool = True,
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
@@ -44,10 +44,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
-]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialProductListT | ResourceNotFoundT | None:
     if response.status_code == 200:
         response_200 = PartialProductListT.from_dict(response.json())
 
@@ -85,9 +83,9 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+    *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialProductListT | ResourceNotFoundT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -101,12 +99,12 @@ def sync_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
+    order_by: Unset | str = UNSET,
+    order_desc: Unset | bool = True,
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialProductListT | ResourceNotFoundT
 ]:
     """products order
 
@@ -157,13 +155,11 @@ def sync(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
-]:
+    order_by: Unset | str = UNSET,
+    order_desc: Unset | bool = True,
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialProductListT | ResourceNotFoundT | None:
     """products order
 
      list products created by an order
@@ -208,12 +204,12 @@ async def asyncio_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
+    order_by: Unset | str = UNSET,
+    order_desc: Unset | bool = True,
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialProductListT | ResourceNotFoundT
 ]:
     """products order
 
@@ -262,13 +258,11 @@ async def asyncio(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialProductListT, ResourceNotFoundT]
-]:
+    order_by: Unset | str = UNSET,
+    order_desc: Unset | bool = True,
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialProductListT | ResourceNotFoundT | None:
     """products order
 
      list products created by an order

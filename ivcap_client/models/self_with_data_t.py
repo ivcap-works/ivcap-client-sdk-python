@@ -26,15 +26,15 @@ class SelfWithDataT:
         self_ (Union[Unset, str]):  Example: Incidunt reprehenderit quaerat laudantium quo aut qui..
     """
 
-    data: Union[Unset, str] = UNSET
+    data: Unset | str = UNSET
     described_by: Union[Unset, "DescribedByT"] = UNSET
-    self_: Union[Unset, str] = UNSET
+    self_: Unset | str = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         data = self.data
 
-        described_by: Union[Unset, dict[str, Any]] = UNSET
+        described_by: Unset | dict[str, Any] = UNSET
         if not isinstance(self.described_by, Unset):
             described_by = self.described_by.to_dict()
 
@@ -60,7 +60,7 @@ class SelfWithDataT:
         data = d.pop("data", UNSET)
 
         _described_by = d.pop("describedBy", UNSET)
-        described_by: Union[Unset, DescribedByT]
+        described_by: Unset | DescribedByT
         if isinstance(_described_by, Unset):
             described_by = UNSET
         else:

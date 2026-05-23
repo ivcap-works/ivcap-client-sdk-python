@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -52,16 +52,16 @@ class ArtifactStatusRT:
     id: str
     links: list["LinkT"]
     status: ArtifactStatusRTStatus
-    account: Union[Unset, str] = UNSET
-    cache_of: Union[Unset, str] = UNSET
-    created_at: Union[Unset, datetime.datetime] = UNSET
-    data_href: Union[Unset, str] = UNSET
-    etag: Union[Unset, str] = UNSET
-    last_modified_at: Union[Unset, datetime.datetime] = UNSET
-    mime_type: Union[Unset, str] = UNSET
-    name: Union[Unset, str] = UNSET
-    policy: Union[Unset, str] = UNSET
-    size: Union[Unset, int] = UNSET
+    account: Unset | str = UNSET
+    cache_of: Unset | str = UNSET
+    created_at: Unset | datetime.datetime = UNSET
+    data_href: Unset | str = UNSET
+    etag: Unset | str = UNSET
+    last_modified_at: Unset | datetime.datetime = UNSET
+    mime_type: Unset | str = UNSET
+    name: Unset | str = UNSET
+    policy: Unset | str = UNSET
+    size: Unset | int = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -78,7 +78,7 @@ class ArtifactStatusRT:
 
         cache_of = self.cache_of
 
-        created_at: Union[Unset, str] = UNSET
+        created_at: Unset | str = UNSET
         if not isinstance(self.created_at, Unset):
             created_at = self.created_at.isoformat()
 
@@ -86,7 +86,7 @@ class ArtifactStatusRT:
 
         etag = self.etag
 
-        last_modified_at: Union[Unset, str] = UNSET
+        last_modified_at: Unset | str = UNSET
         if not isinstance(self.last_modified_at, Unset):
             last_modified_at = self.last_modified_at.isoformat()
 
@@ -151,7 +151,7 @@ class ArtifactStatusRT:
         cache_of = d.pop("cache-of", UNSET)
 
         _created_at = d.pop("created-at", UNSET)
-        created_at: Union[Unset, datetime.datetime]
+        created_at: Unset | datetime.datetime
         if isinstance(_created_at, Unset):
             created_at = UNSET
         else:
@@ -162,7 +162,7 @@ class ArtifactStatusRT:
         etag = d.pop("etag", UNSET)
 
         _last_modified_at = d.pop("last-modified-at", UNSET)
-        last_modified_at: Union[Unset, datetime.datetime]
+        last_modified_at: Unset | datetime.datetime
         if isinstance(_last_modified_at, Unset):
             last_modified_at = UNSET
         else:

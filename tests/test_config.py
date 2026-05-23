@@ -1,5 +1,6 @@
 from ivcap_client import __version__
 
+
 def test_config():
     """Test reading Config."""
     # cfg = Config([])

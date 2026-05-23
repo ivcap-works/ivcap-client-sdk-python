@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ivcap_client"
-version = "0.40.5"
+version = "0.47.11"
 description = "A client library for accessing an IVCAP cluster"
 
 authors = ["Max Ott <max.ott@csiro.au>",
@@ -8,27 +8,62 @@ authors = ["Max Ott <max.ott@csiro.au>",
 
 readme = "README.md"
 
-include = ["CHANGELOG.md", "src/ivcap_sdk_client/py.typed"]
+include = ["CHANGELOG.md", "ivcap_sdk_client/py.typed"]
+
+[tool.poe.tasks]    # using poethepoet
+lint = "ruff check ."
+format = "ruff format ."
+typecheck = "pyright"
+docs = { help = "Build documentation", shell = "cd docs && mkdocs build" }
+docs-serve = { help = "Serve documentation locally", shell = "cd docs && mkdocs serve" }
+docs-clean = { help = "Clean built documentation", shell = "cd docs && rm -rf site .mkdocs_cache" }
 
 [tool.poetry.dependencies]
-python = "^3.9"
-httpx = ">=0.15.4,<0.24.0"
+#python = ">=3.10,<4.0"
+python = ">=3.11,<4.0" # Version 8 of sphinx is required by version 3.1.0 of sphinx-rtd-theme, Sphinx requries python >= 3.11. Python 3.10 is in 'security fixes only' until October 2026.
+httpx = ">=0.15.4,<0.29"
 attrs = ">=21.3.0"
-python-dateutil = "^2.8.0"
-tuspy = ">=1.0.0"
-
-[tool.poetry.dev-dependencies]
+python-dateutil = ">=2.8.0,<2.9.0"
+tuspy = ">=1.1.0"
+frozenlist = ">=1.8.0"
+packaging = ">=25.0"
+yarl = ">=1.22.0"
+aiohttp = ">=3.13.3,<4.0.0"
+pydantic = ">=2.10,<3.0.0"
 
 [tool.poetry.group.dev.dependencies]
-openapi-python-client = ">=0.15.0"
+openapi-python-client = ">=0.28.0"
 pytest = "^7.1.3"
 pytest-cov = "^4.1.0"
-Sphinx = "^5.2.3"
-myst-nb = "^0.17.1"
+# Sphinx < 6.2.0 required imghdr which was a standard library
+# module removed in python 3.13
+#Sphinx = "^5.2.3"
+#Sphinx = ">=6.1.0,<7.0"
+#Sphinx = "^7.4.7"
+Sphinx = "^8.2.3"
+myst-nb = "^1.3.0"
 autoapi = "^2.0.1"
-sphinx-autoapi = "^2.0.0"
-sphinx-rtd-theme = "^1.0.0"
+#sphinx-autoapi = "^2.0.0"
+sphinx-autoapi = "^3.6.1"
+#sphinx-rtd-theme = "^1.0.0"
+#sphinx-rtd-theme = "<2.0.0"
+sphinx-rtd-theme = "^3.1.0"
 licenseheaders = "^0.8.8"
+mypy = "^1.16.0"
+dotenv = "^0.9.9"
+locust = "^2.39.0"
+pyzmq = ">=27.1.0" # pyzmq is a dependency of locust, older versions wouldn't build with newer pythons
+jsonschema = "^4.26.0" # needed by nbformat, which is needed by myst-nb, segfaults running earlier versions.
+sqlalchemy = "^2.0.46"
+gevent = "^25.5.1"
+respx = "^0.21.0"
+mkdocs = "^1.5.0"
+mkdocstrings = {version = "^0.25.0", extras = ["python"]}
+mkdocs-autorefs = "^0.5.0"
+griffe = "^0.45.0"
+poethepoet = "^0.42.1"
+ruff = "^0.15.4"
+pyright = "^1.1.396"
 
 [tool.semantic_release]
 version_variable = "pyproject.toml:version" # version location
@@ -41,6 +76,37 @@ upload_to_pypi = false                      # don't auto-upload to PyPI
 remove_dist = false                         # don't remove dists
 patch_without_tag = true                    # patch release by default
 
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+exclude = ["examples", "build", "dist", ".git", "ivcap_client/api", "ivcap_client/models", "ivcap_client/client"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]   # pycodestyle, pyflakes, isort, pyupgrade
+ignore = [
+  "E501",    # Line too long
+  "E402",    # Module level import not at top (valid in pytest.skip context)
+  "E711",    # Comparison to None (style preference)
+  "E721",    # Type comparisons (test assertions use type() == str)
+  "E741",    # Ambiguous variable names like 'l' (used consistently in codebase)
+  "F401",    # Unused imports (many are re-exported in __all__)
+  "F811",    # Redefinition (datetime module vs class is intentional)
+  "F821",    # Undefined names (some are generated code)
+  "UP007",   # Union type annotation style
+  "UP028",   # yield from (style preference)
+  "UP042",   # Class based kwargs (style preference)
+  "UP045",   # Optional annotation style
+]
+
+[tool.ruff.format]
+quote-style = "double"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+# Keep `pytest` runs focused on the unit-test suite.
+# (Without this, pytest may try to collect example scripts under `examples/`.)
+testpaths = ["tests"]
+norecursedirs = ["examples", "build", "dist", ".git"]

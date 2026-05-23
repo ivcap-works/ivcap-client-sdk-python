@@ -1,30 +1,37 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 
-list_services:
-	env PYTHONPATH=${ROOT_DIR}/../src \
-		IVCAP_URL=$(shell ivcap context get url) \
-		IVCAP_JWT=$(shell ivcap context get access-token --refresh-token) \
-		IVCAP_ACCOUNT_ID=$(shell ivcap context get account-id) \
-	python list_services.py
+list-services:
+	@${MAKE} SCRIPT=list_services.py run-script
 
-list_artifacts:
-	env PYTHONPATH=${ROOT_DIR}/../src \
-		IVCAP_URL=$(shell ivcap context get url) \
-		IVCAP_JWT=$(shell ivcap context get access-token --refresh-token) \
-		IVCAP_ACCOUNT_ID=$(shell ivcap context get account-id) \
-	python list_artifacts.py
+list-artifacts:
+	@${MAKE} SCRIPT=list_artifacts.py run-script
 
-upload_artifact:
-	env PYTHONPATH=${ROOT_DIR}/../src \
-		IVCAP_URL=$(shell ivcap context get url) \
-		IVCAP_JWT=$(shell ivcap context get access-token --refresh-token) \
-		IVCAP_ACCOUNT_ID=$(shell ivcap context get account-id) \
-	python upload_artifact.py
+upload-artifact:
+	@${MAKE} SCRIPT=upload_artifact.py run-script
 
-search_aspect:
-	env PYTHONPATH=${ROOT_DIR}/../src \
+
+search-aspect:
+	@${MAKE} SCRIPT=search_aspect.py run-script
+
+x:
+	env PYTHONPATH=${ROOT_DIR}/.. \
 		IVCAP_URL=$(shell ivcap context get url) \
 		IVCAP_JWT=$(shell ivcap context get access-token --refresh-token) \
 		IVCAP_ACCOUNT_ID=$(shell ivcap context get account-id) \
-	python search_aspect.py
+	poetry run python search_aspect.py
+
+place-job:
+	env PYTHONPATH=${ROOT_DIR}/.. \
+		IVCAP_URL=$(shell ivcap context get url) \
+		IVCAP_JWT=$(shell ivcap context get access-token --refresh-token) \
+		IVCAP_ACCOUNT_ID=$(shell ivcap context get account-id) \
+	poetry run python place_job.py
+
+SCRIPT=
+run-script:
+	@env PYTHONPATH=${ROOT_DIR}/.. \
+		IVCAP_URL=$(shell ivcap context get url) \
+		IVCAP_JWT=$(shell ivcap context get access-token --refresh-token) \
+		IVCAP_ACCOUNT_ID=$(shell ivcap context get account-id) \
+	poetry run python ${SCRIPT}

@@ -144,3 +144,7 @@ dmypy.json
 
 # MacOS
 .DS_Store
+examples/data/
+examples/metric
+
+docs/site

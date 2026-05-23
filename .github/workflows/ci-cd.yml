@@ -10,9 +10,9 @@ jobs:
     # Define job steps
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.9"
+          python-version: "3.11"
 
       - name: Check-out repository
         uses: actions/checkout@v2
@@ -23,23 +23,29 @@ jobs:
       - name: Install package
         run: poetry install
 
-      - name: Test with pytest
-        run: poetry run pytest tests/ --cov=ivcap_sdk_service --cov-report=xml
+      - name: Lint, typecheck, and test
+        run: make check
 
       - name: Use Codecov to track coverage
         uses: codecov/codecov-action@v2
         with:
           files: ./coverage.xml # coverage report
 
+      - name: Packages
+        run: poetry show
+
+      - name: PackagesTree
+        run: poetry show --tree
+
       - name: Build documentation
-        run: poetry run make html --directory docs/
+        run: poetry run poe docs
 
   cd:
     # Only run this job if the "ci" job passes
     needs: ci
 
     # Only run this job if new work is pushed to "main"
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref_name == 'main')
 
     # Set up operating system
     runs-on: ubuntu-latest
@@ -49,7 +55,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.9"
+          python-version: "3.11"
 
       - name: Check-out repository
         uses: actions/checkout@v2
@@ -63,7 +69,9 @@ jobs:
         run: poetry install
 
       - name: Build documentation
-        run: poetry run make html --directory docs/
+        env:
+          TZ: "Australia/Sydney"
+        run: poetry run poe docs
 
       - name: pushing to gh-pages
         env:
@@ -73,7 +81,7 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          cp -r -r docs/_build/html /tmp
+          cp -r docs/site /tmp/html
           git checkout gh-pages
           rm -rf *
           cp -r /tmp/html/* .
@@ -81,7 +89,7 @@ jobs:
           git add .
           git commit -m "docs update"
           git push
-          
+
       # - name: Use Python Semantic Release to prepare release
       #   env:
       #     # This token is created automatically by GH Actions

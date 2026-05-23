@@ -1,6 +1,6 @@
 from http import HTTPStatus
 from io import BytesIO
-from typing import Any, Optional, Union
+from typing import Any
 
 import httpx
 
@@ -17,8 +17,8 @@ from ...types import UNSET, File, Response, Unset
 def _get_kwargs(
     order_id: str,
     *,
-    from_: Union[Unset, int] = UNSET,
-    to: Union[Unset, int] = UNSET,
+    from_: Unset | int = UNSET,
+    to: Unset | int = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
@@ -38,8 +38,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     if response.status_code == 200:
         response_200 = File(payload=BytesIO(response.json()))
 
@@ -79,8 +79,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -93,9 +95,11 @@ def sync_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Union[Unset, int] = UNSET,
-    to: Union[Unset, int] = UNSET,
-) -> Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+    from_: Unset | int = UNSET,
+    to: Unset | int = UNSET,
+) -> Response[
+    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
+]:
     """logs order
 
      download order logs
@@ -131,9 +135,9 @@ def sync(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Union[Unset, int] = UNSET,
-    to: Union[Unset, int] = UNSET,
-) -> Optional[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+    from_: Unset | int = UNSET,
+    to: Unset | int = UNSET,
+) -> BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     """logs order
 
      download order logs
@@ -164,9 +168,11 @@ async def asyncio_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Union[Unset, int] = UNSET,
-    to: Union[Unset, int] = UNSET,
-) -> Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+    from_: Unset | int = UNSET,
+    to: Unset | int = UNSET,
+) -> Response[
+    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
+]:
     """logs order
 
      download order logs
@@ -200,9 +206,9 @@ async def asyncio(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Union[Unset, int] = UNSET,
-    to: Union[Unset, int] = UNSET,
-) -> Optional[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+    from_: Unset | int = UNSET,
+    to: Unset | int = UNSET,
+) -> BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     """logs order
 
      download order logs

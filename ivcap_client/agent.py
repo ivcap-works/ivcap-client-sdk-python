@@ -1,27 +1,27 @@
 #
-# Copyright (c) 2023-2025 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
+# Copyright (c) 2023-2026 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
-from __future__ import annotations # postpone evaluation of annotations
-import io
-import json
+from __future__ import annotations  # postpone evaluation of annotations
+
+from collections.abc import Awaitable
 from time import sleep
-from typing import IO, TYPE_CHECKING, Awaitable, Dict, List, Optional, Any, List, Optional, Dict, Set, Union
+from typing import (
+    IO,
+    TYPE_CHECKING,
+)
 
 from pydantic import BaseModel
 
 from ivcap_client.models.service_status_rt_status import ServiceStatusRTStatus
 
-
 if TYPE_CHECKING:
     from ivcap_client.ivcap import IVCAP, URN
     from ivcap_client.job import Job
-    from ivcap_client.service import Service
 
-import datetime
-from dataclasses import asdict, dataclass, field, is_dataclass
-from enum import Enum
+from dataclasses import dataclass
+
 
 @dataclass
 class Agent:
@@ -49,11 +49,10 @@ class Agent:
         else:
             raise ValueError(f"Invalid agent ID: {id}")
 
-
     def __update__(self, **kwargs):
         pass
 
-    def status(self, refresh = True) -> ServiceStatusRTStatus:
+    def status(self, refresh=True) -> ServiceStatusRTStatus:
         if refresh:
             self.refresh()
         return self._status
@@ -71,7 +70,9 @@ class Agent:
     # async def request_job_async(self, data: Union[BaseModel, object, IO[str]], timeout:Optional[int]=0) -> Awaitable[Job]:
     #     return self._service.request_job_async(data, timeout)
 
-    def exec_agent(self, data: Union[BaseModel, object, IO[str]], timeout:Optional[int]=0) -> Job:
+    def exec_agent(
+        self, data: BaseModel | object | IO[str], timeout: int | None = 0
+    ) -> Job:
         """Executes the agent with the given data and returns a Job object."""
         wait_until_done = timeout == 0
         job = self._service.request_job(data, timeout)
@@ -83,6 +84,7 @@ class Agent:
     def __repr__(self):
         name = self.name if self.name else "???"
         return f"<Agent id={self.id}, name={name}>"
+
 
 # class AgentIter(BaseIter[Agent, AgentListItemT]):
 #     def __init__(self, ivcap: 'IVCAP', **kwargs):

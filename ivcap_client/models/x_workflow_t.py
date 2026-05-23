@@ -35,7 +35,7 @@ class XWorkflowT:
     """
 
     type_: str
-    argo: Union[Unset, Any] = UNSET
+    argo: Unset | Any = UNSET
     basic: Union[Unset, "XBasicWorkflowOptsT"] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -44,7 +44,7 @@ class XWorkflowT:
 
         argo = self.argo
 
-        basic: Union[Unset, dict[str, Any]] = UNSET
+        basic: Unset | dict[str, Any] = UNSET
         if not isinstance(self.basic, Unset):
             basic = self.basic.to_dict()
 
@@ -72,7 +72,7 @@ class XWorkflowT:
         argo = d.pop("argo", UNSET)
 
         _basic = d.pop("basic", UNSET)
-        basic: Union[Unset, XBasicWorkflowOptsT]
+        basic: Unset | XBasicWorkflowOptsT
         if isinstance(_basic, Unset):
             basic = UNSET
         else:

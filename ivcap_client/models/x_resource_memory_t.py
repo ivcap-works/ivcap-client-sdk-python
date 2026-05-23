@@ -1,4 +1,4 @@
-from typing import Any, TypeVar, Union
+from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -22,8 +22,8 @@ class XResourceMemoryT:
             request (Union[Unset, str]): minimal requirements [0] Example: Voluptas consectetur quia sint aut odit..
     """
 
-    limit: Union[Unset, str] = UNSET
-    request: Union[Unset, str] = UNSET
+    limit: Unset | str = UNSET
+    request: Unset | str = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

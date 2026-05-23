@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -15,9 +15,9 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    tag: Union[Unset, str] = UNSET,
-    page: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = UNSET,
+    tag: Unset | str = UNSET,
+    page: Unset | str = UNSET,
+    limit: Unset | int = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
@@ -39,8 +39,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | ListResponseBody | NotImplementedT | None:
     if response.status_code == 200:
         response_200 = ListResponseBody.from_dict(response.json())
 
@@ -74,8 +74,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | ListResponseBody | NotImplementedT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -87,10 +89,12 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    tag: Union[Unset, str] = UNSET,
-    page: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody, NotImplementedT]]:
+    tag: Unset | str = UNSET,
+    page: Unset | str = UNSET,
+    limit: Unset | int = UNSET,
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | ListResponseBody | NotImplementedT
+]:
     """list package
 
      list ivcap service's docker images under account
@@ -125,10 +129,10 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    tag: Union[Unset, str] = UNSET,
-    page: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody, NotImplementedT]]:
+    tag: Unset | str = UNSET,
+    page: Unset | str = UNSET,
+    limit: Unset | int = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | ListResponseBody | NotImplementedT | None:
     """list package
 
      list ivcap service's docker images under account
@@ -158,10 +162,12 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    tag: Union[Unset, str] = UNSET,
-    page: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody, NotImplementedT]]:
+    tag: Unset | str = UNSET,
+    page: Unset | str = UNSET,
+    limit: Unset | int = UNSET,
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | ListResponseBody | NotImplementedT
+]:
     """list package
 
      list ivcap service's docker images under account
@@ -194,10 +200,10 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    tag: Union[Unset, str] = UNSET,
-    page: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, ListResponseBody, NotImplementedT]]:
+    tag: Unset | str = UNSET,
+    page: Unset | str = UNSET,
+    limit: Unset | int = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | ListResponseBody | NotImplementedT | None:
     """list package
 
      list ivcap service's docker images under account

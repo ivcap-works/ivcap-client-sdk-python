@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2023-2025 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
+# Copyright (c) 2023-2026 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
@@ -12,27 +12,27 @@ import io
 import mimetypes
 import os
 import tempfile
+from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from sys import maxsize as MAXSIZE
-from typing import TYPE_CHECKING, BinaryIO, Dict, Iterator, List, Optional
+from typing import IO, TYPE_CHECKING, BinaryIO
 from urllib.parse import urlparse
 
 if TYPE_CHECKING:
-    from ivcap_client.ivcap import IVCAP, URN
     from typing import Self
+
+    from ivcap_client.ivcap import IVCAP, URN
 
 from tusclient.client import TusClient
 
-from ivcap_client.api.artifact import (artifact_list, artifact_read,
-                                       artifact_upload)
+from ivcap_client.api.artifact import artifact_list, artifact_read, artifact_upload
 from ivcap_client.aspect import Aspect
 from ivcap_client.models.artifact_list_item import ArtifactListItem
 from ivcap_client.models.artifact_list_rt import ArtifactListRT
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
-from ivcap_client.models.artifact_status_rt_status import \
-    ArtifactStatusRTStatus
+from ivcap_client.models.artifact_status_rt_status import ArtifactStatusRTStatus
 from ivcap_client.utils import BaseIter, Links, _set_fields, process_error
 
 
@@ -43,16 +43,16 @@ class Artifact:
 
     id: str
     status: ArtifactStatusRTStatus
-    name: Optional[str] = None
-    size: Optional[int] = None
-    mime_type: Optional[str] = None
-    created_at: Optional[datetime.datetime] = None
-    last_modified_at: Optional[datetime.datetime] = None
+    name: str | None = None
+    size: int | None = None
+    mime_type: str | None = None
+    created_at: datetime.datetime | None = None
+    last_modified_at: datetime.datetime | None = None
 
-    etag: Optional[str] = None
+    etag: str | None = None
 
-    policy: Optional[URN] = None
-    account: Optional[URN] = None
+    policy: URN | None = None
+    account: URN | None = None
 
     @classmethod
     def _from_list_item(cls, item: ArtifactListItem, ivcap: IVCAP):
@@ -66,8 +66,17 @@ class Artifact:
         self.__update__(**kwargs)
 
     def __update__(self, **kwargs):
-        p = ["id", "name", "size", "mime-type", "last-modified-at",
-             "created-at", "policy", "etag", "account"]
+        p = [
+            "id",
+            "name",
+            "size",
+            "mime-type",
+            "last-modified-at",
+            "created-at",
+            "policy",
+            "etag",
+            "account",
+        ]
         hp = ["status", "cache_of", "data-href"]
         _set_fields(self, p, hp, kwargs)
 
@@ -89,7 +98,7 @@ class Artifact:
     def refresh(self) -> Artifact:
         r = artifact_read.sync_detailed(client=self._ivcap._client, id=self.id)
         if r.status_code >= 300:
-            return process_error('place_order', r)
+            return process_error("place_order", r)
         kwargs = r.parsed.to_dict()
         self.__update__(**kwargs)
         return self
@@ -130,12 +139,13 @@ class Artifact:
     def metadata(self) -> Iterator[Aspect]:
         return self._ivcap.list_aspects(entity=self.id)
 
-    def add_metadata(self,
-                     aspect: Dict[str,any],
-                     *,
-                     schema: Optional[str]=None,
-                     policy: Optional[URN]=None,
-    ) -> 'Artifact':
+    def add_metadata(
+        self,
+        aspect: dict[str, any],
+        *,
+        schema: str | None = None,
+        policy: URN | None = None,
+    ) -> Artifact:
         """Add a metadata 'aspect' to this artifact. The 'schema' of the aspect, if not defined
         is expected to found in the 'aspect' under the '$schema' key.
 
@@ -147,52 +157,59 @@ class Artifact:
         Returns:
             self: To enable chaining
         """
-        self._ivcap.add_aspect(entity=self.id, aspect=aspect, schema=schema, policy=policy)
+        self._ivcap.add_aspect(
+            entity=self.id, aspect=aspect, schema=schema, policy=policy
+        )
         return self
 
     def __repr__(self):
-        return f"<Artifact id={self.id}, status={self._status if self._status else '???'}>"
+        return (
+            f"<Artifact id={self.id}, status={self._status if self._status else '???'}>"
+        )
+
 
 class ArtifactIter(BaseIter[Artifact, ArtifactListItem]):
-    def __init__(self, ivcap: 'IVCAP', **kwargs):
+    def __init__(self, ivcap: IVCAP, **kwargs):
         super().__init__(ivcap, **kwargs)
 
     def _next_el(self, el) -> Artifact:
         return Artifact._from_list_item(el, self._ivcap)
 
-    def _get_list(self) -> List[ArtifactListItem]:
+    def _get_list(self) -> list[ArtifactListItem]:
         r = artifact_list.sync_detailed(**self._kwargs)
-        if r.status_code >= 300 :
-            return process_error('artifact_list', r)
+        if r.status_code >= 300:
+            return process_error("artifact_list", r)
         l: ArtifactListRT = r.parsed
         self._links = Links(l.links)
         return l.items
 
+
 class LocalFileArtifact:
     """This class represents a loca file masquerading as an artifact"""
+
     def __init__(self, id: str):
         if id.startswith("file://"):
             id = f"urn:${id}"
         self.id = id
-        fn = id[len("urn:file://"):]
+        fn = id[len("urn:file://") :]
         fp = Path(fn)
         self._fp = fp
-        if not(fp.exists() and fp.is_file()):
+        if not (fp.exists() and fp.is_file()):
             raise ValueError(f"file '{fn}' does not exist")
         self.name = fp.name
 
         stats = fp.stat()
         self.size = stats.st_size
         self.last_modified_at = datetime.fromtimestamp(stats.st_mtime)
-        self.created_at = self.last_modified_at # keep it simple
+        self.created_at = self.last_modified_at  # keep it simple
 
     def open(self) -> io.IOBase:
         """Return a file-like object for the artifact data"""
-        return open(self._fp, 'r', encoding='utf-8')
+        return open(self._fp, encoding="utf-8")
 
     def as_local_file(self) -> Path:
         # Return the Path to the local file but ensure it won't be deleted
-        return CMPath(SafePath(self._fp))
+        return SafePath(self._fp)
 
     def refresh(self) -> Artifact:
         return self
@@ -213,22 +230,25 @@ class LocalFileArtifact:
             mime_type = "application/octet-stream"
         return mime_type
 
+
 #### HELPER FUNCTIONS ####
 
-def upload_artifact(ivcap: IVCAP,
-                    *,
-                    name: Optional[str] = None,
-                    file_path: Optional[str] = None,
-                    io_stream: Optional[IO] = None,
-                    content_type:  Optional[str] = None,
-                    content_size: Optional[int] = -1,
-                    collection: Optional[URN] = None,
-                    policy: Optional[URN] = None,
-                    chunk_size: Optional[int] = MAXSIZE,
-                    retries: Optional[int] = 0,
-                    retry_delay: Optional[int] = 30,
-                    force_upload: Optional[bool] = False,
-    ) -> Artifact:
+
+def upload_artifact(
+    ivcap: IVCAP,
+    *,
+    name: str | None = None,
+    file_path: str | None = None,
+    io_stream: IO | None = None,
+    content_type: str | None = None,
+    content_size: int | None = -1,
+    collection: URN | None = None,
+    policy: URN | None = None,
+    chunk_size: int | None = MAXSIZE,
+    retries: int | None = 0,
+    retry_delay: int | None = 30,
+    force_upload: bool | None = False,
+) -> Artifact:
     """Uploads content which is either identified as a `file_path` or `io_stream`. In the
     latter case, content type need to be provided.
 
@@ -267,43 +287,43 @@ def upload_artifact(ivcap: IVCAP,
         content_size = os.path.getsize(file_path)
 
     kwargs = {
-        'x_content_type': content_type,
-        'x_content_length': content_size,
-        'tus_resumable': "1.0.0",
+        "x_content_type": content_type,
+        "x_content_length": content_size,
+        "tus_resumable": "1.0.0",
     }
     if name:
-        n = base64.b64encode(bytes(name, 'utf-8'))
-        kwargs['x_name'] = n
+        n = base64.b64encode(bytes(name, "utf-8"))
+        kwargs["x_name"] = n
     if collection:
         if not collection.startswith("urn:"):
             raise ValueError(f"collection '{collection} is not a URN.")
-        kwargs['x_collection'] = collection
+        kwargs["x_collection"] = collection
     if policy:
         if not policy.startswith("urn:ivcap:policy:"):
             raise ValueError(f"policy '{collection} is not a policy URN.")
-        kwargs['x_policy'] = policy
+        kwargs["x_policy"] = policy
 
     r = artifact_upload.sync_detailed(client=ivcap._client, **kwargs)
-    if r.status_code >= 300 :
-        return process_error('upload_artifact', r)
-    res:ArtifactStatusRT = r.parsed
+    if r.status_code >= 300:
+        return process_error("upload_artifact", r)
+    res: ArtifactStatusRT = r.parsed
 
     h = {}
     if ivcap._token:
-        h['Authorization'] = f"Bearer {ivcap._token}"
+        h["Authorization"] = f"Bearer {ivcap._token}"
     # NOTE: See coment on fix_data_ref
     data_url = ivcap._url + fix_data_ref(res.data_href)
     # print(f"... res.data_href: '{res.data_href}' data_url: '{data_url}")
     c = TusClient(data_url, headers=h)
     kwargs = {
-        'file_path': file_path,
-        'file_stream': io_stream,
-        'chunk_size': chunk_size,
-        'retries': retries,
-        'retry_delay': retry_delay,
+        "file_path": file_path,
+        "file_stream": io_stream,
+        "chunk_size": chunk_size,
+        "retries": retries,
+        "retry_delay": retry_delay,
     }
     uploader = c.uploader(**kwargs)
-    uploader.set_url(data_url) # not sure why I need to set it here again
+    uploader.set_url(data_url)  # not sure why I need to set it here again
     uploader.upload()
 
     kwargs = res.to_dict()
@@ -311,14 +331,15 @@ def upload_artifact(ivcap: IVCAP,
         mark_file_already_uploaded(res.id, file_path)
     kwargs["status"] = None
     a = Artifact(ivcap, **kwargs)
-    a.status # force status update as it will have change
+    a.status  # force status update as it will have change
     return a
 
-def check_file_already_uploaded(file_path: str) -> Optional[str]:
+
+def check_file_already_uploaded(file_path: str) -> str | None:
     df = _upload_marker(file_path)
 
     if os.path.isfile(df) and os.access(df, os.R_OK):
-        with open(df, "r") as f:
+        with open(df) as f:
             l = f.readlines()
             oh5, aid = l[0].split("|") if len(l) > 0 else [None, None]
             if oh5 and aid:
@@ -327,11 +348,13 @@ def check_file_already_uploaded(file_path: str) -> Optional[str]:
                     return aid.strip()
     return None
 
+
 def mark_file_already_uploaded(id: str, file_path: str):
     df = _upload_marker(file_path)
     h5 = md5sum(file_path)
     with open(df, "w") as f:
         f.write(f"{h5}|{id}\n")
+
 
 def _upload_marker(file_path: str):
     fn = os.path.basename(file_path)
@@ -340,13 +363,13 @@ def _upload_marker(file_path: str):
     return df
 
 
-
 def md5sum(filename, blocksize=65536):
     h = hashlib.md5()
     with open(filename, "rb") as f:
         for block in iter(lambda: f.read(blocksize), b""):
             h.update(block)
     return h.hexdigest()
+
 
 def fix_data_ref(data_href):
     """NOTE: the artifact API still provides the full 'external' data url
@@ -358,14 +381,13 @@ def fix_data_ref(data_href):
 
 
 ### PROTECT FILES WHEN RUNNING LOCALLY ####
-class SafePath(Path):
+_CONCRETE_PATH = type(Path())
+
+
+class SafePath(_CONCRETE_PATH):
     """
     A Path object that disables the destructive 'unlink' (delete) method.
     """
-    try:
-        _flavour = Path()._flavour
-    except AttributeError:
-        pass
 
     def unlink(self, missing_ok: bool = False):
         """
@@ -374,6 +396,7 @@ class SafePath(Path):
         """
         return
 
+
 class ProxyFile:
     """
     A custom class that acts as a Read-Only (Input) File-Like Object,
@@ -381,8 +404,8 @@ class ProxyFile:
     Implements the Context Manager protocol for use with 'with' statements.
     """
 
-    def __init__(self, buffer: io.BinaryIO):
-        self._buffer:BinaryIO = buffer
+    def __init__(self, buffer: BinaryIO):
+        self._buffer: BinaryIO = buffer
         self._closed = False
 
     def __enter__(self) -> Self:
@@ -440,29 +463,16 @@ class ProxyFile:
     def __iter__(self):
         return self._buffer.__iter__()
 
-# --- FIX for Path Subclassing ---
-# Dynamically get the platform-specific flavour object from an instance of Path.
-# Not needed from python3.12
-try:
-    CONCRETE_PATH_FLAVOUR = Path()._flavour
-except AttributeError:
-    pass
 
-class CMPath(Path):
+class CMPath(_CONCRETE_PATH):
     """
     A pathlib.Path subclass that acts as a context manager
     for a file and ensuring its cleanup on exit.
     """
 
-    # 1. CRITICAL: Inherit the platform-specific flavour
-    try:
-        _flavour = CONCRETE_PATH_FLAVOUR
-    except NameError:
-        pass
-
-    def __new__(cls, filename: str) -> Self:
-        instance = super().__new__(cls, filename)
-        return instance
+    def __new__(cls, *pathsegments) -> Self:
+        # Path subclasses must implement __new__; delegate to the concrete path type.
+        return super().__new__(cls, *pathsegments)
 
     # --- Context Manager Protocol ---
 
@@ -474,6 +484,6 @@ class CMPath(Path):
         """Cleans up the file."""
         try:
             if self.exists():
-                self.unlink() # Path.unlink() is the correct deletion method
+                self.unlink()  # Path.unlink() is the correct deletion method
         except Exception as e:
-            print(f"ERROR: Could not remove file {self._file_path}: {e}")
+            print(f"ERROR: Could not remove file {self}: {e}")

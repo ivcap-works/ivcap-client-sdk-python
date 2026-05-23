@@ -1,6 +1,6 @@
 import datetime
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -16,12 +16,12 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-    filter_: Union[Unset, str] = UNSET,
-    order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
+    filter_: Unset | str = UNSET,
+    order_by: Unset | str = UNSET,
+    order_desc: Unset | bool = True,
+    at_time: Unset | datetime.datetime = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
@@ -35,7 +35,7 @@ def _get_kwargs(
 
     params["order-desc"] = order_desc
 
-    json_at_time: Union[Unset, str] = UNSET
+    json_at_time: Unset | str = UNSET
     if not isinstance(at_time, Unset):
         json_at_time = at_time.isoformat()
     params["at-time"] = json_at_time
@@ -52,8 +52,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, ArtifactListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | ArtifactListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     if response.status_code == 200:
         response_200 = ArtifactListRT.from_dict(response.json())
 
@@ -87,8 +87,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, ArtifactListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    Any | ArtifactListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -100,13 +102,15 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-    filter_: Union[Unset, str] = UNSET,
-    order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-) -> Response[Union[Any, ArtifactListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
+    filter_: Unset | str = UNSET,
+    order_by: Unset | str = UNSET,
+    order_desc: Unset | bool = True,
+    at_time: Unset | datetime.datetime = UNSET,
+) -> Response[
+    Any | ArtifactListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """list artifact
 
      list artifacts
@@ -161,13 +165,13 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-    filter_: Union[Unset, str] = UNSET,
-    order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-) -> Optional[Union[Any, ArtifactListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
+    filter_: Unset | str = UNSET,
+    order_by: Unset | str = UNSET,
+    order_desc: Unset | bool = True,
+    at_time: Unset | datetime.datetime = UNSET,
+) -> Any | ArtifactListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """list artifact
 
      list artifacts
@@ -217,13 +221,15 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-    filter_: Union[Unset, str] = UNSET,
-    order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-) -> Response[Union[Any, ArtifactListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
+    filter_: Unset | str = UNSET,
+    order_by: Unset | str = UNSET,
+    order_desc: Unset | bool = True,
+    at_time: Unset | datetime.datetime = UNSET,
+) -> Response[
+    Any | ArtifactListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """list artifact
 
      list artifacts
@@ -276,13 +282,13 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-    filter_: Union[Unset, str] = UNSET,
-    order_by: Union[Unset, str] = UNSET,
-    order_desc: Union[Unset, bool] = True,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-) -> Optional[Union[Any, ArtifactListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
+    filter_: Unset | str = UNSET,
+    order_by: Unset | str = UNSET,
+    order_desc: Unset | bool = True,
+    at_time: Unset | datetime.datetime = UNSET,
+) -> Any | ArtifactListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """list artifact
 
      list artifacts

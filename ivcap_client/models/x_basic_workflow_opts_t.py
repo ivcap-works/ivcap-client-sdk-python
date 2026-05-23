@@ -46,11 +46,11 @@ class XBasicWorkflowOptsT:
     image: str
     cpu: Union[Unset, "XResourceMemoryT"] = UNSET
     ephemeral_storage: Union[Unset, "XResourceMemoryT"] = UNSET
-    gpu_number: Union[Unset, int] = UNSET
-    gpu_type: Union[Unset, str] = UNSET
-    image_pull_policy: Union[Unset, str] = "IfNotPresent"
+    gpu_number: Unset | int = UNSET
+    gpu_type: Unset | str = UNSET
+    image_pull_policy: Unset | str = "IfNotPresent"
     memory: Union[Unset, "XResourceMemoryT"] = UNSET
-    shared_memory: Union[Unset, str] = UNSET
+    shared_memory: Unset | str = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -58,11 +58,11 @@ class XBasicWorkflowOptsT:
 
         image = self.image
 
-        cpu: Union[Unset, dict[str, Any]] = UNSET
+        cpu: Unset | dict[str, Any] = UNSET
         if not isinstance(self.cpu, Unset):
             cpu = self.cpu.to_dict()
 
-        ephemeral_storage: Union[Unset, dict[str, Any]] = UNSET
+        ephemeral_storage: Unset | dict[str, Any] = UNSET
         if not isinstance(self.ephemeral_storage, Unset):
             ephemeral_storage = self.ephemeral_storage.to_dict()
 
@@ -72,7 +72,7 @@ class XBasicWorkflowOptsT:
 
         image_pull_policy = self.image_pull_policy
 
-        memory: Union[Unset, dict[str, Any]] = UNSET
+        memory: Unset | dict[str, Any] = UNSET
         if not isinstance(self.memory, Unset):
             memory = self.memory.to_dict()
 
@@ -113,14 +113,14 @@ class XBasicWorkflowOptsT:
         image = d.pop("image")
 
         _cpu = d.pop("cpu", UNSET)
-        cpu: Union[Unset, XResourceMemoryT]
+        cpu: Unset | XResourceMemoryT
         if isinstance(_cpu, Unset):
             cpu = UNSET
         else:
             cpu = XResourceMemoryT.from_dict(_cpu)
 
         _ephemeral_storage = d.pop("ephemeral-storage", UNSET)
-        ephemeral_storage: Union[Unset, XResourceMemoryT]
+        ephemeral_storage: Unset | XResourceMemoryT
         if isinstance(_ephemeral_storage, Unset):
             ephemeral_storage = UNSET
         else:
@@ -133,7 +133,7 @@ class XBasicWorkflowOptsT:
         image_pull_policy = d.pop("image-pull-policy", UNSET)
 
         _memory = d.pop("memory", UNSET)
-        memory: Union[Unset, XResourceMemoryT]
+        memory: Unset | XResourceMemoryT
         if isinstance(_memory, Unset):
             memory = UNSET
         else:

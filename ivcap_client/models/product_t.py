@@ -34,13 +34,13 @@ class ProductT:
         status (Union[Unset, str]):  Example: Adipisci atque itaque aut nostrum maiores..
     """
 
-    etag: Union[Unset, str] = UNSET
-    id: Union[Unset, str] = UNSET
+    etag: Unset | str = UNSET
+    id: Unset | str = UNSET
     links: Union[Unset, "SelfWithDataT"] = UNSET
-    mime_type: Union[Unset, str] = UNSET
-    name: Union[Unset, str] = UNSET
-    size: Union[Unset, int] = UNSET
-    status: Union[Unset, str] = UNSET
+    mime_type: Unset | str = UNSET
+    name: Unset | str = UNSET
+    size: Unset | int = UNSET
+    status: Unset | str = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -48,7 +48,7 @@ class ProductT:
 
         id = self.id
 
-        links: Union[Unset, dict[str, Any]] = UNSET
+        links: Unset | dict[str, Any] = UNSET
         if not isinstance(self.links, Unset):
             links = self.links.to_dict()
 
@@ -90,7 +90,7 @@ class ProductT:
         id = d.pop("id", UNSET)
 
         _links = d.pop("links", UNSET)
-        links: Union[Unset, SelfWithDataT]
+        links: Unset | SelfWithDataT
         if isinstance(_links, Unset):
             links = UNSET
         else:

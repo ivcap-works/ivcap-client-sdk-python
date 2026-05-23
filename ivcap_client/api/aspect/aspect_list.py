@@ -1,6 +1,6 @@
 import datetime
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -17,16 +17,16 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    entity: Union[Unset, str] = UNSET,
-    schema: Union[Unset, str] = UNSET,
-    content_path: Union[Unset, str] = UNSET,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-    limit: Union[Unset, int] = 10,
-    filter_: Union[Unset, str] = "",
-    order_by: Union[Unset, str] = "valid_from",
-    order_direction: Union[Unset, str] = "DESC",
-    include_content: Union[Unset, bool] = UNSET,
-    page: Union[Unset, str] = UNSET,
+    entity: Unset | str = UNSET,
+    schema: Unset | str = UNSET,
+    content_path: Unset | str = UNSET,
+    at_time: Unset | datetime.datetime = UNSET,
+    limit: Unset | int = 10,
+    filter_: Unset | str = "",
+    order_by: Unset | str = "valid_from",
+    order_direction: Unset | str = "DESC",
+    include_content: Unset | bool = UNSET,
+    page: Unset | str = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
@@ -36,7 +36,7 @@ def _get_kwargs(
 
     params["content-path"] = content_path
 
-    json_at_time: Union[Unset, str] = UNSET
+    json_at_time: Unset | str = UNSET
     if not isinstance(at_time, Unset):
         json_at_time = at_time.isoformat()
     params["at-time"] = json_at_time
@@ -65,10 +65,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
-]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | AspectListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | UnsupportedContentTypeT | None:
     if response.status_code == 200:
         response_200 = AspectListRT.from_dict(response.json())
 
@@ -106,9 +104,9 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+    *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
+    Any | AspectListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | UnsupportedContentTypeT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -121,18 +119,18 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    entity: Union[Unset, str] = UNSET,
-    schema: Union[Unset, str] = UNSET,
-    content_path: Union[Unset, str] = UNSET,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-    limit: Union[Unset, int] = 10,
-    filter_: Union[Unset, str] = "",
-    order_by: Union[Unset, str] = "valid_from",
-    order_direction: Union[Unset, str] = "DESC",
-    include_content: Union[Unset, bool] = UNSET,
-    page: Union[Unset, str] = UNSET,
+    entity: Unset | str = UNSET,
+    schema: Unset | str = UNSET,
+    content_path: Unset | str = UNSET,
+    at_time: Unset | datetime.datetime = UNSET,
+    limit: Unset | int = 10,
+    filter_: Unset | str = "",
+    order_by: Unset | str = "valid_from",
+    order_direction: Unset | str = "DESC",
+    include_content: Unset | bool = UNSET,
+    page: Unset | str = UNSET,
 ) -> Response[
-    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
+    Any | AspectListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | UnsupportedContentTypeT
 ]:
     """list aspect
 
@@ -210,19 +208,17 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    entity: Union[Unset, str] = UNSET,
-    schema: Union[Unset, str] = UNSET,
-    content_path: Union[Unset, str] = UNSET,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-    limit: Union[Unset, int] = 10,
-    filter_: Union[Unset, str] = "",
-    order_by: Union[Unset, str] = "valid_from",
-    order_direction: Union[Unset, str] = "DESC",
-    include_content: Union[Unset, bool] = UNSET,
-    page: Union[Unset, str] = UNSET,
-) -> Optional[
-    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
-]:
+    entity: Unset | str = UNSET,
+    schema: Unset | str = UNSET,
+    content_path: Unset | str = UNSET,
+    at_time: Unset | datetime.datetime = UNSET,
+    limit: Unset | int = 10,
+    filter_: Unset | str = "",
+    order_by: Unset | str = "valid_from",
+    order_direction: Unset | str = "DESC",
+    include_content: Unset | bool = UNSET,
+    page: Unset | str = UNSET,
+) -> Any | AspectListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | UnsupportedContentTypeT | None:
     """list aspect
 
      Return a list of aspect aspects.
@@ -294,18 +290,18 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    entity: Union[Unset, str] = UNSET,
-    schema: Union[Unset, str] = UNSET,
-    content_path: Union[Unset, str] = UNSET,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-    limit: Union[Unset, int] = 10,
-    filter_: Union[Unset, str] = "",
-    order_by: Union[Unset, str] = "valid_from",
-    order_direction: Union[Unset, str] = "DESC",
-    include_content: Union[Unset, bool] = UNSET,
-    page: Union[Unset, str] = UNSET,
+    entity: Unset | str = UNSET,
+    schema: Unset | str = UNSET,
+    content_path: Unset | str = UNSET,
+    at_time: Unset | datetime.datetime = UNSET,
+    limit: Unset | int = 10,
+    filter_: Unset | str = "",
+    order_by: Unset | str = "valid_from",
+    order_direction: Unset | str = "DESC",
+    include_content: Unset | bool = UNSET,
+    page: Unset | str = UNSET,
 ) -> Response[
-    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
+    Any | AspectListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | UnsupportedContentTypeT
 ]:
     """list aspect
 
@@ -381,19 +377,17 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    entity: Union[Unset, str] = UNSET,
-    schema: Union[Unset, str] = UNSET,
-    content_path: Union[Unset, str] = UNSET,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-    limit: Union[Unset, int] = 10,
-    filter_: Union[Unset, str] = "",
-    order_by: Union[Unset, str] = "valid_from",
-    order_direction: Union[Unset, str] = "DESC",
-    include_content: Union[Unset, bool] = UNSET,
-    page: Union[Unset, str] = UNSET,
-) -> Optional[
-    Union[Any, AspectListRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, UnsupportedContentTypeT]
-]:
+    entity: Unset | str = UNSET,
+    schema: Unset | str = UNSET,
+    content_path: Unset | str = UNSET,
+    at_time: Unset | datetime.datetime = UNSET,
+    limit: Unset | int = 10,
+    filter_: Unset | str = "",
+    order_by: Unset | str = "valid_from",
+    order_direction: Unset | str = "DESC",
+    include_content: Unset | bool = UNSET,
+    page: Unset | str = UNSET,
+) -> Any | AspectListRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | UnsupportedContentTypeT | None:
     """list aspect
 
      Return a list of aspect aspects.

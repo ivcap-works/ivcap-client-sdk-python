@@ -31,7 +31,7 @@ class MetadataListItemRT:
     id: str
     schema: str
     aspect: Union[Unset, "MetadataListItemRTAspect"] = UNSET
-    aspect_context: Union[Unset, str] = UNSET
+    aspect_context: Unset | str = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -41,7 +41,7 @@ class MetadataListItemRT:
 
         schema = self.schema
 
-        aspect: Union[Unset, dict[str, Any]] = UNSET
+        aspect: Unset | dict[str, Any] = UNSET
         if not isinstance(self.aspect, Unset):
             aspect = self.aspect.to_dict()
 
@@ -75,7 +75,7 @@ class MetadataListItemRT:
         schema = d.pop("schema")
 
         _aspect = d.pop("aspect", UNSET)
-        aspect: Union[Unset, MetadataListItemRTAspect]
+        aspect: Unset | MetadataListItemRTAspect
         if isinstance(_aspect, Unset):
             aspect = UNSET
         else:

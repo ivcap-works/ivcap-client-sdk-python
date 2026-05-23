@@ -1,27 +1,34 @@
 #
-# Copyright (c) 2023-2025 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
+# Copyright (c) 2023-2026 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
-from __future__ import annotations # postpone evaluation of annotations
-from typing import TYPE_CHECKING, Dict, List, Optional, List, Optional, Dict
+from __future__ import annotations  # postpone evaluation of annotations
+
+from typing import TYPE_CHECKING
 
 from ivcap_client.exception import MissingParameterValue
 
 if TYPE_CHECKING:
     from ivcap_client.ivcap import IVCAP, URN
 
-import types
 import datetime
+import types
 from dataclasses import dataclass
 
-from ivcap_client.api.aspect import aspect_create, aspect_list, aspect_read, aspect_retract, aspect_update
-from ivcap_client.models.list_meta_rt import ListMetaRT
+from ivcap_client.api.aspect import (
+    aspect_create,
+    aspect_list,
+    aspect_read,
+    aspect_retract,
+    aspect_update,
+)
+from ivcap_client.models.aspect_idrt import AspectIDRT
 from ivcap_client.models.aspect_list_item_rt import AspectListItemRT
 from ivcap_client.models.aspect_rt import AspectRT
-from ivcap_client.models.aspect_idrt import AspectIDRT
-
+from ivcap_client.models.list_meta_rt import ListMetaRT
 from ivcap_client.utils import BaseIter, Links, _set_fields, process_error
+
 
 @dataclass
 class Aspect:
@@ -33,15 +40,13 @@ class Aspect:
     schema: str
 
     # content: Optional[any] = None
-    content_type: Optional[str] = None
+    content_type: str | None = None
 
-    valid_from: Optional[datetime.datetime] = None
-    valid_to: Optional[datetime.datetime] = None
+    valid_from: datetime.datetime | None = None
+    valid_to: datetime.datetime | None = None
 
-    asserter: Optional[URN] = None
-    retracter: Optional[URN] = None
-
-
+    asserter: URN | None = None
+    retracter: URN | None = None
 
     @classmethod
     def _from_list_item(cls, item: AspectListItemRT, ivcap: IVCAP):
@@ -55,7 +60,16 @@ class Aspect:
         self.__update__(**kwargs)
 
     def __update__(self, **kwargs):
-        p = ["id", "entity", "schema", "content-type", "valid-from", "valid-to", "asserter", "retracter"]
+        p = [
+            "id",
+            "entity",
+            "schema",
+            "content-type",
+            "valid-from",
+            "valid-to",
+            "asserter",
+            "retracter",
+        ]
         hp = ["content"]
         _set_fields(self, p, hp, kwargs)
 
@@ -81,9 +95,9 @@ class Aspect:
 
     def refresh(self) -> Aspect:
         r = aspect_read.sync_detailed(self.id, client=self._ivcap._client)
-        if r.status_code >= 300 :
-            return process_error('aspect', r)
-        res:AspectRT = r.parsed
+        if r.status_code >= 300:
+            return process_error("aspect", r)
+        res: AspectRT = r.parsed
         self.__update__(**res.to_dict())
         return self
 
@@ -93,37 +107,39 @@ class Aspect:
             # already retracted
             return self
         r = aspect_retract.sync_detailed(self.id, client=self._ivcap._client)
-        if r.status_code >= 300 :
-            return process_error('aspect', r)
+        if r.status_code >= 300:
+            return process_error("aspect", r)
         return self.refresh()
 
     def __repr__(self):
         return f"<Aspect id={self.id}, entity={self.entity} schema={self.schema}>"
 
+
 class AspectIter(BaseIter[Aspect, AspectListItemRT]):
-    def __init__(self, ivcap: 'IVCAP', **kwargs):
+    def __init__(self, ivcap: IVCAP, **kwargs):
         super().__init__(ivcap, **kwargs)
 
     def _next_el(self, el) -> Aspect:
         return Aspect._from_list_item(el, self._ivcap)
 
-    def _get_list(self) -> List[AspectListItemRT]:
+    def _get_list(self) -> list[AspectListItemRT]:
         r = aspect_list.sync_detailed(**self._kwargs)
-        if r.status_code >= 300 :
-            return process_error('artifact_list', r)
+        if r.status_code >= 300:
+            return process_error("artifact_list", r)
         l: ListMetaRT = r.parsed
         self._links = Links(l.links)
         return l.items
 
 
-def _add_update_aspect(ivcap: IVCAP,
-                       is_update: bool,
-                       entity: str,
-                       aspect: Dict[str,any],
-                       *,
-                       schema: Optional[str]=None,
-                       policy: Optional[URN] = None,
-                       ) -> Aspect:
+def _add_update_aspect(
+    ivcap: IVCAP,
+    is_update: bool,
+    entity: str,
+    aspect: dict[str, any],
+    *,
+    schema: str | None = None,
+    policy: URN | None = None,
+) -> Aspect:
     """Add an 'aspect' to an 'entity'. The 'schema' of the aspect, if not defined
     is expected to found in the 'aspect' under the '$schema' key.
 
@@ -148,11 +164,7 @@ def _add_update_aspect(ivcap: IVCAP,
     if not schema:
         raise MissingParameterValue("Missing schema (also not in aspect '$schema')")
 
-    b = {
-        "$schema": schema,
-        "$entity": entity,
-        **b
-    }
+    b = {"$schema": schema, "$entity": entity, **b}
     # api is calling to_dict on body
     body = types.SimpleNamespace()
     body.to_dict = lambda: b
@@ -167,19 +179,19 @@ def _add_update_aspect(ivcap: IVCAP,
     if policy:
         if not policy.startswith("urn:ivcap:policy:"):
             raise ValueError(f"policy '{policy} is not a policy URN.")
-        kwargs['policy'] = policy
+        kwargs["policy"] = policy
 
     if is_update:
         r = aspect_update.sync_detailed(**kwargs)
     else:
         r = aspect_create.sync_detailed(**kwargs)
-    if r.status_code >= 300 :
-        return process_error('add_aspect', r)
+    if r.status_code >= 300:
+        return process_error("add_aspect", r)
 
-    res:AspectIDRT = r.parsed
+    res: AspectIDRT = r.parsed
     d = res.to_dict()
-    d['entity'] = entity
-    d['schema'] = schema
-    d['content'] = aspect
-    d['content-type'] = "application/json"
+    d["entity"] = entity
+    d["schema"] = schema
+    d["content"] = aspect
+    d["content-type"] = "application/json"
     return Aspect(ivcap, **d)

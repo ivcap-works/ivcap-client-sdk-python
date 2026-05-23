@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -17,8 +17,8 @@ def _get_kwargs(
     id: str,
     *,
     body: Any,
-    schema: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
+    schema: Unset | str = UNSET,
+    content_type: Unset | str = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
     if not isinstance(content_type, Unset):
@@ -46,8 +46,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | Messagestatus | NotImplementedT | None:
     if response.status_code == 200:
         response_200 = Messagestatus.from_dict(response.json())
 
@@ -81,8 +81,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | Messagestatus | NotImplementedT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -96,9 +98,11 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: Any,
-    schema: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
+    schema: Unset | str = UNSET,
+    content_type: Unset | str = UNSET,
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | Messagestatus | NotImplementedT
+]:
     """enqueue queue
 
      Send a message to a specific queues.
@@ -139,9 +143,9 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: Any,
-    schema: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
+    schema: Unset | str = UNSET,
+    content_type: Unset | str = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | Messagestatus | NotImplementedT | None:
     """enqueue queue
 
      Send a message to a specific queues.
@@ -177,9 +181,11 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: Any,
-    schema: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
+    schema: Unset | str = UNSET,
+    content_type: Unset | str = UNSET,
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | Messagestatus | NotImplementedT
+]:
     """enqueue queue
 
      Send a message to a specific queues.
@@ -218,9 +224,9 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: Any,
-    schema: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, Messagestatus, NotImplementedT]]:
+    schema: Unset | str = UNSET,
+    content_type: Unset | str = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | Messagestatus | NotImplementedT | None:
     """enqueue queue
 
      Send a message to a specific queues.

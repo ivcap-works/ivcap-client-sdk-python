@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -17,7 +17,7 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     secret_name: str,
-    secret_type: Union[Unset, str] = UNSET,
+    secret_type: Unset | str = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
@@ -37,10 +37,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, SecretResultT]
-]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT | None:
     if response.status_code == 200:
         response_200 = SecretResultT.from_dict(response.json())
 
@@ -78,9 +76,9 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+    *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, SecretResultT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -94,9 +92,9 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     secret_name: str,
-    secret_type: Union[Unset, str] = UNSET,
+    secret_type: Unset | str = UNSET,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, SecretResultT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT
 ]:
     """get secret
 
@@ -130,10 +128,8 @@ def sync(
     *,
     client: AuthenticatedClient,
     secret_name: str,
-    secret_type: Union[Unset, str] = UNSET,
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, SecretResultT]
-]:
+    secret_type: Unset | str = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT | None:
     """get secret
 
      Get a secrets
@@ -161,9 +157,9 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     secret_name: str,
-    secret_type: Union[Unset, str] = UNSET,
+    secret_type: Unset | str = UNSET,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, SecretResultT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT
 ]:
     """get secret
 
@@ -195,10 +191,8 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     secret_name: str,
-    secret_type: Union[Unset, str] = UNSET,
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, SecretResultT]
-]:
+    secret_type: Unset | str = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT | None:
     """get secret
 
      Get a secrets

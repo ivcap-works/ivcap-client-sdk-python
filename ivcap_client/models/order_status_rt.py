@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -62,11 +62,11 @@ class OrderStatusRT:
     products: "PartialProductListT"
     service: str
     status: OrderStatusRTStatus
-    finished_at: Union[Unset, datetime.datetime] = UNSET
-    name: Union[Unset, str] = UNSET
-    ordered_at: Union[Unset, datetime.datetime] = UNSET
-    started_at: Union[Unset, datetime.datetime] = UNSET
-    tags: Union[Unset, list[str]] = UNSET
+    finished_at: Unset | datetime.datetime = UNSET
+    name: Unset | str = UNSET
+    ordered_at: Unset | datetime.datetime = UNSET
+    started_at: Unset | datetime.datetime = UNSET
+    tags: Unset | list[str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -90,21 +90,21 @@ class OrderStatusRT:
 
         status = self.status.value
 
-        finished_at: Union[Unset, str] = UNSET
+        finished_at: Unset | str = UNSET
         if not isinstance(self.finished_at, Unset):
             finished_at = self.finished_at.isoformat()
 
         name = self.name
 
-        ordered_at: Union[Unset, str] = UNSET
+        ordered_at: Unset | str = UNSET
         if not isinstance(self.ordered_at, Unset):
             ordered_at = self.ordered_at.isoformat()
 
-        started_at: Union[Unset, str] = UNSET
+        started_at: Unset | str = UNSET
         if not isinstance(self.started_at, Unset):
             started_at = self.started_at.isoformat()
 
-        tags: Union[Unset, list[str]] = UNSET
+        tags: Unset | list[str] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
@@ -166,7 +166,7 @@ class OrderStatusRT:
         status = OrderStatusRTStatus(d.pop("status"))
 
         _finished_at = d.pop("finished-at", UNSET)
-        finished_at: Union[Unset, datetime.datetime]
+        finished_at: Unset | datetime.datetime
         if isinstance(_finished_at, Unset):
             finished_at = UNSET
         else:
@@ -175,14 +175,14 @@ class OrderStatusRT:
         name = d.pop("name", UNSET)
 
         _ordered_at = d.pop("ordered-at", UNSET)
-        ordered_at: Union[Unset, datetime.datetime]
+        ordered_at: Unset | datetime.datetime
         if isinstance(_ordered_at, Unset):
             ordered_at = UNSET
         else:
             ordered_at = isoparse(_ordered_at)
 
         _started_at = d.pop("started-at", UNSET)
-        started_at: Union[Unset, datetime.datetime]
+        started_at: Unset | datetime.datetime
         if isinstance(_started_at, Unset):
             started_at = UNSET
         else:

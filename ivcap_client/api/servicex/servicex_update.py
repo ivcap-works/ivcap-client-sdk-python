@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -19,7 +19,7 @@ def _get_kwargs(
     id: str,
     *,
     body: XServiceDefinitionT,
-    force_create: Union[Unset, bool] = UNSET,
+    force_create: Unset | bool = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
 
@@ -45,10 +45,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, XServiceStatusRT]
-]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT | None:
     if response.status_code == 200:
         response_200 = XServiceStatusRT.from_dict(response.json())
 
@@ -86,9 +84,9 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+    *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, XServiceStatusRT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -103,9 +101,9 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
-    force_create: Union[Unset, bool] = UNSET,
+    force_create: Unset | bool = UNSET,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, XServiceStatusRT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT
 ]:
     """update servicex
 
@@ -155,10 +153,8 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
-    force_create: Union[Unset, bool] = UNSET,
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, XServiceStatusRT]
-]:
+    force_create: Unset | bool = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT | None:
     """update servicex
 
      Update an existing services and return its status.
@@ -202,9 +198,9 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
-    force_create: Union[Unset, bool] = UNSET,
+    force_create: Unset | bool = UNSET,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, XServiceStatusRT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT
 ]:
     """update servicex
 
@@ -252,10 +248,8 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
-    force_create: Union[Unset, bool] = UNSET,
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, XServiceStatusRT]
-]:
+    force_create: Unset | bool = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT | None:
     """update servicex
 
      Update an existing services and return its status.

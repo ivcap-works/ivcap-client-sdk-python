@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -43,8 +43,8 @@ class ProjectListRT:
     """
 
     projects: list["ProjectListItem"]
-    at_time: Union[Unset, datetime.datetime] = UNSET
-    page: Union[Unset, str] = UNSET
+    at_time: Unset | datetime.datetime = UNSET
+    page: Unset | str = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -55,7 +55,7 @@ class ProjectListRT:
             )
             projects.append(componentsschemas_project_list_item_collection_item)
 
-        at_time: Union[Unset, str] = UNSET
+        at_time: Unset | str = UNSET
         if not isinstance(self.at_time, Unset):
             at_time = self.at_time.isoformat()
 
@@ -83,14 +83,16 @@ class ProjectListRT:
         projects = []
         _projects = d.pop("projects")
         for componentsschemas_project_list_item_collection_item_data in _projects:
-            componentsschemas_project_list_item_collection_item = ProjectListItem.from_dict(
-                componentsschemas_project_list_item_collection_item_data
+            componentsschemas_project_list_item_collection_item = (
+                ProjectListItem.from_dict(
+                    componentsschemas_project_list_item_collection_item_data
+                )
             )
 
             projects.append(componentsschemas_project_list_item_collection_item)
 
         _at_time = d.pop("at-time", UNSET)
-        at_time: Union[Unset, datetime.datetime]
+        at_time: Unset | datetime.datetime
         if isinstance(_at_time, Unset):
             at_time = UNSET
         else:

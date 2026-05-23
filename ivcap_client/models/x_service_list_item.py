@@ -1,5 +1,5 @@
 import datetime
-from typing import Any, TypeVar, Union
+from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -36,11 +36,11 @@ class XServiceListItem:
     account: str
     href: str
     id: str
-    banner: Union[Unset, str] = UNSET
-    description: Union[Unset, str] = UNSET
-    name: Union[Unset, str] = UNSET
-    policy: Union[Unset, str] = UNSET
-    published_at: Union[Unset, datetime.datetime] = UNSET
+    banner: Unset | str = UNSET
+    description: Unset | str = UNSET
+    name: Unset | str = UNSET
+    policy: Unset | str = UNSET
+    published_at: Unset | datetime.datetime = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -58,7 +58,7 @@ class XServiceListItem:
 
         policy = self.policy
 
-        published_at: Union[Unset, str] = UNSET
+        published_at: Unset | str = UNSET
         if not isinstance(self.published_at, Unset):
             published_at = self.published_at.isoformat()
 
@@ -102,7 +102,7 @@ class XServiceListItem:
         policy = d.pop("policy", UNSET)
 
         _published_at = d.pop("published-at", UNSET)
-        published_at: Union[Unset, datetime.datetime]
+        published_at: Unset | datetime.datetime
         if isinstance(_published_at, Unset):
             published_at = UNSET
         else:

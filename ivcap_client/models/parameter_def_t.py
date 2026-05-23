@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -43,13 +43,13 @@ class ParameterDefT:
     description: str
     name: str
     type_: str
-    constant: Union[Unset, bool] = UNSET
-    default: Union[Unset, str] = UNSET
-    label: Union[Unset, str] = UNSET
-    optional: Union[Unset, bool] = UNSET
-    options: Union[Unset, list["ParameterOptT"]] = UNSET
-    unary: Union[Unset, bool] = UNSET
-    unit: Union[Unset, str] = UNSET
+    constant: Unset | bool = UNSET
+    default: Unset | str = UNSET
+    label: Unset | str = UNSET
+    optional: Unset | bool = UNSET
+    options: Unset | list["ParameterOptT"] = UNSET
+    unary: Unset | bool = UNSET
+    unit: Unset | str = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -67,7 +67,7 @@ class ParameterDefT:
 
         optional = self.optional
 
-        options: Union[Unset, list[dict[str, Any]]] = UNSET
+        options: Unset | list[dict[str, Any]] = UNSET
         if not isinstance(self.options, Unset):
             options = []
             for options_item_data in self.options:

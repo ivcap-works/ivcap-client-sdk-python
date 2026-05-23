@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -48,8 +48,8 @@ class MetadataRecordRT:
     links: list["LinkT"]
     schema: str
     valid_from: datetime.datetime
-    revoker: Union[Unset, str] = UNSET
-    valid_to: Union[Unset, datetime.datetime] = UNSET
+    revoker: Unset | str = UNSET
+    valid_to: Unset | datetime.datetime = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -72,7 +72,7 @@ class MetadataRecordRT:
 
         revoker = self.revoker
 
-        valid_to: Union[Unset, str] = UNSET
+        valid_to: Unset | str = UNSET
         if not isinstance(self.valid_to, Unset):
             valid_to = self.valid_to.isoformat()
 
@@ -123,7 +123,7 @@ class MetadataRecordRT:
         revoker = d.pop("revoker", UNSET)
 
         _valid_to = d.pop("valid-to", UNSET)
-        valid_to: Union[Unset, datetime.datetime]
+        valid_to: Unset | datetime.datetime
         if isinstance(_valid_to, Unset):
             valid_to = UNSET
         else:

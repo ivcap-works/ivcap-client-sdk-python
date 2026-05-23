@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -17,8 +17,8 @@ def _get_kwargs(
     service_id: str,
     id: str,
     *,
-    with_request_content: Union[Unset, bool] = UNSET,
-    with_result_content: Union[Unset, bool] = True,
+    with_request_content: Unset | bool = UNSET,
+    with_result_content: Unset | bool = True,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
@@ -38,8 +38,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, NotImplementedT, ResourceNotFoundT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT | None:
     if response.status_code == 200:
         response_200 = JobStatusRT.from_dict(response.json())
 
@@ -73,8 +73,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, NotImplementedT, ResourceNotFoundT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -88,9 +90,11 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Union[Unset, bool] = UNSET,
-    with_result_content: Union[Unset, bool] = True,
-) -> Response[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, NotImplementedT, ResourceNotFoundT]]:
+    with_request_content: Unset | bool = UNSET,
+    with_result_content: Unset | bool = True,
+) -> Response[
+    Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT
+]:
     """job-read service
 
      show the status of a job within the context of a service
@@ -130,9 +134,9 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Union[Unset, bool] = UNSET,
-    with_result_content: Union[Unset, bool] = True,
-) -> Optional[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, NotImplementedT, ResourceNotFoundT]]:
+    with_request_content: Unset | bool = UNSET,
+    with_result_content: Unset | bool = True,
+) -> Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT | None:
     """job-read service
 
      show the status of a job within the context of a service
@@ -167,9 +171,11 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Union[Unset, bool] = UNSET,
-    with_result_content: Union[Unset, bool] = True,
-) -> Response[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, NotImplementedT, ResourceNotFoundT]]:
+    with_request_content: Unset | bool = UNSET,
+    with_result_content: Unset | bool = True,
+) -> Response[
+    Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT
+]:
     """job-read service
 
      show the status of a job within the context of a service
@@ -207,9 +213,9 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Union[Unset, bool] = UNSET,
-    with_result_content: Union[Unset, bool] = True,
-) -> Optional[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, NotImplementedT, ResourceNotFoundT]]:
+    with_request_content: Unset | bool = UNSET,
+    with_result_content: Unset | bool = True,
+) -> Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT | None:
     """job-read service
 
      show the status of a job within the context of a service

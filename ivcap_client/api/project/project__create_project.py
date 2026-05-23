@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -35,8 +35,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ProjectStatusRT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ProjectStatusRT | None:
     if response.status_code == 200:
         response_200 = ProjectStatusRT.from_dict(response.json())
 
@@ -70,8 +70,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ProjectStatusRT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ProjectStatusRT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -84,7 +86,9 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: ProjectCreateRequest,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ProjectStatusRT]]:
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ProjectStatusRT
+]:
     """Create a Project
 
      Create a new project and return its status.
@@ -118,7 +122,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: ProjectCreateRequest,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ProjectStatusRT]]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ProjectStatusRT | None:
     """Create a Project
 
      Create a new project and return its status.
@@ -147,7 +151,9 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: ProjectCreateRequest,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ProjectStatusRT]]:
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ProjectStatusRT
+]:
     """Create a Project
 
      Create a new project and return its status.
@@ -179,7 +185,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: ProjectCreateRequest,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ProjectStatusRT]]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ProjectStatusRT | None:
     """Create a Project
 
      Create a new project and return its status.

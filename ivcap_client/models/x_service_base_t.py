@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -29,8 +29,8 @@ class XServiceBaseT:
     """
 
     parameters: list["ParameterDefT"]
-    name: Union[Unset, str] = UNSET
-    tags: Union[Unset, list[str]] = UNSET
+    name: Unset | str = UNSET
+    tags: Unset | list[str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -41,7 +41,7 @@ class XServiceBaseT:
 
         name = self.name
 
-        tags: Union[Unset, list[str]] = UNSET
+        tags: Unset | list[str] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 

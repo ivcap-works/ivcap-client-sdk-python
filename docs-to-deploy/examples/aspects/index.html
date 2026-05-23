@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="CSIRO" /><link rel="canonical" href="https://ivcap-works.github.io/ivcap-client-sdk-python/examples/aspects/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Aspects & Search - IVCAP Client SDK (Python)</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Aspects \u0026 Search";
+        var mkdocs_page_input_path = "examples/aspects.md";
+        var mkdocs_page_url = "/ivcap-client-sdk-python/examples/aspects/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> IVCAP Client SDK (Python)
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation/">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/quick-start/">Quick Start</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/authentication/">Authentication</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guides</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/services/">Discovering Services</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/jobs/">Running Jobs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/artifacts/">Working with Artifacts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/aspects/">The Datafabric & Aspects</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/async-usage/">Async Usage</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/error-handling/">Error Handling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/agents/">Agent Integration</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/search/">Search (Datalog)</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/ivcap/">IVCAP Client</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/service/">Service</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/job/">Job</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/artifact/">Artifact</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/aspect/">Aspect</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/exceptions/">Exceptions</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Examples</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../services/">Service Discovery</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../jobs/">Job Workflows</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Artifacts</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Aspects & Search</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#search-aspects-search_aspectpy">Search Aspects (search_aspect.py)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#add-metadata-to-an-artifact">Add Metadata to an Artifact</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#add-and-update-an-aspect">Add and Update an Aspect</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#list-all-aspects-for-an-entity">List All Aspects for an Entity</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#historical-aspect-query">Historical Aspect Query</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#retract-an-aspect">Retract an Aspect</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../async-parallel/">Async & Parallel</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/environment-variables/">Environment Variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/glossary/">Glossary</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../community/contributing/">Contributing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../community/conduct/">Code of Conduct</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">IVCAP Client SDK (Python)</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Examples</li>
+      <li class="breadcrumb-item active">Aspects & Search</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/ivcap-works/ivcap-client-sdk-python/edit/main/docs/docs/examples/aspects.md">Edit on ivcap-client-sdk-python</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="example-aspects-search">Example: Aspects &amp; Search<a class="headerlink" href="#example-aspects-search" title="Permanent link">&para;</a></h1>
+<p>These examples show how to query the Datafabric and manage typed metadata.</p>
+<h2 id="search-aspects-search_aspectpy">Search Aspects (<code>search_aspect.py</code>)<a class="headerlink" href="#search-aspects-search_aspectpy" title="Permanent link">&para;</a></h2>
+<pre><code class="language-python">from _common import ivcap, pp
+
+schema = 'urn:common:schema:in_collection.1'
+filter = &quot;collection~='urn:ibenthos:collection:indo_flores_0922:LB4 UQ PhotoTransect'&quot;
+
+for i, m in enumerate(ivcap.list_aspects(
+    schema=schema,
+    filter=filter,
+    include_content=False,
+    limit=20
+)):
+    print(f&quot;=========== {i + 1}&quot;)
+    pp.pprint(m)
+    pp.pprint(m.aspect)
+</code></pre>
+<p><strong>What it demonstrates:</strong>
+- <code>ivcap.list_aspects()</code> with <code>schema</code> and <code>filter</code> arguments
+- OData-style filter with <code>~=</code> (contains-like) operator
+- <code>include_content=False</code> — returns aspect metadata only, not the JSON content
+- <code>m.aspect</code> — the JSON content dict (may be <code>None</code> when <code>include_content=False</code>)</p>
+<h2 id="add-metadata-to-an-artifact">Add Metadata to an Artifact<a class="headerlink" href="#add-metadata-to-an-artifact" title="Permanent link">&para;</a></h2>
+<pre><code class="language-python">from _common import ivcap, pp
+
+# Get or upload an artifact
+artifact = ivcap.get_artifact(&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;)
+
+# Attach custom metadata
+artifact.add_metadata({
+    &quot;$schema&quot;: &quot;urn:my-project:schema:image-annotation.1&quot;,
+    &quot;label&quot;: &quot;coral reef&quot;,
+    &quot;confidence&quot;: 0.97,
+    &quot;annotator&quot;: &quot;alice@csiro.au&quot;,
+})
+
+# Verify
+for aspect in ivcap.list_aspects(
+    entity=artifact.id,
+    schema=&quot;urn:my-project:schema:image-annotation.1&quot;,
+    include_content=True,
+):
+    pp.pprint(aspect.aspect)
+</code></pre>
+<h2 id="add-and-update-an-aspect">Add and Update an Aspect<a class="headerlink" href="#add-and-update-an-aspect" title="Permanent link">&para;</a></h2>
+<pre><code class="language-python">from _common import ivcap, pp
+
+# Add a new aspect
+aspect = ivcap.add_aspect(
+    entity=&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;,
+    aspect={
+        &quot;$schema&quot;: &quot;urn:my:schema:status.1&quot;,
+        &quot;status&quot;: &quot;pending-review&quot;,
+    },
+)
+print(f&quot;Added aspect: {aspect.id}&quot;)
+
+# Update (retracts old, creates new)
+updated = ivcap.update_aspect(
+    entity=&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;,
+    aspect={
+        &quot;$schema&quot;: &quot;urn:my:schema:status.1&quot;,
+        &quot;status&quot;: &quot;approved&quot;,
+    },
+)
+print(f&quot;Updated aspect: {updated.id}&quot;)
+</code></pre>
+<h2 id="list-all-aspects-for-an-entity">List All Aspects for an Entity<a class="headerlink" href="#list-all-aspects-for-an-entity" title="Permanent link">&para;</a></h2>
+<pre><code class="language-python">from _common import ivcap, pp
+
+entity = &quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;
+
+for aspect in ivcap.list_aspects(
+    entity=entity,
+    include_content=True,
+    order_by=&quot;valid_from&quot;,
+    order_direction=&quot;ASC&quot;,
+):
+    print(f&quot;[{aspect.valid_from}] {aspect.schema}&quot;)
+    if aspect.aspect:
+        pp.pprint(aspect.aspect)
+</code></pre>
+<h2 id="historical-aspect-query">Historical Aspect Query<a class="headerlink" href="#historical-aspect-query" title="Permanent link">&para;</a></h2>
+<pre><code class="language-python">from _common import ivcap
+from datetime import datetime, timezone
+
+# What did we know about this artifact on 2025-01-01?
+past = datetime(2025, 1, 1, tzinfo=timezone.utc)
+for aspect in ivcap.list_aspects(
+    entity=&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;,
+    at_time=past,
+    include_content=True,
+):
+    print(f&quot;Valid from {aspect.valid_from}: {aspect.schema}&quot;)
+    print(aspect.aspect)
+</code></pre>
+<h2 id="retract-an-aspect">Retract an Aspect<a class="headerlink" href="#retract-an-aspect" title="Permanent link">&para;</a></h2>
+<pre><code class="language-python">from _common import ivcap
+
+aspects = list(ivcap.list_aspects(
+    entity=&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;,
+    schema=&quot;urn:my:schema:status.1&quot;,
+))
+if aspects:
+    aspects[0].retract()
+    print(f&quot;Retracted: {aspects[0].id}&quot;)
+</code></pre>
+<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../guides/aspects/">Guide: The Datafabric &amp; Aspects</a></li>
+<li><a href="../../guides/search/">Guide: Search (Datalog)</a></li>
+<li><a href="../../api/aspect/">API: Aspect</a></li>
+<li><a href="../../api/ivcap/">API: IVCAP Client</a></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../artifacts/" class="btn btn-neutral float-left" title="Artifacts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../async-parallel/" class="btn btn-neutral float-right" title="Async & Parallel">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2022-2026 CSIRO</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/ivcap-works/ivcap-client-sdk-python" class="fa fa-code-fork" style="color: #fcfcfc"> ivcap-client-sdk-python</a>
+        </span>
+    
+    
+      <span><a href="../artifacts/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../async-parallel/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="CSIRO" /><link rel="canonical" href="https://ivcap-works.github.io/ivcap-client-sdk-python/guides/jobs/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Running Jobs - IVCAP Client SDK (Python)</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Running Jobs";
+        var mkdocs_page_input_path = "guides/jobs.md";
+        var mkdocs_page_url = "/ivcap-client-sdk-python/guides/jobs/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> IVCAP Client SDK (Python)
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation/">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/quick-start/">Quick Start</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/authentication/">Authentication</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guides</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../services/">Discovering Services</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Running Jobs</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#job-lifecycle">Job Lifecycle</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#submitting-a-job">Submitting a Job</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#fire-and-check-non-blocking">Fire and check (non-blocking)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#with-a-pydantic-model">With a Pydantic model</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#blocking-wait-for-completion-server-side">Blocking (wait for completion server-side)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#with-a-raw-json-string-or-io-stream">With a raw JSON string or IO stream</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#polling-for-completion">Polling for Completion</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#accessing-the-result">Accessing the Result</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#job-properties">Job Properties</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#batch-job-monitoring">Batch Job Monitoring</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#handling-job-failures">Handling Job Failures</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#legacy-orders-api">Legacy: Orders API</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Working with Artifacts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../aspects/">The Datafabric & Aspects</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../async-usage/">Async Usage</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../error-handling/">Error Handling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../agents/">Agent Integration</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../search/">Search (Datalog)</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/ivcap/">IVCAP Client</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/service/">Service</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/job/">Job</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/artifact/">Artifact</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/aspect/">Aspect</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/exceptions/">Exceptions</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Examples</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/services/">Service Discovery</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/jobs/">Job Workflows</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/artifacts/">Artifacts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/aspects/">Aspects & Search</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/async-parallel/">Async & Parallel</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/environment-variables/">Environment Variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/glossary/">Glossary</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../community/contributing/">Contributing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../community/conduct/">Code of Conduct</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">IVCAP Client SDK (Python)</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Guides</li>
+      <li class="breadcrumb-item active">Running Jobs</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/ivcap-works/ivcap-client-sdk-python/edit/main/docs/docs/guides/jobs.md">Edit on ivcap-client-sdk-python</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="running-jobs">Running Jobs<a class="headerlink" href="#running-jobs" title="Permanent link">&para;</a></h1>
+<p>This guide covers submitting jobs to IVCAP services and monitoring their execution.</p>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>A <strong>Job</strong> is the tracked execution of one service invocation. When you call
+<code>service.request_job(data)</code>, the platform:</p>
+<ol>
+<li>Creates a job record (<code>urn:ivcap:job:&lt;uuid&gt;</code>) with status <code>pending</code></li>
+<li>Selects the appropriate dispatcher (Lambda, Batch, Nextflow, or Argo)</li>
+<li>Launches the service container in Kubernetes</li>
+<li>Runs the computation and writes results back to the Datafabric</li>
+</ol>
+<h2 id="job-lifecycle">Job Lifecycle<a class="headerlink" href="#job-lifecycle" title="Permanent link">&para;</a></h2>
+<pre><code>pending → scheduled → executing → succeeded
+                                → failed
+                                → error
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pending</code></td>
+<td>Job record created, waiting for a dispatcher slot</td>
+</tr>
+<tr>
+<td><code>scheduled</code></td>
+<td>Dispatcher has provisioned the execution environment</td>
+</tr>
+<tr>
+<td><code>executing</code></td>
+<td>Service container is processing the job</td>
+</tr>
+<tr>
+<td><code>succeeded</code></td>
+<td>Service reported success; result is available</td>
+</tr>
+<tr>
+<td><code>failed</code></td>
+<td>Service reported failure (business-logic failure)</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td>Platform-level error (infrastructure, timeout, OOM)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="submitting-a-job">Submitting a Job<a class="headerlink" href="#submitting-a-job" title="Permanent link">&para;</a></h2>
+<h3 id="fire-and-check-non-blocking">Fire and check (non-blocking)<a class="headerlink" href="#fire-and-check-non-blocking" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">from ivcap_client.ivcap import IVCAP
+
+ivcap = IVCAP()
+svc = ivcap.get_service(&quot;urn:ivcap:service:&lt;uuid&gt;&quot;)
+
+# Submit — returns immediately (timeout=0)
+job = svc.request_job({&quot;param&quot;: &quot;value&quot;})
+print(f&quot;Created job: {job.id}&quot;)
+</code></pre>
+<h3 id="with-a-pydantic-model">With a Pydantic model<a class="headerlink" href="#with-a-pydantic-model" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">Model = svc.request_model
+req = Model(duration_seconds=6, target_cpu_percent=90)
+job = svc.request_job(req)
+</code></pre>
+<h3 id="blocking-wait-for-completion-server-side">Blocking (wait for completion server-side)<a class="headerlink" href="#blocking-wait-for-completion-server-side" title="Permanent link">&para;</a></h3>
+<p>Pass a <code>timeout</code> in seconds. The API gateway holds the connection open until the job
+completes or the timeout elapses:</p>
+<pre><code class="language-python"># Block up to 120 seconds server-side
+job = svc.request_job(req, timeout=120)
+
+# Block indefinitely
+job = svc.request_job(req, timeout=None)
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> <code>timeout=0</code> (the default) means "submit and return immediately with 202 Accepted".
+The gateway does not wait; poll with <code>job.refresh()</code>.</p>
+</blockquote>
+<h3 id="with-a-raw-json-string-or-io-stream">With a raw JSON string or IO stream<a class="headerlink" href="#with-a-raw-json-string-or-io-stream" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">import io
+
+payload = '{&quot;wordle&quot;: {&quot;maxattempts&quot;: 2, &quot;thinking_time&quot;: 1}}'
+job = svc.request_job(io.StringIO(payload))
+</code></pre>
+<h2 id="polling-for-completion">Polling for Completion<a class="headerlink" href="#polling-for-completion" title="Permanent link">&para;</a></h2>
+<pre><code class="language-python">import time
+from ivcap_client import JobStatus
+
+while not job.finished:
+    time.sleep(5)
+    job.refresh()             # pull latest state from server
+
+print(job.status())           # JobStatus.SUCCEEDED / .FAILED / .ERROR
+print(job.result)             # parsed response body
+</code></pre>
+<p><code>job.finished</code> is <code>True</code> when status is <code>SUCCEEDED</code>, <code>FAILED</code>, or <code>ERROR</code>.</p>
+<h2 id="accessing-the-result">Accessing the Result<a class="headerlink" href="#accessing-the-result" title="Permanent link">&para;</a></h2>
+<pre><code class="language-python">if job.status() == JobStatus.SUCCEEDED:
+    result = job.result      # dict / object
+    print(result)
+</code></pre>
+<blockquote>
+<p><strong>Under the hood:</strong> <code>job.refresh()</code> reads the <code>urn:ivcap:schema.job.2</code> aspect from
+the Datafabric. The result is stored as a <code>urn:ivcap:schema.job-result.1</code> aspect —
+accessing <code>job.result</code> may trigger a second network round-trip.</p>
+</blockquote>
+<h2 id="job-properties">Job Properties<a class="headerlink" href="#job-properties" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Property/Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>job.id</code></td>
+<td>URN of the job</td>
+</tr>
+<tr>
+<td><code>job.status()</code></td>
+<td>Current <code>JobStatus</code> (re-fetched from server)</td>
+</tr>
+<tr>
+<td><code>job.finished</code></td>
+<td><code>True</code> if SUCCEEDED, FAILED, or ERROR</td>
+</tr>
+<tr>
+<td><code>job.succeeded</code></td>
+<td><code>True</code> only if SUCCEEDED</td>
+</tr>
+<tr>
+<td><code>job.result</code></td>
+<td>Result payload (fetched on demand)</td>
+</tr>
+<tr>
+<td><code>job.refresh()</code></td>
+<td>Pull latest state from the server</td>
+</tr>
+<tr>
+<td><code>job.requested_at</code></td>
+<td>When the job was submitted</td>
+</tr>
+<tr>
+<td><code>job.started_at</code></td>
+<td>When execution began</td>
+</tr>
+<tr>
+<td><code>job.finished_at</code></td>
+<td>When execution ended</td>
+</tr>
+</tbody>
+</table>
+<h2 id="batch-job-monitoring">Batch Job Monitoring<a class="headerlink" href="#batch-job-monitoring" title="Permanent link">&para;</a></h2>
+<p>Monitor many jobs simultaneously:</p>
+<pre><code class="language-python">import csv
+from time import sleep, time
+
+jobs = [svc.request_job(req) for _ in range(10)]
+
+with open(&quot;results.csv&quot;, &quot;w&quot;, newline=&quot;&quot;) as f:
+    w = csv.writer(f)
+    start = time()
+    while True:
+        sleep(10)
+        elapsed = int(time() - start)
+        for j in jobs:
+            j.refresh()
+            w.writerow([elapsed, j.id, j.status().value])
+        f.flush()
+        done = sum(1 for j in jobs if j.finished)
+        print(f&quot;Progress: {done}/{len(jobs)}&quot;)
+        if done == len(jobs):
+            break
+</code></pre>
+<h2 id="handling-job-failures">Handling Job Failures<a class="headerlink" href="#handling-job-failures" title="Permanent link">&para;</a></h2>
+<pre><code class="language-python">from ivcap_client import JobStatus
+
+while not job.finished:
+    time.sleep(5)
+    job.refresh()
+
+if job.status() == JobStatus.SUCCEEDED:
+    print(&quot;Done:&quot;, job.result)
+elif job.status() == JobStatus.FAILED:
+    print(&quot;Job reported failure (check service logs)&quot;)
+elif job.status() == JobStatus.ERROR:
+    print(&quot;Platform-level error (infrastructure, OOM, timeout)&quot;)
+</code></pre>
+<h2 id="legacy-orders-api">Legacy: Orders API<a class="headerlink" href="#legacy-orders-api" title="Permanent link">&para;</a></h2>
+<p>Orders are the older mechanism to invoke a service. They are fully supported and share
+the same underlying Datafabric representation:</p>
+<pre><code class="language-python"># Submit via the orders API
+order = service.place_order(msg='Hello World')
+print(order.status())
+
+# List historical orders
+for order in ivcap.list_orders(limit=4):
+    print(order)
+    for name, param in order.parameters.items():
+        print(f&quot;  {name}: {param.value}&quot;)
+</code></pre>
+<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../services/">Discovering Services</a> — Find and inspect services</li>
+<li><a href="../async-usage/">Async Usage</a> — Async job patterns and parallel execution</li>
+<li><a href="../error-handling/">Error Handling</a> — Exception types and retry strategies</li>
+<li><a href="../../api/job/">API Reference: Job</a> — Full <code>Job</code> class documentation</li>
+<li><a href="../../examples/jobs/">Examples: Job Workflows</a> — Ready-to-run scripts</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../services/" class="btn btn-neutral float-left" title="Discovering Services"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../artifacts/" class="btn btn-neutral float-right" title="Working with Artifacts">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2022-2026 CSIRO</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/ivcap-works/ivcap-client-sdk-python" class="fa fa-code-fork" style="color: #fcfcfc"> ivcap-client-sdk-python</a>
+        </span>
+    
+    
+      <span><a href="../services/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../artifacts/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

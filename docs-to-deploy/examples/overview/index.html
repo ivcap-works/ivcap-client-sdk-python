@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="CSIRO" /><link rel="canonical" href="https://ivcap-works.github.io/ivcap-client-sdk-python/examples/overview/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Overview - IVCAP Client SDK (Python)</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Overview";
+        var mkdocs_page_input_path = "examples/overview.md";
+        var mkdocs_page_url = "/ivcap-client-sdk-python/examples/overview/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> IVCAP Client SDK (Python)
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation/">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/quick-start/">Quick Start</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/authentication/">Authentication</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guides</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/services/">Discovering Services</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/jobs/">Running Jobs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/artifacts/">Working with Artifacts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/aspects/">The Datafabric & Aspects</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/async-usage/">Async Usage</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/error-handling/">Error Handling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/agents/">Agent Integration</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/search/">Search (Datalog)</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/ivcap/">IVCAP Client</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/service/">Service</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/job/">Job</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/artifact/">Artifact</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/aspect/">Aspect</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/exceptions/">Exceptions</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Examples</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Overview</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#available-examples">Available Examples</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#service-discovery">Service Discovery</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#job-workflows">Job Workflows</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#artifacts">Artifacts</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#aspects-search">Aspects &amp; Search</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#async-parallel">Async &amp; Parallel</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../services/">Service Discovery</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../jobs/">Job Workflows</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Artifacts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../aspects/">Aspects & Search</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../async-parallel/">Async & Parallel</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/environment-variables/">Environment Variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/glossary/">Glossary</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../community/contributing/">Contributing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../community/conduct/">Code of Conduct</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">IVCAP Client SDK (Python)</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Examples</li>
+      <li class="breadcrumb-item active">Overview</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/ivcap-works/ivcap-client-sdk-python/edit/main/docs/docs/examples/overview.md">Edit on ivcap-client-sdk-python</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="examples-overview">Examples Overview<a class="headerlink" href="#examples-overview" title="Permanent link">&para;</a></h1>
+<p>The <code>examples/</code> directory contains ready-to-run Python scripts that demonstrate the
+most common IVCAP Client SDK use cases.</p>
+<h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
+<p>All examples share a common setup in <code>examples/_common.py</code>:</p>
+<pre><code class="language-python">from dotenv import load_dotenv
+from ivcap_client.ivcap import IVCAP
+
+# Load credentials from .dbg-env (or set environment variables directly)
+load_dotenv('.dbg-env')
+ivcap = IVCAP()
+</code></pre>
+<p>Create a <code>.dbg-env</code> file in the <code>examples/</code> directory:</p>
+<pre><code>IVCAP_URL=https://api.your-ivcap-deployment.net
+IVCAP_JWT=&lt;your-jwt-token&gt;
+</code></pre>
+<p>Then run any example from the <code>examples/</code> directory:</p>
+<pre><code class="language-bash">cd examples/
+python list_services.py
+</code></pre>
+<h2 id="available-examples">Available Examples<a class="headerlink" href="#available-examples" title="Permanent link">&para;</a></h2>
+<h3 id="service-discovery">Service Discovery<a class="headerlink" href="#service-discovery" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>What it demonstrates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../services/"><code>list_services.py</code></a></td>
+<td>List and inspect all available services with their parameters</td>
+</tr>
+<tr>
+<td><a href="../services/"><code>find_service_by_name.py</code></a></td>
+<td>Look up a specific service by name</td>
+</tr>
+</tbody>
+</table>
+<h3 id="job-workflows">Job Workflows<a class="headerlink" href="#job-workflows" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>What it demonstrates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../jobs/"><code>place_order.py</code></a></td>
+<td>Submit a job (via legacy Orders API) and wait for the result</td>
+</tr>
+<tr>
+<td><a href="../jobs/"><code>run_async_job.py</code></a></td>
+<td>Async job submission using <code>request_job_async()</code></td>
+</tr>
+<tr>
+<td><a href="../jobs/"><code>list_orders.py</code></a></td>
+<td>Browse historical job orders</td>
+</tr>
+<tr>
+<td><a href="../jobs/"><code>test_failed_service.py</code></a></td>
+<td>How to detect and handle a failed job</td>
+</tr>
+<tr>
+<td><a href="../jobs/"><code>order_service.py</code></a></td>
+<td>Submit a job and monitor it</td>
+</tr>
+</tbody>
+</table>
+<h3 id="artifacts">Artifacts<a class="headerlink" href="#artifacts" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>What it demonstrates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../artifacts/"><code>upload_artifact.py</code></a></td>
+<td>Upload a local file as an artifact</td>
+</tr>
+<tr>
+<td><a href="../artifacts/"><code>download_artifact.py</code></a></td>
+<td>Download artifact content to disk</td>
+</tr>
+<tr>
+<td><a href="../artifacts/"><code>list_artifacts.py</code></a></td>
+<td>Browse all artifacts with their metadata</td>
+</tr>
+</tbody>
+</table>
+<h3 id="aspects-search">Aspects &amp; Search<a class="headerlink" href="#aspects-search" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>What it demonstrates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../aspects/"><code>search_aspect.py</code></a></td>
+<td>Query the Datafabric by schema and filter</td>
+</tr>
+</tbody>
+</table>
+<h3 id="async-parallel">Async &amp; Parallel<a class="headerlink" href="#async-parallel" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>What it demonstrates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../async-parallel/"><code>batch_stress_test.py</code></a></td>
+<td>Submit many Batch-mode jobs in parallel and monitor</td>
+</tr>
+<tr>
+<td><a href="../async-parallel/"><code>lambda_stress_test.py</code></a></td>
+<td>Stress-test a Lambda-mode service</td>
+</tr>
+<tr>
+<td><a href="../async-parallel/"><code>locus_stress_test.py</code></a></td>
+<td>Parallel job submission with Locust load testing</td>
+</tr>
+<tr>
+<td><a href="../async-parallel/"><code>run_crewai_agent.py</code></a></td>
+<td>Run a CrewAI agent deployed on IVCAP</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../getting-started/quick-start/">Getting Started: Quick Start</a> — A guided walkthrough</li>
+<li><a href="../../guides/overview/">Guides</a> — Deep dives into each feature area</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../api/exceptions/" class="btn btn-neutral float-left" title="Exceptions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../services/" class="btn btn-neutral float-right" title="Service Discovery">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2022-2026 CSIRO</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/ivcap-works/ivcap-client-sdk-python" class="fa fa-code-fork" style="color: #fcfcfc"> ivcap-client-sdk-python</a>
+        </span>
+    
+    
+      <span><a href="../../api/exceptions/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../services/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

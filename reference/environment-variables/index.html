@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="CSIRO" /><link rel="canonical" href="https://ivcap-works.github.io/ivcap-client-sdk-python/reference/environment-variables/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Environment Variables - IVCAP Client SDK (Python)</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Environment Variables";
+        var mkdocs_page_input_path = "reference/environment-variables.md";
+        var mkdocs_page_url = "/ivcap-client-sdk-python/reference/environment-variables/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> IVCAP Client SDK (Python)
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation/">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/quick-start/">Quick Start</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/authentication/">Authentication</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guides</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/services/">Discovering Services</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/jobs/">Running Jobs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/artifacts/">Working with Artifacts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/aspects/">The Datafabric & Aspects</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/async-usage/">Async Usage</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/error-handling/">Error Handling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/agents/">Agent Integration</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../guides/search/">Search (Datalog)</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/ivcap/">IVCAP Client</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/service/">Service</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/job/">Job</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/artifact/">Artifact</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/aspect/">Aspect</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api/exceptions/">Exceptions</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Examples</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/overview/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/services/">Service Discovery</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/jobs/">Job Workflows</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/artifacts/">Artifacts</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/aspects/">Aspects & Search</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../examples/async-parallel/">Async & Parallel</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Environment Variables</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#connection-configuration">Connection Configuration</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ivcap_url">IVCAP_URL</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ivcap_jwt">IVCAP_JWT</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ivcap_base_url">IVCAP_BASE_URL</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ivcap_account_id">IVCAP_ACCOUNT_ID</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#in-a-env-dbg-env-file-recommended-for-development">In a .env / .dbg-env file (recommended for development)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#as-shell-environment-variables">As shell environment variables</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#in-cicd-github-actions">In CI/CD (GitHub Actions)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#variable-priority">Variable Priority</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#security">Security</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../glossary/">Glossary</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../community/contributing/">Contributing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../community/conduct/">Code of Conduct</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">IVCAP Client SDK (Python)</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Reference</li>
+      <li class="breadcrumb-item active">Environment Variables</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/ivcap-works/ivcap-client-sdk-python/edit/main/docs/docs/reference/environment-variables.md">Edit on ivcap-client-sdk-python</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="environment-variables-reference">Environment Variables Reference<a class="headerlink" href="#environment-variables-reference" title="Permanent link">&para;</a></h1>
+<p>Complete reference of all environment variables used by the IVCAP Client SDK.</p>
+<h2 id="connection-configuration">Connection Configuration<a class="headerlink" href="#connection-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="ivcap_url">IVCAP_URL<a class="headerlink" href="#ivcap_url" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Type</strong>: String</li>
+<li><strong>Required</strong>: Yes (external use)</li>
+<li><strong>Description</strong>: Base URL for the IVCAP platform API</li>
+<li><strong>Example</strong>: <code>https://api.your-ivcap-deployment.net</code></li>
+</ul>
+<h3 id="ivcap_jwt">IVCAP_JWT<a class="headerlink" href="#ivcap_jwt" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Type</strong>: String</li>
+<li><strong>Required</strong>: Yes (external use)</li>
+<li><strong>Description</strong>: JWT access token for authentication</li>
+<li><strong>How to get</strong>: <code>ivcap context get access-token</code></li>
+<li><strong>Note</strong>: Tokens expire — refresh as needed</li>
+</ul>
+<h3 id="ivcap_base_url">IVCAP_BASE_URL<a class="headerlink" href="#ivcap_base_url" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Type</strong>: String</li>
+<li><strong>Required</strong>: Only inside platform containers</li>
+<li><strong>Description</strong>: Injected automatically by the IVCAP platform when running inside a service container. Overrides <code>IVCAP_URL</code>. No JWT needed when this is set.</li>
+<li><strong>Example</strong>: <code>http://ivcap.local</code></li>
+</ul>
+<h3 id="ivcap_account_id">IVCAP_ACCOUNT_ID<a class="headerlink" href="#ivcap_account_id" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Type</strong>: String (URN)</li>
+<li><strong>Required</strong>: No</li>
+<li><strong>Description</strong>: Your account URN. Some operations (e.g., listing secrets) require this.</li>
+<li><strong>Example</strong>: <code>urn:ivcap:account:a1b2c3d4-e5f6-...</code></li>
+</ul>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<h3 id="in-a-env-dbg-env-file-recommended-for-development">In a <code>.env</code> / <code>.dbg-env</code> file (recommended for development)<a class="headerlink" href="#in-a-env-dbg-env-file-recommended-for-development" title="Permanent link">&para;</a></h3>
+<pre><code>IVCAP_URL=https://api.your-ivcap-deployment.net
+IVCAP_JWT=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+IVCAP_ACCOUNT_ID=urn:ivcap:account:&lt;uuid&gt;
+</code></pre>
+<p>Load with <code>python-dotenv</code>:</p>
+<pre><code class="language-python">from dotenv import load_dotenv
+from ivcap_client.ivcap import IVCAP
+
+load_dotenv('.dbg-env')
+ivcap = IVCAP()
+</code></pre>
+<h3 id="as-shell-environment-variables">As shell environment variables<a class="headerlink" href="#as-shell-environment-variables" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">export IVCAP_URL=https://api.your-ivcap-deployment.net
+export IVCAP_JWT=$(ivcap context get access-token)
+export IVCAP_ACCOUNT_ID=urn:ivcap:account:&lt;uuid&gt;
+
+python my_script.py
+</code></pre>
+<h3 id="in-cicd-github-actions">In CI/CD (GitHub Actions)<a class="headerlink" href="#in-cicd-github-actions" title="Permanent link">&para;</a></h3>
+<pre><code class="language-yaml">env:
+  IVCAP_URL: ${{ secrets.IVCAP_URL }}
+  IVCAP_JWT: ${{ secrets.IVCAP_JWT }}
+</code></pre>
+<h2 id="variable-priority">Variable Priority<a class="headerlink" href="#variable-priority" title="Permanent link">&para;</a></h2>
+<p>When <code>IVCAP_BASE_URL</code> is set (inside a platform container), it takes precedence over
+<code>IVCAP_URL</code>, and no JWT token is required. This allows the same code to work both
+locally (with <code>IVCAP_URL</code> + <code>IVCAP_JWT</code>) and inside IVCAP (with <code>IVCAP_BASE_URL</code>).</p>
+<h2 id="security">Security<a class="headerlink" href="#security" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Never commit <code>.env</code> or <code>.dbg-env</code> files to version control</li>
+<li>Add them to <code>.gitignore</code>:
+  <code>.env
+  .dbg-env
+  *.env</code></li>
+<li>JWT tokens expire — use <code>ivcap context get access-token</code> to refresh</li>
+<li>In production, use a secrets manager (AWS Secrets Manager, HashiCorp Vault, etc.)</li>
+</ul>
+<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../getting-started/authentication/">Authentication Guide</a> — Detailed setup instructions</li>
+<li><a href="https://github.com/reinventingscience/ivcap-cli">ivcap-cli</a> — Tool for obtaining JWT tokens</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../examples/async-parallel/" class="btn btn-neutral float-left" title="Async & Parallel"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../glossary/" class="btn btn-neutral float-right" title="Glossary">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2022-2026 CSIRO</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/ivcap-works/ivcap-client-sdk-python" class="fa fa-code-fork" style="color: #fcfcfc"> ivcap-client-sdk-python</a>
+        </span>
+    
+    
+      <span><a href="../../examples/async-parallel/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../glossary/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

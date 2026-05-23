@@ -30,8 +30,8 @@ class ProjectCreateRequest:
     """
 
     name: str
-    account_urn: Union[Unset, str] = UNSET
-    parent_project_urn: Union[Unset, str] = UNSET
+    account_urn: Unset | str = UNSET
+    parent_project_urn: Unset | str = UNSET
     properties: Union[Unset, "ProjectProperties"] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -42,7 +42,7 @@ class ProjectCreateRequest:
 
         parent_project_urn = self.parent_project_urn
 
-        properties: Union[Unset, dict[str, Any]] = UNSET
+        properties: Unset | dict[str, Any] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
 
@@ -74,7 +74,7 @@ class ProjectCreateRequest:
         parent_project_urn = d.pop("parent_project_urn", UNSET)
 
         _properties = d.pop("properties", UNSET)
-        properties: Union[Unset, ProjectProperties]
+        properties: Unset | ProjectProperties
         if isinstance(_properties, Unset):
             properties = UNSET
         else:

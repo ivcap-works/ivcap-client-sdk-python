@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -18,7 +18,7 @@ def _get_kwargs(
     body: Any,
     entity_id: str,
     schema: str,
-    policy_id: Union[Unset, str] = UNSET,
+    policy_id: Unset | str = UNSET,
     content_type: str,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
@@ -50,8 +50,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     if response.status_code == 200:
         response_200 = AddMetaRT.from_dict(response.json())
 
@@ -85,8 +85,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -101,9 +103,11 @@ def sync_detailed(
     body: Any,
     entity_id: str,
     schema: str,
-    policy_id: Union[Unset, str] = UNSET,
+    policy_id: Unset | str = UNSET,
     content_type: str,
-) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> Response[
+    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """add metadata
 
      Attach new metadata to an entity.
@@ -147,9 +151,9 @@ def sync(
     body: Any,
     entity_id: str,
     schema: str,
-    policy_id: Union[Unset, str] = UNSET,
+    policy_id: Unset | str = UNSET,
     content_type: str,
-) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """add metadata
 
      Attach new metadata to an entity.
@@ -188,9 +192,11 @@ async def asyncio_detailed(
     body: Any,
     entity_id: str,
     schema: str,
-    policy_id: Union[Unset, str] = UNSET,
+    policy_id: Unset | str = UNSET,
     content_type: str,
-) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> Response[
+    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """add metadata
 
      Attach new metadata to an entity.
@@ -232,9 +238,9 @@ async def asyncio(
     body: Any,
     entity_id: str,
     schema: str,
-    policy_id: Union[Unset, str] = UNSET,
+    policy_id: Unset | str = UNSET,
     content_type: str,
-) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """add metadata
 
      Attach new metadata to an entity.

@@ -1,5 +1,5 @@
 import datetime
-from typing import Any, TypeVar, Union, cast
+from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -37,11 +37,11 @@ class ServiceListItemT:
     controller_schema: str
     href: str
     id: str
-    description: Union[Unset, str] = UNSET
-    name: Union[Unset, str] = UNSET
-    tags: Union[Unset, list[str]] = UNSET
-    valid_from: Union[Unset, datetime.datetime] = UNSET
-    valid_to: Union[Unset, datetime.datetime] = UNSET
+    description: Unset | str = UNSET
+    name: Unset | str = UNSET
+    tags: Unset | list[str] = UNSET
+    valid_from: Unset | datetime.datetime = UNSET
+    valid_to: Unset | datetime.datetime = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -55,15 +55,15 @@ class ServiceListItemT:
 
         name = self.name
 
-        tags: Union[Unset, list[str]] = UNSET
+        tags: Unset | list[str] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
-        valid_from: Union[Unset, str] = UNSET
+        valid_from: Unset | str = UNSET
         if not isinstance(self.valid_from, Unset):
             valid_from = self.valid_from.isoformat()
 
-        valid_to: Union[Unset, str] = UNSET
+        valid_to: Unset | str = UNSET
         if not isinstance(self.valid_to, Unset):
             valid_to = self.valid_to.isoformat()
 
@@ -105,14 +105,14 @@ class ServiceListItemT:
         tags = cast(list[str], d.pop("tags", UNSET))
 
         _valid_from = d.pop("valid-from", UNSET)
-        valid_from: Union[Unset, datetime.datetime]
+        valid_from: Unset | datetime.datetime
         if isinstance(_valid_from, Unset):
             valid_from = UNSET
         else:
             valid_from = isoparse(_valid_from)
 
         _valid_to = d.pop("valid-to", UNSET)
-        valid_to: Union[Unset, datetime.datetime]
+        valid_to: Unset | datetime.datetime
         if isinstance(_valid_to, Unset):
             valid_to = UNSET
         else:

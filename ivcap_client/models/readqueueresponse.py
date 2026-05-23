@@ -1,5 +1,5 @@
 import datetime
-from typing import Any, TypeVar, Union
+from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -36,12 +36,12 @@ class Readqueueresponse:
     created_at: datetime.datetime
     id: str
     name: str
-    bytes_: Union[Unset, int] = UNSET
-    consumer_count: Union[Unset, int] = UNSET
-    description: Union[Unset, str] = UNSET
-    first_time: Union[Unset, datetime.datetime] = UNSET
-    last_time: Union[Unset, datetime.datetime] = UNSET
-    total_messages: Union[Unset, int] = UNSET
+    bytes_: Unset | int = UNSET
+    consumer_count: Unset | int = UNSET
+    description: Unset | str = UNSET
+    first_time: Unset | datetime.datetime = UNSET
+    last_time: Unset | datetime.datetime = UNSET
+    total_messages: Unset | int = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -57,11 +57,11 @@ class Readqueueresponse:
 
         description = self.description
 
-        first_time: Union[Unset, str] = UNSET
+        first_time: Unset | str = UNSET
         if not isinstance(self.first_time, Unset):
             first_time = self.first_time.isoformat()
 
-        last_time: Union[Unset, str] = UNSET
+        last_time: Unset | str = UNSET
         if not isinstance(self.last_time, Unset):
             last_time = self.last_time.isoformat()
 
@@ -107,14 +107,14 @@ class Readqueueresponse:
         description = d.pop("description", UNSET)
 
         _first_time = d.pop("first-time", UNSET)
-        first_time: Union[Unset, datetime.datetime]
+        first_time: Unset | datetime.datetime
         if isinstance(_first_time, Unset):
             first_time = UNSET
         else:
             first_time = isoparse(_first_time)
 
         _last_time = d.pop("last-time", UNSET)
-        last_time: Union[Unset, datetime.datetime]
+        last_time: Unset | datetime.datetime
         if isinstance(_last_time, Unset):
             last_time = UNSET
         else:

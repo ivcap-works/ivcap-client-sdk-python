@@ -1,27 +1,30 @@
 #
-# Copyright (c) 2023-2025 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
+# Copyright (c) 2023-2026 Commonwealth Scientific and Industrial Research Organisation (CSIRO). All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 #
-from __future__ import annotations # postpone evaluation of annotations
-from typing import TYPE_CHECKING, Awaitable, List, Optional
+from __future__ import annotations  # postpone evaluation of annotations
+
+from collections.abc import Awaitable
+from typing import TYPE_CHECKING
 
 from ivcap_client.service import Service
 from ivcap_client.types import Response
+
 if TYPE_CHECKING:
     from ivcap_client.ivcap import IVCAP, URN
 
 import datetime
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
 
-from ivcap_client.api.service import service_job_read
+from ivcap_client.api.service import service_job_list, service_job_read
 from ivcap_client.models.job_list_item import JobListItem
 from ivcap_client.models.job_list_rt import JobListRT
 from ivcap_client.models.parameter_t import ParameterT
 from ivcap_client.utils import BaseIter, Links, _set_fields, _unset, process_error
 
-from enum import Enum
 
 class JobStatus(Enum):
     UNKNOWN = "unknown"
@@ -33,11 +36,12 @@ class JobStatus(Enum):
     ERROR = "error"
 
     @classmethod
-    def from_string(cls, s: str) -> "JobStatus":
+    def from_string(cls, s: str) -> JobStatus:
         try:
             return cls(s)
         except ValueError:
             return cls.UNKNOWN
+
 
 @dataclass
 class Job:
@@ -45,15 +49,15 @@ class Job:
     or executed at a particular IVCAP deployment"""
 
     id: str
-    name: Optional[str] = None
-    request_content_type: Optional[str] = None
-    result_content_type: Optional[str] = None
-    requested_at: Optional[datetime.datetime] = None
-    started_at: Optional[datetime.datetime] = None
-    finished_at: Optional[datetime.datetime] = None
+    name: str | None = None
+    request_content_type: str | None = None
+    result_content_type: str | None = None
+    requested_at: datetime.datetime | None = None
+    started_at: datetime.datetime | None = None
+    finished_at: datetime.datetime | None = None
 
-    policy: Optional[URN] = None
-    account: Optional[URN] = None
+    policy: URN | None = None
+    account: URN | None = None
 
     @classmethod
     def _from_list_item(cls, item: JobListItem, ivcap: IVCAP):
@@ -67,7 +71,7 @@ class Job:
                 "id": response.headers.get("ivcap-job-id"),
                 "service": service,
                 "result-content": response.json(),
-                "result-content-type": response.headers.get("content-type")
+                "result-content-type": response.headers.get("content-type"),
             }
             return cls(service._ivcap, **kwargs)
         elif response.status_code == 202:
@@ -94,7 +98,17 @@ class Job:
         self.__update__(**kwargs)
 
     def __update__(self, **kwargs):
-        p = ["id", "name", "request-content-type", "result-content-type", "requested-at", "started-at", "finished-at", "policy", "account"]
+        p = [
+            "id",
+            "name",
+            "request-content-type",
+            "result-content-type",
+            "requested-at",
+            "started-at",
+            "finished-at",
+            "policy",
+            "account",
+        ]
         hp = ["status", "request-content", "result-content"]
         _set_fields(self, p, hp, kwargs)
         self._status = JobStatus.from_string(self._status)
@@ -132,14 +146,19 @@ class Job:
         await self.refresh_async()
         return self._status in [JobStatus.SUCCEEDED, JobStatus.FAILED, JobStatus.ERROR]
 
-    async def wait_for_finished_async(self, max_wait_time: Optional[float] = None, poll_interval: float = 5.0) -> Awaitable[Job]:
+    async def wait_for_finished_async(
+        self, max_wait_time: float | None = None, poll_interval: float = 5.0
+    ) -> Awaitable[Job]:
         import asyncio
+
         start_time = datetime.now()
         while not await self.finished_async():
             if max_wait_time is not None:
                 elapsed = (datetime.now() - start_time).total_seconds()
                 if elapsed >= max_wait_time:
-                    raise TimeoutError(f"Job '{self.id}' did not finish within {max_wait_time} seconds")
+                    raise TimeoutError(
+                        f"Job '{self.id}' did not finish within {max_wait_time} seconds"
+                    )
             await asyncio.sleep(poll_interval)
         return self
 
@@ -169,7 +188,7 @@ class Job:
 
     def refresh(self) -> Job:
         if self._finished:
-            return self # no need to refresh
+            return self  # no need to refresh
 
         kwargs = self._refresh_top()
         r = service_job_read.sync_detailed(**kwargs)
@@ -177,7 +196,7 @@ class Job:
 
     async def refresh_async(self) -> Awaitable[Job]:
         if self._finished:
-            return self # no need to refresh
+            return self  # no need to refresh
 
         kwargs = self._refresh_top()
         r = await service_job_read.asyncio_detailed(**kwargs)
@@ -194,29 +213,30 @@ class Job:
 
     def _refresh_bottom(self, r: Response) -> Job:
         if r.status_code >= 300:
-            return process_error('place_job', r)
+            return process_error("place_job", r)
         kwargs = r.parsed.to_dict()
         self.__update__(**kwargs)
         return self
 
     def __repr__(self):
-        status = self._status if self._status else '???'
+        status = self._status if self._status else "???"
         return f"<Job id={self.id}, status={status}>"
 
     def __hash__(self):
-        return hash((self.id))
+        return hash(self.id)
+
 
 class JobIter(BaseIter[Job, JobListItem]):
-    def __init__(self, ivcap: 'IVCAP', **kwargs):
+    def __init__(self, ivcap: IVCAP, **kwargs):
         super().__init__(ivcap, **kwargs)
 
     def _next_el(self, el) -> Job:
         return Job._from_list_item(el, self._ivcap)
 
-    def _get_list(self) -> List[JobListItem]:
-        r = job_list.sync_detailed(**self._kwargs)
-        if r.status_code >= 300 :
-            return process_error('artifact_list', r)
+    def _get_list(self) -> list[JobListItem]:
+        r = service_job_list.sync_detailed(**self._kwargs)
+        if r.status_code >= 300:
+            return process_error("artifact_list", r)
         l: JobListRT = r.parsed
         self._links = Links(l.links)
         return l.items

@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -57,10 +57,10 @@ class ListMetaRT:
 
     items: list["MetadataListItemRT"]
     links: list["LinkT"]
-    aspect_path: Union[Unset, str] = UNSET
-    at_time: Union[Unset, datetime.datetime] = UNSET
-    entity: Union[Unset, str] = UNSET
-    schema: Union[Unset, str] = UNSET
+    aspect_path: Unset | str = UNSET
+    at_time: Unset | datetime.datetime = UNSET
+    entity: Unset | str = UNSET
+    schema: Unset | str = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -76,7 +76,7 @@ class ListMetaRT:
 
         aspect_path = self.aspect_path
 
-        at_time: Union[Unset, str] = UNSET
+        at_time: Unset | str = UNSET
         if not isinstance(self.at_time, Unset):
             at_time = self.at_time.isoformat()
 
@@ -126,7 +126,7 @@ class ListMetaRT:
         aspect_path = d.pop("aspect-path", UNSET)
 
         _at_time = d.pop("at-time", UNSET)
-        at_time: Union[Unset, datetime.datetime]
+        at_time: Unset | datetime.datetime
         if isinstance(_at_time, Unset):
             at_time = UNSET
         else:

@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -24,8 +24,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     if response.status_code == 204:
         response_204 = cast(Any, None)
         return response_204
@@ -58,8 +58,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -72,7 +74,9 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """revoke metadata
 
      Retract a previously created statement.
@@ -104,7 +108,7 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """revoke metadata
 
      Retract a previously created statement.
@@ -131,7 +135,9 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """revoke metadata
 
      Retract a previously created statement.
@@ -161,7 +167,7 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """revoke metadata
 
      Retract a previously created statement.

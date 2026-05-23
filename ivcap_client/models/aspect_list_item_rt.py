@@ -38,7 +38,7 @@ class AspectListItemRT:
     schema: str
     valid_from: datetime.datetime
     content: Union[Unset, "AspectListItemRTContent"] = UNSET
-    valid_to: Union[Unset, datetime.datetime] = UNSET
+    valid_to: Unset | datetime.datetime = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -52,11 +52,11 @@ class AspectListItemRT:
 
         valid_from = self.valid_from.isoformat()
 
-        content: Union[Unset, dict[str, Any]] = UNSET
+        content: Unset | dict[str, Any] = UNSET
         if not isinstance(self.content, Unset):
             content = self.content.to_dict()
 
-        valid_to: Union[Unset, str] = UNSET
+        valid_to: Unset | str = UNSET
         if not isinstance(self.valid_to, Unset):
             valid_to = self.valid_to.isoformat()
 
@@ -94,14 +94,14 @@ class AspectListItemRT:
         valid_from = isoparse(d.pop("valid-from"))
 
         _content = d.pop("content", UNSET)
-        content: Union[Unset, AspectListItemRTContent]
+        content: Unset | AspectListItemRTContent
         if isinstance(_content, Unset):
             content = UNSET
         else:
             content = AspectListItemRTContent.from_dict(_content)
 
         _valid_to = d.pop("valid-to", UNSET)
-        valid_to: Union[Unset, datetime.datetime]
+        valid_to: Unset | datetime.datetime
         if isinstance(_valid_to, Unset):
             valid_to = UNSET
         else:

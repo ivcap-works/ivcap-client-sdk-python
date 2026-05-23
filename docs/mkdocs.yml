@@ -1,0 +1,79 @@
+site_name: IVCAP Client SDK (Python)
+site_description: Python SDK for interacting with IVCAP deployments — discover services, run jobs, manage artifacts and metadata
+site_author: CSIRO
+site_url: https://ivcap-works.github.io/ivcap-client-sdk-python/
+repo_url: https://github.com/ivcap-works/ivcap-client-sdk-python
+repo_name: ivcap-client-sdk-python
+edit_uri: edit/main/docs/docs/
+docs_dir: docs
+site_dir: site
+copyright: Copyright &copy; 2022-2026 CSIRO
+
+theme:
+  name: readthedocs
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            docstring_options:
+              returns_multiple_items: false
+            show_source: true
+            show_root_heading: true
+            show_root_full_path: false
+            members_order: source
+            filters:
+              - "!^_"
+            show_if_no_docstring: false
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quick-start.md
+    - Authentication: getting-started/authentication.md
+  - Guides:
+    - Overview: guides/overview.md
+    - Discovering Services: guides/services.md
+    - Running Jobs: guides/jobs.md
+    - Working with Artifacts: guides/artifacts.md
+    - The Datafabric & Aspects: guides/aspects.md
+    - Async Usage: guides/async-usage.md
+    - Error Handling: guides/error-handling.md
+    - Agent Integration: guides/agents.md
+    - Search (Datalog): guides/search.md
+  - API Reference:
+    - Overview: api/overview.md
+    - IVCAP Client: api/ivcap.md
+    - Service: api/service.md
+    - Job: api/job.md
+    - Artifact: api/artifact.md
+    - Aspect: api/aspect.md
+    - Exceptions: api/exceptions.md
+  - Examples:
+    - Overview: examples/overview.md
+    - Service Discovery: examples/services.md
+    - Job Workflows: examples/jobs.md
+    - Artifacts: examples/artifacts.md
+    - Aspects & Search: examples/aspects.md
+    - Async & Parallel: examples/async-parallel.md
+  - Reference:
+    - Environment Variables: reference/environment-variables.md
+    - Glossary: reference/glossary.md
+  - Community:
+    - Contributing: community/contributing.md
+    - Code of Conduct: community/conduct.md

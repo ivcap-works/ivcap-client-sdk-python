@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -17,10 +17,10 @@ def _get_kwargs(
     id: str,
     *,
     body: Any,
-    entity_id: Union[Unset, str] = UNSET,
-    schema: Union[Unset, str] = UNSET,
-    policy_id: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
+    entity_id: Unset | str = UNSET,
+    schema: Unset | str = UNSET,
+    policy_id: Unset | str = UNSET,
+    content_type: Unset | str = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
     if not isinstance(content_type, Unset):
@@ -52,8 +52,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     if response.status_code == 200:
         response_200 = AddMetaRT.from_dict(response.json())
 
@@ -87,8 +87,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -102,11 +104,13 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: Any,
-    entity_id: Union[Unset, str] = UNSET,
-    schema: Union[Unset, str] = UNSET,
-    policy_id: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
-) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    entity_id: Unset | str = UNSET,
+    schema: Unset | str = UNSET,
+    policy_id: Unset | str = UNSET,
+    content_type: Unset | str = UNSET,
+) -> Response[
+    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """update_record metadata
 
      Revoke this record and create a new one with the information provided.
@@ -152,11 +156,11 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: Any,
-    entity_id: Union[Unset, str] = UNSET,
-    schema: Union[Unset, str] = UNSET,
-    policy_id: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
-) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    entity_id: Unset | str = UNSET,
+    schema: Unset | str = UNSET,
+    policy_id: Unset | str = UNSET,
+    content_type: Unset | str = UNSET,
+) -> AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """update_record metadata
 
      Revoke this record and create a new one with the information provided.
@@ -197,11 +201,13 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: Any,
-    entity_id: Union[Unset, str] = UNSET,
-    schema: Union[Unset, str] = UNSET,
-    policy_id: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
-) -> Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    entity_id: Unset | str = UNSET,
+    schema: Unset | str = UNSET,
+    policy_id: Unset | str = UNSET,
+    content_type: Unset | str = UNSET,
+) -> Response[
+    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """update_record metadata
 
      Revoke this record and create a new one with the information provided.
@@ -245,11 +251,11 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: Any,
-    entity_id: Union[Unset, str] = UNSET,
-    schema: Union[Unset, str] = UNSET,
-    policy_id: Union[Unset, str] = UNSET,
-    content_type: Union[Unset, str] = UNSET,
-) -> Optional[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    entity_id: Unset | str = UNSET,
+    schema: Unset | str = UNSET,
+    policy_id: Unset | str = UNSET,
+    content_type: Unset | str = UNSET,
+) -> AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """update_record metadata
 
      Revoke this record and create a new one with the information provided.

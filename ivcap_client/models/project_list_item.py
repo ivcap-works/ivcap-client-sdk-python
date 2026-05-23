@@ -1,5 +1,5 @@
 import datetime
-from typing import Any, TypeVar, Union
+from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -27,24 +27,24 @@ class ProjectListItem:
         urn (Union[Unset, str]): Project URN Example: urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4.
     """
 
-    at_time: Union[Unset, datetime.datetime] = UNSET
-    created_at: Union[Unset, datetime.datetime] = UNSET
-    modified_at: Union[Unset, datetime.datetime] = UNSET
-    name: Union[Unset, str] = UNSET
-    role: Union[Unset, str] = UNSET
-    urn: Union[Unset, str] = UNSET
+    at_time: Unset | datetime.datetime = UNSET
+    created_at: Unset | datetime.datetime = UNSET
+    modified_at: Unset | datetime.datetime = UNSET
+    name: Unset | str = UNSET
+    role: Unset | str = UNSET
+    urn: Unset | str = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        at_time: Union[Unset, str] = UNSET
+        at_time: Unset | str = UNSET
         if not isinstance(self.at_time, Unset):
             at_time = self.at_time.isoformat()
 
-        created_at: Union[Unset, str] = UNSET
+        created_at: Unset | str = UNSET
         if not isinstance(self.created_at, Unset):
             created_at = self.created_at.isoformat()
 
-        modified_at: Union[Unset, str] = UNSET
+        modified_at: Unset | str = UNSET
         if not isinstance(self.modified_at, Unset):
             modified_at = self.modified_at.isoformat()
 
@@ -76,21 +76,21 @@ class ProjectListItem:
     def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
         d = src_dict.copy()
         _at_time = d.pop("at-time", UNSET)
-        at_time: Union[Unset, datetime.datetime]
+        at_time: Unset | datetime.datetime
         if isinstance(_at_time, Unset):
             at_time = UNSET
         else:
             at_time = isoparse(_at_time)
 
         _created_at = d.pop("created_at", UNSET)
-        created_at: Union[Unset, datetime.datetime]
+        created_at: Unset | datetime.datetime
         if isinstance(_created_at, Unset):
             created_at = UNSET
         else:
             created_at = isoparse(_created_at)
 
         _modified_at = d.pop("modified_at", UNSET)
-        modified_at: Union[Unset, datetime.datetime]
+        modified_at: Unset | datetime.datetime
         if isinstance(_modified_at, Unset):
             modified_at = UNSET
         else:

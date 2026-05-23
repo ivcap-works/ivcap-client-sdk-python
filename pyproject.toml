@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ivcap_client"
-version = "0.47.10"
+version = "0.47.11"
 description = "A client library for accessing an IVCAP cluster"
 
 authors = ["Max Ott <max.ott@csiro.au>",
@@ -9,6 +9,14 @@ authors = ["Max Ott <max.ott@csiro.au>",
 readme = "README.md"
 
 include = ["CHANGELOG.md", "ivcap_sdk_client/py.typed"]
+
+[tool.poe.tasks]    # using poethepoet
+lint = "ruff check ."
+format = "ruff format ."
+typecheck = "pyright"
+docs = { help = "Build documentation", shell = "cd docs && mkdocs build" }
+docs-serve = { help = "Serve documentation locally", shell = "cd docs && mkdocs serve" }
+docs-clean = { help = "Clean built documentation", shell = "cd docs && rm -rf site .mkdocs_cache" }
 
 [tool.poetry.dependencies]
 #python = ">=3.10,<4.0"
@@ -48,6 +56,14 @@ pyzmq = ">=27.1.0" # pyzmq is a dependency of locust, older versions wouldn't bu
 jsonschema = "^4.26.0" # needed by nbformat, which is needed by myst-nb, segfaults running earlier versions.
 sqlalchemy = "^2.0.46"
 gevent = "^25.5.1"
+respx = "^0.21.0"
+mkdocs = "^1.5.0"
+mkdocstrings = {version = "^0.25.0", extras = ["python"]}
+mkdocs-autorefs = "^0.5.0"
+griffe = "^0.45.0"
+poethepoet = "^0.42.1"
+ruff = "^0.15.4"
+pyright = "^1.1.396"
 
 [tool.semantic_release]
 version_variable = "pyproject.toml:version" # version location
@@ -60,6 +76,37 @@ upload_to_pypi = false                      # don't auto-upload to PyPI
 remove_dist = false                         # don't remove dists
 patch_without_tag = true                    # patch release by default
 
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+exclude = ["examples", "build", "dist", ".git", "ivcap_client/api", "ivcap_client/models", "ivcap_client/client"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]   # pycodestyle, pyflakes, isort, pyupgrade
+ignore = [
+  "E501",    # Line too long
+  "E402",    # Module level import not at top (valid in pytest.skip context)
+  "E711",    # Comparison to None (style preference)
+  "E721",    # Type comparisons (test assertions use type() == str)
+  "E741",    # Ambiguous variable names like 'l' (used consistently in codebase)
+  "F401",    # Unused imports (many are re-exported in __all__)
+  "F811",    # Redefinition (datetime module vs class is intentional)
+  "F821",    # Undefined names (some are generated code)
+  "UP007",   # Union type annotation style
+  "UP028",   # yield from (style preference)
+  "UP042",   # Class based kwargs (style preference)
+  "UP045",   # Optional annotation style
+]
+
+[tool.ruff.format]
+quote-style = "double"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+# Keep `pytest` runs focused on the unit-test suite.
+# (Without this, pytest may try to collect example scripts under `examples/`.)
+testpaths = ["tests"]
+norecursedirs = ["examples", "build", "dist", ".git"]

@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -26,10 +26,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[AccountResult, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]
-]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> AccountResult | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     if response.status_code == 200:
         response_200 = AccountResult.from_dict(response.json())
 
@@ -67,9 +65,9 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+    *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Union[AccountResult, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]
+    AccountResult | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -84,7 +82,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[
-    Union[AccountResult, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]
+    AccountResult | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
 ]:
     """Get Project's Billing Account
 
@@ -117,9 +115,7 @@ def sync(
     project_urn: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[
-    Union[AccountResult, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]
-]:
+) -> AccountResult | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     """Get Project's Billing Account
 
      Retrieves the project's billing account urn
@@ -147,7 +143,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[
-    Union[AccountResult, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]
+    AccountResult | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
 ]:
     """Get Project's Billing Account
 
@@ -178,9 +174,7 @@ async def asyncio(
     project_urn: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[
-    Union[AccountResult, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]
-]:
+) -> AccountResult | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     """Get Project's Billing Account
 
      Retrieves the project's billing account urn

@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -38,7 +38,7 @@ class MessageList:
     """
 
     messages: list["Publishedmessage"]
-    at_time: Union[Unset, datetime.datetime] = UNSET
+    at_time: Unset | datetime.datetime = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -47,7 +47,7 @@ class MessageList:
             messages_item = messages_item_data.to_dict()
             messages.append(messages_item)
 
-        at_time: Union[Unset, str] = UNSET
+        at_time: Unset | str = UNSET
         if not isinstance(self.at_time, Unset):
             at_time = self.at_time.isoformat()
 
@@ -76,7 +76,7 @@ class MessageList:
             messages.append(messages_item)
 
         _at_time = d.pop("at-time", UNSET)
-        at_time: Union[Unset, datetime.datetime]
+        at_time: Unset | datetime.datetime
         if isinstance(_at_time, Unset):
             at_time = UNSET
         else:

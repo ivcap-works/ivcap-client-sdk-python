@@ -25,14 +25,14 @@ class RefT:
             'application/openapi3+json'}, 'self': 'Perspiciatis quidem.'}.
     """
 
-    id: Union[Unset, str] = UNSET
+    id: Unset | str = UNSET
     links: Union[Unset, "SelfT"] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         id = self.id
 
-        links: Union[Unset, dict[str, Any]] = UNSET
+        links: Unset | dict[str, Any] = UNSET
         if not isinstance(self.links, Unset):
             links = self.links.to_dict()
 
@@ -54,7 +54,7 @@ class RefT:
         id = d.pop("id", UNSET)
 
         _links = d.pop("links", UNSET)
-        links: Union[Unset, SelfT]
+        links: Unset | SelfT
         if isinstance(_links, Unset):
             links = UNSET
         else:

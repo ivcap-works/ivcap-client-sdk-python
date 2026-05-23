@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -26,8 +26,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     if response.status_code == 204:
         response_204 = cast(Any, None)
         return response_204
@@ -64,8 +64,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -79,7 +81,9 @@ def sync_detailed(
     user_urn: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
+]:
     """Remove User Membership
 
      Remove a user from a project.
@@ -114,7 +118,7 @@ def sync(
     user_urn: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     """Remove User Membership
 
      Remove a user from a project.
@@ -144,7 +148,9 @@ async def asyncio_detailed(
     user_urn: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
+]:
     """Remove User Membership
 
      Remove a user from a project.
@@ -177,7 +183,7 @@ async def asyncio(
     user_urn: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     """Remove User Membership
 
      Remove a user from a project.

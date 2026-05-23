@@ -1,6 +1,6 @@
 import datetime
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -18,9 +18,9 @@ from ...types import UNSET, File, Response, Unset
 def _get_kwargs(
     *,
     body: File,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, Any] = UNSET,
+    at_time: Unset | datetime.datetime = UNSET,
+    limit: Unset | int = 10,
+    page: Unset | Any = UNSET,
     content_type: str,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
@@ -28,7 +28,7 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    json_at_time: Union[Unset, str] = UNSET
+    json_at_time: Unset | str = UNSET
     if not isinstance(at_time, Unset):
         json_at_time = at_time.isoformat()
     params["at-time"] = json_at_time
@@ -55,10 +55,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
-]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT | None:
     if response.status_code == 200:
         response_200 = SearchListRT.from_dict(response.json())
 
@@ -96,9 +94,9 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+    *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -112,12 +110,12 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: File,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, Any] = UNSET,
+    at_time: Unset | datetime.datetime = UNSET,
+    limit: Unset | int = 10,
+    page: Unset | Any = UNSET,
     content_type: str,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT
 ]:
     """search search
 
@@ -180,13 +178,11 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: File,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, Any] = UNSET,
+    at_time: Unset | datetime.datetime = UNSET,
+    limit: Unset | int = 10,
+    page: Unset | Any = UNSET,
     content_type: str,
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
-]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT | None:
     """search search
 
      Execute query provided in body and return a list of search result.
@@ -243,12 +239,12 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: File,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, Any] = UNSET,
+    at_time: Unset | datetime.datetime = UNSET,
+    limit: Unset | int = 10,
+    page: Unset | Any = UNSET,
     content_type: str,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT
 ]:
     """search search
 
@@ -309,13 +305,11 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: File,
-    at_time: Union[Unset, datetime.datetime] = UNSET,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, Any] = UNSET,
+    at_time: Unset | datetime.datetime = UNSET,
+    limit: Unset | int = 10,
+    page: Unset | Any = UNSET,
     content_type: str,
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
-]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT | None:
     """search search
 
      Execute query provided in body and return a list of search result.

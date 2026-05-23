@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -36,8 +36,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushStatusT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushStatusT | None:
     if response.status_code == 200:
         response_200 = PushStatusT.from_dict(response.json())
 
@@ -71,8 +71,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushStatusT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushStatusT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -86,7 +88,9 @@ def sync_detailed(
     client: AuthenticatedClient,
     tag: str,
     digest: str,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushStatusT]]:
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushStatusT
+]:
     """status package
 
      check push status of a layer
@@ -121,7 +125,7 @@ def sync(
     client: AuthenticatedClient,
     tag: str,
     digest: str,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushStatusT]]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushStatusT | None:
     """status package
 
      check push status of a layer
@@ -151,7 +155,9 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     tag: str,
     digest: str,
-) -> Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushStatusT]]:
+) -> Response[
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushStatusT
+]:
     """status package
 
      check push status of a layer
@@ -184,7 +190,7 @@ async def asyncio(
     client: AuthenticatedClient,
     tag: str,
     digest: str,
-) -> Optional[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PushStatusT]]:
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PushStatusT | None:
     """status package
 
      check push status of a layer

@@ -1,4 +1,4 @@
-from typing import Any, TypeVar, Union
+from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,9 +20,9 @@ class UserListItem:
         urn (Union[Unset, str]): User URN Example: urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6.
     """
 
-    email: Union[Unset, str] = UNSET
-    role: Union[Unset, str] = UNSET
-    urn: Union[Unset, str] = UNSET
+    email: Unset | str = UNSET
+    role: Unset | str = UNSET
+    urn: Unset | str = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

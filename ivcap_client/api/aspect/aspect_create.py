@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -19,7 +19,7 @@ def _get_kwargs(
     body: AspectcreateBody,
     entity: str,
     schema: str,
-    policy: Union[Unset, str] = UNSET,
+    policy: Unset | str = UNSET,
     content_type: str,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
@@ -51,8 +51,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     if response.status_code == 200:
         response_200 = AspectIDRT.from_dict(response.json())
 
@@ -86,8 +86,10 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[
+    Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -102,9 +104,11 @@ def sync_detailed(
     body: AspectcreateBody,
     entity: str,
     schema: str,
-    policy: Union[Unset, str] = UNSET,
+    policy: Unset | str = UNSET,
     content_type: str,
-) -> Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> Response[
+    Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """create aspect
 
      Attach new aspect to an entity.
@@ -147,9 +151,9 @@ def sync(
     body: AspectcreateBody,
     entity: str,
     schema: str,
-    policy: Union[Unset, str] = UNSET,
+    policy: Unset | str = UNSET,
     content_type: str,
-) -> Optional[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """create aspect
 
      Attach new aspect to an entity.
@@ -187,9 +191,11 @@ async def asyncio_detailed(
     body: AspectcreateBody,
     entity: str,
     schema: str,
-    policy: Union[Unset, str] = UNSET,
+    policy: Unset | str = UNSET,
     content_type: str,
-) -> Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> Response[
+    Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
+]:
     """create aspect
 
      Attach new aspect to an entity.
@@ -230,9 +236,9 @@ async def asyncio(
     body: AspectcreateBody,
     entity: str,
     schema: str,
-    policy: Union[Unset, str] = UNSET,
+    policy: Unset | str = UNSET,
     content_type: str,
-) -> Optional[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]:
+) -> Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """create aspect
 
      Attach new aspect to an entity.

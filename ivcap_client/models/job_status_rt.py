@@ -74,16 +74,16 @@ class JobStatusRT:
     requested_at: datetime.datetime
     service: str
     status: JobStatusRTStatus
-    error_message: Union[Unset, str] = UNSET
-    finished_at: Union[Unset, datetime.datetime] = UNSET
-    name: Union[Unset, str] = UNSET
+    error_message: Unset | str = UNSET
+    finished_at: Unset | datetime.datetime = UNSET
+    name: Unset | str = UNSET
     products: Union[Unset, "PartialProductList2T"] = UNSET
-    request_content: Union[Unset, Any] = UNSET
-    result_content: Union[Unset, Any] = UNSET
-    result_content_type: Union[Unset, str] = UNSET
-    result_content_urn: Union[Unset, str] = UNSET
-    started_at: Union[Unset, datetime.datetime] = UNSET
-    tags: Union[Unset, list[str]] = UNSET
+    request_content: Unset | Any = UNSET
+    result_content: Unset | Any = UNSET
+    result_content_type: Unset | str = UNSET
+    result_content_urn: Unset | str = UNSET
+    started_at: Unset | datetime.datetime = UNSET
+    tags: Unset | list[str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -110,13 +110,13 @@ class JobStatusRT:
 
         error_message = self.error_message
 
-        finished_at: Union[Unset, str] = UNSET
+        finished_at: Unset | str = UNSET
         if not isinstance(self.finished_at, Unset):
             finished_at = self.finished_at.isoformat()
 
         name = self.name
 
-        products: Union[Unset, dict[str, Any]] = UNSET
+        products: Unset | dict[str, Any] = UNSET
         if not isinstance(self.products, Unset):
             products = self.products.to_dict()
 
@@ -128,11 +128,11 @@ class JobStatusRT:
 
         result_content_urn = self.result_content_urn
 
-        started_at: Union[Unset, str] = UNSET
+        started_at: Unset | str = UNSET
         if not isinstance(self.started_at, Unset):
             started_at = self.started_at.isoformat()
 
-        tags: Union[Unset, list[str]] = UNSET
+        tags: Unset | list[str] = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
@@ -206,7 +206,7 @@ class JobStatusRT:
         error_message = d.pop("error-message", UNSET)
 
         _finished_at = d.pop("finished-at", UNSET)
-        finished_at: Union[Unset, datetime.datetime]
+        finished_at: Unset | datetime.datetime
         if isinstance(_finished_at, Unset):
             finished_at = UNSET
         else:
@@ -215,7 +215,7 @@ class JobStatusRT:
         name = d.pop("name", UNSET)
 
         _products = d.pop("products", UNSET)
-        products: Union[Unset, PartialProductList2T]
+        products: Unset | PartialProductList2T
         if isinstance(_products, Unset):
             products = UNSET
         else:
@@ -230,7 +230,7 @@ class JobStatusRT:
         result_content_urn = d.pop("result-content-urn", UNSET)
 
         _started_at = d.pop("started-at", UNSET)
-        started_at: Union[Unset, datetime.datetime]
+        started_at: Unset | datetime.datetime
         if isinstance(_started_at, Unset):
             started_at = UNSET
         else:

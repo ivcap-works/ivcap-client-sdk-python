@@ -36,13 +36,13 @@ class ProjectStatusRT:
     """
 
     urn: str
-    account: Union[Unset, str] = UNSET
-    created_at: Union[Unset, datetime.datetime] = UNSET
-    modified_at: Union[Unset, datetime.datetime] = UNSET
-    name: Union[Unset, str] = UNSET
-    parent: Union[Unset, str] = UNSET
+    account: Unset | str = UNSET
+    created_at: Unset | datetime.datetime = UNSET
+    modified_at: Unset | datetime.datetime = UNSET
+    name: Unset | str = UNSET
+    parent: Unset | str = UNSET
     properties: Union[Unset, "ProjectProperties"] = UNSET
-    status: Union[Unset, ProjectStatusRTStatus] = UNSET
+    status: Unset | ProjectStatusRTStatus = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -50,11 +50,11 @@ class ProjectStatusRT:
 
         account = self.account
 
-        created_at: Union[Unset, str] = UNSET
+        created_at: Unset | str = UNSET
         if not isinstance(self.created_at, Unset):
             created_at = self.created_at.isoformat()
 
-        modified_at: Union[Unset, str] = UNSET
+        modified_at: Unset | str = UNSET
         if not isinstance(self.modified_at, Unset):
             modified_at = self.modified_at.isoformat()
 
@@ -62,11 +62,11 @@ class ProjectStatusRT:
 
         parent = self.parent
 
-        properties: Union[Unset, dict[str, Any]] = UNSET
+        properties: Unset | dict[str, Any] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
 
-        status: Union[Unset, str] = UNSET
+        status: Unset | str = UNSET
         if not isinstance(self.status, Unset):
             status = self.status.value
 
@@ -104,14 +104,14 @@ class ProjectStatusRT:
         account = d.pop("account", UNSET)
 
         _created_at = d.pop("created_at", UNSET)
-        created_at: Union[Unset, datetime.datetime]
+        created_at: Unset | datetime.datetime
         if isinstance(_created_at, Unset):
             created_at = UNSET
         else:
             created_at = isoparse(_created_at)
 
         _modified_at = d.pop("modified_at", UNSET)
-        modified_at: Union[Unset, datetime.datetime]
+        modified_at: Unset | datetime.datetime
         if isinstance(_modified_at, Unset):
             modified_at = UNSET
         else:
@@ -122,14 +122,14 @@ class ProjectStatusRT:
         parent = d.pop("parent", UNSET)
 
         _properties = d.pop("properties", UNSET)
-        properties: Union[Unset, ProjectProperties]
+        properties: Unset | ProjectProperties
         if isinstance(_properties, Unset):
             properties = UNSET
         else:
             properties = ProjectProperties.from_dict(_properties)
 
         _status = d.pop("status", UNSET)
-        status: Union[Unset, ProjectStatusRTStatus]
+        status: Unset | ProjectStatusRTStatus
         if isinstance(_status, Unset):
             status = UNSET
         else:

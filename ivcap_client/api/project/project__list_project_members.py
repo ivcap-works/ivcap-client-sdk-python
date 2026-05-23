@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import httpx
 
@@ -17,9 +17,9 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     urn: str,
     *,
-    role: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
+    role: Unset | str = UNSET,
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
 ) -> dict[str, Any]:
     params: dict[str, Any] = {}
 
@@ -41,10 +41,8 @@ def _get_kwargs(
 
 
 def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, NotImplementedT, ResourceNotFoundT]
-]:
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT | None:
     if response.status_code == 200:
         response_200 = MembersList.from_dict(response.json())
 
@@ -82,9 +80,9 @@ def _parse_response(
 
 
 def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+    *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, NotImplementedT, ResourceNotFoundT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -98,11 +96,11 @@ def sync_detailed(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
+    role: Unset | str = UNSET,
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, NotImplementedT, ResourceNotFoundT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT
 ]:
     """List Project Members
 
@@ -142,12 +140,10 @@ def sync(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, NotImplementedT, ResourceNotFoundT]
-]:
+    role: Unset | str = UNSET,
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT | None:
     """List Project Members
 
      Lists the current members of a project.
@@ -181,11 +177,11 @@ async def asyncio_detailed(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
+    role: Unset | str = UNSET,
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
 ) -> Response[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, NotImplementedT, ResourceNotFoundT]
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT
 ]:
     """List Project Members
 
@@ -223,12 +219,10 @@ async def asyncio(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Union[Unset, str] = UNSET,
-    limit: Union[Unset, int] = 10,
-    page: Union[Unset, str] = UNSET,
-) -> Optional[
-    Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, NotImplementedT, ResourceNotFoundT]
-]:
+    role: Unset | str = UNSET,
+    limit: Unset | int = 10,
+    page: Unset | str = UNSET,
+) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT | None:
     """List Project Members
 
      Lists the current members of a project.

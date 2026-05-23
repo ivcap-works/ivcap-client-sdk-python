@@ -23,8 +23,8 @@ jobs:
       - name: Install package
         run: poetry install
 
-      - name: Test with pytest
-        run: poetry run pytest tests/ --cov=ivcap_sdk_service --cov-report=xml
+      - name: Lint, typecheck, and test
+        run: make check
 
       - name: Use Codecov to track coverage
         uses: codecov/codecov-action@v2
@@ -70,7 +70,7 @@ jobs:
 
       - name: Build documentation
         env:
-          TZ: 'Australia/Sydney'
+          TZ: "Australia/Sydney"
         run: poetry run make html --directory docs/
 
       - name: pushing to gh-pages

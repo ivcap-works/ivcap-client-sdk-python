@@ -1,4 +1,4 @@
-from kubernetes import client, config
+from kubernetes import client, config  # type: ignore[import-untyped]
 
 def get_pod_resource_usage(namespace="default"):
     """

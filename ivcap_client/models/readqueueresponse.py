@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -23,25 +26,25 @@ class Readqueueresponse:
         created_at (datetime.datetime): Timestamp when the queue was created Example: 1996-12-19T16:39:57-08:00.
         id (str): ID Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
         name (str): Name of the queue. Example: events.
-        bytes_ (Union[Unset, int]): Number of bytes in the queue Example: 7409664754160475411.
-        consumer_count (Union[Unset, int]): Number of consumers Example: 8220973392880417104.
-        description (Union[Unset, str]): Description of the queue. Example: Events for the event service.
-        first_time (Union[Unset, datetime.datetime]): Timestamp of the first message in the queue Example:
+        bytes_ (int | Unset): Number of bytes in the queue Example: 7409664754160475411.
+        consumer_count (int | Unset): Number of consumers Example: 8220973392880417104.
+        description (str | Unset): Description of the queue. Example: Events for the event service.
+        first_time (datetime.datetime | Unset): Timestamp of the first message in the queue Example:
             1996-12-19T16:39:57-08:00.
-        last_time (Union[Unset, datetime.datetime]): Timestamp of the last message in the queue Example:
+        last_time (datetime.datetime | Unset): Timestamp of the last message in the queue Example:
             1996-12-19T16:39:57-08:00.
-        total_messages (Union[Unset, int]): Number of messages sent to the queue Example: 18085974087404329575.
+        total_messages (int | Unset): Number of messages sent to the queue Example: 18085974087404329575.
     """
 
     created_at: datetime.datetime
     id: str
     name: str
-    bytes_: Unset | int = UNSET
-    consumer_count: Unset | int = UNSET
-    description: Unset | str = UNSET
-    first_time: Unset | datetime.datetime = UNSET
-    last_time: Unset | datetime.datetime = UNSET
-    total_messages: Unset | int = UNSET
+    bytes_: int | Unset = UNSET
+    consumer_count: int | Unset = UNSET
+    description: str | Unset = UNSET
+    first_time: datetime.datetime | Unset = UNSET
+    last_time: datetime.datetime | Unset = UNSET
+    total_messages: int | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -57,11 +60,11 @@ class Readqueueresponse:
 
         description = self.description
 
-        first_time: Unset | str = UNSET
+        first_time: str | Unset = UNSET
         if not isinstance(self.first_time, Unset):
             first_time = self.first_time.isoformat()
 
-        last_time: Unset | str = UNSET
+        last_time: str | Unset = UNSET
         if not isinstance(self.last_time, Unset):
             last_time = self.last_time.isoformat()
 
@@ -92,8 +95,8 @@ class Readqueueresponse:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         created_at = isoparse(d.pop("created-at"))
 
         id = d.pop("id")
@@ -107,14 +110,14 @@ class Readqueueresponse:
         description = d.pop("description", UNSET)
 
         _first_time = d.pop("first-time", UNSET)
-        first_time: Unset | datetime.datetime
+        first_time: datetime.datetime | Unset
         if isinstance(_first_time, Unset):
             first_time = UNSET
         else:
             first_time = isoparse(_first_time)
 
         _last_time = d.pop("last-time", UNSET)
-        last_time: Unset | datetime.datetime
+        last_time: datetime.datetime | Unset
         if isinstance(_last_time, Unset):
             last_time = UNSET
         else:

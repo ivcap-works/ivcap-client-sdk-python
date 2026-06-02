@@ -18,9 +18,9 @@ from ...types import UNSET, File, Response, Unset
 def _get_kwargs(
     *,
     body: File,
-    at_time: Unset | datetime.datetime = UNSET,
-    limit: Unset | int = 10,
-    page: Unset | Any = UNSET,
+    at_time: datetime.datetime | Unset = UNSET,
+    limit: int | Unset = 10,
+    page: Any | Unset = UNSET,
     content_type: str,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
@@ -28,7 +28,7 @@ def _get_kwargs(
 
     params: dict[str, Any] = {}
 
-    json_at_time: Unset | str = UNSET
+    json_at_time: str | Unset = UNSET
     if not isinstance(at_time, Unset):
         json_at_time = at_time.isoformat()
     params["at-time"] = json_at_time
@@ -45,9 +45,8 @@ def _get_kwargs(
         "params": params,
     }
 
-    _body = body.payload
+    _kwargs["content"] = body.payload
 
-    _kwargs["content"] = _body
     headers["Content-Type"] = "application/datalog+mangle"
 
     _kwargs["headers"] = headers
@@ -56,37 +55,54 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT | None:
+) -> (
+    Any
+    | BadRequestT
+    | InvalidParameterT
+    | InvalidScopesT
+    | NotImplementedT
+    | SearchListRT
+    | UnsupportedContentTypeT
+    | None
+):
     if response.status_code == 200:
         response_200 = SearchListRT.from_dict(response.json())
 
         return response_200
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 415:
         response_415 = UnsupportedContentTypeT.from_dict(response.json())
 
         return response_415
+
     if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -110,9 +126,9 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: File,
-    at_time: Unset | datetime.datetime = UNSET,
-    limit: Unset | int = 10,
-    page: Unset | Any = UNSET,
+    at_time: datetime.datetime | Unset = UNSET,
+    limit: int | Unset = 10,
+    page: Any | Unset = UNSET,
     content_type: str,
 ) -> Response[
     Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT
@@ -122,13 +138,13 @@ def sync_detailed(
      Execute query provided in body and return a list of search result.
 
     Args:
-        at_time (Union[Unset, datetime.datetime]): Return search which where valid at that time
-            [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
-            the queried
+        at_time (datetime.datetime | Unset): Return search which where valid at that time [now]
+            Example: 1996-12-19T16:39:57-08:00.
+        limit (int | Unset): The 'limit' system query option requests the number of items in the
+            queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, Any]): The content of '$page' is returned in the 'links' part of a
-            previous query and
+        page (Any | Unset): The content of '$page' is returned in the 'links' part of a previous
+            query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
         content_type (str): Content-Type header, MUST be of application/json. Example:
@@ -156,7 +172,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]]
+        Response[Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT]
     """
 
     kwargs = _get_kwargs(
@@ -178,23 +194,32 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: File,
-    at_time: Unset | datetime.datetime = UNSET,
-    limit: Unset | int = 10,
-    page: Unset | Any = UNSET,
+    at_time: datetime.datetime | Unset = UNSET,
+    limit: int | Unset = 10,
+    page: Any | Unset = UNSET,
     content_type: str,
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT | None:
+) -> (
+    Any
+    | BadRequestT
+    | InvalidParameterT
+    | InvalidScopesT
+    | NotImplementedT
+    | SearchListRT
+    | UnsupportedContentTypeT
+    | None
+):
     """search search
 
      Execute query provided in body and return a list of search result.
 
     Args:
-        at_time (Union[Unset, datetime.datetime]): Return search which where valid at that time
-            [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
-            the queried
+        at_time (datetime.datetime | Unset): Return search which where valid at that time [now]
+            Example: 1996-12-19T16:39:57-08:00.
+        limit (int | Unset): The 'limit' system query option requests the number of items in the
+            queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, Any]): The content of '$page' is returned in the 'links' part of a
-            previous query and
+        page (Any | Unset): The content of '$page' is returned in the 'links' part of a previous
+            query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
         content_type (str): Content-Type header, MUST be of application/json. Example:
@@ -222,7 +247,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
+        Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT
     """
 
     return sync_detailed(
@@ -239,9 +264,9 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: File,
-    at_time: Unset | datetime.datetime = UNSET,
-    limit: Unset | int = 10,
-    page: Unset | Any = UNSET,
+    at_time: datetime.datetime | Unset = UNSET,
+    limit: int | Unset = 10,
+    page: Any | Unset = UNSET,
     content_type: str,
 ) -> Response[
     Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT
@@ -251,13 +276,13 @@ async def asyncio_detailed(
      Execute query provided in body and return a list of search result.
 
     Args:
-        at_time (Union[Unset, datetime.datetime]): Return search which where valid at that time
-            [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
-            the queried
+        at_time (datetime.datetime | Unset): Return search which where valid at that time [now]
+            Example: 1996-12-19T16:39:57-08:00.
+        limit (int | Unset): The 'limit' system query option requests the number of items in the
+            queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, Any]): The content of '$page' is returned in the 'links' part of a
-            previous query and
+        page (Any | Unset): The content of '$page' is returned in the 'links' part of a previous
+            query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
         content_type (str): Content-Type header, MUST be of application/json. Example:
@@ -285,7 +310,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]]
+        Response[Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT]
     """
 
     kwargs = _get_kwargs(
@@ -305,23 +330,32 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: File,
-    at_time: Unset | datetime.datetime = UNSET,
-    limit: Unset | int = 10,
-    page: Unset | Any = UNSET,
+    at_time: datetime.datetime | Unset = UNSET,
+    limit: int | Unset = 10,
+    page: Any | Unset = UNSET,
     content_type: str,
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT | None:
+) -> (
+    Any
+    | BadRequestT
+    | InvalidParameterT
+    | InvalidScopesT
+    | NotImplementedT
+    | SearchListRT
+    | UnsupportedContentTypeT
+    | None
+):
     """search search
 
      Execute query provided in body and return a list of search result.
 
     Args:
-        at_time (Union[Unset, datetime.datetime]): Return search which where valid at that time
-            [now] Example: 1996-12-19T16:39:57-08:00.
-        limit (Union[Unset, int]): The 'limit' system query option requests the number of items in
-            the queried
+        at_time (datetime.datetime | Unset): Return search which where valid at that time [now]
+            Example: 1996-12-19T16:39:57-08:00.
+        limit (int | Unset): The 'limit' system query option requests the number of items in the
+            queried
                                         collection to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, Any]): The content of '$page' is returned in the 'links' part of a
-            previous query and
+        page (Any | Unset): The content of '$page' is returned in the 'links' part of a previous
+            query and
                                         will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
         content_type (str): Content-Type header, MUST be of application/json. Example:
@@ -349,7 +383,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, SearchListRT, UnsupportedContentTypeT]
+        Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | SearchListRT | UnsupportedContentTypeT
     """
 
     return (

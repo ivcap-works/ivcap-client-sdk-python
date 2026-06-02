@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import datetime
-from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -38,7 +41,7 @@ class JobStatusRT:
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
         id (str): ID Example: urn:ivcap:job:123e4567-e89b-12d3-a456-426614174000.
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
         order (str): Reference to order Example: urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
@@ -47,43 +50,41 @@ class JobStatusRT:
         requested_at (datetime.datetime): DateTime job was submitted Example: 1996-12-19T16:39:57-08:00.
         service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
         status (JobStatusRTStatus): Job status Example: pending.
-        error_message (Union[Unset, str]): Additional error message id status is 'Error' or 'Failed' Example: parameter
-            out of range.
-        finished_at (Union[Unset, datetime.datetime]): DateTime job processing finished Example:
-            1996-12-19T16:39:57-08:00.
-        name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
-        products (Union[Unset, PartialProductList2T]):  Example: {'items': [{'data-href':
+        error_message (str | Unset): Additional error message id status is 'Error' or 'Failed' Example: parameter out of
+            range.
+        finished_at (datetime.datetime | Unset): DateTime job processing finished Example: 1996-12-19T16:39:57-08:00.
+        name (str | Unset): Optional customer provided name Example: Fire risk for Lot2.
+        products (PartialProductList2T | Unset):  Example: {'items': [{'data-href':
             'https:/.../1/artifacts/0000-00001220/blob', 'href': 'https:/.../1/artifacts/0000-00001220', 'mime-type':
             'image/geo+tiff', 'name': 'fire risk map', 'size': 1234963}], 'links': [{'href': 'https://api.ivcap.net/1/....',
             'rel': 'next'}]}.
-        request_content (Union[Unset, Any]): Request content Example: Accusantium maiores placeat assumenda similique..
-        result_content (Union[Unset, Any]): Result content Example: Asperiores quidem nisi unde quibusdam..
-        result_content_type (Union[Unset, str]): Mime type of result Example: application/json.
-        result_content_urn (Union[Unset, str]): Result content URN Example: urn:ivcap:aspect:000.
-        started_at (Union[Unset, datetime.datetime]): DateTime job processing started Example:
-            1996-12-19T16:39:57-08:00.
-        tags (Union[Unset, list[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
+        request_content (Any | Unset): Request content Example: Accusantium maiores placeat assumenda similique..
+        result_content (Any | Unset): Result content Example: Asperiores quidem nisi unde quibusdam..
+        result_content_type (str | Unset): Mime type of result Example: application/json.
+        result_content_urn (str | Unset): Result content URN Example: urn:ivcap:aspect:000.
+        started_at (datetime.datetime | Unset): DateTime job processing started Example: 1996-12-19T16:39:57-08:00.
+        tags (list[str] | Unset): Optional customer provided tags Example: ['tag1', 'tag2'].
     """
 
     account: str
     id: str
-    links: list["LinkT"]
+    links: list[LinkT]
     order: str
     policy: str
     request_content_type: str
     requested_at: datetime.datetime
     service: str
     status: JobStatusRTStatus
-    error_message: Unset | str = UNSET
-    finished_at: Unset | datetime.datetime = UNSET
-    name: Unset | str = UNSET
-    products: Union[Unset, "PartialProductList2T"] = UNSET
-    request_content: Unset | Any = UNSET
-    result_content: Unset | Any = UNSET
-    result_content_type: Unset | str = UNSET
-    result_content_urn: Unset | str = UNSET
-    started_at: Unset | datetime.datetime = UNSET
-    tags: Unset | list[str] = UNSET
+    error_message: str | Unset = UNSET
+    finished_at: datetime.datetime | Unset = UNSET
+    name: str | Unset = UNSET
+    products: PartialProductList2T | Unset = UNSET
+    request_content: Any | Unset = UNSET
+    result_content: Any | Unset = UNSET
+    result_content_type: str | Unset = UNSET
+    result_content_urn: str | Unset = UNSET
+    started_at: datetime.datetime | Unset = UNSET
+    tags: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -110,13 +111,13 @@ class JobStatusRT:
 
         error_message = self.error_message
 
-        finished_at: Unset | str = UNSET
+        finished_at: str | Unset = UNSET
         if not isinstance(self.finished_at, Unset):
             finished_at = self.finished_at.isoformat()
 
         name = self.name
 
-        products: Unset | dict[str, Any] = UNSET
+        products: dict[str, Any] | Unset = UNSET
         if not isinstance(self.products, Unset):
             products = self.products.to_dict()
 
@@ -128,11 +129,11 @@ class JobStatusRT:
 
         result_content_urn = self.result_content_urn
 
-        started_at: Unset | str = UNSET
+        started_at: str | Unset = UNSET
         if not isinstance(self.started_at, Unset):
             started_at = self.started_at.isoformat()
 
-        tags: Unset | list[str] = UNSET
+        tags: list[str] | Unset = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
@@ -175,11 +176,11 @@ class JobStatusRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.partial_product_list_2t import PartialProductList2T
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         account = d.pop("account")
 
         id = d.pop("id")
@@ -206,7 +207,7 @@ class JobStatusRT:
         error_message = d.pop("error-message", UNSET)
 
         _finished_at = d.pop("finished-at", UNSET)
-        finished_at: Unset | datetime.datetime
+        finished_at: datetime.datetime | Unset
         if isinstance(_finished_at, Unset):
             finished_at = UNSET
         else:
@@ -215,7 +216,7 @@ class JobStatusRT:
         name = d.pop("name", UNSET)
 
         _products = d.pop("products", UNSET)
-        products: Unset | PartialProductList2T
+        products: PartialProductList2T | Unset
         if isinstance(_products, Unset):
             products = UNSET
         else:
@@ -230,7 +231,7 @@ class JobStatusRT:
         result_content_urn = d.pop("result-content-urn", UNSET)
 
         _started_at = d.pop("started-at", UNSET)
-        started_at: Unset | datetime.datetime
+        started_at: datetime.datetime | Unset
         if isinstance(_started_at, Unset):
             started_at = UNSET
         else:

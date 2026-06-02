@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -18,33 +21,48 @@ T = TypeVar("T", bound="ProjectListRT")
 class ProjectListRT:
     """
     Example:
-        {'at-time': '1996-12-19T16:39:57-08:00', 'page': 'Eius in asperiores voluptatem ut deserunt.', 'projects':
-            [{'at-time': '1996-12-19T16:39:57-08:00', 'created_at': '2023-03-17T04:57:00Z', 'modified_at':
-            '2023-03-17T04:57:00Z', 'name': 'MineralsCollection', 'role': 'Member', 'urn':
-            'urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4'}, {'at-time': '1996-12-19T16:39:57-08:00',
-            'created_at': '2023-03-17T04:57:00Z', 'modified_at': '2023-03-17T04:57:00Z', 'name': 'MineralsCollection',
-            'role': 'Member', 'urn': 'urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4'}, {'at-time':
+        {'at-time': '1996-12-19T16:39:57-08:00', 'page': 'Ut deserunt corporis voluptatibus optio quibusdam.',
+            'projects': [{'account': 'urn:ivcap:account:146d4ac9-244a-4aee-aa32-a28f4b91e60d', 'at-time':
             '1996-12-19T16:39:57-08:00', 'created_at': '2023-03-17T04:57:00Z', 'modified_at': '2023-03-17T04:57:00Z',
-            'name': 'MineralsCollection', 'role': 'Member', 'urn':
-            'urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4'}]}
+            'name': 'My project name', 'parent': 'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1', 'properties':
+            {'details': 'Created to investigate [objective]'}, 'role': 'Member', 'status': 'disabled', 'urn':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1'}, {'account': 'urn:ivcap:account:146d4ac9-244a-4aee-
+            aa32-a28f4b91e60d', 'at-time': '1996-12-19T16:39:57-08:00', 'created_at': '2023-03-17T04:57:00Z', 'modified_at':
+            '2023-03-17T04:57:00Z', 'name': 'My project name', 'parent':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1', 'properties': {'details': 'Created to investigate
+            [objective]'}, 'role': 'Member', 'status': 'disabled', 'urn':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1'}, {'account': 'urn:ivcap:account:146d4ac9-244a-4aee-
+            aa32-a28f4b91e60d', 'at-time': '1996-12-19T16:39:57-08:00', 'created_at': '2023-03-17T04:57:00Z', 'modified_at':
+            '2023-03-17T04:57:00Z', 'name': 'My project name', 'parent':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1', 'properties': {'details': 'Created to investigate
+            [objective]'}, 'role': 'Member', 'status': 'disabled', 'urn':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1'}]}
 
     Attributes:
-        projects (list['ProjectListItem']):  Example: [{'at-time': '1996-12-19T16:39:57-08:00', 'created_at':
-            '2023-03-17T04:57:00Z', 'modified_at': '2023-03-17T04:57:00Z', 'name': 'MineralsCollection', 'role': 'Member',
-            'urn': 'urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4'}, {'at-time': '1996-12-19T16:39:57-08:00',
-            'created_at': '2023-03-17T04:57:00Z', 'modified_at': '2023-03-17T04:57:00Z', 'name': 'MineralsCollection',
-            'role': 'Member', 'urn': 'urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4'}, {'at-time':
-            '1996-12-19T16:39:57-08:00', 'created_at': '2023-03-17T04:57:00Z', 'modified_at': '2023-03-17T04:57:00Z',
-            'name': 'MineralsCollection', 'role': 'Member', 'urn':
-            'urn:ivcap:project:53cbb715-4ffd-4158-9e55-5d0ae69605a4'}].
-        at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
-        page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if there are no more
-            results Example: Perferendis qui omnis explicabo officiis..
+        projects (list[ProjectListItem]):  Example: [{'account': 'urn:ivcap:account:146d4ac9-244a-4aee-
+            aa32-a28f4b91e60d', 'at-time': '1996-12-19T16:39:57-08:00', 'created_at': '2023-03-17T04:57:00Z', 'modified_at':
+            '2023-03-17T04:57:00Z', 'name': 'My project name', 'parent':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1', 'properties': {'details': 'Created to investigate
+            [objective]'}, 'role': 'Member', 'status': 'disabled', 'urn':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1'}, {'account': 'urn:ivcap:account:146d4ac9-244a-4aee-
+            aa32-a28f4b91e60d', 'at-time': '1996-12-19T16:39:57-08:00', 'created_at': '2023-03-17T04:57:00Z', 'modified_at':
+            '2023-03-17T04:57:00Z', 'name': 'My project name', 'parent':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1', 'properties': {'details': 'Created to investigate
+            [objective]'}, 'role': 'Member', 'status': 'disabled', 'urn':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1'}, {'account': 'urn:ivcap:account:146d4ac9-244a-4aee-
+            aa32-a28f4b91e60d', 'at-time': '1996-12-19T16:39:57-08:00', 'created_at': '2023-03-17T04:57:00Z', 'modified_at':
+            '2023-03-17T04:57:00Z', 'name': 'My project name', 'parent':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1', 'properties': {'details': 'Created to investigate
+            [objective]'}, 'role': 'Member', 'status': 'disabled', 'urn':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1'}].
+        at_time (datetime.datetime | Unset): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
+        page (str | Unset): A pagination token to retrieve the next set of results. Empty if there are no more results
+            Example: Omnis explicabo officiis vel eius in asperiores..
     """
 
-    projects: list["ProjectListItem"]
-    at_time: Unset | datetime.datetime = UNSET
-    page: Unset | str = UNSET
+    projects: list[ProjectListItem]
+    at_time: datetime.datetime | Unset = UNSET
+    page: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -55,7 +73,7 @@ class ProjectListRT:
             )
             projects.append(componentsschemas_project_list_item_collection_item)
 
-        at_time: Unset | str = UNSET
+        at_time: str | Unset = UNSET
         if not isinstance(self.at_time, Unset):
             at_time = self.at_time.isoformat()
 
@@ -76,23 +94,21 @@ class ProjectListRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.project_list_item import ProjectListItem
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         projects = []
         _projects = d.pop("projects")
         for componentsschemas_project_list_item_collection_item_data in _projects:
-            componentsschemas_project_list_item_collection_item = (
-                ProjectListItem.from_dict(
-                    componentsschemas_project_list_item_collection_item_data
-                )
+            componentsschemas_project_list_item_collection_item = ProjectListItem.from_dict(
+                componentsschemas_project_list_item_collection_item_data
             )
 
             projects.append(componentsschemas_project_list_item_collection_item)
 
         _at_time = d.pop("at-time", UNSET)
-        at_time: Unset | datetime.datetime
+        at_time: datetime.datetime | Unset
         if isinstance(_at_time, Unset):
             at_time = UNSET
         else:

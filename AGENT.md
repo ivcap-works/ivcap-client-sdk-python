@@ -1,4 +1,10 @@
-# IVCAP Python Client SDK — Agent Skills Guide
+# AGENT.md — ivcap-client
+
+> **For AI coding assistants (Copilot, Cursor, Claude, Cline, …).** This file is the
+> authoritative quick-reference for using the `ivcap-client` Python SDK.
+> Full docs: <https://ivcap-works.github.io/ivcap-client-sdk-python/>
+> Also available as [`AGENT.md`](https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENT.md)
+> at the repository root.
 
 This document teaches AI agents how to use the `ivcap_client` Python library to interact
 with an [IVCAP](https://github.com/reinventingscience/ivcap-core/) (Intelligent Visual
@@ -28,13 +34,12 @@ Computing and Analytics Platform) deployment.
 6. [Monitoring Jobs](#6-monitoring-jobs)
 7. [Artifacts — Upload & Download](#7-artifacts--upload--download)
 8. [Aspects — Metadata on Any Entity](#8-aspects--metadata-on-any-entity)
-9. [Orders (Legacy API)](#9-orders-legacy-api)
-10. [Secrets](#10-secrets)
-11. [Agents](#11-agents)
-12. [Search (Datalog)](#12-search-datalog)
-13. [Error Handling](#13-error-handling)
-14. [Async Usage](#14-async-usage)
-15. [Environment Variable Reference](#15-environment-variable-reference)
+9. [Secrets](#9-secrets)
+10. [Agents](#10-agents)
+11. [Search (Datalog)](#11-search-datalog)
+12. [Error Handling](#12-error-handling)
+13. [Async Usage](#13-async-usage)
+14. [Environment Variable Reference](#14-environment-variable-reference)
 
 ---
 
@@ -203,7 +208,7 @@ Aspect {
 | `urn:sd-core:schema.ai-tool.1` | Service's Pydantic/JSON input schema (used by `request_model`) |
 
 **You can attach your own aspects** using any schema URN you choose. This is how you
-add domain-specific metadata to any entity — artifact, job, order, or custom entity.
+add domain-specific metadata to any entity — artifact, job, or any custom entity URN.
 
 ### 1.5 URNs — Universal Identifiers
 
@@ -214,7 +219,6 @@ identifier. Information *about* an entity is carried exclusively by its aspects.
 |---|---|
 | Service | `urn:ivcap:service:<uuid>` |
 | Job | `urn:ivcap:job:<uuid>` |
-| Order | `urn:ivcap:order:<uuid>` |
 | Artifact | `urn:ivcap:artifact:<uuid>` |
 | Aspect | `urn:ivcap:aspect:<uuid>` |
 | Account | `urn:ivcap:account:<uuid>` |
@@ -481,13 +485,6 @@ class MyReq(BaseModel):
 job = svc.request_job(MyReq())
 ```
 
-### Submit using a service found by name and `place_order` shorthand
-
-```python
-service = ivcap.get_service_by_name("hello-world-python")
-order = service.place_order(msg='Hello World', background_img='https://example.com/img.png')
-```
-
 ---
 
 ## 6. Monitoring Jobs
@@ -693,8 +690,8 @@ artifact = ivcap.get_artifact("file:///data/input.csv")
 
 ## 8. Aspects — Metadata on Any Entity
 
-Aspects are typed JSON documents attached to any IVCAP entity (artifact, order,
-service, etc.). They form the **Datafabric** — the universal, append-only,
+Aspects are typed JSON documents attached to any IVCAP entity (artifact, service,
+job, etc.). They form the **Datafabric** — the universal, append-only,
 provenance-preserving knowledge graph of the entire IVCAP platform.
 
 As an agent you interact with aspects in two distinct roles:
@@ -703,7 +700,7 @@ As an agent you interact with aspects in two distinct roles:
    all provenance records are all aspects. The `list_aspects()` API lets you query any
    of them.
 2. **Attaching your own domain knowledge** — you can annotate any entity (artifact, job,
-   order, or a custom URN you invent) with any JSON payload under any schema you choose.
+   or any custom entity URN) with any JSON payload under any schema you choose.
    These annotations are first-class platform objects: they are access-controlled,
    versioned, time-stamped, and queryable.
 
@@ -812,45 +809,7 @@ if aspects:
 
 ---
 
-## 9. Orders (Legacy API)
-
-Orders are the older mechanism to invoke a service (predating the Jobs API). They are
-still fully supported and share the same underlying Datafabric representation — an order
-URN (`urn:ivcap:order:<uuid>`) is effectively a correlation ID for a job request.
-
-### List orders
-
-```python
-for order in ivcap.list_orders(limit=4):
-    print(order)
-    for name, param in order.parameters.items():
-        print(f"  {name}: {param.value}")
-```
-
-### Get an order by URN
-
-```python
-order = ivcap.get_order("urn:ivcap:order:<uuid>")
-print(order.status())
-```
-
-### Order properties
-
-| Property/Method | Description |
-|---|---|
-| `order.id` | URN of the order |
-| `order.name` | Name given at creation |
-| `order.service` | URN of the service |
-| `order.parameters` | Dict of `{name: OrderParameter}` |
-| `order.status()` | Refresh and return status string |
-| `order.refresh()` | Pull latest state |
-| `order.ordered_at` | Submission timestamp |
-| `order.started_at` | Execution start |
-| `order.finished_at` | Execution end |
-
----
-
-## 10. Secrets
+## 9. Secrets
 
 ```python
 for secret in ivcap.list_secrets(limit=50):
@@ -859,7 +818,7 @@ for secret in ivcap.list_secrets(limit=50):
 
 ---
 
-## 11. Agents
+## 10. Agents
 
 Agents are services that follow an agent pattern (they wrap a `Service` internally).
 
@@ -878,7 +837,7 @@ print(job.result)
 
 ---
 
-## 12. Search (Datalog)
+## 11. Search (Datalog)
 
 IVCAP supports a Datalog/Mangle query language over its knowledge graph. The search
 service traverses the *emergent graph* formed by URN references embedded in aspect
@@ -887,7 +846,8 @@ job-result aspect to an artifact URN. This allows queries such as "find all arti
 produced by jobs that used this particular service version".
 
 ```python
-query = b"""
+# ivcap.search() expects a str query, not bytes
+query = """
 :- ivcap_artifact(Id, Name, MimeType),
    MimeType = "image/jpeg".
 """
@@ -899,7 +859,7 @@ for r in results.items:
 
 ---
 
-## 13. Error Handling
+## 12. Error Handling
 
 Import exceptions from `ivcap_client.exception`:
 
@@ -908,7 +868,7 @@ from ivcap_client.exception import (
     IvcapError,          # base class for all IVCAP exceptions
     IvcapApiError,       # HTTP error from the API (has .status_code, .operation)
     NotAuthorizedException,  # HTTP 401/403
-    ResourceNotFound,    # service / artifact / order not found
+    ResourceNotFound,    # service or artifact not found
     AmbiguousRequest,    # get_service_by_name matched more than one service
     MissingParameterValue,   # required parameter missing when creating an aspect
 )
@@ -955,7 +915,7 @@ elif job.status() == JobStatus.ERROR:
 
 ---
 
-## 14. Async Usage
+## 13. Async Usage
 
 All major operations have `_async` variants that are compatible with `asyncio`.
 
@@ -1013,14 +973,14 @@ async def run():
 
 ---
 
-## 15. Environment Variable Reference
+## 14. Environment Variable Reference
 
 | Variable | Description | Used by |
 |---|---|---|
 | `IVCAP_URL` | External URL of IVCAP deployment | `IVCAP()` |
 | `IVCAP_BASE_URL` | Internal URL (set by platform inside a job) | `IVCAP()` |
 | `IVCAP_JWT` | JWT bearer token for authentication | `IVCAP()` |
-| `IVCAP_ACCOUNT_ID` | Account URN for order/artifact ownership | Application code |
+| `IVCAP_ACCOUNT_ID` | Account URN for artifact/aspect ownership | Application code |
 
 ---
 

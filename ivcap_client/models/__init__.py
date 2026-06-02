@@ -77,7 +77,9 @@ from .product_t import ProductT
 from .project_base import ProjectBase
 from .project_create_request import ProjectCreateRequest
 from .project_list_item import ProjectListItem
+from .project_list_item_status import ProjectListItemStatus
 from .project_list_rt import ProjectListRT
+from .project_modify_request import ProjectModifyRequest
 from .project_properties import ProjectProperties
 from .project_status_rt import ProjectStatusRT
 from .project_status_rt_status import ProjectStatusRTStatus
@@ -202,7 +204,9 @@ __all__ = (
     "ProjectBase",
     "ProjectCreateRequest",
     "ProjectListItem",
+    "ProjectListItemStatus",
     "ProjectListRT",
+    "ProjectModifyRequest",
     "ProjectProperties",
     "ProjectStatusRT",
     "ProjectStatusRTStatus",

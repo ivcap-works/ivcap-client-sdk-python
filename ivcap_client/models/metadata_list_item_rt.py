@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -23,15 +26,15 @@ class MetadataListItemRT:
         entity (str): Entity ID Example: urn:blue:transect.1.
         id (str): ID Example: urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000.
         schema (str): Schema ID Example: urn:blue:schema.image.
-        aspect (Union[Unset, MetadataListItemRTAspect]): Attached metadata aspect Example: {...}.
-        aspect_context (Union[Unset, str]): If aspectPath was defined, this is what matched the query Example: {...}.
+        aspect (MetadataListItemRTAspect | Unset): Attached metadata aspect Example: {...}.
+        aspect_context (str | Unset): If aspectPath was defined, this is what matched the query Example: {...}.
     """
 
     entity: str
     id: str
     schema: str
-    aspect: Union[Unset, "MetadataListItemRTAspect"] = UNSET
-    aspect_context: Unset | str = UNSET
+    aspect: MetadataListItemRTAspect | Unset = UNSET
+    aspect_context: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -41,7 +44,7 @@ class MetadataListItemRT:
 
         schema = self.schema
 
-        aspect: Unset | dict[str, Any] = UNSET
+        aspect: dict[str, Any] | Unset = UNSET
         if not isinstance(self.aspect, Unset):
             aspect = self.aspect.to_dict()
 
@@ -64,10 +67,10 @@ class MetadataListItemRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.metadata_list_item_rt_aspect import MetadataListItemRTAspect
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         entity = d.pop("entity")
 
         id = d.pop("id")
@@ -75,7 +78,7 @@ class MetadataListItemRT:
         schema = d.pop("schema")
 
         _aspect = d.pop("aspect", UNSET)
-        aspect: Unset | MetadataListItemRTAspect
+        aspect: MetadataListItemRTAspect | Unset
         if isinstance(_aspect, Unset):
             aspect = UNSET
         else:

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -29,27 +32,27 @@ class ParameterDefT:
         description (str):  Example: Qui maiores reprehenderit fuga harum impedit..
         name (str):  Example: Omnis dolor dicta quo..
         type_ (str):  Example: Ex ut consequatur pariatur rerum est et..
-        constant (Union[Unset, bool]):
-        default (Union[Unset, str]):  Example: Id vel voluptas quis autem..
-        label (Union[Unset, str]):  Example: Natus sit..
-        optional (Union[Unset, bool]):
-        options (Union[Unset, list['ParameterOptT']]):  Example: [{'description': 'Quo fugiat non qui nihil voluptatem
-            ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}, {'description': 'Quo fugiat non qui
-            nihil voluptatem ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}].
-        unary (Union[Unset, bool]):  Example: True.
-        unit (Union[Unset, str]):  Example: Voluptatibus doloremque ea molestiae ratione commodi..
+        constant (bool | Unset):
+        default (str | Unset):  Example: Id vel voluptas quis autem..
+        label (str | Unset):  Example: Natus sit..
+        optional (bool | Unset):
+        options (list[ParameterOptT] | Unset):  Example: [{'description': 'Quo fugiat non qui nihil voluptatem ea.',
+            'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}, {'description': 'Quo fugiat non qui nihil
+            voluptatem ea.', 'value': 'Beatae voluptatem reprehenderit enim nisi qui occaecati.'}].
+        unary (bool | Unset):  Example: True.
+        unit (str | Unset):  Example: Voluptatibus doloremque ea molestiae ratione commodi..
     """
 
     description: str
     name: str
     type_: str
-    constant: Unset | bool = UNSET
-    default: Unset | str = UNSET
-    label: Unset | str = UNSET
-    optional: Unset | bool = UNSET
-    options: Unset | list["ParameterOptT"] = UNSET
-    unary: Unset | bool = UNSET
-    unit: Unset | str = UNSET
+    constant: bool | Unset = UNSET
+    default: str | Unset = UNSET
+    label: str | Unset = UNSET
+    optional: bool | Unset = UNSET
+    options: list[ParameterOptT] | Unset = UNSET
+    unary: bool | Unset = UNSET
+    unit: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -67,7 +70,7 @@ class ParameterDefT:
 
         optional = self.optional
 
-        options: Unset | list[dict[str, Any]] = UNSET
+        options: list[dict[str, Any]] | Unset = UNSET
         if not isinstance(self.options, Unset):
             options = []
             for options_item_data in self.options:
@@ -105,10 +108,10 @@ class ParameterDefT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.parameter_opt_t import ParameterOptT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         description = d.pop("description")
 
         name = d.pop("name")
@@ -123,12 +126,14 @@ class ParameterDefT:
 
         optional = d.pop("optional", UNSET)
 
-        options = []
         _options = d.pop("options", UNSET)
-        for options_item_data in _options or []:
-            options_item = ParameterOptT.from_dict(options_item_data)
+        options: list[ParameterOptT] | Unset = UNSET
+        if _options is not UNSET:
+            options = []
+            for options_item_data in _options:
+                options_item = ParameterOptT.from_dict(options_item_data)
 
-            options.append(options_item)
+                options.append(options_item)
 
         unary = d.pop("unary", UNSET)
 

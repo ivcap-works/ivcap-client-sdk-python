@@ -1,8 +1,7 @@
 # IVCAP Client SDK for Python
 
 Welcome to the **IVCAP Client SDK** — a Python library for **interacting with an
-[IVCAP](https://github.com/reinventingscience/ivcap-core/) (Intelligent Visual
-Computing and Analytics Platform) deployment from the outside** — from your laptop,
+[IVCAP](https://github.com/reinventingscience/ivcap-core/) deployment from the outside** — from your laptop,
 a notebook, a data pipeline, or an AI agent.
 
 Use it to:
@@ -32,8 +31,10 @@ for service in ivcap.list_services(limit=10):
     print(service)
 
 # Find a service by name and run a job
+# request_job accepts a Pydantic BaseModel, dataclass, or IO[str] (JSON)
+import io, json
 service = ivcap.get_service_by_name("hello-world-python")
-job = service.request_job({"msg": "Hello, IVCAP!"})
+job = service.request_job(io.StringIO(json.dumps({"msg": "Hello, IVCAP!"})))
 
 # Wait for the result
 while not job.finished:
@@ -81,7 +82,6 @@ The [`examples/`](https://github.com/ivcap-works/ivcap-client-sdk-python/tree/ma
 |---|---|
 | `list_services.py` | List and inspect all available services |
 | `find_service_by_name.py` | Look up a service by name |
-| `place_order.py` | Submit a job and wait for its result |
 | `run_async_job.py` | Async job submission and monitoring |
 | `upload_artifact.py` | Upload a local file as an artifact |
 | `download_artifact.py` | Download artifact content |
@@ -93,7 +93,7 @@ See the **[Examples section](examples/overview.md)** for annotated walkthroughs.
 ## Where to Find Help
 
 - **[API Reference](api/overview.md)** — Complete class and method documentation
-- **[SKILLS.md](https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/SKILLS.md)** — Deep technical reference for developers and AI agents
+- **[AGENT.md](https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENT.md)** — Machine-readable quick-reference for AI agents; also available as the [Agent Guide](agent.md) doc page
 - **GitHub Issues** — [Report bugs or ask questions](https://github.com/ivcap-works/ivcap-client-sdk-python/issues)
 - **[Contributing](community/contributing.md)** — Contributions welcome!
 

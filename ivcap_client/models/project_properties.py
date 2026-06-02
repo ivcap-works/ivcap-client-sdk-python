@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -12,14 +15,14 @@ T = TypeVar("T", bound="ProjectProperties")
 class ProjectProperties:
     """
     Example:
-        {'details': 'Created for to investigate [objective]'}
+        {'details': 'Created to investigate [objective]'}
 
     Attributes:
-        details (Union[Unset, str]): String metadata for detailing the use of this project Example: Created for to
-            investigate [objective].
+        details (str | Unset): String metadata for detailing the use of this project Example: Created to investigate
+            [objective].
     """
 
-    details: Unset | str = UNSET
+    details: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -34,8 +37,8 @@ class ProjectProperties:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         details = d.pop("details", UNSET)
 
         project_properties = cls(

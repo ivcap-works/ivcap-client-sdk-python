@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,21 +23,21 @@ class SelfWithDataT:
             'type': 'application/openapi3+json'}, 'self': 'Qui et in.'}
 
     Attributes:
-        data (Union[Unset, str]):  Example: Sed neque..
-        described_by (Union[Unset, DescribedByT]):  Example: {'href': 'https://api.com/swagger/...', 'type':
+        data (str | Unset):  Example: Sed neque..
+        described_by (DescribedByT | Unset):  Example: {'href': 'https://api.com/swagger/...', 'type':
             'application/openapi3+json'}.
-        self_ (Union[Unset, str]):  Example: Incidunt reprehenderit quaerat laudantium quo aut qui..
+        self_ (str | Unset):  Example: Incidunt reprehenderit quaerat laudantium quo aut qui..
     """
 
-    data: Unset | str = UNSET
-    described_by: Union[Unset, "DescribedByT"] = UNSET
-    self_: Unset | str = UNSET
+    data: str | Unset = UNSET
+    described_by: DescribedByT | Unset = UNSET
+    self_: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         data = self.data
 
-        described_by: Unset | dict[str, Any] = UNSET
+        described_by: dict[str, Any] | Unset = UNSET
         if not isinstance(self.described_by, Unset):
             described_by = self.described_by.to_dict()
 
@@ -53,14 +56,14 @@ class SelfWithDataT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.described_by_t import DescribedByT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         data = d.pop("data", UNSET)
 
         _described_by = d.pop("describedBy", UNSET)
-        described_by: Unset | DescribedByT
+        described_by: DescribedByT | Unset
         if isinstance(_described_by, Unset):
             described_by = UNSET
         else:

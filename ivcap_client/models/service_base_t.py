@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
@@ -24,19 +27,19 @@ class ServiceBaseT:
     Attributes:
         description (str): More detailed description of the service Example: This service ....
         id (str): ID Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        parameters (list['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
+        parameters (list[ParameterDefT]): Service parameter definitions Example: [{'description': 'The name of the
             region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
             'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}].
-        name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
-        tags (Union[Unset, list[str]]): Optional tags defined for service to help in categorising them Example: ['tag1',
+        name (str | Unset): Optional provider provided name Example: Fire risk for Lot2.
+        tags (list[str] | Unset): Optional tags defined for service to help in categorising them Example: ['tag1',
             'tag2'].
     """
 
     description: str
     id: str
-    parameters: list["ParameterDefT"]
-    name: Unset | str = UNSET
-    tags: Unset | list[str] = UNSET
+    parameters: list[ParameterDefT]
+    name: str | Unset = UNSET
+    tags: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -51,7 +54,7 @@ class ServiceBaseT:
 
         name = self.name
 
-        tags: Unset | list[str] = UNSET
+        tags: list[str] | Unset = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
@@ -72,10 +75,10 @@ class ServiceBaseT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.parameter_def_t import ParameterDefT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         description = d.pop("description")
 
         id = d.pop("id")

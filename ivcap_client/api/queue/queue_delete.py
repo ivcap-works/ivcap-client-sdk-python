@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from typing import Any, cast
+from urllib.parse import quote
 
 import httpx
 
@@ -14,9 +15,12 @@ from ...types import Response
 def _get_kwargs(
     id: str,
 ) -> dict[str, Any]:
+
     _kwargs: dict[str, Any] = {
         "method": "delete",
-        "url": f"/1/queues/{id}",
+        "url": "/1/queues/{id}".format(
+            id=quote(str(id), safe=""),
+        ),
     }
 
     return _kwargs
@@ -28,24 +32,30 @@ def _parse_response(
     if response.status_code == 204:
         response_204 = cast(Any, None)
         return response_204
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -73,15 +83,14 @@ def sync_detailed(
      Delete an existing queues.
 
     Args:
-        id (str): ID of queues to update Example: Quis ipsa repudiandae quidem eos vitae
-            quibusdam..
+        id (str): ID of queues to update Example: Dolore qui dolores est dolorum..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidScopesT, NotImplementedT]]
+        Response[Any | BadRequestT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -105,15 +114,14 @@ def sync(
      Delete an existing queues.
 
     Args:
-        id (str): ID of queues to update Example: Quis ipsa repudiandae quidem eos vitae
-            quibusdam..
+        id (str): ID of queues to update Example: Dolore qui dolores est dolorum..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidScopesT, NotImplementedT]
+        Any | BadRequestT | InvalidScopesT | NotImplementedT
     """
 
     return sync_detailed(
@@ -132,15 +140,14 @@ async def asyncio_detailed(
      Delete an existing queues.
 
     Args:
-        id (str): ID of queues to update Example: Quis ipsa repudiandae quidem eos vitae
-            quibusdam..
+        id (str): ID of queues to update Example: Dolore qui dolores est dolorum..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidScopesT, NotImplementedT]]
+        Response[Any | BadRequestT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -162,15 +169,14 @@ async def asyncio(
      Delete an existing queues.
 
     Args:
-        id (str): ID of queues to update Example: Quis ipsa repudiandae quidem eos vitae
-            quibusdam..
+        id (str): ID of queues to update Example: Dolore qui dolores est dolorum..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidScopesT, NotImplementedT]
+        Any | BadRequestT | InvalidScopesT | NotImplementedT
     """
 
     return (

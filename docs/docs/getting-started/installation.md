@@ -45,11 +45,13 @@ You should see the version number printed.
 If you plan to contribute or build documentation locally:
 
 ```bash
-# Development tools (includes Sphinx for API docs)
+# Development tools
 poetry install --with dev
+```
 
-# Documentation tools (MkDocs)
-pip install -r docs/requirements-docs.txt
+```bash
+# Documentation tools (MkDocs) — run from the project root
+pip install -r docs/requirements.txt
 ```
 
 ## Next Steps

@@ -177,6 +177,7 @@ artifact = ivcap.get_artifact("file:///data/input.csv")
 ### Upload data → run service → download result
 
 ```python
+import io, json
 ivcap = IVCAP()
 
 # Upload input
@@ -184,7 +185,7 @@ artifact = ivcap.upload_artifact(name="input-image", file_path="/data/photo.jpg"
 
 # Submit job
 service = ivcap.get_service_by_name("my-image-processor")
-job = service.request_job({"image": artifact.id, "threshold": 0.8})
+job = service.request_job(io.StringIO(json.dumps({"image": artifact.id, "threshold": 0.8})))
 
 # Wait for result
 import time

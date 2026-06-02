@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -24,19 +27,19 @@ class MembersList:
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}], 'page': 'Adipisci in similique qui cumque in.'}
 
     Attributes:
-        members (list['UserListItem']): Members Example: [{'email': 'example@domain.com', 'role': 'Owner', 'urn':
+        members (list[UserListItem]): Members Example: [{'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}, {'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}, {'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}, {'email': 'example@domain.com', 'role': 'Owner', 'urn':
             'urn:ivcap:user:0190804b-a48c-758e-839b-8ee2ed25aec6'}].
-        at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
-        page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if there are no more
-            results Example: Quae hic dignissimos..
+        at_time (datetime.datetime | Unset): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
+        page (str | Unset): A pagination token to retrieve the next set of results. Empty if there are no more results
+            Example: Quae hic dignissimos..
     """
 
-    members: list["UserListItem"]
-    at_time: Unset | datetime.datetime = UNSET
-    page: Unset | str = UNSET
+    members: list[UserListItem]
+    at_time: datetime.datetime | Unset = UNSET
+    page: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -45,7 +48,7 @@ class MembersList:
             members_item = members_item_data.to_dict()
             members.append(members_item)
 
-        at_time: Unset | str = UNSET
+        at_time: str | Unset = UNSET
         if not isinstance(self.at_time, Unset):
             at_time = self.at_time.isoformat()
 
@@ -66,10 +69,10 @@ class MembersList:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.user_list_item import UserListItem
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         members = []
         _members = d.pop("members")
         for members_item_data in _members:
@@ -78,7 +81,7 @@ class MembersList:
             members.append(members_item)
 
         _at_time = d.pop("at-time", UNSET)
-        at_time: Unset | datetime.datetime
+        at_time: datetime.datetime | Unset
         if isinstance(_at_time, Unset):
             at_time = UNSET
         else:

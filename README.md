@@ -57,8 +57,10 @@ for service in ivcap.list_services(limit=10):
     print(service)
 
 # Find a service by name and run a job
+# request_job accepts a Pydantic BaseModel, dataclass, or IO[str] (JSON)
+import io, json
 service = ivcap.get_service_by_name("hello-world-python")
-job = service.request_job({"msg": "Hello, IVCAP!"})
+job = service.request_job(io.StringIO(json.dumps({"msg": "Hello, IVCAP!"})))
 
 # Wait for the result
 while not job.finished:
@@ -118,8 +120,9 @@ ivcap = IVCAP()
 artifact = ivcap.upload_artifact(name="input-image", file_path="/data/photo.jpg")
 
 # Find the service and submit a job
+import io, json
 service = ivcap.get_service_by_name("my-image-processor")
-job = service.request_job({"image": artifact.id, "threshold": 0.8})
+job = service.request_job(io.StringIO(json.dumps({"image": artifact.id, "threshold": 0.8})))
 
 # Poll until done
 import time
@@ -176,13 +179,11 @@ common use cases:
 |---|---|
 | [`list_services.py`](./examples/list_services.py) | List and inspect all available services |
 | [`find_service_by_name.py`](./examples/find_service_by_name.py) | Look up a service by name |
-| [`place_order.py`](./examples/place_order.py) | Submit a job and wait for its result |
 | [`run_async_job.py`](./examples/run_async_job.py) | Async job submission and monitoring |
 | [`upload_artifact.py`](./examples/upload_artifact.py) | Upload a local file as an artifact |
 | [`download_artifact.py`](./examples/download_artifact.py) | Download artifact content |
 | [`list_artifacts.py`](./examples/list_artifacts.py) | Browse artifacts in the platform |
 | [`search_aspect.py`](./examples/search_aspect.py) | Query the Datafabric for aspects |
-| [`list_orders.py`](./examples/list_orders.py) | Browse historical orders |
 | [`run_crewai_agent.py`](./examples/run_crewai_agent.py) | Run a CrewAI agent via IVCAP |
 | [`batch_stress_test.py`](./examples/batch_stress_test.py) | Submit and monitor many parallel jobs |
 | [`lambda_stress_test.py`](./examples/lambda_stress_test.py) | Stress-test a Lambda-mode service |
@@ -194,7 +195,7 @@ All examples read credentials from a `.env` file (or environment variables). See
 
 ## Going Deeper
 
-**[`SKILLS.md`](./SKILLS.md)** is a comprehensive reference guide — written primarily for
+**[`AGENT.md`](./AGENT.md)** is a comprehensive reference guide — written primarily for
 AI agents, but equally useful for developers who want the full picture. It covers:
 
 - A detailed explanation of every platform concept (Services, Jobs, Artifacts, Aspects,
@@ -206,7 +207,7 @@ AI agents, but equally useful for developers who want the full picture. It cover
 - Environment variable reference
 
 If you want to understand *why* the API works the way it does, or need exhaustive
-parameter documentation, start with `SKILLS.md`.
+parameter documentation, start with `AGENT.md`.
 
 ---
 

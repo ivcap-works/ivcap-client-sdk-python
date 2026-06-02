@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -23,24 +26,23 @@ class ProductT:
             quis.'}
 
     Attributes:
-        etag (Union[Unset, str]):  Example: Ut quasi minus et ad eius commodi..
-        id (Union[Unset, str]):  Example: Assumenda dolore..
-        links (Union[Unset, SelfWithDataT]):  Example: {'data': 'Assumenda voluptatem cupiditate doloribus.',
-            'describedBy': {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Qui et
-            in.'}.
-        mime_type (Union[Unset, str]):  Example: Placeat tenetur qui libero et iusto et..
-        name (Union[Unset, str]):  Example: Assumenda dolorem eveniet illo repellendus atque ad..
-        size (Union[Unset, int]):  Example: 1903424111964933358.
-        status (Union[Unset, str]):  Example: Adipisci atque itaque aut nostrum maiores..
+        etag (str | Unset):  Example: Ut quasi minus et ad eius commodi..
+        id (str | Unset):  Example: Assumenda dolore..
+        links (SelfWithDataT | Unset):  Example: {'data': 'Assumenda voluptatem cupiditate doloribus.', 'describedBy':
+            {'href': 'https://api.com/swagger/...', 'type': 'application/openapi3+json'}, 'self': 'Qui et in.'}.
+        mime_type (str | Unset):  Example: Placeat tenetur qui libero et iusto et..
+        name (str | Unset):  Example: Assumenda dolorem eveniet illo repellendus atque ad..
+        size (int | Unset):  Example: 1903424111964933358.
+        status (str | Unset):  Example: Adipisci atque itaque aut nostrum maiores..
     """
 
-    etag: Unset | str = UNSET
-    id: Unset | str = UNSET
-    links: Union[Unset, "SelfWithDataT"] = UNSET
-    mime_type: Unset | str = UNSET
-    name: Unset | str = UNSET
-    size: Unset | int = UNSET
-    status: Unset | str = UNSET
+    etag: str | Unset = UNSET
+    id: str | Unset = UNSET
+    links: SelfWithDataT | Unset = UNSET
+    mime_type: str | Unset = UNSET
+    name: str | Unset = UNSET
+    size: int | Unset = UNSET
+    status: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -48,7 +50,7 @@ class ProductT:
 
         id = self.id
 
-        links: Unset | dict[str, Any] = UNSET
+        links: dict[str, Any] | Unset = UNSET
         if not isinstance(self.links, Unset):
             links = self.links.to_dict()
 
@@ -81,16 +83,16 @@ class ProductT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.self_with_data_t import SelfWithDataT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         etag = d.pop("etag", UNSET)
 
         id = d.pop("id", UNSET)
 
         _links = d.pop("links", UNSET)
-        links: Unset | SelfWithDataT
+        links: SelfWithDataT | Unset
         if isinstance(_links, Unset):
             links = UNSET
         else:

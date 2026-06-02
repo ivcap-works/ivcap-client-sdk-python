@@ -49,7 +49,7 @@ Aspect {
 
 ## Adding an Aspect
 
-Attach typed metadata to any entity URN (artifact, job, order, or a custom URN):
+Attach typed metadata to any entity URN (artifact, job, or any custom URN):
 
 ```python
 from ivcap_client.ivcap import IVCAP

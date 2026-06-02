@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -23,24 +26,21 @@ class XServiceListItem:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
         href (str):  Example: https://api.ivcap.net/1/services/....
         id (str): ID Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        banner (Union[Unset, str]): Optional banner image for this service Example: urn:.....
-        description (Union[Unset, str]): Optional description of the service Example: Some lengthy description of fire
-            risk.
-        name (Union[Unset, str]): Optional customer provided name Example: Fire risk for region.
-        policy (Union[Unset, str]): Reference to policy used Example:
-            urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
-        published_at (Union[Unset, datetime.datetime]): time this service was published Example:
-            1996-12-19T16:39:57-08:00.
+        banner (str | Unset): Optional banner image for this service Example: urn:.....
+        description (str | Unset): Optional description of the service Example: Some lengthy description of fire risk.
+        name (str | Unset): Optional customer provided name Example: Fire risk for region.
+        policy (str | Unset): Reference to policy used Example: urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
+        published_at (datetime.datetime | Unset): time this service was published Example: 1996-12-19T16:39:57-08:00.
     """
 
     account: str
     href: str
     id: str
-    banner: Unset | str = UNSET
-    description: Unset | str = UNSET
-    name: Unset | str = UNSET
-    policy: Unset | str = UNSET
-    published_at: Unset | datetime.datetime = UNSET
+    banner: str | Unset = UNSET
+    description: str | Unset = UNSET
+    name: str | Unset = UNSET
+    policy: str | Unset = UNSET
+    published_at: datetime.datetime | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -58,7 +58,7 @@ class XServiceListItem:
 
         policy = self.policy
 
-        published_at: Unset | str = UNSET
+        published_at: str | Unset = UNSET
         if not isinstance(self.published_at, Unset):
             published_at = self.published_at.isoformat()
 
@@ -85,8 +85,8 @@ class XServiceListItem:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         account = d.pop("account")
 
         href = d.pop("href")
@@ -102,7 +102,7 @@ class XServiceListItem:
         policy = d.pop("policy", UNSET)
 
         _published_at = d.pop("published-at", UNSET)
-        published_at: Unset | datetime.datetime
+        published_at: datetime.datetime | Unset
         if isinstance(_published_at, Unset):
             published_at = UNSET
         else:

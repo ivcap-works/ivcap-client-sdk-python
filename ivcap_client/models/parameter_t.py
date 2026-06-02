@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -15,12 +18,12 @@ class ParameterT:
         {'name': 'Ducimus explicabo aspernatur autem quas autem ad.', 'value': 'Laboriosam omnis.'}
 
     Attributes:
-        name (Union[Unset, str]):  Example: Praesentium enim aut..
-        value (Union[Unset, str]):  Example: Et qui ex tempora omnis ratione fuga..
+        name (str | Unset):  Example: Praesentium enim aut..
+        value (str | Unset):  Example: Et qui ex tempora omnis ratione fuga..
     """
 
-    name: Unset | str = UNSET
-    value: Unset | str = UNSET
+    name: str | Unset = UNSET
+    value: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -39,8 +42,8 @@ class ParameterT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         name = d.pop("name", UNSET)
 
         value = d.pop("value", UNSET)

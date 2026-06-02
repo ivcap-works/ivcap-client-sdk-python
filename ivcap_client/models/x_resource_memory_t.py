@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -17,13 +20,12 @@ class XResourceMemoryT:
             {'limit': 'Dolor odit rerum quia.', 'request': 'Voluptatem facilis libero voluptatem quis quam.'}
 
         Attributes:
-            limit (Union[Unset, str]): minimal requirements [system limit] Example: Nulla quo ut asperiores temporibus
-                quia..
-            request (Union[Unset, str]): minimal requirements [0] Example: Voluptas consectetur quia sint aut odit..
+            limit (str | Unset): minimal requirements [system limit] Example: Nulla quo ut asperiores temporibus quia..
+            request (str | Unset): minimal requirements [0] Example: Voluptas consectetur quia sint aut odit..
     """
 
-    limit: Unset | str = UNSET
-    request: Unset | str = UNSET
+    limit: str | Unset = UNSET
+    request: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -42,8 +44,8 @@ class XResourceMemoryT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         limit = d.pop("limit", UNSET)
 
         request = d.pop("request", UNSET)

@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,35 +19,37 @@ T = TypeVar("T", bound="ProjectCreateRequest")
 class ProjectCreateRequest:
     """
     Example:
-        {'account_urn': 'urn:ivcap:account:146d4ac9-244a-4aee-aa32-a28f4b91e60d', 'name': 'My project name',
-            'parent_project_urn': 'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1', 'properties': {'details':
-            'Created for to investigate [objective]'}}
+        {'account': 'urn:ivcap:account:146d4ac9-244a-4aee-aa32-a28f4b91e60d', 'name': 'My project name', 'parent':
+            'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1', 'properties': {'details': 'Created to investigate
+            [objective]'}, 'urn': 'urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1'}
 
     Attributes:
         name (str): Project name Example: My project name.
-        account_urn (Union[Unset, str]): URN of the billing account Example: urn:ivcap:account:146d4ac9-244a-4aee-
-            aa32-a28f4b91e60d.
-        parent_project_urn (Union[Unset, str]): URN of the parent project Example:
-            urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1.
-        properties (Union[Unset, ProjectProperties]):  Example: {'details': 'Created for to investigate [objective]'}.
+        account (str | Unset): Account URN Example: urn:ivcap:account:146d4ac9-244a-4aee-aa32-a28f4b91e60d.
+        parent (str | Unset): Parent Project URN Example: urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1.
+        properties (ProjectProperties | Unset):  Example: {'details': 'Created to investigate [objective]'}.
+        urn (str | Unset): Project URN Example: urn:ivcap:project:8a82775b-27d9-4635-b006-7ef5553656d1.
     """
 
     name: str
-    account_urn: Unset | str = UNSET
-    parent_project_urn: Unset | str = UNSET
-    properties: Union[Unset, "ProjectProperties"] = UNSET
+    account: str | Unset = UNSET
+    parent: str | Unset = UNSET
+    properties: ProjectProperties | Unset = UNSET
+    urn: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         name = self.name
 
-        account_urn = self.account_urn
+        account = self.account
 
-        parent_project_urn = self.parent_project_urn
+        parent = self.parent
 
-        properties: Unset | dict[str, Any] = UNSET
+        properties: dict[str, Any] | Unset = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
+
+        urn = self.urn
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -53,38 +58,43 @@ class ProjectCreateRequest:
                 "name": name,
             }
         )
-        if account_urn is not UNSET:
-            field_dict["account_urn"] = account_urn
-        if parent_project_urn is not UNSET:
-            field_dict["parent_project_urn"] = parent_project_urn
+        if account is not UNSET:
+            field_dict["account"] = account
+        if parent is not UNSET:
+            field_dict["parent"] = parent
         if properties is not UNSET:
             field_dict["properties"] = properties
+        if urn is not UNSET:
+            field_dict["urn"] = urn
 
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.project_properties import ProjectProperties
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         name = d.pop("name")
 
-        account_urn = d.pop("account_urn", UNSET)
+        account = d.pop("account", UNSET)
 
-        parent_project_urn = d.pop("parent_project_urn", UNSET)
+        parent = d.pop("parent", UNSET)
 
         _properties = d.pop("properties", UNSET)
-        properties: Unset | ProjectProperties
+        properties: ProjectProperties | Unset
         if isinstance(_properties, Unset):
             properties = UNSET
         else:
             properties = ProjectProperties.from_dict(_properties)
 
+        urn = d.pop("urn", UNSET)
+
         project_create_request = cls(
             name=name,
-            account_urn=account_urn,
-            parent_project_urn=parent_project_urn,
+            account=account,
+            parent=parent,
             properties=properties,
+            urn=urn,
         )
 
         project_create_request.additional_properties = d

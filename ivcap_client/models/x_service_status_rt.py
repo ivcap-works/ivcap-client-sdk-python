@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
@@ -29,26 +32,26 @@ class XServiceStatusRT:
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
         id (str): ID Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
-        parameters (list['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
+        parameters (list[ParameterDefT]): Service parameter definitions Example: [{'description': 'The name of the
             region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
             'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}].
         status (XServiceStatusRTStatus): Service status Example: inactive.
-        description (Union[Unset, str]): More detailed description of the service Example: This service ....
-        name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
-        tags (Union[Unset, list[str]]): Optional provider provided tags Example: ['tag1', 'tag2'].
+        description (str | Unset): More detailed description of the service Example: This service ....
+        name (str | Unset): Optional provider provided name Example: Fire risk for Lot2.
+        tags (list[str] | Unset): Optional provider provided tags Example: ['tag1', 'tag2'].
     """
 
     account: str
     id: str
-    links: list["LinkT"]
-    parameters: list["ParameterDefT"]
+    links: list[LinkT]
+    parameters: list[ParameterDefT]
     status: XServiceStatusRTStatus
-    description: Unset | str = UNSET
-    name: Unset | str = UNSET
-    tags: Unset | list[str] = UNSET
+    description: str | Unset = UNSET
+    name: str | Unset = UNSET
+    tags: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -72,7 +75,7 @@ class XServiceStatusRT:
 
         name = self.name
 
-        tags: Unset | list[str] = UNSET
+        tags: list[str] | Unset = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
@@ -97,11 +100,11 @@ class XServiceStatusRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.parameter_def_t import ParameterDefT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         account = d.pop("account")
 
         id = d.pop("id")

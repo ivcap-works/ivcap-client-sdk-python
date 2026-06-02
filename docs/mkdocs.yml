@@ -10,7 +10,18 @@ site_dir: site
 copyright: Copyright &copy; 2022-2026 CSIRO
 
 theme:
-  name: readthedocs
+  name: material
+  logo: img/logo.svg
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - content.code.copy
 
 plugins:
   - search
@@ -18,6 +29,7 @@ plugins:
       default_handler: python
       handlers:
         python:
+          paths: [".."]
           options:
             docstring_style: google
             docstring_options:
@@ -29,6 +41,43 @@ plugins:
             filters:
               - "!^_"
             show_if_no_docstring: false
+  - llmstxt-md:
+      enable_markdown_urls: true
+      enable_llms_txt: true
+      enable_llms_full: true
+      markdown_description: |
+        ivcap_client is a Python SDK for interacting with IVCAP
+        (Intelligent Visual Computing and Analytics Platform) deployments.
+        Use it to discover services, submit jobs, manage artifacts, read/write
+        Aspects in the DataFabric, and orchestrate multi-agent pipelines.
+        All list methods return iterators; authentication is via JWT token or environment variables.
+      sections:
+        Getting Started:
+          - getting-started/installation.md
+          - getting-started/quick-start.md
+          - getting-started/authentication.md
+        Guides:
+          - guides/services.md
+          - guides/jobs.md
+          - guides/artifacts.md
+          - guides/aspects.md
+          - guides/async-usage.md
+          - guides/error-handling.md
+          - guides/agents.md
+          - guides/search.md
+        API Reference:
+          - api/ivcap.md
+          - api/service.md
+          - api/job.md
+          - api/artifact.md
+          - api/aspect.md
+          - api/exceptions.md
+        Examples:
+          - examples/services.md
+          - examples/jobs.md
+          - examples/artifacts.md
+          - examples/aspects.md
+          - examples/async-parallel.md
 
 markdown_extensions:
   - admonition
@@ -39,6 +88,25 @@ markdown_extensions:
   - tables
   - toc:
       permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: [".."]
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+
+extra_css:
+  - css/extra.css
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+  - js/mermaid-init.js
 
 nav:
   - Home: index.md
@@ -74,6 +142,7 @@ nav:
   - Reference:
     - Environment Variables: reference/environment-variables.md
     - Glossary: reference/glossary.md
+  - Agent Guide: agent.md
   - Community:
     - Contributing: community/contributing.md
     - Code of Conduct: community/conduct.md

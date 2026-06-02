@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,19 +23,19 @@ class RefT:
             'application/openapi3+json'}, 'self': 'Sed debitis ut culpa.'}}
 
     Attributes:
-        id (Union[Unset, str]):  Example: http://schmeler.biz/liam_krajcik.
-        links (Union[Unset, SelfT]):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
+        id (str | Unset):  Example: http://schmeler.biz/liam_krajcik.
+        links (SelfT | Unset):  Example: {'describedBy': {'href': 'https://api.com/swagger/...', 'type':
             'application/openapi3+json'}, 'self': 'Perspiciatis quidem.'}.
     """
 
-    id: Unset | str = UNSET
-    links: Union[Unset, "SelfT"] = UNSET
+    id: str | Unset = UNSET
+    links: SelfT | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         id = self.id
 
-        links: Unset | dict[str, Any] = UNSET
+        links: dict[str, Any] | Unset = UNSET
         if not isinstance(self.links, Unset):
             links = self.links.to_dict()
 
@@ -47,14 +50,14 @@ class RefT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.self_t import SelfT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         id = d.pop("id", UNSET)
 
         _links = d.pop("links", UNSET)
-        links: Unset | SelfT
+        links: SelfT | Unset
         if isinstance(_links, Unset):
             links = UNSET
         else:

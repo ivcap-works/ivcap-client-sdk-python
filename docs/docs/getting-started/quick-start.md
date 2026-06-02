@@ -33,6 +33,8 @@ for service in ivcap.list_services(limit=10):
 ## 4. Find a Service and Run a Job
 
 ```python
+import io, json
+
 # Find a service by name
 service = ivcap.get_service_by_name("hello-world-python")
 print(service)
@@ -41,8 +43,9 @@ print(service)
 for name, param in service.parameters.items():
     print(f"  {name}: type={param.type}, optional={param.is_optional}")
 
-# Submit a job
-job = service.request_job({"msg": "Hello, IVCAP!"})
+# Submit a job — request_job accepts a Pydantic BaseModel, a dataclass,
+# or an IO[str] containing JSON (plain dicts must be wrapped):
+job = service.request_job(io.StringIO(json.dumps({"msg": "Hello, IVCAP!"})))
 print(f"Created job: {job.id}")
 ```
 
@@ -69,8 +72,9 @@ artifact = ivcap.upload_artifact(
 )
 print(f"Uploaded: {artifact.id}")
 
-# Pass the artifact URN to a service
-job = service.request_job({"input": artifact.id})
+# Pass the artifact URN to a service (wrap the dict in io.StringIO)
+import io, json
+job = service.request_job(io.StringIO(json.dumps({"input": artifact.id})))
 ```
 
 ## 7. Attach Metadata (Aspects)

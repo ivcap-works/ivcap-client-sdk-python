@@ -97,13 +97,7 @@ def _parse_response(
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    Any
-    | BadRequestT
-    | InvalidParameterT
-    | InvalidScopesT
-    | NotImplementedT
-    | ProjectStatusRT
-    | ResourceNotFoundT
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ProjectStatusRT | ResourceNotFoundT
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -119,13 +113,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     body: ProjectModifyRequest,
 ) -> Response[
-    Any
-    | BadRequestT
-    | InvalidParameterT
-    | InvalidScopesT
-    | NotImplementedT
-    | ProjectStatusRT
-    | ResourceNotFoundT
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ProjectStatusRT | ResourceNotFoundT
 ]:
     """Set Project Information
 
@@ -207,13 +195,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     body: ProjectModifyRequest,
 ) -> Response[
-    Any
-    | BadRequestT
-    | InvalidParameterT
-    | InvalidScopesT
-    | NotImplementedT
-    | ProjectStatusRT
-    | ResourceNotFoundT
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ProjectStatusRT | ResourceNotFoundT
 ]:
     """Set Project Information
 

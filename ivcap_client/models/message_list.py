@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -28,17 +31,17 @@ class MessageList:
             identifier:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:ivcap:schema:queue:message.1'}]}
 
     Attributes:
-        messages (list['Publishedmessage']): Messages in the queue Example: [{'content': '{"temperature": "21",
+        messages (list[Publishedmessage]): Messages in the queue Example: [{'content': '{"temperature": "21",
             "location": "Buoy101", "timestamp": "2024-05-20T14:30:00Z"}', 'content-type': 'application/json', 'id':
             'urn:ivcap:Message identifier:123e4567-e89b-12d3-a456-426614174000', 'schema':
             'urn:ivcap:schema:queue:message.1'}, {'content': '{"temperature": "21", "location": "Buoy101", "timestamp":
             "2024-05-20T14:30:00Z"}', 'content-type': 'application/json', 'id': 'urn:ivcap:Message
             identifier:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:ivcap:schema:queue:message.1'}].
-        at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
+        at_time (datetime.datetime | Unset): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
     """
 
-    messages: list["Publishedmessage"]
-    at_time: Unset | datetime.datetime = UNSET
+    messages: list[Publishedmessage]
+    at_time: datetime.datetime | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -47,7 +50,7 @@ class MessageList:
             messages_item = messages_item_data.to_dict()
             messages.append(messages_item)
 
-        at_time: Unset | str = UNSET
+        at_time: str | Unset = UNSET
         if not isinstance(self.at_time, Unset):
             at_time = self.at_time.isoformat()
 
@@ -64,10 +67,10 @@ class MessageList:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.publishedmessage import Publishedmessage
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         messages = []
         _messages = d.pop("messages")
         for messages_item_data in _messages:
@@ -76,7 +79,7 @@ class MessageList:
             messages.append(messages_item)
 
         _at_time = d.pop("at-time", UNSET)
-        at_time: Unset | datetime.datetime
+        at_time: datetime.datetime | Unset
         if isinstance(_at_time, Unset):
             at_time = UNSET
         else:

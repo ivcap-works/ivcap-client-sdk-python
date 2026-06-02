@@ -47,7 +47,7 @@ poetry run mypy ivcap_client/
 
 ```bash
 # Install MkDocs and mkdocstrings
-pip install -r docs/requirements-docs.txt
+pip install -r docs/requirements.txt
 
 # Serve locally (http://localhost:8000)
 make docs-serve

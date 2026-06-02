@@ -34,13 +34,15 @@ pending → scheduled → executing → succeeded
 ### Fire and check (non-blocking)
 
 ```python
+import io, json
 from ivcap_client.ivcap import IVCAP
 
 ivcap = IVCAP()
 svc = ivcap.get_service("urn:ivcap:service:<uuid>")
 
 # Submit — returns immediately (timeout=0)
-job = svc.request_job({"param": "value"})
+# request_job accepts a Pydantic BaseModel, a dataclass, or an IO[str] (JSON)
+job = svc.request_job(io.StringIO(json.dumps({"param": "value"})))
 print(f"Created job: {job.id}")
 ```
 
@@ -160,23 +162,6 @@ elif job.status() == JobStatus.FAILED:
     print("Job reported failure (check service logs)")
 elif job.status() == JobStatus.ERROR:
     print("Platform-level error (infrastructure, OOM, timeout)")
-```
-
-## Legacy: Orders API
-
-Orders are the older mechanism to invoke a service. They are fully supported and share
-the same underlying Datafabric representation:
-
-```python
-# Submit via the orders API
-order = service.place_order(msg='Hello World')
-print(order.status())
-
-# List historical orders
-for order in ivcap.list_orders(limit=4):
-    print(order)
-    for name, param in order.parameters.items():
-        print(f"  {name}: {param.value}")
 ```
 
 ## See Also

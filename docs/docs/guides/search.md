@@ -20,7 +20,8 @@ from ivcap_client.ivcap import IVCAP
 ivcap = IVCAP()
 
 # Datalog query — find all JPEG artifacts
-query = b"""
+# ivcap.search() expects a str (not bytes)
+query = """
 :- ivcap_artifact(Id, Name, MimeType),
    MimeType = "image/jpeg".
 """
@@ -47,7 +48,7 @@ clauses that the system evaluates over the aspect graph.
 ### Find artifacts by MIME type
 
 ```python
-query = b"""
+query = """
 :- ivcap_artifact(Id, Name, MimeType),
    MimeType = "text/csv".
 """
@@ -57,7 +58,7 @@ results = ivcap.search(query)
 ### Find artifacts produced by a specific service
 
 ```python
-query = b"""
+query = """
 :- ivcap_job(JobId, "succeeded", ServiceId),
    ServiceId = "urn:ivcap:service:<uuid>",
    ivcap_artifact_produced_by(ArtifactId, JobId).
@@ -68,7 +69,7 @@ results = ivcap.search(query)
 ### Find all jobs for a service
 
 ```python
-query = b"""
+query = """
 :- ivcap_job(JobId, Status, ServiceId),
    ServiceId = "urn:ivcap:service:<uuid>".
 """

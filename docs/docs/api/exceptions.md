@@ -19,13 +19,21 @@ from ivcap_client.exception import (
 ## Hierarchy
 
 ```
-IvcapError
-├── IvcapApiError
-│   ├── NotAuthorizedException
-│   └── ResourceNotFound
+Exception
+├── IvcapError
+│   └── IvcapApiError
+│       ├── NotAuthorizedException
+│       └── HttpException            (backward-compat alias)
+├── ResourceNotFound
 ├── AmbiguousRequest
 └── MissingParameterValue
 ```
+
+!!! note
+    `ResourceNotFound`, `AmbiguousRequest`, and `MissingParameterValue` inherit
+    directly from the built-in `Exception`, **not** from `IvcapError`. Catch
+    `IvcapError` to handle HTTP/API errors only; use individual exception types
+    (or the base `Exception`) when you also need to catch these.
 
 ## Exception Documentation
 

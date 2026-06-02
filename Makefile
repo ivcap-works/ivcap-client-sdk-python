@@ -2,7 +2,18 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 SRC_DIR:=${ROOT_DIR}/src
 
-.PHONY: help copyx lint typecheck check
+# Docker image name for the docs build
+DOCS_IMAGE   := ivcap-docs
+# The whole repo is mounted at /project; workdir is /project/docs so that
+# pymdownx.snippets base_path: [".."] resolves to the project root.
+# PYTHONPATH=/project lets mkdocstrings/griffe find ivcap_client without installing it.
+DOCS_DOCKER  := docker run --rm \
+  -v "$(ROOT_DIR):/project" \
+  -e PYTHONPATH=/project \
+  -w /project/docs \
+  $(DOCS_IMAGE)
+
+.PHONY: help copyx lint typecheck check docs-image docs-build docs-serve docs-deploy docs docs-mkdocs docs-clean
 
 help:
 	@echo "Available targets:"
@@ -14,9 +25,12 @@ help:
 	@echo "  lint          - Run ruff checks"
 	@echo "  typecheck     - Run pyright type checking"
 	@echo "  check         - Lint + typecheck + tests"
-	@echo "  docs          - Build MkDocs documentation"
-	@echo "  docs-mkdocs   - Build MkDocs documentation (alias)"
-	@echo "  docs-serve    - Serve MkDocs documentation locally (http://localhost:8000)"
+	@echo "  docs-image    - Build the docs Docker image (run once, or after changing docs/requirements.txt)"
+	@echo "  docs-build    - Build MkDocs static site via Docker"
+	@echo "  docs-serve    - Serve MkDocs docs locally with live reload via Docker (http://localhost:8000)"
+	@echo "  docs-deploy   - Deploy docs to gh-pages via Docker"
+	@echo "  docs          - Alias for docs-build"
+	@echo "  docs-mkdocs   - Alias for docs-build"
 	@echo "  docs-clean    - Clean MkDocs build artifacts"
 	@echo "  clean         - Remove build artifacts and caches"
 
@@ -74,26 +88,41 @@ add-license:
 	licenseheaders -t .license.tmpl -y 2023-$(shell date +%Y) -f ivcap_client/*.py
 	licenseheaders -t .license.tmpl -y 2023-$(shell date +%Y) -d ivcap_client/client
 
-docs:
-	@echo "Building MkDocs documentation..."
-	poetry run poe docs
+docs-image:
+	@echo "Building docs Docker image ($(DOCS_IMAGE))..."
+	docker build -t $(DOCS_IMAGE) docs/
 
-docs-mkdocs:
-	@echo "Building MkDocs documentation..."
-	poetry run poe docs
+docs-build:
+	@echo "Building MkDocs static site via Docker..."
+	$(DOCS_DOCKER) build --strict
+
+docs: docs-build
+
+docs-mkdocs: docs-build
 
 docs-serve:
-	@echo "Serving MkDocs documentation at http://localhost:8000"
-	poetry run poe docs-serve
+	@echo "Serving MkDocs documentation at http://localhost:8000 (via Docker)..."
+	docker run --rm -it -p 8000:8000 \
+	  -v "$(ROOT_DIR):/project" \
+	  -e PYTHONPATH=/project \
+	  -w /project/docs \
+	  $(DOCS_IMAGE) serve --dev-addr=0.0.0.0:8000
+
+docs-deploy:
+	@echo "Deploying docs to gh-pages via Docker..."
+	docker run --rm \
+	  -v "$(ROOT_DIR):/project" \
+	  -v "$(HOME)/.ssh:/root/.ssh" \
+	  -e PYTHONPATH=/project \
+	  -w /project/docs \
+	  $(DOCS_IMAGE) gh-deploy --force
 
 docs-clean:
-	@echo "Cleaning MkDocs documentation..."
-	poetry run poe docs-clean
+	@echo "Cleaning MkDocs build artifacts..."
+	rm -rf $(ROOT_DIR)/docs/site $(ROOT_DIR)/docs/.mkdocs_cache
 
 clean:
 	rm -rf *.egg-info
 	rm -rf dist
 	find ${ROOT_DIR} -name __pycache__ | xargs rm -r
 	rm -rf ${ROOT_DIR}/docs/site
-
-.PHONY: docs docs-mkdocs docs-serve docs-clean help clean

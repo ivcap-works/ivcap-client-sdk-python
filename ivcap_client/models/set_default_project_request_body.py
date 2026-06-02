@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -17,11 +20,11 @@ class SetDefaultProjectRequestBody:
 
     Attributes:
         project_urn (str): Project URN Example: urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        user_urn (Union[Unset, str]): User URN Example: urn:ivcap:user:0b755f67-4d03-4d82-b208-4d6a0ae16468.
+        user_urn (str | Unset): User URN Example: urn:ivcap:user:0b755f67-4d03-4d82-b208-4d6a0ae16468.
     """
 
     project_urn: str
-    user_urn: Unset | str = UNSET
+    user_urn: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -42,8 +45,8 @@ class SetDefaultProjectRequestBody:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         project_urn = d.pop("project_urn")
 
         user_urn = d.pop("user_urn", UNSET)

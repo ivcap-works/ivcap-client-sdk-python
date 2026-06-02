@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -20,15 +23,15 @@ class QueueListItem:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
         href (str):  Example: https://api.ivcap.net/1/queues/....
         id (str): queue Example: urn:ivcap:queue:123e4567-e89b-12d3-a456-426614174000.
-        description (Union[Unset, str]): Description of the created queue. Example: Events for the event service.
-        name (Union[Unset, str]): Name of the created queue. Example: events.
+        description (str | Unset): Description of the created queue. Example: Events for the event service.
+        name (str | Unset): Name of the created queue. Example: events.
     """
 
     account: str
     href: str
     id: str
-    description: Unset | str = UNSET
-    name: Unset | str = UNSET
+    description: str | Unset = UNSET
+    name: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -59,8 +62,8 @@ class QueueListItem:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         account = d.pop("account")
 
         href = d.pop("href")

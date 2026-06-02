@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -35,7 +38,7 @@ class ListMetaRT:
             'application/openapi3+json'}], 'schema': 'urn:blue:image,urn:blue:location'}
 
     Attributes:
-        items (list['MetadataListItemRT']): List of metadata records Example: [{'aspect': '{...}', 'aspect-context':
+        items (list[MetadataListItemRT]): List of metadata records Example: [{'aspect': '{...}', 'aspect-context':
             '{...}', 'entity': 'urn:blue:transect.1', 'id': 'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000',
             'schema': 'urn:blue:schema.image'}, {'aspect': '{...}', 'aspect-context': '{...}', 'entity':
             'urn:blue:transect.1', 'id': 'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema':
@@ -43,24 +46,24 @@ class ListMetaRT:
             'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}, {'aspect':
             '{...}', 'aspect-context': '{...}', 'entity': 'urn:blue:transect.1', 'id':
             'urn:ivcap:metadata:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image'}].
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}].
-        aspect_path (Union[Unset, str]): Optional json path to further filter on returned list Example: Repellat quo et
-            aut quas..
-        at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
-        entity (Union[Unset, str]): Entity for which to request metadata Example: urn:blue:image.collA.12.
-        schema (Union[Unset, str]): Optional schema to filter on Example: urn:blue:image,urn:blue:location.
+        aspect_path (str | Unset): Optional json path to further filter on returned list Example: Repellat quo et aut
+            quas..
+        at_time (datetime.datetime | Unset): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
+        entity (str | Unset): Entity for which to request metadata Example: urn:blue:image.collA.12.
+        schema (str | Unset): Optional schema to filter on Example: urn:blue:image,urn:blue:location.
     """
 
-    items: list["MetadataListItemRT"]
-    links: list["LinkT"]
-    aspect_path: Unset | str = UNSET
-    at_time: Unset | datetime.datetime = UNSET
-    entity: Unset | str = UNSET
-    schema: Unset | str = UNSET
+    items: list[MetadataListItemRT]
+    links: list[LinkT]
+    aspect_path: str | Unset = UNSET
+    at_time: datetime.datetime | Unset = UNSET
+    entity: str | Unset = UNSET
+    schema: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -76,7 +79,7 @@ class ListMetaRT:
 
         aspect_path = self.aspect_path
 
-        at_time: Unset | str = UNSET
+        at_time: str | Unset = UNSET
         if not isinstance(self.at_time, Unset):
             at_time = self.at_time.isoformat()
 
@@ -104,11 +107,11 @@ class ListMetaRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.metadata_list_item_rt import MetadataListItemRT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         items = []
         _items = d.pop("items")
         for items_item_data in _items:
@@ -126,7 +129,7 @@ class ListMetaRT:
         aspect_path = d.pop("aspect-path", UNSET)
 
         _at_time = d.pop("at-time", UNSET)
-        at_time: Unset | datetime.datetime
+        at_time: datetime.datetime | Unset
         if isinstance(_at_time, Unset):
             at_time = UNSET
         else:

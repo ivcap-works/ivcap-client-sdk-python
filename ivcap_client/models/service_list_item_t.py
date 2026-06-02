@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import Any, TypeVar, cast
 
 from attrs import define as _attrs_define
@@ -23,25 +26,24 @@ class ServiceListItemT:
         controller_schema (str): type of controller used for this service Example: Corrupti laborum qui incidunt..
         href (str):  Example: https://api.ivcap.net/1/services/....
         id (str): ID Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        description (Union[Unset, str]): Optional description of the service Example: Some lengthy description of fire
-            risk.
-        name (Union[Unset, str]): Optional customer provided name Example: Fire risk for region.
-        tags (Union[Unset, list[str]]): Optional tags defined for service to help in categorising them Example: ['tag1',
+        description (str | Unset): Optional description of the service Example: Some lengthy description of fire risk.
+        name (str | Unset): Optional customer provided name Example: Fire risk for region.
+        tags (list[str] | Unset): Optional tags defined for service to help in categorising them Example: ['tag1',
             'tag2'].
-        valid_from (Union[Unset, datetime.datetime]): time this service has been available from Example:
+        valid_from (datetime.datetime | Unset): time this service has been available from Example:
             1996-12-19T16:39:57-08:00.
-        valid_to (Union[Unset, datetime.datetime]): time this service has been available to Example:
+        valid_to (datetime.datetime | Unset): time this service has been available to Example:
             1996-12-19T16:39:57-08:00.
     """
 
     controller_schema: str
     href: str
     id: str
-    description: Unset | str = UNSET
-    name: Unset | str = UNSET
-    tags: Unset | list[str] = UNSET
-    valid_from: Unset | datetime.datetime = UNSET
-    valid_to: Unset | datetime.datetime = UNSET
+    description: str | Unset = UNSET
+    name: str | Unset = UNSET
+    tags: list[str] | Unset = UNSET
+    valid_from: datetime.datetime | Unset = UNSET
+    valid_to: datetime.datetime | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -55,15 +57,15 @@ class ServiceListItemT:
 
         name = self.name
 
-        tags: Unset | list[str] = UNSET
+        tags: list[str] | Unset = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
-        valid_from: Unset | str = UNSET
+        valid_from: str | Unset = UNSET
         if not isinstance(self.valid_from, Unset):
             valid_from = self.valid_from.isoformat()
 
-        valid_to: Unset | str = UNSET
+        valid_to: str | Unset = UNSET
         if not isinstance(self.valid_to, Unset):
             valid_to = self.valid_to.isoformat()
 
@@ -90,8 +92,8 @@ class ServiceListItemT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         controller_schema = d.pop("controller-schema")
 
         href = d.pop("href")
@@ -105,14 +107,14 @@ class ServiceListItemT:
         tags = cast(list[str], d.pop("tags", UNSET))
 
         _valid_from = d.pop("valid-from", UNSET)
-        valid_from: Unset | datetime.datetime
+        valid_from: datetime.datetime | Unset
         if isinstance(_valid_from, Unset):
             valid_from = UNSET
         else:
             valid_from = isoparse(_valid_from)
 
         _valid_to = d.pop("valid-to", UNSET)
-        valid_to: Unset | datetime.datetime
+        valid_to: datetime.datetime | Unset
         if isinstance(_valid_to, Unset):
             valid_to = UNSET
         else:

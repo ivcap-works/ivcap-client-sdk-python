@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -21,19 +24,19 @@ class ProductListItemT:
         href (str):  Example: https://api.ivcap.net/1/artifacts/....
         id (str):  Example: Autem id dolorum sed voluptatem..
         status (str):  Example: Repudiandae omnis ipsam animi tempore..
-        data_href (Union[Unset, str]):  Example: https://api.ivcap.net/1/artifacts/.../data.
-        mime_type (Union[Unset, str]):  Example: Id blanditiis..
-        name (Union[Unset, str]):  Example: Nulla est vel reiciendis facere inventore..
-        size (Union[Unset, int]):  Example: 4028534825099521728.
+        data_href (str | Unset):  Example: https://api.ivcap.net/1/artifacts/.../data.
+        mime_type (str | Unset):  Example: Id blanditiis..
+        name (str | Unset):  Example: Nulla est vel reiciendis facere inventore..
+        size (int | Unset):  Example: 4028534825099521728.
     """
 
     href: str
     id: str
     status: str
-    data_href: Unset | str = UNSET
-    mime_type: Unset | str = UNSET
-    name: Unset | str = UNSET
-    size: Unset | int = UNSET
+    data_href: str | Unset = UNSET
+    mime_type: str | Unset = UNSET
+    name: str | Unset = UNSET
+    size: int | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -72,8 +75,8 @@ class ProductListItemT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         href = d.pop("href")
 
         id = d.pop("id")

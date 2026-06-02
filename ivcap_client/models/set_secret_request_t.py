@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -20,13 +23,13 @@ class SetSecretRequestT:
         expiry_time (int): Expiry time Example: 6351079993822416003.
         secret_name (str): Secret name Example: Porro consequatur qui voluptatem et..
         secret_value (str): Secret value Example: Ipsum numquam adipisci optio..
-        secret_type (Union[Unset, str]): Secret type Example: Aliquid quia..
+        secret_type (str | Unset): Secret type Example: Aliquid quia..
     """
 
     expiry_time: int
     secret_name: str
     secret_value: str
-    secret_type: Unset | str = UNSET
+    secret_type: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -53,8 +56,8 @@ class SetSecretRequestT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         expiry_time = d.pop("expiry-time")
 
         secret_name = d.pop("secret-name")

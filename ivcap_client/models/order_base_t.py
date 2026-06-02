@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
@@ -20,15 +23,15 @@ class OrderBaseT:
             'value': '10'}], 'tags': ['tag1', 'tag2']}
 
     Attributes:
-        parameters (list['ParameterT']): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
+        parameters (list[ParameterT]): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
             {'name': 'threshold', 'value': '10'}].
-        name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
-        tags (Union[Unset, list[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
+        name (str | Unset): Optional customer provided name Example: Fire risk for Lot2.
+        tags (list[str] | Unset): Optional customer provided tags Example: ['tag1', 'tag2'].
     """
 
-    parameters: list["ParameterT"]
-    name: Unset | str = UNSET
-    tags: Unset | list[str] = UNSET
+    parameters: list[ParameterT]
+    name: str | Unset = UNSET
+    tags: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -39,7 +42,7 @@ class OrderBaseT:
 
         name = self.name
 
-        tags: Unset | list[str] = UNSET
+        tags: list[str] | Unset = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
@@ -58,10 +61,10 @@ class OrderBaseT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.parameter_t import ParameterT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         parameters = []
         _parameters = d.pop("parameters")
         for parameters_item_data in _parameters:

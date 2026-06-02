@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -19,12 +22,12 @@ class JobRetryLaterT:
     Attributes:
         location (str): the URL for the job Example: Eius vel..
         retry_later (int): The time in seconds after which an update may be available Example: 6693500484784064230.
-        job_id (Union[Unset, str]): the ID of the job Example: Veniam sunt quibusdam dolores officiis reprehenderit..
+        job_id (str | Unset): the ID of the job Example: Veniam sunt quibusdam dolores officiis reprehenderit..
     """
 
     location: str
     retry_later: int
-    job_id: Unset | str = UNSET
+    job_id: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -48,8 +51,8 @@ class JobRetryLaterT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         location = d.pop("location")
 
         retry_later = d.pop("retry-later")

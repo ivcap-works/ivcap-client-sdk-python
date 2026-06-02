@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -20,15 +23,15 @@ class PartialMetaListT:
             1234963}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'next'}]}
 
     Attributes:
-        items (list['OrderMetadataListItemRT']): (Partial) list of metadata associated with this order Example: [{'data-
+        items (list[OrderMetadataListItemRT]): (Partial) list of metadata associated with this order Example: [{'data-
             href': 'https:/.../1/artifacts/0000-00001220/blob', 'href': 'https:/.../1/artifacts/0000-00001220', 'mime-type':
             'image/geo+tiff', 'name': 'fire risk map', 'size': 1234963}].
-        links (list['LinkT']): Links to more metadata, if there are any Example: [{'href':
-            'https://api.ivcap.net/1/....', 'rel': 'next'}].
+        links (list[LinkT]): Links to more metadata, if there are any Example: [{'href': 'https://api.ivcap.net/1/....',
+            'rel': 'next'}].
     """
 
-    items: list["OrderMetadataListItemRT"]
-    links: list["LinkT"]
+    items: list[OrderMetadataListItemRT]
+    links: list[LinkT]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -54,11 +57,11 @@ class PartialMetaListT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.order_metadata_list_item_rt import OrderMetadataListItemRT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         items = []
         _items = d.pop("items")
         for items_item_data in _items:

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -18,12 +21,12 @@ class InvalidParameterT:
     Attributes:
         message (str): message describing expected type or pattern. Example: cannot parse date.
         name (str): name of parameter. Example: timestamp.
-        value (Union[Unset, str]): provided parameter value. Example: today.
+        value (str | Unset): provided parameter value. Example: today.
     """
 
     message: str
     name: str
-    value: Unset | str = UNSET
+    value: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -47,8 +50,8 @@ class InvalidParameterT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         message = d.pop("message")
 
         name = d.pop("name")

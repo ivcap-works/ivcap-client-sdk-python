@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -16,16 +19,15 @@ class QueueRequest:
             'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000'}
 
     Attributes:
-        description (Union[Unset, str]): More detailed description of the queue. Example: Events for the event service.
-        name (Union[Unset, str]): Optional Name for the queue. Cannot contain whitespace, ., *, >, path separators
-            (forward or backwards slash), and non-printable characters. Example: events.
-        policy (Union[Unset, str]): Reference to policy used Example:
-            urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
+        description (str | Unset): More detailed description of the queue. Example: Events for the event service.
+        name (str | Unset): Optional Name for the queue. Cannot contain whitespace, ., *, >, path separators (forward or
+            backwards slash), and non-printable characters. Example: events.
+        policy (str | Unset): Reference to policy used Example: urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
     """
 
-    description: Unset | str = UNSET
-    name: Unset | str = UNSET
-    policy: Unset | str = UNSET
+    description: str | Unset = UNSET
+    name: str | Unset = UNSET
+    policy: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -48,8 +50,8 @@ class QueueRequest:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         description = d.pop("description", UNSET)
 
         name = d.pop("name", UNSET)

@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -38,32 +41,32 @@ class AspectRT:
         content_type (str): Content-Type header, MUST be of application/json. Example: application/json.
         entity (str): Entity URN Example: urn:blue:transect.1.
         id (str): ID Example: urn:ivcap:record:123e4567-e89b-12d3-a456-426614174000.
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
         policy (str): Reference to policy used Example: urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
         schema (str): Schema URN Example: urn:blue:schema.image.
         valid_from (datetime.datetime): Time this record was asserted Example: 1996-12-19T16:39:57-08:00.
-        replaces (Union[Unset, str]): Reference to retracted aspect record this record is replacing Example:
+        replaces (str | Unset): Reference to retracted aspect record this record is replacing Example:
             urn:ivcap:aspect:123e4567-e89b-12d3-a456-426614174000.
-        retracter (Union[Unset, str]): Entity retracting this record at 'valid-to' Example:
+        retracter (str | Unset): Entity retracting this record at 'valid-to' Example:
             urn:ivcap:principal:123e4567-e89b-12d3-a456-426614174000.
-        valid_to (Union[Unset, datetime.datetime]): Time this record was retracted Example: 1996-12-19T16:39:57-08:00.
+        valid_to (datetime.datetime | Unset): Time this record was retracted Example: 1996-12-19T16:39:57-08:00.
     """
 
     account: str
     asserter: str
-    content: "AspectRTContent"
+    content: AspectRTContent
     content_type: str
     entity: str
     id: str
-    links: list["LinkT"]
+    links: list[LinkT]
     policy: str
     schema: str
     valid_from: datetime.datetime
-    replaces: Unset | str = UNSET
-    retracter: Unset | str = UNSET
-    valid_to: Unset | datetime.datetime = UNSET
+    replaces: str | Unset = UNSET
+    retracter: str | Unset = UNSET
+    valid_to: datetime.datetime | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -94,7 +97,7 @@ class AspectRT:
 
         retracter = self.retracter
 
-        valid_to: Unset | str = UNSET
+        valid_to: str | Unset = UNSET
         if not isinstance(self.valid_to, Unset):
             valid_to = self.valid_to.isoformat()
 
@@ -124,11 +127,11 @@ class AspectRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.aspect_rt_content import AspectRTContent
         from ..models.link_t import LinkT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         account = d.pop("account")
 
         asserter = d.pop("asserter")
@@ -159,7 +162,7 @@ class AspectRT:
         retracter = d.pop("retracter", UNSET)
 
         _valid_to = d.pop("valid-to", UNSET)
-        valid_to: Unset | datetime.datetime
+        valid_to: datetime.datetime | Unset
         if isinstance(_valid_to, Unset):
             valid_to = UNSET
         else:

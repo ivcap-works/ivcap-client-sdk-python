@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -20,14 +23,14 @@ class DashboardListRT:
             '/d/aeawr2d4xw7pcc'}]}
 
     Attributes:
-        items (list['DashboardListItem']): Dashboards Example: [{'id': 3, 'title': 'Kubernetes Cluster Monitoring',
-            'uid': 'aeawr2d4xw7pcc', 'url': '/d/aeawr2d4xw7pcc'}, {'id': 3, 'title': 'Kubernetes Cluster Monitoring', 'uid':
+        items (list[DashboardListItem]): Dashboards Example: [{'id': 3, 'title': 'Kubernetes Cluster Monitoring', 'uid':
+            'aeawr2d4xw7pcc', 'url': '/d/aeawr2d4xw7pcc'}, {'id': 3, 'title': 'Kubernetes Cluster Monitoring', 'uid':
             'aeawr2d4xw7pcc', 'url': '/d/aeawr2d4xw7pcc'}, {'id': 3, 'title': 'Kubernetes Cluster Monitoring', 'uid':
             'aeawr2d4xw7pcc', 'url': '/d/aeawr2d4xw7pcc'}, {'id': 3, 'title': 'Kubernetes Cluster Monitoring', 'uid':
             'aeawr2d4xw7pcc', 'url': '/d/aeawr2d4xw7pcc'}].
     """
 
-    items: list["DashboardListItem"]
+    items: list[DashboardListItem]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -47,10 +50,10 @@ class DashboardListRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.dashboard_list_item import DashboardListItem
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         items = []
         _items = d.pop("items")
         for items_item_data in _items:

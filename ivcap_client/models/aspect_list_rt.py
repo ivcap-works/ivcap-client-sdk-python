@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -34,30 +37,30 @@ class AspectListRT:
 
     Attributes:
         at_time (datetime.datetime): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
-        items (list['AspectListItemRT']): List of aspect descriptions Example: [{'content': '{...}', 'content-type':
+        items (list[AspectListItemRT]): List of aspect descriptions Example: [{'content': '{...}', 'content-type':
             'application/json', 'entity': 'urn:blue:transect.1', 'id':
             'urn:ivcap:aspect:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image', 'valid-from':
             '1996-12-19T16:39:57-08:00', 'valid-to': '1996-12-19T16:39:57-08:00'}, {'content': '{...}', 'content-type':
             'application/json', 'entity': 'urn:blue:transect.1', 'id':
             'urn:ivcap:aspect:123e4567-e89b-12d3-a456-426614174000', 'schema': 'urn:blue:schema.image', 'valid-from':
             '1996-12-19T16:39:57-08:00', 'valid-to': '1996-12-19T16:39:57-08:00'}].
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}].
-        aspect_path (Union[Unset, str]): Optional json path to further filter on returned list Example: Qui autem
-            placeat fugiat doloremque..
-        entity (Union[Unset, str]): Entity for which to request aspect Example: urn:blue:image.collA.12.
-        schema (Union[Unset, str]): Optional schema to filter on Example: urn:blue:image,urn:blue:location.
+        aspect_path (str | Unset): Optional json path to further filter on returned list Example: Qui autem placeat
+            fugiat doloremque..
+        entity (str | Unset): Entity for which to request aspect Example: urn:blue:image.collA.12.
+        schema (str | Unset): Optional schema to filter on Example: urn:blue:image,urn:blue:location.
     """
 
     at_time: datetime.datetime
-    items: list["AspectListItemRT"]
-    links: list["LinkT"]
-    aspect_path: Unset | str = UNSET
-    entity: Unset | str = UNSET
-    schema: Unset | str = UNSET
+    items: list[AspectListItemRT]
+    links: list[LinkT]
+    aspect_path: str | Unset = UNSET
+    entity: str | Unset = UNSET
+    schema: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -98,11 +101,11 @@ class AspectListRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.aspect_list_item_rt import AspectListItemRT
         from ..models.link_t import LinkT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         at_time = isoparse(d.pop("at-time"))
 
         items = []

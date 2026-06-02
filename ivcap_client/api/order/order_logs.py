@@ -1,6 +1,7 @@
 from http import HTTPStatus
 from io import BytesIO
 from typing import Any
+from urllib.parse import quote
 
 import httpx
 
@@ -17,9 +18,10 @@ from ...types import UNSET, File, Response, Unset
 def _get_kwargs(
     order_id: str,
     *,
-    from_: Unset | int = UNSET,
-    to: Unset | int = UNSET,
+    from_: int | Unset = UNSET,
+    to: int | Unset = UNSET,
 ) -> dict[str, Any]:
+
     params: dict[str, Any] = {}
 
     params["from"] = from_
@@ -30,7 +32,9 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/1/orders/{order_id}/logs",
+        "url": "/1/orders/{order_id}/logs".format(
+            order_id=quote(str(order_id), safe=""),
+        ),
         "params": params,
     }
 
@@ -44,34 +48,42 @@ def _parse_response(
         response_200 = File(payload=BytesIO(response.json()))
 
         return response_200
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = File(payload=BytesIO(response.json()))
 
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
+
     if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = File(payload=BytesIO(response.json()))
 
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -80,9 +92,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[
-    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
-]:
+) -> Response[BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -95,11 +105,9 @@ def sync_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Unset | int = UNSET,
-    to: Unset | int = UNSET,
-) -> Response[
-    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
-]:
+    from_: int | Unset = UNSET,
+    to: int | Unset = UNSET,
+) -> Response[BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT]:
     """logs order
 
      download order logs
@@ -107,15 +115,15 @@ def sync_detailed(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        from_ (Union[Unset, int]): From unix time, seconds since 1970-01-01 Example: 1257894000.
-        to (Union[Unset, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
+        from_ (int | Unset): From unix time, seconds since 1970-01-01 Example: 1257894000.
+        to (int | Unset): To unix time, seconds since 1970-01-01 Example: 1257894000.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]
+        Response[BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT]
     """
 
     kwargs = _get_kwargs(
@@ -135,8 +143,8 @@ def sync(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Unset | int = UNSET,
-    to: Unset | int = UNSET,
+    from_: int | Unset = UNSET,
+    to: int | Unset = UNSET,
 ) -> BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     """logs order
 
@@ -145,15 +153,15 @@ def sync(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        from_ (Union[Unset, int]): From unix time, seconds since 1970-01-01 Example: 1257894000.
-        to (Union[Unset, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
+        from_ (int | Unset): From unix time, seconds since 1970-01-01 Example: 1257894000.
+        to (int | Unset): To unix time, seconds since 1970-01-01 Example: 1257894000.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]
+        BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
     """
 
     return sync_detailed(
@@ -168,11 +176,9 @@ async def asyncio_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Unset | int = UNSET,
-    to: Unset | int = UNSET,
-) -> Response[
-    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
-]:
+    from_: int | Unset = UNSET,
+    to: int | Unset = UNSET,
+) -> Response[BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT]:
     """logs order
 
      download order logs
@@ -180,15 +186,15 @@ async def asyncio_detailed(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        from_ (Union[Unset, int]): From unix time, seconds since 1970-01-01 Example: 1257894000.
-        to (Union[Unset, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
+        from_ (int | Unset): From unix time, seconds since 1970-01-01 Example: 1257894000.
+        to (int | Unset): To unix time, seconds since 1970-01-01 Example: 1257894000.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]]
+        Response[BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT]
     """
 
     kwargs = _get_kwargs(
@@ -206,8 +212,8 @@ async def asyncio(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    from_: Unset | int = UNSET,
-    to: Unset | int = UNSET,
+    from_: int | Unset = UNSET,
+    to: int | Unset = UNSET,
 ) -> BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | None:
     """logs order
 
@@ -216,15 +222,15 @@ async def asyncio(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        from_ (Union[Unset, int]): From unix time, seconds since 1970-01-01 Example: 1257894000.
-        to (Union[Unset, int]): To unix time, seconds since 1970-01-01 Example: 1257894000.
+        from_ (int | Unset): From unix time, seconds since 1970-01-01 Example: 1257894000.
+        to (int | Unset): To unix time, seconds since 1970-01-01 Example: 1257894000.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT]
+        BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT
     """
 
     return (

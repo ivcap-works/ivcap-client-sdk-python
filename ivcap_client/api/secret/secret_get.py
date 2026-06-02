@@ -17,8 +17,9 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     secret_name: str,
-    secret_type: Unset | str = UNSET,
+    secret_type: str | Unset = UNSET,
 ) -> dict[str, Any]:
+
     params: dict[str, Any] = {}
 
     params["secret-name"] = secret_name
@@ -38,37 +39,47 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT | None:
+) -> (
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT | None
+):
     if response.status_code == 200:
         response_200 = SecretResultT.from_dict(response.json())
 
         return response_200
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
+
     if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -92,7 +103,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     secret_name: str,
-    secret_type: Unset | str = UNSET,
+    secret_type: str | Unset = UNSET,
 ) -> Response[
     Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT
 ]:
@@ -102,14 +113,14 @@ def sync_detailed(
 
     Args:
         secret_name (str): Secret name Example: test-purpose-secret.
-        secret_type (Union[Unset, str]): Secret type Example: raw.
+        secret_type (str | Unset): Secret type Example: raw.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, SecretResultT]]
+        Response[Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT]
     """
 
     kwargs = _get_kwargs(
@@ -128,22 +139,24 @@ def sync(
     *,
     client: AuthenticatedClient,
     secret_name: str,
-    secret_type: Unset | str = UNSET,
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT | None:
+    secret_type: str | Unset = UNSET,
+) -> (
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT | None
+):
     """get secret
 
      Get a secrets
 
     Args:
         secret_name (str): Secret name Example: test-purpose-secret.
-        secret_type (Union[Unset, str]): Secret type Example: raw.
+        secret_type (str | Unset): Secret type Example: raw.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, SecretResultT]
+        Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT
     """
 
     return sync_detailed(
@@ -157,7 +170,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     secret_name: str,
-    secret_type: Unset | str = UNSET,
+    secret_type: str | Unset = UNSET,
 ) -> Response[
     Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT
 ]:
@@ -167,14 +180,14 @@ async def asyncio_detailed(
 
     Args:
         secret_name (str): Secret name Example: test-purpose-secret.
-        secret_type (Union[Unset, str]): Secret type Example: raw.
+        secret_type (str | Unset): Secret type Example: raw.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, SecretResultT]]
+        Response[Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT]
     """
 
     kwargs = _get_kwargs(
@@ -191,22 +204,24 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     secret_name: str,
-    secret_type: Unset | str = UNSET,
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT | None:
+    secret_type: str | Unset = UNSET,
+) -> (
+    Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT | None
+):
     """get secret
 
      Get a secrets
 
     Args:
         secret_name (str): Secret name Example: test-purpose-secret.
-        secret_type (Union[Unset, str]): Secret type Example: raw.
+        secret_type (str | Unset): Secret type Example: raw.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, SecretResultT]
+        Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | SecretResultT
     """
 
     return (

@@ -18,7 +18,7 @@ def _get_kwargs(
     body: Any,
     entity_id: str,
     schema: str,
-    policy_id: Unset | str = UNSET,
+    policy_id: str | Unset = UNSET,
     content_type: str,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
@@ -40,9 +40,8 @@ def _get_kwargs(
         "params": params,
     }
 
-    _body = body
+    _kwargs["json"] = body
 
-    _kwargs["json"] = _body
     headers["Content-Type"] = "application/json"
 
     _kwargs["headers"] = headers
@@ -56,28 +55,35 @@ def _parse_response(
         response_200 = AddMetaRT.from_dict(response.json())
 
         return response_200
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -86,9 +92,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[
-    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+) -> Response[AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -103,21 +107,18 @@ def sync_detailed(
     body: Any,
     entity_id: str,
     schema: str,
-    policy_id: Unset | str = UNSET,
+    policy_id: str | Unset = UNSET,
     content_type: str,
-) -> Response[
-    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+) -> Response[AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     """add metadata
 
      Attach new metadata to an entity.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example:
-            http://buckridge.info/cade.larkin.
-        schema (str): Schema of metadata Example: http://reinger.org/everardo.parker.
-        policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://beahan.info/bettie.sanford.
+        entity_id (str): Entity to which attach metadata Example: http://gaylord.name/arno.
+        schema (str): Schema of metadata Example: http://mayer.info/cornell.
+        policy_id (str | Unset): Policy guiding visibility and actions performed Example:
+            http://kirlin.name/ansel_ratke.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (Any): Aspect content Example: {"$schema": ...}.
@@ -127,7 +128,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]
+        Response[AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -151,7 +152,7 @@ def sync(
     body: Any,
     entity_id: str,
     schema: str,
-    policy_id: Unset | str = UNSET,
+    policy_id: str | Unset = UNSET,
     content_type: str,
 ) -> AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """add metadata
@@ -159,11 +160,10 @@ def sync(
      Attach new metadata to an entity.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example:
-            http://buckridge.info/cade.larkin.
-        schema (str): Schema of metadata Example: http://reinger.org/everardo.parker.
-        policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://beahan.info/bettie.sanford.
+        entity_id (str): Entity to which attach metadata Example: http://gaylord.name/arno.
+        schema (str): Schema of metadata Example: http://mayer.info/cornell.
+        policy_id (str | Unset): Policy guiding visibility and actions performed Example:
+            http://kirlin.name/ansel_ratke.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (Any): Aspect content Example: {"$schema": ...}.
@@ -173,7 +173,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]
+        AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
     """
 
     return sync_detailed(
@@ -192,21 +192,18 @@ async def asyncio_detailed(
     body: Any,
     entity_id: str,
     schema: str,
-    policy_id: Unset | str = UNSET,
+    policy_id: str | Unset = UNSET,
     content_type: str,
-) -> Response[
-    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+) -> Response[AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     """add metadata
 
      Attach new metadata to an entity.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example:
-            http://buckridge.info/cade.larkin.
-        schema (str): Schema of metadata Example: http://reinger.org/everardo.parker.
-        policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://beahan.info/bettie.sanford.
+        entity_id (str): Entity to which attach metadata Example: http://gaylord.name/arno.
+        schema (str): Schema of metadata Example: http://mayer.info/cornell.
+        policy_id (str | Unset): Policy guiding visibility and actions performed Example:
+            http://kirlin.name/ansel_ratke.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (Any): Aspect content Example: {"$schema": ...}.
@@ -216,7 +213,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]
+        Response[AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -238,7 +235,7 @@ async def asyncio(
     body: Any,
     entity_id: str,
     schema: str,
-    policy_id: Unset | str = UNSET,
+    policy_id: str | Unset = UNSET,
     content_type: str,
 ) -> AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """add metadata
@@ -246,11 +243,10 @@ async def asyncio(
      Attach new metadata to an entity.
 
     Args:
-        entity_id (str): Entity to which attach metadata Example:
-            http://buckridge.info/cade.larkin.
-        schema (str): Schema of metadata Example: http://reinger.org/everardo.parker.
-        policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://beahan.info/bettie.sanford.
+        entity_id (str): Entity to which attach metadata Example: http://gaylord.name/arno.
+        schema (str): Schema of metadata Example: http://mayer.info/cornell.
+        policy_id (str | Unset): Policy guiding visibility and actions performed Example:
+            http://kirlin.name/ansel_ratke.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
         body (Any): Aspect content Example: {"$schema": ...}.
@@ -260,7 +256,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]
+        AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
     """
 
     return (

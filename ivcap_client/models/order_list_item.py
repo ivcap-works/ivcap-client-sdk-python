@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -27,12 +30,10 @@ class OrderListItem:
         id (str): ID Example: urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
         service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
         status (OrderListItemStatus): Order status Example: error.
-        finished_at (Union[Unset, datetime.datetime]): DateTime order processing finished Example:
-            1996-12-19T16:39:57-08:00.
-        name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
-        ordered_at (Union[Unset, datetime.datetime]): DateTime order was placed Example: 1996-12-19T16:39:57-08:00.
-        started_at (Union[Unset, datetime.datetime]): DateTime order processing started Example:
-            1996-12-19T16:39:57-08:00.
+        finished_at (datetime.datetime | Unset): DateTime order processing finished Example: 1996-12-19T16:39:57-08:00.
+        name (str | Unset): Optional customer provided name Example: Fire risk for Lot2.
+        ordered_at (datetime.datetime | Unset): DateTime order was placed Example: 1996-12-19T16:39:57-08:00.
+        started_at (datetime.datetime | Unset): DateTime order processing started Example: 1996-12-19T16:39:57-08:00.
     """
 
     account: str
@@ -40,10 +41,10 @@ class OrderListItem:
     id: str
     service: str
     status: OrderListItemStatus
-    finished_at: Unset | datetime.datetime = UNSET
-    name: Unset | str = UNSET
-    ordered_at: Unset | datetime.datetime = UNSET
-    started_at: Unset | datetime.datetime = UNSET
+    finished_at: datetime.datetime | Unset = UNSET
+    name: str | Unset = UNSET
+    ordered_at: datetime.datetime | Unset = UNSET
+    started_at: datetime.datetime | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -57,17 +58,17 @@ class OrderListItem:
 
         status = self.status.value
 
-        finished_at: Unset | str = UNSET
+        finished_at: str | Unset = UNSET
         if not isinstance(self.finished_at, Unset):
             finished_at = self.finished_at.isoformat()
 
         name = self.name
 
-        ordered_at: Unset | str = UNSET
+        ordered_at: str | Unset = UNSET
         if not isinstance(self.ordered_at, Unset):
             ordered_at = self.ordered_at.isoformat()
 
-        started_at: Unset | str = UNSET
+        started_at: str | Unset = UNSET
         if not isinstance(self.started_at, Unset):
             started_at = self.started_at.isoformat()
 
@@ -94,8 +95,8 @@ class OrderListItem:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         account = d.pop("account")
 
         href = d.pop("href")
@@ -107,7 +108,7 @@ class OrderListItem:
         status = OrderListItemStatus(d.pop("status"))
 
         _finished_at = d.pop("finished-at", UNSET)
-        finished_at: Unset | datetime.datetime
+        finished_at: datetime.datetime | Unset
         if isinstance(_finished_at, Unset):
             finished_at = UNSET
         else:
@@ -116,14 +117,14 @@ class OrderListItem:
         name = d.pop("name", UNSET)
 
         _ordered_at = d.pop("ordered-at", UNSET)
-        ordered_at: Unset | datetime.datetime
+        ordered_at: datetime.datetime | Unset
         if isinstance(_ordered_at, Unset):
             ordered_at = UNSET
         else:
             ordered_at = isoparse(_ordered_at)
 
         _started_at = d.pop("started-at", UNSET)
-        started_at: Unset | datetime.datetime
+        started_at: datetime.datetime | Unset
         if isinstance(_started_at, Unset):
             started_at = UNSET
         else:

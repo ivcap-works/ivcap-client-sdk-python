@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -15,10 +18,10 @@ class HRefT:
         {'href': 'https://api.com/foo/...'}
 
     Attributes:
-        href (Union[Unset, str]):  Example: https://api.com/foo/....
+        href (str | Unset):  Example: https://api.com/foo/....
     """
 
-    href: Unset | str = UNSET
+    href: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -33,8 +36,8 @@ class HRefT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         href = d.pop("href", UNSET)
 
         h_ref_t = cls(

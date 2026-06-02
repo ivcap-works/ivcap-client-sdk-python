@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -15,12 +18,12 @@ class XReferenceT:
         {'title': 'Dolor recusandae.', 'uri': 'http://buckridgeleffler.com/leora_davis'}
 
     Attributes:
-        title (Union[Unset, str]): Title of reference document Example: Et accusamus..
-        uri (Union[Unset, str]): Link to document Example: http://renner.com/nicolas_swift.
+        title (str | Unset): Title of reference document Example: Et accusamus..
+        uri (str | Unset): Link to document Example: http://renner.com/nicolas_swift.
     """
 
-    title: Unset | str = UNSET
-    uri: Unset | str = UNSET
+    title: str | Unset = UNSET
+    uri: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -39,8 +42,8 @@ class XReferenceT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         title = d.pop("title", UNSET)
 
         uri = d.pop("uri", UNSET)

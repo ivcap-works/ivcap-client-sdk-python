@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from typing import Any, cast
+from urllib.parse import quote
 
 import httpx
 
@@ -17,11 +18,12 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     order_id: str,
     *,
-    order_by: Unset | str = UNSET,
-    order_desc: Unset | bool = True,
-    limit: Unset | int = 10,
-    page: Unset | str = UNSET,
+    order_by: str | Unset = UNSET,
+    order_desc: bool | Unset = True,
+    limit: int | Unset = 10,
+    page: str | Unset = UNSET,
 ) -> dict[str, Any]:
+
     params: dict[str, Any] = {}
 
     params["order-by"] = order_by
@@ -36,7 +38,9 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/1/orders/{order_id}/metadata",
+        "url": "/1/orders/{order_id}/metadata".format(
+            order_id=quote(str(order_id), safe=""),
+        ),
         "params": params,
     }
 
@@ -45,37 +49,54 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialMetaListT | ResourceNotFoundT | None:
+) -> (
+    Any
+    | BadRequestT
+    | InvalidParameterT
+    | InvalidScopesT
+    | NotImplementedT
+    | PartialMetaListT
+    | ResourceNotFoundT
+    | None
+):
     if response.status_code == 200:
         response_200 = PartialMetaListT.from_dict(response.json())
 
         return response_200
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
+
     if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -99,10 +120,10 @@ def sync_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Unset | str = UNSET,
-    order_desc: Unset | bool = True,
-    limit: Unset | int = 10,
-    page: Unset | str = UNSET,
+    order_by: str | Unset = UNSET,
+    order_desc: bool | Unset = True,
+    limit: int | Unset = 10,
+    page: str | Unset = UNSET,
 ) -> Response[
     Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialMetaListT | ResourceNotFoundT
 ]:
@@ -113,18 +134,18 @@ def sync_detailed(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
-            resources in either
+        order_by (str | Unset): The 'orderby' query option allows clients to request resources in
+            either
                                 ascending order using asc or descending order using desc. If asc or desc not specified,
                                 then the resources will be ordered in ascending order. The request below orders Trips
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True. Example: True.
-        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+        order_desc (bool | Unset): When set order result in descending order. Ascending order is
+            the lt. Default: True.
+        limit (int | Unset): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
-            previous query and
+        page (str | Unset): The content of 'page' is returned in the 'links' part of a previous
+            query and
                                 will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
 
@@ -133,7 +154,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialMetaListT, ResourceNotFoundT]]
+        Response[Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialMetaListT | ResourceNotFoundT]
     """
 
     kwargs = _get_kwargs(
@@ -155,11 +176,20 @@ def sync(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Unset | str = UNSET,
-    order_desc: Unset | bool = True,
-    limit: Unset | int = 10,
-    page: Unset | str = UNSET,
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialMetaListT | ResourceNotFoundT | None:
+    order_by: str | Unset = UNSET,
+    order_desc: bool | Unset = True,
+    limit: int | Unset = 10,
+    page: str | Unset = UNSET,
+) -> (
+    Any
+    | BadRequestT
+    | InvalidParameterT
+    | InvalidScopesT
+    | NotImplementedT
+    | PartialMetaListT
+    | ResourceNotFoundT
+    | None
+):
     """metadata order
 
      list metadata created by an order
@@ -167,18 +197,18 @@ def sync(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
-            resources in either
+        order_by (str | Unset): The 'orderby' query option allows clients to request resources in
+            either
                                 ascending order using asc or descending order using desc. If asc or desc not specified,
                                 then the resources will be ordered in ascending order. The request below orders Trips
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True. Example: True.
-        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+        order_desc (bool | Unset): When set order result in descending order. Ascending order is
+            the lt. Default: True.
+        limit (int | Unset): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
-            previous query and
+        page (str | Unset): The content of 'page' is returned in the 'links' part of a previous
+            query and
                                 will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
 
@@ -187,7 +217,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialMetaListT, ResourceNotFoundT]
+        Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialMetaListT | ResourceNotFoundT
     """
 
     return sync_detailed(
@@ -204,10 +234,10 @@ async def asyncio_detailed(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Unset | str = UNSET,
-    order_desc: Unset | bool = True,
-    limit: Unset | int = 10,
-    page: Unset | str = UNSET,
+    order_by: str | Unset = UNSET,
+    order_desc: bool | Unset = True,
+    limit: int | Unset = 10,
+    page: str | Unset = UNSET,
 ) -> Response[
     Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialMetaListT | ResourceNotFoundT
 ]:
@@ -218,18 +248,18 @@ async def asyncio_detailed(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
-            resources in either
+        order_by (str | Unset): The 'orderby' query option allows clients to request resources in
+            either
                                 ascending order using asc or descending order using desc. If asc or desc not specified,
                                 then the resources will be ordered in ascending order. The request below orders Trips
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True. Example: True.
-        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+        order_desc (bool | Unset): When set order result in descending order. Ascending order is
+            the lt. Default: True.
+        limit (int | Unset): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
-            previous query and
+        page (str | Unset): The content of 'page' is returned in the 'links' part of a previous
+            query and
                                 will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
 
@@ -238,7 +268,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialMetaListT, ResourceNotFoundT]]
+        Response[Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialMetaListT | ResourceNotFoundT]
     """
 
     kwargs = _get_kwargs(
@@ -258,11 +288,20 @@ async def asyncio(
     order_id: str,
     *,
     client: AuthenticatedClient,
-    order_by: Unset | str = UNSET,
-    order_desc: Unset | bool = True,
-    limit: Unset | int = 10,
-    page: Unset | str = UNSET,
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialMetaListT | ResourceNotFoundT | None:
+    order_by: str | Unset = UNSET,
+    order_desc: bool | Unset = True,
+    limit: int | Unset = 10,
+    page: str | Unset = UNSET,
+) -> (
+    Any
+    | BadRequestT
+    | InvalidParameterT
+    | InvalidScopesT
+    | NotImplementedT
+    | PartialMetaListT
+    | ResourceNotFoundT
+    | None
+):
     """metadata order
 
      list metadata created by an order
@@ -270,18 +309,18 @@ async def asyncio(
     Args:
         order_id (str): Reference to order requested Example:
             urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        order_by (Union[Unset, str]): The 'orderby' query option allows clients to request
-            resources in either
+        order_by (str | Unset): The 'orderby' query option allows clients to request resources in
+            either
                                 ascending order using asc or descending order using desc. If asc or desc not specified,
                                 then the resources will be ordered in ascending order. The request below orders Trips
             on
                                 property EndsAt in descending order. Example: orderby=EndsAt.
-        order_desc (Union[Unset, bool]): When set order result in descending order. Ascending
-            order is the lt. Default: True. Example: True.
-        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+        order_desc (bool | Unset): When set order result in descending order. Ascending order is
+            the lt. Default: True.
+        limit (int | Unset): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): The content of 'page' is returned in the 'links' part of a
-            previous query and
+        page (str | Unset): The content of 'page' is returned in the 'links' part of a previous
+            query and
                                 will when set, ALL other parameters, except for 'limit' are ignored. Example:
             gdsgQwhdgd.
 
@@ -290,7 +329,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, PartialMetaListT, ResourceNotFoundT]
+        Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | PartialMetaListT | ResourceNotFoundT
     """
 
     return (

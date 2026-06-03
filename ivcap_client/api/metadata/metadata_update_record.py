@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from typing import Any, cast
+from urllib.parse import quote
 
 import httpx
 
@@ -17,10 +18,10 @@ def _get_kwargs(
     id: str,
     *,
     body: Any,
-    entity_id: Unset | str = UNSET,
-    schema: Unset | str = UNSET,
-    policy_id: Unset | str = UNSET,
-    content_type: Unset | str = UNSET,
+    entity_id: str | Unset = UNSET,
+    schema: str | Unset = UNSET,
+    policy_id: str | Unset = UNSET,
+    content_type: str | Unset = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
     if not isinstance(content_type, Unset):
@@ -38,13 +39,14 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "put",
-        "url": f"/1/metadata/{id}",
+        "url": "/1/metadata/{id}".format(
+            id=quote(str(id), safe=""),
+        ),
         "params": params,
     }
 
-    _body = body
+    _kwargs["json"] = body
 
-    _kwargs["json"] = _body
     headers["Content-Type"] = "application/json"
 
     _kwargs["headers"] = headers
@@ -58,28 +60,35 @@ def _parse_response(
         response_200 = AddMetaRT.from_dict(response.json())
 
         return response_200
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -88,9 +97,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[
-    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+) -> Response[AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -104,13 +111,11 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: Any,
-    entity_id: Unset | str = UNSET,
-    schema: Unset | str = UNSET,
-    policy_id: Unset | str = UNSET,
-    content_type: Unset | str = UNSET,
-) -> Response[
-    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+    entity_id: str | Unset = UNSET,
+    schema: str | Unset = UNSET,
+    policy_id: str | Unset = UNSET,
+    content_type: str | Unset = UNSET,
+) -> Response[AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     """update_record metadata
 
      Revoke this record and create a new one with the information provided.
@@ -119,12 +124,12 @@ def sync_detailed(
     Args:
         id (str): Record ID to update Example:
             urn:ivcap:record.53cbb715-4ffd-4158-9e55-5d0ae69605a4.
-        entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
-        schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
-        policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://krajciklemke.com/elouise.
-        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
-            Example: application/json.
+        entity_id (str | Unset): Entity to which attach metadata Example: urn:url:.....
+        schema (str | Unset): Schema of metadata Example: urn:url:.....
+        policy_id (str | Unset): Policy guiding visibility and actions performed Example:
+            http://dooleyblock.name/tod.
+        content_type (str | Unset): Content-Type header, MUST be of application/json. Example:
+            application/json.
         body (Any): Aspect content Example: {"$schema": ...}.
 
     Raises:
@@ -132,7 +137,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]
+        Response[AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -156,10 +161,10 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: Any,
-    entity_id: Unset | str = UNSET,
-    schema: Unset | str = UNSET,
-    policy_id: Unset | str = UNSET,
-    content_type: Unset | str = UNSET,
+    entity_id: str | Unset = UNSET,
+    schema: str | Unset = UNSET,
+    policy_id: str | Unset = UNSET,
+    content_type: str | Unset = UNSET,
 ) -> AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """update_record metadata
 
@@ -169,12 +174,12 @@ def sync(
     Args:
         id (str): Record ID to update Example:
             urn:ivcap:record.53cbb715-4ffd-4158-9e55-5d0ae69605a4.
-        entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
-        schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
-        policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://krajciklemke.com/elouise.
-        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
-            Example: application/json.
+        entity_id (str | Unset): Entity to which attach metadata Example: urn:url:.....
+        schema (str | Unset): Schema of metadata Example: urn:url:.....
+        policy_id (str | Unset): Policy guiding visibility and actions performed Example:
+            http://dooleyblock.name/tod.
+        content_type (str | Unset): Content-Type header, MUST be of application/json. Example:
+            application/json.
         body (Any): Aspect content Example: {"$schema": ...}.
 
     Raises:
@@ -182,7 +187,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]
+        AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
     """
 
     return sync_detailed(
@@ -201,13 +206,11 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: Any,
-    entity_id: Unset | str = UNSET,
-    schema: Unset | str = UNSET,
-    policy_id: Unset | str = UNSET,
-    content_type: Unset | str = UNSET,
-) -> Response[
-    AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+    entity_id: str | Unset = UNSET,
+    schema: str | Unset = UNSET,
+    policy_id: str | Unset = UNSET,
+    content_type: str | Unset = UNSET,
+) -> Response[AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     """update_record metadata
 
      Revoke this record and create a new one with the information provided.
@@ -216,12 +219,12 @@ async def asyncio_detailed(
     Args:
         id (str): Record ID to update Example:
             urn:ivcap:record.53cbb715-4ffd-4158-9e55-5d0ae69605a4.
-        entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
-        schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
-        policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://krajciklemke.com/elouise.
-        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
-            Example: application/json.
+        entity_id (str | Unset): Entity to which attach metadata Example: urn:url:.....
+        schema (str | Unset): Schema of metadata Example: urn:url:.....
+        policy_id (str | Unset): Policy guiding visibility and actions performed Example:
+            http://dooleyblock.name/tod.
+        content_type (str | Unset): Content-Type header, MUST be of application/json. Example:
+            application/json.
         body (Any): Aspect content Example: {"$schema": ...}.
 
     Raises:
@@ -229,7 +232,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]
+        Response[AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -251,10 +254,10 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: Any,
-    entity_id: Unset | str = UNSET,
-    schema: Unset | str = UNSET,
-    policy_id: Unset | str = UNSET,
-    content_type: Unset | str = UNSET,
+    entity_id: str | Unset = UNSET,
+    schema: str | Unset = UNSET,
+    policy_id: str | Unset = UNSET,
+    content_type: str | Unset = UNSET,
 ) -> AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """update_record metadata
 
@@ -264,12 +267,12 @@ async def asyncio(
     Args:
         id (str): Record ID to update Example:
             urn:ivcap:record.53cbb715-4ffd-4158-9e55-5d0ae69605a4.
-        entity_id (Union[Unset, str]): Entity to which attach metadata Example: urn:url:.....
-        schema (Union[Unset, str]): Schema of metadata Example: urn:url:.....
-        policy_id (Union[Unset, str]): Policy guiding visibility and actions performed Example:
-            http://krajciklemke.com/elouise.
-        content_type (Union[Unset, str]): Content-Type header, MUST be of application/json.
-            Example: application/json.
+        entity_id (str | Unset): Entity to which attach metadata Example: urn:url:.....
+        schema (str | Unset): Schema of metadata Example: urn:url:.....
+        policy_id (str | Unset): Policy guiding visibility and actions performed Example:
+            http://dooleyblock.name/tod.
+        content_type (str | Unset): Content-Type header, MUST be of application/json. Example:
+            application/json.
         body (Any): Aspect content Example: {"$schema": ...}.
 
     Raises:
@@ -277,7 +280,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AddMetaRT, Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]
+        AddMetaRT | Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
     """
 
     return (

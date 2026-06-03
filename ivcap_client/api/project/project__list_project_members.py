@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from typing import Any, cast
+from urllib.parse import quote
 
 import httpx
 
@@ -17,10 +18,11 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     urn: str,
     *,
-    role: Unset | str = UNSET,
-    limit: Unset | int = 10,
-    page: Unset | str = UNSET,
+    role: str | Unset = UNSET,
+    limit: int | Unset = 10,
+    page: str | Unset = UNSET,
 ) -> dict[str, Any]:
+
     params: dict[str, Any] = {}
 
     params["role"] = role
@@ -33,7 +35,9 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/1/project/{urn}/members",
+        "url": "/1/project/{urn}/members".format(
+            urn=quote(str(urn), safe=""),
+        ),
         "params": params,
     }
 
@@ -47,32 +51,40 @@ def _parse_response(
         response_200 = MembersList.from_dict(response.json())
 
         return response_200
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
+
     if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -96,9 +108,9 @@ def sync_detailed(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Unset | str = UNSET,
-    limit: Unset | int = 10,
-    page: Unset | str = UNSET,
+    role: str | Unset = UNSET,
+    limit: int | Unset = 10,
+    page: str | Unset = UNSET,
 ) -> Response[
     Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT
 ]:
@@ -108,18 +120,18 @@ def sync_detailed(
 
     Args:
         urn (str): Project URN Example: urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        role (Union[Unset, str]): Role Example: all.
-        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+        role (str | Unset): Role Example: all.
+        limit (int | Unset): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if
-            there are no more results Example: Sed laboriosam optio placeat rerum..
+        page (str | Unset): A pagination token to retrieve the next set of results. Empty if there
+            are no more results Example: Recusandae perspiciatis laboriosam molestiae..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, NotImplementedT, ResourceNotFoundT]]
+        Response[Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT]
     """
 
     kwargs = _get_kwargs(
@@ -140,9 +152,9 @@ def sync(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Unset | str = UNSET,
-    limit: Unset | int = 10,
-    page: Unset | str = UNSET,
+    role: str | Unset = UNSET,
+    limit: int | Unset = 10,
+    page: str | Unset = UNSET,
 ) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT | None:
     """List Project Members
 
@@ -150,18 +162,18 @@ def sync(
 
     Args:
         urn (str): Project URN Example: urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        role (Union[Unset, str]): Role Example: all.
-        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+        role (str | Unset): Role Example: all.
+        limit (int | Unset): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if
-            there are no more results Example: Sed laboriosam optio placeat rerum..
+        page (str | Unset): A pagination token to retrieve the next set of results. Empty if there
+            are no more results Example: Recusandae perspiciatis laboriosam molestiae..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, NotImplementedT, ResourceNotFoundT]
+        Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT
     """
 
     return sync_detailed(
@@ -177,9 +189,9 @@ async def asyncio_detailed(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Unset | str = UNSET,
-    limit: Unset | int = 10,
-    page: Unset | str = UNSET,
+    role: str | Unset = UNSET,
+    limit: int | Unset = 10,
+    page: str | Unset = UNSET,
 ) -> Response[
     Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT
 ]:
@@ -189,18 +201,18 @@ async def asyncio_detailed(
 
     Args:
         urn (str): Project URN Example: urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        role (Union[Unset, str]): Role Example: all.
-        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+        role (str | Unset): Role Example: all.
+        limit (int | Unset): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if
-            there are no more results Example: Sed laboriosam optio placeat rerum..
+        page (str | Unset): A pagination token to retrieve the next set of results. Empty if there
+            are no more results Example: Recusandae perspiciatis laboriosam molestiae..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, NotImplementedT, ResourceNotFoundT]]
+        Response[Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT]
     """
 
     kwargs = _get_kwargs(
@@ -219,9 +231,9 @@ async def asyncio(
     urn: str,
     *,
     client: AuthenticatedClient,
-    role: Unset | str = UNSET,
-    limit: Unset | int = 10,
-    page: Unset | str = UNSET,
+    role: str | Unset = UNSET,
+    limit: int | Unset = 10,
+    page: str | Unset = UNSET,
 ) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT | None:
     """List Project Members
 
@@ -229,18 +241,18 @@ async def asyncio(
 
     Args:
         urn (str): Project URN Example: urn:ivcap:project:59c76bc8-721b-409d-8a32-6d560680e89f.
-        role (Union[Unset, str]): Role Example: all.
-        limit (Union[Unset, int]): The 'limit' query option sets the maximum number of items
+        role (str | Unset): Role Example: all.
+        limit (int | Unset): The 'limit' query option sets the maximum number of items
                                 to be included in the result. Default: 10. Example: 10.
-        page (Union[Unset, str]): A pagination token to retrieve the next set of results. Empty if
-            there are no more results Example: Sed laboriosam optio placeat rerum..
+        page (str | Unset): A pagination token to retrieve the next set of results. Empty if there
+            are no more results Example: Recusandae perspiciatis laboriosam molestiae..
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, MembersList, NotImplementedT, ResourceNotFoundT]
+        Any | BadRequestT | InvalidParameterT | InvalidScopesT | MembersList | NotImplementedT | ResourceNotFoundT
     """
 
     return (

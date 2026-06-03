@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -26,22 +29,20 @@ class JobListItem:
         id (str): ID Example: urn:ivcap:job:123e4567-e89b-12d3-a456-426614174000.
         service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
         status (JobListItemStatus): Job status Example: executing.
-        finished_at (Union[Unset, datetime.datetime]): DateTime job processing finished Example:
-            1996-12-19T16:39:57-08:00.
-        name (Union[Unset, str]): Optional customer provided name Example: Fire risk for region.
-        order (Union[Unset, str]): Reference to order Example: urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        started_at (Union[Unset, datetime.datetime]): DateTime job processing started Example:
-            1996-12-19T16:39:57-08:00.
+        finished_at (datetime.datetime | Unset): DateTime job processing finished Example: 1996-12-19T16:39:57-08:00.
+        name (str | Unset): Optional customer provided name Example: Fire risk for region.
+        order (str | Unset): Reference to order Example: urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
+        started_at (datetime.datetime | Unset): DateTime job processing started Example: 1996-12-19T16:39:57-08:00.
     """
 
     href: str
     id: str
     service: str
     status: JobListItemStatus
-    finished_at: Unset | datetime.datetime = UNSET
-    name: Unset | str = UNSET
-    order: Unset | str = UNSET
-    started_at: Unset | datetime.datetime = UNSET
+    finished_at: datetime.datetime | Unset = UNSET
+    name: str | Unset = UNSET
+    order: str | Unset = UNSET
+    started_at: datetime.datetime | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -53,7 +54,7 @@ class JobListItem:
 
         status = self.status.value
 
-        finished_at: Unset | str = UNSET
+        finished_at: str | Unset = UNSET
         if not isinstance(self.finished_at, Unset):
             finished_at = self.finished_at.isoformat()
 
@@ -61,7 +62,7 @@ class JobListItem:
 
         order = self.order
 
-        started_at: Unset | str = UNSET
+        started_at: str | Unset = UNSET
         if not isinstance(self.started_at, Unset):
             started_at = self.started_at.isoformat()
 
@@ -87,8 +88,8 @@ class JobListItem:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         href = d.pop("href")
 
         id = d.pop("id")
@@ -98,7 +99,7 @@ class JobListItem:
         status = JobListItemStatus(d.pop("status"))
 
         _finished_at = d.pop("finished-at", UNSET)
-        finished_at: Unset | datetime.datetime
+        finished_at: datetime.datetime | Unset
         if isinstance(_finished_at, Unset):
             finished_at = UNSET
         else:
@@ -109,7 +110,7 @@ class JobListItem:
         order = d.pop("order", UNSET)
 
         _started_at = d.pop("started-at", UNSET)
-        started_at: Unset | datetime.datetime
+        started_at: datetime.datetime | Unset
         if isinstance(_started_at, Unset):
             started_at = UNSET
         else:

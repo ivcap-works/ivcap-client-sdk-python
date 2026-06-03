@@ -19,7 +19,7 @@ def _get_kwargs(
     body: AspectcreateBody,
     entity: str,
     schema: str,
-    policy: Unset | str = UNSET,
+    policy: str | Unset = UNSET,
     content_type: str,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
@@ -41,9 +41,8 @@ def _get_kwargs(
         "params": params,
     }
 
-    _body = body.to_dict()
+    _kwargs["json"] = body.to_dict()
 
-    _kwargs["json"] = _body
     headers["Content-Type"] = "application/json"
 
     _kwargs["headers"] = headers
@@ -57,28 +56,35 @@ def _parse_response(
         response_200 = AspectIDRT.from_dict(response.json())
 
         return response_200
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -87,9 +93,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[
-    Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+) -> Response[Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -104,11 +108,9 @@ def sync_detailed(
     body: AspectcreateBody,
     entity: str,
     schema: str,
-    policy: Unset | str = UNSET,
+    policy: str | Unset = UNSET,
     content_type: str,
-) -> Response[
-    Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+) -> Response[Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     """create aspect
 
      Attach new aspect to an entity.
@@ -116,7 +118,7 @@ def sync_detailed(
     Args:
         entity (str): Entity to which attach aspect Example: urn:some_ns:entity#123.
         schema (str): Schema of the aspect in payload Example: urn:some_ns:schema:some_schema.1.
-        policy (Union[Unset, str]): Policy guiding visibility and actions performed Example:
+        policy (str | Unset): Policy guiding visibility and actions performed Example:
             urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
@@ -127,7 +129,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]
+        Response[Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -151,7 +153,7 @@ def sync(
     body: AspectcreateBody,
     entity: str,
     schema: str,
-    policy: Unset | str = UNSET,
+    policy: str | Unset = UNSET,
     content_type: str,
 ) -> Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """create aspect
@@ -161,7 +163,7 @@ def sync(
     Args:
         entity (str): Entity to which attach aspect Example: urn:some_ns:entity#123.
         schema (str): Schema of the aspect in payload Example: urn:some_ns:schema:some_schema.1.
-        policy (Union[Unset, str]): Policy guiding visibility and actions performed Example:
+        policy (str | Unset): Policy guiding visibility and actions performed Example:
             urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
@@ -172,7 +174,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]
+        Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
     """
 
     return sync_detailed(
@@ -191,11 +193,9 @@ async def asyncio_detailed(
     body: AspectcreateBody,
     entity: str,
     schema: str,
-    policy: Unset | str = UNSET,
+    policy: str | Unset = UNSET,
     content_type: str,
-) -> Response[
-    Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+) -> Response[Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     """create aspect
 
      Attach new aspect to an entity.
@@ -203,7 +203,7 @@ async def asyncio_detailed(
     Args:
         entity (str): Entity to which attach aspect Example: urn:some_ns:entity#123.
         schema (str): Schema of the aspect in payload Example: urn:some_ns:schema:some_schema.1.
-        policy (Union[Unset, str]): Policy guiding visibility and actions performed Example:
+        policy (str | Unset): Policy guiding visibility and actions performed Example:
             urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
@@ -214,7 +214,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]]
+        Response[Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -236,7 +236,7 @@ async def asyncio(
     body: AspectcreateBody,
     entity: str,
     schema: str,
-    policy: Unset | str = UNSET,
+    policy: str | Unset = UNSET,
     content_type: str,
 ) -> Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """create aspect
@@ -246,7 +246,7 @@ async def asyncio(
     Args:
         entity (str): Entity to which attach aspect Example: urn:some_ns:entity#123.
         schema (str): Schema of the aspect in payload Example: urn:some_ns:schema:some_schema.1.
-        policy (Union[Unset, str]): Policy guiding visibility and actions performed Example:
+        policy (str | Unset): Policy guiding visibility and actions performed Example:
             urn:ivcap:policy:some_policy.1.
         content_type (str): Content-Type header, MUST be of application/json. Example:
             application/json.
@@ -257,7 +257,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, AspectIDRT, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT]
+        Any | AspectIDRT | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT
     """
 
     return (

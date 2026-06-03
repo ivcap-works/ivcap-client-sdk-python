@@ -18,8 +18,9 @@ def _get_kwargs(
     *,
     ref: str,
     type_: PackagepullType,
-    offset: Unset | int = UNSET,
+    offset: int | Unset = UNSET,
 ) -> dict[str, Any]:
+
     params: dict[str, Any] = {}
 
     params["ref"] = ref
@@ -47,30 +48,37 @@ def _parse_response(
         response_200 = File(payload=BytesIO(response.json()))
 
         return response_200
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = File(payload=BytesIO(response.json()))
 
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = File(payload=BytesIO(response.json()))
 
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -79,9 +87,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[
-    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+) -> Response[BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -95,10 +101,8 @@ def sync_detailed(
     client: AuthenticatedClient,
     ref: str,
     type_: PackagepullType,
-    offset: Unset | int = UNSET,
-) -> Response[
-    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+    offset: int | Unset = UNSET,
+) -> Response[BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     """pull package
 
      pull ivcap service's docker image
@@ -106,14 +110,14 @@ def sync_detailed(
     Args:
         ref (str): docker image tag or layer digest Example: test_app:1.0.1.
         type_ (PackagepullType): pull type, either be manifest, config or layer Example: layer.
-        offset (Union[Unset, int]): offset of the layer chunk
+        offset (int | Unset): offset of the layer chunk
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT]]
+        Response[BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -134,7 +138,7 @@ def sync(
     client: AuthenticatedClient,
     ref: str,
     type_: PackagepullType,
-    offset: Unset | int = UNSET,
+    offset: int | Unset = UNSET,
 ) -> BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """pull package
 
@@ -143,14 +147,14 @@ def sync(
     Args:
         ref (str): docker image tag or layer digest Example: test_app:1.0.1.
         type_ (PackagepullType): pull type, either be manifest, config or layer Example: layer.
-        offset (Union[Unset, int]): offset of the layer chunk
+        offset (int | Unset): offset of the layer chunk
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT]
+        BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT
     """
 
     return sync_detailed(
@@ -166,10 +170,8 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     ref: str,
     type_: PackagepullType,
-    offset: Unset | int = UNSET,
-) -> Response[
-    BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT
-]:
+    offset: int | Unset = UNSET,
+) -> Response[BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT]:
     """pull package
 
      pull ivcap service's docker image
@@ -177,14 +179,14 @@ async def asyncio_detailed(
     Args:
         ref (str): docker image tag or layer digest Example: test_app:1.0.1.
         type_ (PackagepullType): pull type, either be manifest, config or layer Example: layer.
-        offset (Union[Unset, int]): offset of the layer chunk
+        offset (int | Unset): offset of the layer chunk
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT]]
+        Response[BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -203,7 +205,7 @@ async def asyncio(
     client: AuthenticatedClient,
     ref: str,
     type_: PackagepullType,
-    offset: Unset | int = UNSET,
+    offset: int | Unset = UNSET,
 ) -> BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT | None:
     """pull package
 
@@ -212,14 +214,14 @@ async def asyncio(
     Args:
         ref (str): docker image tag or layer digest Example: test_app:1.0.1.
         type_ (PackagepullType): pull type, either be manifest, config or layer Example: layer.
-        offset (Union[Unset, int]): offset of the layer chunk
+        offset (int | Unset): offset of the layer chunk
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[BadRequestT, File, InvalidParameterT, InvalidScopesT, NotImplementedT]
+        BadRequestT | File | InvalidParameterT | InvalidScopesT | NotImplementedT
     """
 
     return (

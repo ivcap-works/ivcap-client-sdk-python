@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -20,15 +23,15 @@ class PartialProductList2T:
             1234963}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'next'}]}
 
     Attributes:
-        items (list['ProductListItem2T']): (Partial) list of products delivered by this order Example: [{'data-href':
+        items (list[ProductListItem2T]): (Partial) list of products delivered by this order Example: [{'data-href':
             'https:/.../1/artifacts/0000-00001220/blob', 'href': 'https:/.../1/artifacts/0000-00001220', 'mime-type':
             'image/geo+tiff', 'name': 'fire risk map', 'size': 1234963}].
-        links (list['LinkT']): Links to more products, if there are any Example: [{'href':
-            'https://api.ivcap.net/1/....', 'rel': 'next'}].
+        links (list[LinkT]): Links to more products, if there are any Example: [{'href': 'https://api.ivcap.net/1/....',
+            'rel': 'next'}].
     """
 
-    items: list["ProductListItem2T"]
-    links: list["LinkT"]
+    items: list[ProductListItem2T]
+    links: list[LinkT]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -54,11 +57,11 @@ class PartialProductList2T:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.product_list_item_2t import ProductListItem2T
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         items = []
         _items = d.pop("items")
         for items_item_data in _items:

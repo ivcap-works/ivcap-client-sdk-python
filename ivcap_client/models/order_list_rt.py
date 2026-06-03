@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -34,7 +37,7 @@ class OrderListRT:
 
     Attributes:
         at_time (datetime.datetime): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
-        items (list['OrderListItem']): Orders Example: [{'account':
+        items (list[OrderListItem]): Orders Example: [{'account':
             'urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000', 'finished-at': '1996-12-19T16:39:57-08:00', 'href':
             'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000', 'name':
             'Fire risk for Lot2', 'ordered-at': '1996-12-19T16:39:57-08:00', 'service':
@@ -49,7 +52,7 @@ class OrderListRT:
             'Fire risk for Lot2', 'ordered-at': '1996-12-19T16:39:57-08:00', 'service':
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'started-at': '1996-12-19T16:39:57-08:00', 'status':
             'executing'}].
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
@@ -57,8 +60,8 @@ class OrderListRT:
     """
 
     at_time: datetime.datetime
-    items: list["OrderListItem"]
-    links: list["LinkT"]
+    items: list[OrderListItem]
+    links: list[LinkT]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -87,11 +90,11 @@ class OrderListRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.order_list_item import OrderListItem
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         at_time = isoparse(d.pop("at-time"))
 
         items = []

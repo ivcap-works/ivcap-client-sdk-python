@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
@@ -21,20 +24,19 @@ class OrderRequestT:
             'urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000', 'tags': ['tag1', 'tag2']}
 
     Attributes:
-        parameters (list['ParameterT']): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
+        parameters (list[ParameterT]): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
             {'name': 'threshold', 'value': '10'}].
         service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
-        name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
-        policy (Union[Unset, str]): Reference to policy used Example:
-            urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
-        tags (Union[Unset, list[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
+        name (str | Unset): Optional customer provided name Example: Fire risk for Lot2.
+        policy (str | Unset): Reference to policy used Example: urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
+        tags (list[str] | Unset): Optional customer provided tags Example: ['tag1', 'tag2'].
     """
 
-    parameters: list["ParameterT"]
+    parameters: list[ParameterT]
     service: str
-    name: Unset | str = UNSET
-    policy: Unset | str = UNSET
-    tags: Unset | list[str] = UNSET
+    name: str | Unset = UNSET
+    policy: str | Unset = UNSET
+    tags: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -49,7 +51,7 @@ class OrderRequestT:
 
         policy = self.policy
 
-        tags: Unset | list[str] = UNSET
+        tags: list[str] | Unset = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
@@ -71,10 +73,10 @@ class OrderRequestT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.parameter_t import ParameterT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         parameters = []
         _parameters = d.pop("parameters")
         for parameters_item_data in _parameters:

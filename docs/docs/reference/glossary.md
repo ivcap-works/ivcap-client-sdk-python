@@ -44,11 +44,6 @@ The access credential used to authenticate with the IVCAP API. Obtained via the
 [ivcap-cli](https://github.com/reinventingscience/ivcap-cli) with
 `ivcap context get access-token`.
 
-## Order
-
-The legacy name for a job invocation. Orders and jobs share the same underlying
-Datafabric representation. The Orders API is still fully supported.
-
 ## Policy
 
 An access control descriptor (`urn:ivcap:policy:<name>`) that governs who can read
@@ -97,7 +92,6 @@ The globally unique identifier for every IVCAP entity. Format:
 |---|---|
 | Service | `urn:ivcap:service:<uuid>` |
 | Job | `urn:ivcap:job:<uuid>` |
-| Order | `urn:ivcap:order:<uuid>` |
 | Artifact | `urn:ivcap:artifact:<uuid>` |
 | Aspect | `urn:ivcap:aspect:<uuid>` |
 | Account | `urn:ivcap:account:<uuid>` |

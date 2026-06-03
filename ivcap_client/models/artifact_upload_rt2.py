@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -25,43 +28,42 @@ class ArtifactUploadRT2:
             '1996-12-19T16:39:57-08:00', 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}], 'mime-type': 'application/json', 'name': 'Fire risk per LGA',
-            'policy': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'size': 7245916656492638692, 'status':
-            'partial'}
+            'policy': 'urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000', 'size': 7299359519116713580, 'status':
+            'ready'}
 
     Attributes:
         id (str): Artifact ID Example: urn:ivcap:Artifact ID:123e4567-e89b-12d3-a456-426614174000.
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
-        status (ArtifactUploadRT2Status): Artifact status Example: partial.
-        account (Union[Unset, str]): Reference to billable account Example:
+        status (ArtifactUploadRT2Status): Artifact status Example: pending.
+        account (str | Unset): Reference to billable account Example:
             urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
-        cache_of (Union[Unset, str]): URL of object this artifact is caching Example: urn:ivcap:artifact:00000.
-        created_at (Union[Unset, datetime.datetime]): DateTime artifact was created Example: 1996-12-19T16:39:57-08:00.
-        data_href (Union[Unset, str]):  Example: https://api.ivcap.net/1/artifacts/.../blob.
-        etag (Union[Unset, str]): ETAG of artifact Example: 00000-0000123.
-        last_modified_at (Union[Unset, datetime.datetime]): DateTime artifact was last modified Example:
+        cache_of (str | Unset): URL of object this artifact is caching Example: urn:ivcap:artifact:00000.
+        created_at (datetime.datetime | Unset): DateTime artifact was created Example: 1996-12-19T16:39:57-08:00.
+        data_href (str | Unset):  Example: https://api.ivcap.net/1/artifacts/.../blob.
+        etag (str | Unset): ETAG of artifact Example: 00000-0000123.
+        last_modified_at (datetime.datetime | Unset): DateTime artifact was last modified Example:
             1996-12-19T16:39:57-08:00.
-        mime_type (Union[Unset, str]): Mime-type of data Example: application/json.
-        name (Union[Unset, str]): Optional name Example: Fire risk per LGA.
-        policy (Union[Unset, str]): Reference to policy used Example:
-            urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
-        size (Union[Unset, int]): Size of data Example: 654379375277776955.
+        mime_type (str | Unset): Mime-type of data Example: application/json.
+        name (str | Unset): Optional name Example: Fire risk per LGA.
+        policy (str | Unset): Reference to policy used Example: urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
+        size (int | Unset): Size of data Example: 6612574515353717636.
     """
 
     id: str
-    links: list["LinkT"]
+    links: list[LinkT]
     status: ArtifactUploadRT2Status
-    account: Unset | str = UNSET
-    cache_of: Unset | str = UNSET
-    created_at: Unset | datetime.datetime = UNSET
-    data_href: Unset | str = UNSET
-    etag: Unset | str = UNSET
-    last_modified_at: Unset | datetime.datetime = UNSET
-    mime_type: Unset | str = UNSET
-    name: Unset | str = UNSET
-    policy: Unset | str = UNSET
-    size: Unset | int = UNSET
+    account: str | Unset = UNSET
+    cache_of: str | Unset = UNSET
+    created_at: datetime.datetime | Unset = UNSET
+    data_href: str | Unset = UNSET
+    etag: str | Unset = UNSET
+    last_modified_at: datetime.datetime | Unset = UNSET
+    mime_type: str | Unset = UNSET
+    name: str | Unset = UNSET
+    policy: str | Unset = UNSET
+    size: int | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -78,7 +80,7 @@ class ArtifactUploadRT2:
 
         cache_of = self.cache_of
 
-        created_at: Unset | str = UNSET
+        created_at: str | Unset = UNSET
         if not isinstance(self.created_at, Unset):
             created_at = self.created_at.isoformat()
 
@@ -86,7 +88,7 @@ class ArtifactUploadRT2:
 
         etag = self.etag
 
-        last_modified_at: Unset | str = UNSET
+        last_modified_at: str | Unset = UNSET
         if not isinstance(self.last_modified_at, Unset):
             last_modified_at = self.last_modified_at.isoformat()
 
@@ -131,10 +133,10 @@ class ArtifactUploadRT2:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.link_t import LinkT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         id = d.pop("id")
 
         links = []
@@ -151,7 +153,7 @@ class ArtifactUploadRT2:
         cache_of = d.pop("cache-of", UNSET)
 
         _created_at = d.pop("created-at", UNSET)
-        created_at: Unset | datetime.datetime
+        created_at: datetime.datetime | Unset
         if isinstance(_created_at, Unset):
             created_at = UNSET
         else:
@@ -162,7 +164,7 @@ class ArtifactUploadRT2:
         etag = d.pop("etag", UNSET)
 
         _last_modified_at = d.pop("last-modified-at", UNSET)
-        last_modified_at: Unset | datetime.datetime
+        last_modified_at: datetime.datetime | Unset
         if isinstance(_last_modified_at, Unset):
             last_modified_at = UNSET
         else:

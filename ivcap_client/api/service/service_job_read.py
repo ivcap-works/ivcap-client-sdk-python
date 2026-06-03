@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from typing import Any, cast
+from urllib.parse import quote
 
 import httpx
 
@@ -17,9 +18,10 @@ def _get_kwargs(
     service_id: str,
     id: str,
     *,
-    with_request_content: Unset | bool = UNSET,
-    with_result_content: Unset | bool = True,
+    with_request_content: bool | Unset = UNSET,
+    with_result_content: bool | Unset = True,
 ) -> dict[str, Any]:
+
     params: dict[str, Any] = {}
 
     params["with-request-content"] = with_request_content
@@ -30,7 +32,10 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/1/services2/{service_id}/jobs/{id}",
+        "url": "/1/services2/{service_id}/jobs/{id}".format(
+            service_id=quote(str(service_id), safe=""),
+            id=quote(str(id), safe=""),
+        ),
         "params": params,
     }
 
@@ -44,28 +49,35 @@ def _parse_response(
         response_200 = JobStatusRT.from_dict(response.json())
 
         return response_200
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -74,9 +86,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[
-    Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT
-]:
+) -> Response[Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -90,11 +100,9 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Unset | bool = UNSET,
-    with_result_content: Unset | bool = True,
-) -> Response[
-    Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT
-]:
+    with_request_content: bool | Unset = UNSET,
+    with_result_content: bool | Unset = True,
+) -> Response[Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT]:
     """job-read service
 
      show the status of a job within the context of a service
@@ -103,16 +111,15 @@ def sync_detailed(
         service_id (str): ID of service for which to show the list of jobs Example:
             urn:ivcap:services.
         id (str): ID of job to show Example: urn:ivcap:job.
-        with_request_content (Union[Unset, bool]): include request content if possible
-        with_result_content (Union[Unset, bool]): include result content if possible Default:
-            True.
+        with_request_content (bool | Unset): include request content if possible
+        with_result_content (bool | Unset): include result content if possible Default: True.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, NotImplementedT, ResourceNotFoundT]]
+        Response[Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT]
     """
 
     kwargs = _get_kwargs(
@@ -134,8 +141,8 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Unset | bool = UNSET,
-    with_result_content: Unset | bool = True,
+    with_request_content: bool | Unset = UNSET,
+    with_result_content: bool | Unset = True,
 ) -> Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT | None:
     """job-read service
 
@@ -145,16 +152,15 @@ def sync(
         service_id (str): ID of service for which to show the list of jobs Example:
             urn:ivcap:services.
         id (str): ID of job to show Example: urn:ivcap:job.
-        with_request_content (Union[Unset, bool]): include request content if possible
-        with_result_content (Union[Unset, bool]): include result content if possible Default:
-            True.
+        with_request_content (bool | Unset): include request content if possible
+        with_result_content (bool | Unset): include result content if possible Default: True.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, NotImplementedT, ResourceNotFoundT]
+        Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT
     """
 
     return sync_detailed(
@@ -171,11 +177,9 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Unset | bool = UNSET,
-    with_result_content: Unset | bool = True,
-) -> Response[
-    Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT
-]:
+    with_request_content: bool | Unset = UNSET,
+    with_result_content: bool | Unset = True,
+) -> Response[Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT]:
     """job-read service
 
      show the status of a job within the context of a service
@@ -184,16 +188,15 @@ async def asyncio_detailed(
         service_id (str): ID of service for which to show the list of jobs Example:
             urn:ivcap:services.
         id (str): ID of job to show Example: urn:ivcap:job.
-        with_request_content (Union[Unset, bool]): include request content if possible
-        with_result_content (Union[Unset, bool]): include result content if possible Default:
-            True.
+        with_request_content (bool | Unset): include request content if possible
+        with_result_content (bool | Unset): include result content if possible Default: True.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, NotImplementedT, ResourceNotFoundT]]
+        Response[Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT]
     """
 
     kwargs = _get_kwargs(
@@ -213,8 +216,8 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    with_request_content: Unset | bool = UNSET,
-    with_result_content: Unset | bool = True,
+    with_request_content: bool | Unset = UNSET,
+    with_result_content: bool | Unset = True,
 ) -> Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT | None:
     """job-read service
 
@@ -224,16 +227,15 @@ async def asyncio(
         service_id (str): ID of service for which to show the list of jobs Example:
             urn:ivcap:services.
         id (str): ID of job to show Example: urn:ivcap:job.
-        with_request_content (Union[Unset, bool]): include request content if possible
-        with_result_content (Union[Unset, bool]): include result content if possible Default:
-            True.
+        with_request_content (bool | Unset): include request content if possible
+        with_result_content (bool | Unset): include result content if possible Default: True.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidScopesT, JobStatusRT, NotImplementedT, ResourceNotFoundT]
+        Any | BadRequestT | InvalidScopesT | JobStatusRT | NotImplementedT | ResourceNotFoundT
     """
 
     return (

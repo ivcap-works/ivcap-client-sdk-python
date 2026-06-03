@@ -376,7 +376,7 @@ class IVCAP:
                 that time [now] Example: 1996-12-19T16:39:57-08:00.
 
         Returns:
-            Iterator[Service]: An iterator over a list of services
+            Iterator[Artifact]: An iterator over a list of artifacts
 
         Yields:
             Artifact: An artifact object

@@ -14,16 +14,16 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    content_type: Unset | str = UNSET,
-    content_encoding: Unset | str = UNSET,
-    content_length: Unset | int = UNSET,
-    x_name: Unset | str = UNSET,
-    x_collection: Unset | str = UNSET,
-    x_policy: Unset | str = UNSET,
-    x_content_type: Unset | str = UNSET,
-    x_content_length: Unset | int = UNSET,
-    upload_length: Unset | int = UNSET,
-    tus_resumable: Unset | str = UNSET,
+    content_type: str | Unset = UNSET,
+    content_encoding: str | Unset = UNSET,
+    content_length: int | Unset = UNSET,
+    x_name: str | Unset = UNSET,
+    x_collection: str | Unset = UNSET,
+    x_policy: str | Unset = UNSET,
+    x_content_type: str | Unset = UNSET,
+    x_content_length: int | Unset = UNSET,
+    upload_length: int | Unset = UNSET,
+    tus_resumable: str | Unset = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
     if not isinstance(content_type, Unset):
@@ -72,24 +72,30 @@ def _parse_response(
         response_201 = ArtifactUploadRT2.from_dict(response.json())
 
         return response_201
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -98,9 +104,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[
-    Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT
-]:
+) -> Response[Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -112,43 +116,41 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    content_type: Unset | str = UNSET,
-    content_encoding: Unset | str = UNSET,
-    content_length: Unset | int = UNSET,
-    x_name: Unset | str = UNSET,
-    x_collection: Unset | str = UNSET,
-    x_policy: Unset | str = UNSET,
-    x_content_type: Unset | str = UNSET,
-    x_content_length: Unset | int = UNSET,
-    upload_length: Unset | int = UNSET,
-    tus_resumable: Unset | str = UNSET,
-) -> Response[
-    Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT
-]:
+    content_type: str | Unset = UNSET,
+    content_encoding: str | Unset = UNSET,
+    content_length: int | Unset = UNSET,
+    x_name: str | Unset = UNSET,
+    x_collection: str | Unset = UNSET,
+    x_policy: str | Unset = UNSET,
+    x_content_type: str | Unset = UNSET,
+    x_content_length: int | Unset = UNSET,
+    upload_length: int | Unset = UNSET,
+    tus_resumable: str | Unset = UNSET,
+) -> Response[Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT]:
     """upload artifact
 
      Upload content and create a artifacts.
 
     Args:
-        content_type (Union[Unset, str]): Content-Type header, MUST define type of uploaded
-            content. Example: application/x-netcdf4.
-        content_encoding (Union[Unset, str]): Content-Encoding header, MAY define encoding of
-            content. Example: gzip.
-        content_length (Union[Unset, int]): Content-Length header, MAY define size of expected
-            upload. Example: 2376.
-        x_name (Union[Unset, str]): X-Name header, MAY define a more human friendly name. Reusing
-            a name will NOT override an existing artifact with the same name Example: sample-12.
-        x_collection (Union[Unset, str]): X-Collection header, MAY define an collection name as a
-            simple way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
-        x_policy (Union[Unset, str]): X-Policy header, MAY define a specific policy to control
-            access to this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
-        x_content_type (Union[Unset, str]): X-Content-Type header, used for initial, empty content
+        content_type (str | Unset): Content-Type header, MUST define type of uploaded content.
+            Example: application/x-netcdf4.
+        content_encoding (str | Unset): Content-Encoding header, MAY define encoding of content.
+            Example: gzip.
+        content_length (int | Unset): Content-Length header, MAY define size of expected upload.
+            Example: 2376.
+        x_name (str | Unset): X-Name header, MAY define a more human friendly name. Reusing a name
+            will NOT override an existing artifact with the same name Example: sample-12.
+        x_collection (str | Unset): X-Collection header, MAY define an collection name as a simple
+            way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
+        x_policy (str | Unset): X-Policy header, MAY define a specific policy to control access to
+            this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
+        x_content_type (str | Unset): X-Content-Type header, used for initial, empty content
             creation requests. Example: application/x-netcdf4.
-        x_content_length (Union[Unset, int]): X-Content-Length header, used for initial, empty
-            content creation requests. Example: 2376.
-        upload_length (Union[Unset, int]): Upload-Length header, sets the expected content size
-            part of the TUS protocol. Example: 2376.
-        tus_resumable (Union[Unset, str]): Tus-Resumable header, specifies TUS protocol version.
+        x_content_length (int | Unset): X-Content-Length header, used for initial, empty content
+            creation requests. Example: 2376.
+        upload_length (int | Unset): Upload-Length header, sets the expected content size part of
+            the TUS protocol. Example: 2376.
+        tus_resumable (str | Unset): Tus-Resumable header, specifies TUS protocol version.
             Example: 1.0.0.
 
     Raises:
@@ -156,7 +158,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]
+        Response[Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -182,41 +184,41 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    content_type: Unset | str = UNSET,
-    content_encoding: Unset | str = UNSET,
-    content_length: Unset | int = UNSET,
-    x_name: Unset | str = UNSET,
-    x_collection: Unset | str = UNSET,
-    x_policy: Unset | str = UNSET,
-    x_content_type: Unset | str = UNSET,
-    x_content_length: Unset | int = UNSET,
-    upload_length: Unset | int = UNSET,
-    tus_resumable: Unset | str = UNSET,
+    content_type: str | Unset = UNSET,
+    content_encoding: str | Unset = UNSET,
+    content_length: int | Unset = UNSET,
+    x_name: str | Unset = UNSET,
+    x_collection: str | Unset = UNSET,
+    x_policy: str | Unset = UNSET,
+    x_content_type: str | Unset = UNSET,
+    x_content_length: int | Unset = UNSET,
+    upload_length: int | Unset = UNSET,
+    tus_resumable: str | Unset = UNSET,
 ) -> Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT | None:
     """upload artifact
 
      Upload content and create a artifacts.
 
     Args:
-        content_type (Union[Unset, str]): Content-Type header, MUST define type of uploaded
-            content. Example: application/x-netcdf4.
-        content_encoding (Union[Unset, str]): Content-Encoding header, MAY define encoding of
-            content. Example: gzip.
-        content_length (Union[Unset, int]): Content-Length header, MAY define size of expected
-            upload. Example: 2376.
-        x_name (Union[Unset, str]): X-Name header, MAY define a more human friendly name. Reusing
-            a name will NOT override an existing artifact with the same name Example: sample-12.
-        x_collection (Union[Unset, str]): X-Collection header, MAY define an collection name as a
-            simple way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
-        x_policy (Union[Unset, str]): X-Policy header, MAY define a specific policy to control
-            access to this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
-        x_content_type (Union[Unset, str]): X-Content-Type header, used for initial, empty content
+        content_type (str | Unset): Content-Type header, MUST define type of uploaded content.
+            Example: application/x-netcdf4.
+        content_encoding (str | Unset): Content-Encoding header, MAY define encoding of content.
+            Example: gzip.
+        content_length (int | Unset): Content-Length header, MAY define size of expected upload.
+            Example: 2376.
+        x_name (str | Unset): X-Name header, MAY define a more human friendly name. Reusing a name
+            will NOT override an existing artifact with the same name Example: sample-12.
+        x_collection (str | Unset): X-Collection header, MAY define an collection name as a simple
+            way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
+        x_policy (str | Unset): X-Policy header, MAY define a specific policy to control access to
+            this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
+        x_content_type (str | Unset): X-Content-Type header, used for initial, empty content
             creation requests. Example: application/x-netcdf4.
-        x_content_length (Union[Unset, int]): X-Content-Length header, used for initial, empty
-            content creation requests. Example: 2376.
-        upload_length (Union[Unset, int]): Upload-Length header, sets the expected content size
-            part of the TUS protocol. Example: 2376.
-        tus_resumable (Union[Unset, str]): Tus-Resumable header, specifies TUS protocol version.
+        x_content_length (int | Unset): X-Content-Length header, used for initial, empty content
+            creation requests. Example: 2376.
+        upload_length (int | Unset): Upload-Length header, sets the expected content size part of
+            the TUS protocol. Example: 2376.
+        tus_resumable (str | Unset): Tus-Resumable header, specifies TUS protocol version.
             Example: 1.0.0.
 
     Raises:
@@ -224,7 +226,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]
+        Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT
     """
 
     return sync_detailed(
@@ -245,43 +247,41 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    content_type: Unset | str = UNSET,
-    content_encoding: Unset | str = UNSET,
-    content_length: Unset | int = UNSET,
-    x_name: Unset | str = UNSET,
-    x_collection: Unset | str = UNSET,
-    x_policy: Unset | str = UNSET,
-    x_content_type: Unset | str = UNSET,
-    x_content_length: Unset | int = UNSET,
-    upload_length: Unset | int = UNSET,
-    tus_resumable: Unset | str = UNSET,
-) -> Response[
-    Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT
-]:
+    content_type: str | Unset = UNSET,
+    content_encoding: str | Unset = UNSET,
+    content_length: int | Unset = UNSET,
+    x_name: str | Unset = UNSET,
+    x_collection: str | Unset = UNSET,
+    x_policy: str | Unset = UNSET,
+    x_content_type: str | Unset = UNSET,
+    x_content_length: int | Unset = UNSET,
+    upload_length: int | Unset = UNSET,
+    tus_resumable: str | Unset = UNSET,
+) -> Response[Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT]:
     """upload artifact
 
      Upload content and create a artifacts.
 
     Args:
-        content_type (Union[Unset, str]): Content-Type header, MUST define type of uploaded
-            content. Example: application/x-netcdf4.
-        content_encoding (Union[Unset, str]): Content-Encoding header, MAY define encoding of
-            content. Example: gzip.
-        content_length (Union[Unset, int]): Content-Length header, MAY define size of expected
-            upload. Example: 2376.
-        x_name (Union[Unset, str]): X-Name header, MAY define a more human friendly name. Reusing
-            a name will NOT override an existing artifact with the same name Example: sample-12.
-        x_collection (Union[Unset, str]): X-Collection header, MAY define an collection name as a
-            simple way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
-        x_policy (Union[Unset, str]): X-Policy header, MAY define a specific policy to control
-            access to this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
-        x_content_type (Union[Unset, str]): X-Content-Type header, used for initial, empty content
+        content_type (str | Unset): Content-Type header, MUST define type of uploaded content.
+            Example: application/x-netcdf4.
+        content_encoding (str | Unset): Content-Encoding header, MAY define encoding of content.
+            Example: gzip.
+        content_length (int | Unset): Content-Length header, MAY define size of expected upload.
+            Example: 2376.
+        x_name (str | Unset): X-Name header, MAY define a more human friendly name. Reusing a name
+            will NOT override an existing artifact with the same name Example: sample-12.
+        x_collection (str | Unset): X-Collection header, MAY define an collection name as a simple
+            way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
+        x_policy (str | Unset): X-Policy header, MAY define a specific policy to control access to
+            this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
+        x_content_type (str | Unset): X-Content-Type header, used for initial, empty content
             creation requests. Example: application/x-netcdf4.
-        x_content_length (Union[Unset, int]): X-Content-Length header, used for initial, empty
-            content creation requests. Example: 2376.
-        upload_length (Union[Unset, int]): Upload-Length header, sets the expected content size
-            part of the TUS protocol. Example: 2376.
-        tus_resumable (Union[Unset, str]): Tus-Resumable header, specifies TUS protocol version.
+        x_content_length (int | Unset): X-Content-Length header, used for initial, empty content
+            creation requests. Example: 2376.
+        upload_length (int | Unset): Upload-Length header, sets the expected content size part of
+            the TUS protocol. Example: 2376.
+        tus_resumable (str | Unset): Tus-Resumable header, specifies TUS protocol version.
             Example: 1.0.0.
 
     Raises:
@@ -289,7 +289,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]]
+        Response[Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT]
     """
 
     kwargs = _get_kwargs(
@@ -313,41 +313,41 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    content_type: Unset | str = UNSET,
-    content_encoding: Unset | str = UNSET,
-    content_length: Unset | int = UNSET,
-    x_name: Unset | str = UNSET,
-    x_collection: Unset | str = UNSET,
-    x_policy: Unset | str = UNSET,
-    x_content_type: Unset | str = UNSET,
-    x_content_length: Unset | int = UNSET,
-    upload_length: Unset | int = UNSET,
-    tus_resumable: Unset | str = UNSET,
+    content_type: str | Unset = UNSET,
+    content_encoding: str | Unset = UNSET,
+    content_length: int | Unset = UNSET,
+    x_name: str | Unset = UNSET,
+    x_collection: str | Unset = UNSET,
+    x_policy: str | Unset = UNSET,
+    x_content_type: str | Unset = UNSET,
+    x_content_length: int | Unset = UNSET,
+    upload_length: int | Unset = UNSET,
+    tus_resumable: str | Unset = UNSET,
 ) -> Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT | None:
     """upload artifact
 
      Upload content and create a artifacts.
 
     Args:
-        content_type (Union[Unset, str]): Content-Type header, MUST define type of uploaded
-            content. Example: application/x-netcdf4.
-        content_encoding (Union[Unset, str]): Content-Encoding header, MAY define encoding of
-            content. Example: gzip.
-        content_length (Union[Unset, int]): Content-Length header, MAY define size of expected
-            upload. Example: 2376.
-        x_name (Union[Unset, str]): X-Name header, MAY define a more human friendly name. Reusing
-            a name will NOT override an existing artifact with the same name Example: sample-12.
-        x_collection (Union[Unset, str]): X-Collection header, MAY define an collection name as a
-            simple way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
-        x_policy (Union[Unset, str]): X-Policy header, MAY define a specific policy to control
-            access to this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
-        x_content_type (Union[Unset, str]): X-Content-Type header, used for initial, empty content
+        content_type (str | Unset): Content-Type header, MUST define type of uploaded content.
+            Example: application/x-netcdf4.
+        content_encoding (str | Unset): Content-Encoding header, MAY define encoding of content.
+            Example: gzip.
+        content_length (int | Unset): Content-Length header, MAY define size of expected upload.
+            Example: 2376.
+        x_name (str | Unset): X-Name header, MAY define a more human friendly name. Reusing a name
+            will NOT override an existing artifact with the same name Example: sample-12.
+        x_collection (str | Unset): X-Collection header, MAY define an collection name as a simple
+            way of grouping artifacts Example: urn:projectX:collection:field-trip-jun-22.
+        x_policy (str | Unset): X-Policy header, MAY define a specific policy to control access to
+            this artifact Example: urn:ivcap:policy:ivcap.open.metadata.
+        x_content_type (str | Unset): X-Content-Type header, used for initial, empty content
             creation requests. Example: application/x-netcdf4.
-        x_content_length (Union[Unset, int]): X-Content-Length header, used for initial, empty
-            content creation requests. Example: 2376.
-        upload_length (Union[Unset, int]): Upload-Length header, sets the expected content size
-            part of the TUS protocol. Example: 2376.
-        tus_resumable (Union[Unset, str]): Tus-Resumable header, specifies TUS protocol version.
+        x_content_length (int | Unset): X-Content-Length header, used for initial, empty content
+            creation requests. Example: 2376.
+        upload_length (int | Unset): Upload-Length header, sets the expected content size part of
+            the TUS protocol. Example: 2376.
+        tus_resumable (str | Unset): Tus-Resumable header, specifies TUS protocol version.
             Example: 1.0.0.
 
     Raises:
@@ -355,7 +355,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, ArtifactUploadRT2, BadRequestT, InvalidScopesT, NotImplementedT]
+        Any | ArtifactUploadRT2 | BadRequestT | InvalidScopesT | NotImplementedT
     """
 
     return (

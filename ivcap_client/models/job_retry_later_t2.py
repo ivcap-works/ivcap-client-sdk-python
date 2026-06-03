@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -13,15 +16,15 @@ class JobRetryLaterT2:
     """Requested job hasn't finished yet, call back later
 
     Example:
-        {'job-id': 'Veniam non eaque.', 'retry-later': 5897998025569623663}
+        {'job-id': 'Non eaque cumque.', 'retry-later': 6267562862295941166}
 
     Attributes:
-        retry_later (int): The time in seconds after which an update may be available Example: 3196025698816427112.
-        job_id (Union[Unset, str]): the ID of the job Example: Quibusdam harum dignissimos quisquam earum dolores unde..
+        retry_later (int): The time in seconds after which an update may be available Example: 5589878510090244616.
+        job_id (str | Unset): the ID of the job Example: Earum dolores unde qui..
     """
 
     retry_later: int
-    job_id: Unset | str = UNSET
+    job_id: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -42,8 +45,8 @@ class JobRetryLaterT2:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         retry_later = d.pop("retry-later")
 
         job_id = d.pop("job-id", UNSET)

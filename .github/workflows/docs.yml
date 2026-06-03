@@ -12,23 +12,33 @@ jobs:
   build:
     name: Build Documentation
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out code
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-
-      - name: Install dependencies
-        run: poetry install
+      - name: Build docs Docker image
+        # Build the custom image from docs/Dockerfile, which extends
+        # squidfunk/mkdocs-material and installs docs/requirements.txt.
+        # This exactly replicates the local `make docs-build` environment.
+        run: docker build -t ivcap-docs docs/
 
       - name: Build documentation
-        run: poetry run poe docs
+        # Mirror the Makefile's DOCS_DOCKER pattern exactly:
+        # mount the whole repo at /project, set workdir to /project/docs so that
+        # pymdownx.snippets base_path: [".."] resolves to /project (the repo root)
+        # and can find AGENT.md and any other root-level files included via --8<--.
+        # PYTHONPATH=/project lets mkdocstrings/griffe find the ivcap_client package
+        # without needing to install it into the Docker image.
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/project" \
+            -e PYTHONPATH=/project \
+            -w /project/docs \
+            ivcap-docs build --strict
 
       - name: Upload docs artifact
         uses: actions/upload-artifact@v4
@@ -41,15 +51,24 @@ jobs:
     name: Deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
-    # Only deploy from main branch
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Only deploy when a commit lands on main
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref_name == 'main')
     permissions:
       contents: write
+
     steps:
-      - name: Check out code
+      - name: Check out repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name  github-actions
+          git config user.email github-actions@github.com
+
+      - name: Switch to gh-pages branch
+        run: git checkout gh-pages
 
       - name: Download docs artifact
         uses: actions/download-artifact@v4
@@ -57,25 +76,20 @@ jobs:
           name: docs-site
           path: docs-to-deploy
 
-      - name: Configure git
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-
-      - name: Switch to gh-pages branch
-        run: git checkout gh-pages
-
       - name: Clean old documentation
         run: |
-          # Keep .git and .gitignore
-          find . -maxdepth 1 -not -name '.git*' -not -name 'docs-to-deploy' -exec rm -rf {} + || true
+          # Remove everything except .git, .gitignore, and the freshly downloaded docs
+          find . -maxdepth 1 \
+            -not -name '.git*' \
+            -not -name 'docs-to-deploy' \
+            -exec rm -rf {} + || true
 
       - name: Deploy new documentation
         run: |
           cp -r docs-to-deploy/* .
           touch .nojekyll
           git add .
-          git commit -m "docs: build from commit ${{ github.sha }}" || echo "No changes to commit"
+          git commit -m "docs: build from ${{ github.sha }}" || echo "No changes to commit"
 
       - name: Push to gh-pages
         run: git push origin gh-pages

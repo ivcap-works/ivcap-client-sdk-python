@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
@@ -31,7 +34,7 @@ class XServiceDefinitionT:
 
     Attributes:
         description (str): More detailed description of the service Example: This service ....
-        parameters (list['ParameterDefT']): Service parameter definitions Example: [{'description': 'The name of the
+        parameters (list[ParameterDefT]): Service parameter definitions Example: [{'description': 'The name of the
             region as according to ...', 'label': 'Region Name', 'name': 'region', 'type': 'string'}, {'label':
             'Rainfall/month threshold', 'name': 'threshold', 'type': 'float', 'unit': 'm'}].
         workflow (XWorkflowT): Defines the workflow to use to execute this service. Currently supported 'types' are
@@ -42,26 +45,24 @@ class XServiceDefinitionT:
             storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type': 'nvidia-tesla-t4', 'image': 'alpine',
             'image-pull-policy': 'Aliquam qui qui voluptates quo.', 'memory': {'limit': '100Mi', 'request': '10Mi'},
             'shared-memory': '1Gi'}, 'type': 'basic'}.
-        banner (Union[Unset, str]): Link to banner image optionally used for this service Example:
+        banner (str | Unset): Link to banner image optionally used for this service Example:
             http://fadelrohan.net/arnoldo_hayes.
-        name (Union[Unset, str]): Optional provider provided name Example: Fire risk for Lot2.
-        policy (Union[Unset, str]): Reference to policy used Example:
-            urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
-        references (Union[Unset, list['XReferenceT']]): Reference to account revenues for this service should be
-            credited to Example: [{'title': 'Eius officiis enim quam blanditiis soluta.', 'uri':
-            'http://reinger.name/wiley'}, {'title': 'Eius officiis enim quam blanditiis soluta.', 'uri':
-            'http://reinger.name/wiley'}].
-        tags (Union[Unset, list[str]]): Optional provider provided tags Example: ['tag1', 'tag2'].
+        name (str | Unset): Optional provider provided name Example: Fire risk for Lot2.
+        policy (str | Unset): Reference to policy used Example: urn:ivcap:policy:123e4567-e89b-12d3-a456-426614174000.
+        references (list[XReferenceT] | Unset): Reference to account revenues for this service should be credited to
+            Example: [{'title': 'Eius officiis enim quam blanditiis soluta.', 'uri': 'http://reinger.name/wiley'}, {'title':
+            'Eius officiis enim quam blanditiis soluta.', 'uri': 'http://reinger.name/wiley'}].
+        tags (list[str] | Unset): Optional provider provided tags Example: ['tag1', 'tag2'].
     """
 
     description: str
-    parameters: list["ParameterDefT"]
-    workflow: "XWorkflowT"
-    banner: Unset | str = UNSET
-    name: Unset | str = UNSET
-    policy: Unset | str = UNSET
-    references: Unset | list["XReferenceT"] = UNSET
-    tags: Unset | list[str] = UNSET
+    parameters: list[ParameterDefT]
+    workflow: XWorkflowT
+    banner: str | Unset = UNSET
+    name: str | Unset = UNSET
+    policy: str | Unset = UNSET
+    references: list[XReferenceT] | Unset = UNSET
+    tags: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -80,14 +81,14 @@ class XServiceDefinitionT:
 
         policy = self.policy
 
-        references: Unset | list[dict[str, Any]] = UNSET
+        references: list[dict[str, Any]] | Unset = UNSET
         if not isinstance(self.references, Unset):
             references = []
             for references_item_data in self.references:
                 references_item = references_item_data.to_dict()
                 references.append(references_item)
 
-        tags: Unset | list[str] = UNSET
+        tags: list[str] | Unset = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
@@ -114,12 +115,12 @@ class XServiceDefinitionT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.parameter_def_t import ParameterDefT
         from ..models.x_reference_t import XReferenceT
         from ..models.x_workflow_t import XWorkflowT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         description = d.pop("description")
 
         parameters = []
@@ -137,12 +138,14 @@ class XServiceDefinitionT:
 
         policy = d.pop("policy", UNSET)
 
-        references = []
         _references = d.pop("references", UNSET)
-        for references_item_data in _references or []:
-            references_item = XReferenceT.from_dict(references_item_data)
+        references: list[XReferenceT] | Unset = UNSET
+        if _references is not UNSET:
+            references = []
+            for references_item_data in _references:
+                references_item = XReferenceT.from_dict(references_item_data)
 
-            references.append(references_item)
+                references.append(references_item)
 
         tags = cast(list[str], d.pop("tags", UNSET))
 

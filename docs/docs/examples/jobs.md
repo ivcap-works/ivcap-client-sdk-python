@@ -60,23 +60,6 @@ if job.status() == JobStatus.SUCCEEDED:
     pp.pprint(job.result)
 ```
 
-## List Orders (`list_orders.py`)
-
-Browse historical orders (legacy API):
-
-```python
-from _common import ivcap, pp
-
-for order in ivcap.list_orders(limit=4):
-    print(order)
-    for name, param in order.parameters.items():
-        print(f"  {name}: {param.value}")
-```
-
-**What it demonstrates:**
-- `ivcap.list_orders()` — paginated lazy iterator over historical orders
-- `order.parameters` — dict of order input parameters
-
 ## Run and Monitor with Logging
 
 ```python

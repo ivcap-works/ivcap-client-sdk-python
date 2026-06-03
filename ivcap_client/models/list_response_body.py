@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
@@ -14,18 +17,17 @@ T = TypeVar("T", bound="ListResponseBody")
 class ListResponseBody:
     """
     Example:
-        {'items': ['Ipsum qui necessitatibus quidem sint doloremque.', 'Blanditiis nihil eligendi.', 'Cumque qui
-            pariatur sint corrupti.', 'Accusamus doloremque et dolor ullam dolorem hic.'], 'links': [{'href':
-            'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
-            'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
+        {'items': ['Et nihil esse aut ipsum qui.', 'Quidem sint doloremque porro.', 'Nihil eligendi perferendis
+            cumque.'], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'},
+            {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}]}
 
     Attributes:
-        items (list[str]): docker image tags Example: ['Corporis unde aperiam et nihil.', 'Voluptas sit perferendis.',
-            'Deserunt placeat excepturi impedit cupiditate et nihil.'].
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        items (list[str]): docker image tags Example: ['Unde aperiam et nihil rerum.', 'Sit perferendis tempora deserunt
+            placeat excepturi.'].
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
@@ -33,7 +35,7 @@ class ListResponseBody:
     """
 
     items: list[str]
-    links: list["LinkT"]
+    links: list[LinkT]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -56,10 +58,10 @@ class ListResponseBody:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.link_t import LinkT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         items = cast(list[str], d.pop("items"))
 
         links = []

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -18,8 +21,7 @@ class ListResponseBody2:
         {'items': [{'expiry-time': 4932954319159294728, 'secret-name': 'Sint suscipit atque exercitationem nobis
             perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728, 'secret-name': 'Sint suscipit atque
             exercitationem nobis perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728, 'secret-name': 'Sint
-            suscipit atque exercitationem nobis perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728, 'secret-
-            name': 'Sint suscipit atque exercitationem nobis perspiciatis voluptate.'}], 'links': [{'href':
+            suscipit atque exercitationem nobis perspiciatis voluptate.'}], 'links': [{'href':
             'https://api.ivcap.net/1/....', 'rel': 'self', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
@@ -27,18 +29,20 @@ class ListResponseBody2:
             'application/openapi3+json'}]}
 
     Attributes:
-        items (list['SecretListItem']): secrets Example: [{'expiry-time': 4932954319159294728, 'secret-name': 'Sint
+        items (list[SecretListItem]): secrets Example: [{'expiry-time': 4932954319159294728, 'secret-name': 'Sint
             suscipit atque exercitationem nobis perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728, 'secret-
-            name': 'Sint suscipit atque exercitationem nobis perspiciatis voluptate.'}].
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+            name': 'Sint suscipit atque exercitationem nobis perspiciatis voluptate.'}, {'expiry-time': 4932954319159294728,
+            'secret-name': 'Sint suscipit atque exercitationem nobis perspiciatis voluptate.'}, {'expiry-time':
+            4932954319159294728, 'secret-name': 'Sint suscipit atque exercitationem nobis perspiciatis voluptate.'}].
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}].
     """
 
-    items: list["SecretListItem"]
-    links: list["LinkT"]
+    items: list[SecretListItem]
+    links: list[LinkT]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -64,11 +68,11 @@ class ListResponseBody2:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.secret_list_item import SecretListItem
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         items = []
         _items = d.pop("items")
         for items_item_data in _items:

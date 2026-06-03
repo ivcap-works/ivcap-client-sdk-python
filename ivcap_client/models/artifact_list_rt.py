@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -36,7 +39,7 @@ class ArtifactListRT:
             'application/openapi3+json'}]}
 
     Attributes:
-        items (list['ArtifactListItem']): Artifacts Example: [{'created-at': '1996-12-19T16:39:57-08:00', 'href':
+        items (list[ArtifactListItem]): Artifacts Example: [{'created-at': '1996-12-19T16:39:57-08:00', 'href':
             'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-
             type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}, {'created-at':
             '1996-12-19T16:39:57-08:00', 'href': 'https://api.ivcap.net/1/orders/...', 'id':
@@ -44,17 +47,17 @@ class ArtifactListRT:
             Lot2', 'size': 19000, 'status': 'ready'}, {'created-at': '1996-12-19T16:39:57-08:00', 'href':
             'https://api.ivcap.net/1/orders/...', 'id': 'urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000', 'mime-
             type': 'image/jpeg', 'name': 'Fire risk for Lot2', 'size': 19000, 'status': 'ready'}].
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/....', 'rel': 'first', 'type': 'application/json'},
             {'href': 'https://api.ivcap.net/1/....', 'rel': 'next', 'type': 'application/json'}, {'href':
             'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel': 'describedBy', 'type':
             'application/openapi3+json'}].
-        at_time (Union[Unset, datetime.datetime]): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
+        at_time (datetime.datetime | Unset): Time at which this list was valid Example: 1996-12-19T16:39:57-08:00.
     """
 
-    items: list["ArtifactListItem"]
-    links: list["LinkT"]
-    at_time: Unset | datetime.datetime = UNSET
+    items: list[ArtifactListItem]
+    links: list[LinkT]
+    at_time: datetime.datetime | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -68,7 +71,7 @@ class ArtifactListRT:
             links_item = links_item_data.to_dict()
             links.append(links_item)
 
-        at_time: Unset | str = UNSET
+        at_time: str | Unset = UNSET
         if not isinstance(self.at_time, Unset):
             at_time = self.at_time.isoformat()
 
@@ -86,11 +89,11 @@ class ArtifactListRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.artifact_list_item import ArtifactListItem
         from ..models.link_t import LinkT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         items = []
         _items = d.pop("items")
         for items_item_data in _items:
@@ -106,7 +109,7 @@ class ArtifactListRT:
             links.append(links_item)
 
         _at_time = d.pop("at-time", UNSET)
-        at_time: Unset | datetime.datetime
+        at_time: datetime.datetime | Unset
         if isinstance(_at_time, Unset):
             at_time = UNSET
         else:

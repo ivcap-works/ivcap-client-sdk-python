@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -10,10 +13,10 @@ T = TypeVar("T", bound="PushResponseBody")
 class PushResponseBody:
     """
     Example:
-        {'digest': 'Voluptas quas ipsa consequatur distinctio necessitatibus quia.', 'exists': False}
+        {'digest': 'Doloremque et.', 'exists': True}
 
     Attributes:
-        digest (str): uploaded image digest or tag Example: Et dolore qui dolores est dolorum rerum..
+        digest (str): uploaded image digest or tag Example: Pariatur sint corrupti..
         exists (bool): layer exists or not Example: True.
     """
 
@@ -38,8 +41,8 @@ class PushResponseBody:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         digest = d.pop("digest")
 
         exists = d.pop("exists")

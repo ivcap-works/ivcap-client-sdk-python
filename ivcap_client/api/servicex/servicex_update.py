@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from typing import Any, cast
+from urllib.parse import quote
 
 import httpx
 
@@ -19,7 +20,7 @@ def _get_kwargs(
     id: str,
     *,
     body: XServiceDefinitionT,
-    force_create: Unset | bool = UNSET,
+    force_create: bool | Unset = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
 
@@ -31,13 +32,14 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "put",
-        "url": f"/1/services/{id}",
+        "url": "/1/services/{id}".format(
+            id=quote(str(id), safe=""),
+        ),
         "params": params,
     }
 
-    _body = body.to_dict()
+    _kwargs["json"] = body.to_dict()
 
-    _kwargs["json"] = _body
     headers["Content-Type"] = "application/json"
 
     _kwargs["headers"] = headers
@@ -46,37 +48,54 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT | None:
+) -> (
+    Any
+    | BadRequestT
+    | InvalidParameterT
+    | InvalidScopesT
+    | NotImplementedT
+    | ResourceNotFoundT
+    | XServiceStatusRT
+    | None
+):
     if response.status_code == 200:
         response_200 = XServiceStatusRT.from_dict(response.json())
 
         return response_200
+
     if response.status_code == 400:
         response_400 = BadRequestT.from_dict(response.json())
 
         return response_400
+
     if response.status_code == 401:
         response_401 = cast(Any, None)
         return response_401
+
     if response.status_code == 403:
         response_403 = InvalidScopesT.from_dict(response.json())
 
         return response_403
+
     if response.status_code == 404:
         response_404 = ResourceNotFoundT.from_dict(response.json())
 
         return response_404
+
     if response.status_code == 422:
         response_422 = InvalidParameterT.from_dict(response.json())
 
         return response_422
+
     if response.status_code == 501:
         response_501 = NotImplementedT.from_dict(response.json())
 
         return response_501
+
     if response.status_code == 503:
         response_503 = cast(Any, None)
         return response_503
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -101,7 +120,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
-    force_create: Unset | bool = UNSET,
+    force_create: bool | Unset = UNSET,
 ) -> Response[
     Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT
 ]:
@@ -110,8 +129,8 @@ def sync_detailed(
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Ut est rerum quia ad nihil..
-        force_create (Union[Unset, bool]): Create if not already exist
+        id (str): ID of services to update Example: Rerum sit..
+        force_create (bool | Unset): Create if not already exist Example: True.
         body (XServiceDefinitionT):  Example: {'banner': 'http://rice.biz/rickie_christiansen',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
@@ -132,7 +151,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, XServiceStatusRT]]
+        Response[Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT]
     """
 
     kwargs = _get_kwargs(
@@ -153,15 +172,24 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
-    force_create: Unset | bool = UNSET,
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT | None:
+    force_create: bool | Unset = UNSET,
+) -> (
+    Any
+    | BadRequestT
+    | InvalidParameterT
+    | InvalidScopesT
+    | NotImplementedT
+    | ResourceNotFoundT
+    | XServiceStatusRT
+    | None
+):
     """update servicex
 
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Ut est rerum quia ad nihil..
-        force_create (Union[Unset, bool]): Create if not already exist
+        id (str): ID of services to update Example: Rerum sit..
+        force_create (bool | Unset): Create if not already exist Example: True.
         body (XServiceDefinitionT):  Example: {'banner': 'http://rice.biz/rickie_christiansen',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
@@ -182,7 +210,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, XServiceStatusRT]
+        Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT
     """
 
     return sync_detailed(
@@ -198,7 +226,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
-    force_create: Unset | bool = UNSET,
+    force_create: bool | Unset = UNSET,
 ) -> Response[
     Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT
 ]:
@@ -207,8 +235,8 @@ async def asyncio_detailed(
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Ut est rerum quia ad nihil..
-        force_create (Union[Unset, bool]): Create if not already exist
+        id (str): ID of services to update Example: Rerum sit..
+        force_create (bool | Unset): Create if not already exist Example: True.
         body (XServiceDefinitionT):  Example: {'banner': 'http://rice.biz/rickie_christiansen',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
@@ -229,7 +257,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, XServiceStatusRT]]
+        Response[Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT]
     """
 
     kwargs = _get_kwargs(
@@ -248,15 +276,24 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: XServiceDefinitionT,
-    force_create: Unset | bool = UNSET,
-) -> Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT | None:
+    force_create: bool | Unset = UNSET,
+) -> (
+    Any
+    | BadRequestT
+    | InvalidParameterT
+    | InvalidScopesT
+    | NotImplementedT
+    | ResourceNotFoundT
+    | XServiceStatusRT
+    | None
+):
     """update servicex
 
      Update an existing services and return its status.
 
     Args:
-        id (str): ID of services to update Example: Ut est rerum quia ad nihil..
-        force_create (Union[Unset, bool]): Create if not already exist
+        id (str): ID of services to update Example: Rerum sit..
+        force_create (bool | Unset): Create if not already exist Example: True.
         body (XServiceDefinitionT):  Example: {'banner': 'http://rice.biz/rickie_christiansen',
             'description': 'This service ...', 'name': 'Fire risk for Lot2', 'parameters':
             [{'description': 'The name of the region as according to ...', 'label': 'Region Name',
@@ -277,7 +314,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[Any, BadRequestT, InvalidParameterT, InvalidScopesT, NotImplementedT, ResourceNotFoundT, XServiceStatusRT]
+        Any | BadRequestT | InvalidParameterT | InvalidScopesT | NotImplementedT | ResourceNotFoundT | XServiceStatusRT
     """
 
     return (

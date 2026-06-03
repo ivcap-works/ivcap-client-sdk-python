@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
@@ -36,37 +39,35 @@ class OrderStatusRT:
     Attributes:
         account (str): Reference to billable account Example: urn:ivcap:account:123e4567-e89b-12d3-a456-426614174000.
         id (str): ID Example: urn:ivcap:order:123e4567-e89b-12d3-a456-426614174000.
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
-        parameters (list['ParameterT']): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
+        parameters (list[ParameterT]): Service parameters Example: [{'name': 'region', 'value': 'Upper Valley'},
             {'name': 'threshold', 'value': '10'}].
         products (PartialProductListT):  Example: {'items': [{'data-href': 'https:/.../1/artifacts/0000-00001220/blob',
             'href': 'https:/.../1/artifacts/0000-00001220', 'mime-type': 'image/geo+tiff', 'name': 'fire risk map', 'size':
             1234963}], 'links': [{'href': 'https://api.ivcap.net/1/....', 'rel': 'next'}]}.
         service (str): Reference to service requested Example: urn:ivcap:service:123e4567-e89b-12d3-a456-426614174000.
         status (OrderStatusRTStatus): Order status Example: pending.
-        finished_at (Union[Unset, datetime.datetime]): DateTime order processing finished Example:
-            1996-12-19T16:39:57-08:00.
-        name (Union[Unset, str]): Optional customer provided name Example: Fire risk for Lot2.
-        ordered_at (Union[Unset, datetime.datetime]): DateTime order was placed Example: 1996-12-19T16:39:57-08:00.
-        started_at (Union[Unset, datetime.datetime]): DateTime order processing started Example:
-            1996-12-19T16:39:57-08:00.
-        tags (Union[Unset, list[str]]): Optional customer provided tags Example: ['tag1', 'tag2'].
+        finished_at (datetime.datetime | Unset): DateTime order processing finished Example: 1996-12-19T16:39:57-08:00.
+        name (str | Unset): Optional customer provided name Example: Fire risk for Lot2.
+        ordered_at (datetime.datetime | Unset): DateTime order was placed Example: 1996-12-19T16:39:57-08:00.
+        started_at (datetime.datetime | Unset): DateTime order processing started Example: 1996-12-19T16:39:57-08:00.
+        tags (list[str] | Unset): Optional customer provided tags Example: ['tag1', 'tag2'].
     """
 
     account: str
     id: str
-    links: list["LinkT"]
-    parameters: list["ParameterT"]
-    products: "PartialProductListT"
+    links: list[LinkT]
+    parameters: list[ParameterT]
+    products: PartialProductListT
     service: str
     status: OrderStatusRTStatus
-    finished_at: Unset | datetime.datetime = UNSET
-    name: Unset | str = UNSET
-    ordered_at: Unset | datetime.datetime = UNSET
-    started_at: Unset | datetime.datetime = UNSET
-    tags: Unset | list[str] = UNSET
+    finished_at: datetime.datetime | Unset = UNSET
+    name: str | Unset = UNSET
+    ordered_at: datetime.datetime | Unset = UNSET
+    started_at: datetime.datetime | Unset = UNSET
+    tags: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -90,21 +91,21 @@ class OrderStatusRT:
 
         status = self.status.value
 
-        finished_at: Unset | str = UNSET
+        finished_at: str | Unset = UNSET
         if not isinstance(self.finished_at, Unset):
             finished_at = self.finished_at.isoformat()
 
         name = self.name
 
-        ordered_at: Unset | str = UNSET
+        ordered_at: str | Unset = UNSET
         if not isinstance(self.ordered_at, Unset):
             ordered_at = self.ordered_at.isoformat()
 
-        started_at: Unset | str = UNSET
+        started_at: str | Unset = UNSET
         if not isinstance(self.started_at, Unset):
             started_at = self.started_at.isoformat()
 
-        tags: Unset | list[str] = UNSET
+        tags: list[str] | Unset = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
@@ -135,12 +136,12 @@ class OrderStatusRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.link_t import LinkT
         from ..models.parameter_t import ParameterT
         from ..models.partial_product_list_t import PartialProductListT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         account = d.pop("account")
 
         id = d.pop("id")
@@ -166,7 +167,7 @@ class OrderStatusRT:
         status = OrderStatusRTStatus(d.pop("status"))
 
         _finished_at = d.pop("finished-at", UNSET)
-        finished_at: Unset | datetime.datetime
+        finished_at: datetime.datetime | Unset
         if isinstance(_finished_at, Unset):
             finished_at = UNSET
         else:
@@ -175,14 +176,14 @@ class OrderStatusRT:
         name = d.pop("name", UNSET)
 
         _ordered_at = d.pop("ordered-at", UNSET)
-        ordered_at: Unset | datetime.datetime
+        ordered_at: datetime.datetime | Unset
         if isinstance(_ordered_at, Unset):
             ordered_at = UNSET
         else:
             ordered_at = isoparse(_ordered_at)
 
         _started_at = d.pop("started-at", UNSET)
-        started_at: Unset | datetime.datetime
+        started_at: datetime.datetime | Unset
         if isinstance(_started_at, Unset):
             started_at = UNSET
         else:

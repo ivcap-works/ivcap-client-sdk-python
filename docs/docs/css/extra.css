@@ -1,0 +1,13 @@
+/* Match the "Copy Markdown" button colour to the site header primary colour */
+#llms-copy-button button {
+  background: var(--md-primary-fg-color) !important;
+  color: var(--md-primary-bg-color) !important;
+  border-radius: 4px !important;
+  box-shadow: var(--md-shadow-z2) !important;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+#llms-copy-button button:hover {
+  background: var(--md-primary-fg-color--dark) !important;
+  box-shadow: var(--md-shadow-z3) !important;
+}

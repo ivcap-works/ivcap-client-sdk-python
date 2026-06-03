@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -15,14 +18,14 @@ class NavT:
         {'first': 'https://api.com/foo/...', 'next': 'https://api.com/foo/...', 'self': 'https://api.com/foo/...'}
 
     Attributes:
-        first (Union[Unset, str]):  Example: https://api.com/foo/....
-        next_ (Union[Unset, str]):  Example: https://api.com/foo/....
-        self_ (Union[Unset, str]):  Example: https://api.com/foo/....
+        first (str | Unset):  Example: https://api.com/foo/....
+        next_ (str | Unset):  Example: https://api.com/foo/....
+        self_ (str | Unset):  Example: https://api.com/foo/....
     """
 
-    first: Unset | str = UNSET
-    next_: Unset | str = UNSET
-    self_: Unset | str = UNSET
+    first: str | Unset = UNSET
+    next_: str | Unset = UNSET
+    self_: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -45,8 +48,8 @@ class NavT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         first = d.pop("first", UNSET)
 
         next_ = d.pop("next", UNSET)

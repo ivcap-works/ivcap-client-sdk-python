@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -31,25 +34,25 @@ class MetadataRecordRT:
             urn:ivcap:principal:123e4567-e89b-12d3-a456-426614174000.
         entity (str): Entity ID Example: urn:blue:transect.1.
         id (str): ID Example: urn:ivcap:record:123e4567-e89b-12d3-a456-426614174000.
-        links (list['LinkT']):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
+        links (list[LinkT]):  Example: [{'href': 'https://api.ivcap.net/1/....', 'rel': 'self', 'type':
             'application/json'}, {'href': 'https://api.ivcap.net/1/openapi/openapi3.json#/components/schemas/user', 'rel':
             'describedBy', 'type': 'application/json'}].
         schema (str): Schema ID Example: urn:blue:schema.image.
         valid_from (datetime.datetime): Time this record was asserted Example: 1996-12-19T16:39:57-08:00.
-        revoker (Union[Unset, str]): Entity revoking this record at 'valid-to' Example:
+        revoker (str | Unset): Entity revoking this record at 'valid-to' Example:
             urn:ivcap:principal:123e4567-e89b-12d3-a456-426614174000.
-        valid_to (Union[Unset, datetime.datetime]): Time this record was retracted Example: 1996-12-19T16:39:57-08:00.
+        valid_to (datetime.datetime | Unset): Time this record was retracted Example: 1996-12-19T16:39:57-08:00.
     """
 
     aspect: Any
     asserter: str
     entity: str
     id: str
-    links: list["LinkT"]
+    links: list[LinkT]
     schema: str
     valid_from: datetime.datetime
-    revoker: Unset | str = UNSET
-    valid_to: Unset | datetime.datetime = UNSET
+    revoker: str | Unset = UNSET
+    valid_to: datetime.datetime | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -72,7 +75,7 @@ class MetadataRecordRT:
 
         revoker = self.revoker
 
-        valid_to: Unset | str = UNSET
+        valid_to: str | Unset = UNSET
         if not isinstance(self.valid_to, Unset):
             valid_to = self.valid_to.isoformat()
 
@@ -97,10 +100,10 @@ class MetadataRecordRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.link_t import LinkT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         aspect = d.pop("aspect")
 
         asserter = d.pop("asserter")
@@ -123,7 +126,7 @@ class MetadataRecordRT:
         revoker = d.pop("revoker", UNSET)
 
         _valid_to = d.pop("valid-to", UNSET)
-        valid_to: Unset | datetime.datetime
+        valid_to: datetime.datetime | Unset
         if isinstance(_valid_to, Unset):
             valid_to = UNSET
         else:

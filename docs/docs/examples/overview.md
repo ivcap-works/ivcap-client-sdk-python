@@ -43,11 +43,8 @@ python list_services.py
 
 | Script | What it demonstrates |
 |---|---|
-| [`place_order.py`](jobs.md) | Submit a job (via legacy Orders API) and wait for the result |
 | [`run_async_job.py`](jobs.md) | Async job submission using `request_job_async()` |
-| [`list_orders.py`](jobs.md) | Browse historical job orders |
 | [`test_failed_service.py`](jobs.md) | How to detect and handle a failed job |
-| [`order_service.py`](jobs.md) | Submit a job and monitor it |
 
 ### Artifacts
 

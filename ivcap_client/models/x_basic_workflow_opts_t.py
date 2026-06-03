@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -25,32 +28,31 @@ class XBasicWorkflowOptsT:
         command (list[str]): Command to start the container - needed for some container runtimes Example: ['/bin/sh',
             '-c', 'echo $PATH'].
         image (str): container image name Example: alpine.
-        cpu (Union[Unset, XResourceMemoryT]): See https://kubernetes.io/docs/concepts/configuration/manage-resources-
+        cpu (XResourceMemoryT | Unset): See https://kubernetes.io/docs/concepts/configuration/manage-resources-
             containers/#resource-units-in-kubernetes for units Example: {'limit': 'Dolor odit rerum quia.', 'request':
             'Voluptatem facilis libero voluptatem quis quam.'}.
-        ephemeral_storage (Union[Unset, XResourceMemoryT]): See
-            https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-units-in-kubernetes for
-            units Example: {'limit': 'Dolor odit rerum quia.', 'request': 'Voluptatem facilis libero voluptatem quis
-            quam.'}.
-        gpu_number (Union[Unset, int]): Defines number of required gpu Example: 2.
-        gpu_type (Union[Unset, str]): Defines required gpu type Example: nvidia-tesla-t4.
-        image_pull_policy (Union[Unset, str]): Optionally definesq the image pull policy Default: 'IfNotPresent'.
-            Example: Est voluptatem rerum qui amet..
-        memory (Union[Unset, XResourceMemoryT]): See https://kubernetes.io/docs/concepts/configuration/manage-resources-
+        ephemeral_storage (XResourceMemoryT | Unset): See https://kubernetes.io/docs/concepts/configuration/manage-
+            resources-containers/#resource-units-in-kubernetes for units Example: {'limit': 'Dolor odit rerum quia.',
+            'request': 'Voluptatem facilis libero voluptatem quis quam.'}.
+        gpu_number (int | Unset): Defines number of required gpu Example: 2.
+        gpu_type (str | Unset): Defines required gpu type Example: nvidia-tesla-t4.
+        image_pull_policy (str | Unset): Optionally definesq the image pull policy Default: 'IfNotPresent'. Example: Est
+            voluptatem rerum qui amet..
+        memory (XResourceMemoryT | Unset): See https://kubernetes.io/docs/concepts/configuration/manage-resources-
             containers/#resource-units-in-kubernetes for units Example: {'limit': 'Dolor odit rerum quia.', 'request':
             'Voluptatem facilis libero voluptatem quis quam.'}.
-        shared_memory (Union[Unset, str]): Defines needed amount of shared-memory Example: 1Gi.
+        shared_memory (str | Unset): Defines needed amount of shared-memory Example: 1Gi.
     """
 
     command: list[str]
     image: str
-    cpu: Union[Unset, "XResourceMemoryT"] = UNSET
-    ephemeral_storage: Union[Unset, "XResourceMemoryT"] = UNSET
-    gpu_number: Unset | int = UNSET
-    gpu_type: Unset | str = UNSET
-    image_pull_policy: Unset | str = "IfNotPresent"
-    memory: Union[Unset, "XResourceMemoryT"] = UNSET
-    shared_memory: Unset | str = UNSET
+    cpu: XResourceMemoryT | Unset = UNSET
+    ephemeral_storage: XResourceMemoryT | Unset = UNSET
+    gpu_number: int | Unset = UNSET
+    gpu_type: str | Unset = UNSET
+    image_pull_policy: str | Unset = "IfNotPresent"
+    memory: XResourceMemoryT | Unset = UNSET
+    shared_memory: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -58,11 +60,11 @@ class XBasicWorkflowOptsT:
 
         image = self.image
 
-        cpu: Unset | dict[str, Any] = UNSET
+        cpu: dict[str, Any] | Unset = UNSET
         if not isinstance(self.cpu, Unset):
             cpu = self.cpu.to_dict()
 
-        ephemeral_storage: Unset | dict[str, Any] = UNSET
+        ephemeral_storage: dict[str, Any] | Unset = UNSET
         if not isinstance(self.ephemeral_storage, Unset):
             ephemeral_storage = self.ephemeral_storage.to_dict()
 
@@ -72,7 +74,7 @@ class XBasicWorkflowOptsT:
 
         image_pull_policy = self.image_pull_policy
 
-        memory: Unset | dict[str, Any] = UNSET
+        memory: dict[str, Any] | Unset = UNSET
         if not isinstance(self.memory, Unset):
             memory = self.memory.to_dict()
 
@@ -104,23 +106,23 @@ class XBasicWorkflowOptsT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.x_resource_memory_t import XResourceMemoryT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         command = cast(list[str], d.pop("command"))
 
         image = d.pop("image")
 
         _cpu = d.pop("cpu", UNSET)
-        cpu: Unset | XResourceMemoryT
+        cpu: XResourceMemoryT | Unset
         if isinstance(_cpu, Unset):
             cpu = UNSET
         else:
             cpu = XResourceMemoryT.from_dict(_cpu)
 
         _ephemeral_storage = d.pop("ephemeral-storage", UNSET)
-        ephemeral_storage: Unset | XResourceMemoryT
+        ephemeral_storage: XResourceMemoryT | Unset
         if isinstance(_ephemeral_storage, Unset):
             ephemeral_storage = UNSET
         else:
@@ -133,7 +135,7 @@ class XBasicWorkflowOptsT:
         image_pull_policy = d.pop("image-pull-policy", UNSET)
 
         _memory = d.pop("memory", UNSET)
-        memory: Unset | XResourceMemoryT
+        memory: XResourceMemoryT | Unset
         if isinstance(_memory, Unset):
             memory = UNSET
         else:

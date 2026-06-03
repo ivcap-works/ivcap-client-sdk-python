@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from collections.abc import Mapping
 from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
@@ -24,18 +27,18 @@ class ArtifactListItem:
         href (str):  Example: https://api.ivcap.net/1/orders/....
         id (str): ID Example: urn:ivcap:artifact:123e4567-e89b-12d3-a456-426614174000.
         status (ArtifactListItemStatus): Artifact status Example: ready.
-        mime_type (Union[Unset, str]): Mime (content) type of artifact Example: image/jpeg.
-        name (Union[Unset, str]): Optional name Example: Fire risk for Lot2.
-        size (Union[Unset, int]): Size of artifact in bytes Example: 19000.
+        mime_type (str | Unset): Mime (content) type of artifact Example: image/jpeg.
+        name (str | Unset): Optional name Example: Fire risk for Lot2.
+        size (int | Unset): Size of artifact in bytes Example: 19000.
     """
 
     created_at: datetime.datetime
     href: str
     id: str
     status: ArtifactListItemStatus
-    mime_type: Unset | str = UNSET
-    name: Unset | str = UNSET
-    size: Unset | int = UNSET
+    mime_type: str | Unset = UNSET
+    name: str | Unset = UNSET
+    size: int | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -73,8 +76,8 @@ class ArtifactListItem:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         created_at = isoparse(d.pop("created-at"))
 
         href = d.pop("href")

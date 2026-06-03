@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import datetime
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -28,8 +31,8 @@ class AspectListItemRT:
         id (str): ID Example: urn:ivcap:aspect:123e4567-e89b-12d3-a456-426614174000.
         schema (str): Schema URN Example: urn:blue:schema.image.
         valid_from (datetime.datetime): Time this assertion became valid Example: 1996-12-19T16:39:57-08:00.
-        content (Union[Unset, AspectListItemRTContent]): Attached aspect aspect
-        valid_to (Union[Unset, datetime.datetime]): Time this assertion became valid Example: 1996-12-19T16:39:57-08:00.
+        content (AspectListItemRTContent | Unset): Attached aspect aspect
+        valid_to (datetime.datetime | Unset): Time this assertion became valid Example: 1996-12-19T16:39:57-08:00.
     """
 
     content_type: str
@@ -37,8 +40,8 @@ class AspectListItemRT:
     id: str
     schema: str
     valid_from: datetime.datetime
-    content: Union[Unset, "AspectListItemRTContent"] = UNSET
-    valid_to: Unset | datetime.datetime = UNSET
+    content: AspectListItemRTContent | Unset = UNSET
+    valid_to: datetime.datetime | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -52,11 +55,11 @@ class AspectListItemRT:
 
         valid_from = self.valid_from.isoformat()
 
-        content: Unset | dict[str, Any] = UNSET
+        content: dict[str, Any] | Unset = UNSET
         if not isinstance(self.content, Unset):
             content = self.content.to_dict()
 
-        valid_to: Unset | str = UNSET
+        valid_to: str | Unset = UNSET
         if not isinstance(self.valid_to, Unset):
             valid_to = self.valid_to.isoformat()
 
@@ -79,10 +82,10 @@ class AspectListItemRT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.aspect_list_item_rt_content import AspectListItemRTContent
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         content_type = d.pop("content-type")
 
         entity = d.pop("entity")
@@ -94,14 +97,14 @@ class AspectListItemRT:
         valid_from = isoparse(d.pop("valid-from"))
 
         _content = d.pop("content", UNSET)
-        content: Unset | AspectListItemRTContent
+        content: AspectListItemRTContent | Unset
         if isinstance(_content, Unset):
             content = UNSET
         else:
             content = AspectListItemRTContent.from_dict(_content)
 
         _valid_to = d.pop("valid-to", UNSET)
-        valid_to: Unset | datetime.datetime
+        valid_to: datetime.datetime | Unset
         if isinstance(_valid_to, Unset):
             valid_to = UNSET
         else:

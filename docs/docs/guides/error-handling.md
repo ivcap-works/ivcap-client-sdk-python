@@ -4,16 +4,24 @@ This guide covers all exception types raised by the IVCAP Client SDK and how to 
 
 ## Exception Hierarchy
 
-All IVCAP exceptions inherit from `IvcapError`:
+The IVCAP SDK uses a mixed exception hierarchy. HTTP/API errors inherit from
+`IvcapError`, while the remaining exceptions inherit from the built-in `Exception`:
 
 ```
-IvcapError
-├── IvcapApiError          # HTTP error from the platform API
-│   ├── NotAuthorizedException   # 401/403
-│   └── ResourceNotFound         # 404 (service, artifact, order not found)
+Exception
+├── IvcapError
+│   └── IvcapApiError      # HTTP error from the platform API
+│       ├── NotAuthorizedException   # 401/403
+│       └── HttpException            # backward-compat alias for IvcapApiError
+├── ResourceNotFound       # 404 (service or artifact not found)
 ├── AmbiguousRequest       # get_service_by_name matched multiple services
 └── MissingParameterValue  # required parameter missing when creating an aspect
 ```
+
+!!! warning
+    `ResourceNotFound`, `AmbiguousRequest`, and `MissingParameterValue` do **not**
+    inherit from `IvcapError`. Catching `IvcapError` will **not** catch these.
+    Always catch them individually or use the base `Exception`.
 
 ## Importing Exceptions
 
@@ -22,7 +30,7 @@ from ivcap_client.exception import (
     IvcapError,               # base class for all IVCAP exceptions
     IvcapApiError,            # HTTP error from the API (.status_code, .operation)
     NotAuthorizedException,   # HTTP 401/403
-    ResourceNotFound,         # service / artifact / order not found
+    ResourceNotFound,         # service or artifact not found
     AmbiguousRequest,         # get_service_by_name matched more than one service
     MissingParameterValue,    # required parameter missing
 )

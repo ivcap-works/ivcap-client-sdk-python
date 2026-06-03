@@ -66,6 +66,12 @@ print(job.result)
 
 ## Async Agent Execution
 
+!!! warning "Limited async support"
+    `Agent` does not currently expose `request_job_async()` directly.
+    To run an agent asynchronously, use `asyncio.to_thread` to call
+    `exec_agent()` in a thread pool, or use the underlying service's
+    async API via `agent._service.request_job_async()`:
+
 ```python
 import asyncio
 from ivcap_client.ivcap import IVCAP
@@ -75,7 +81,12 @@ async def run():
     agent = ivcap.get_agent("urn:ivcap:service:<uuid>")
     Model = await agent.request_model_async()
 
-    job = await agent.request_job_async(Model(param="value"))
+    # Option A — run the blocking exec_agent in a thread pool
+    job = await asyncio.to_thread(agent.exec_agent, Model(param="value"))
+    print(job.result)
+
+    # Option B — use the underlying service's async API directly
+    job = await agent._service.request_job_async(Model(param="value"))
     result = await job.result_async()
     print(result)
 

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from typing import Any, TypeVar
 from uuid import UUID
 
@@ -18,17 +21,17 @@ class InvalidScopesT:
 
     Attributes:
         message (str): Message of error Example: Not authorized to perform this action.
-        id (Union[Unset, UUID]): ID of involved resource Example: 123e4567-e89b-12d3-a456-426614174000.
+        id (UUID | Unset): ID of involved resource Example: 123e4567-e89b-12d3-a456-426614174000.
     """
 
     message: str
-    id: Unset | UUID = UNSET
+    id: UUID | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         message = self.message
 
-        id: Unset | str = UNSET
+        id: str | Unset = UNSET
         if not isinstance(self.id, Unset):
             id = str(self.id)
 
@@ -45,12 +48,12 @@ class InvalidScopesT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         message = d.pop("message")
 
         _id = d.pop("id", UNSET)
-        id: Unset | UUID
+        id: UUID | Unset
         if isinstance(_id, Unset):
             id = UNSET
         else:

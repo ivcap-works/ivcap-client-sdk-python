@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -26,17 +29,17 @@ class XWorkflowT:
 
        Attributes:
            type_ (str): Type of workflow Example: basic.
-           argo (Union[Unset, Any]): Defines the workflow using argo's WF schema Example: Et suscipit voluptatum qui earum
+           argo (Any | Unset): Defines the workflow using argo's WF schema Example: Et suscipit voluptatum qui earum
                inventore..
-           basic (Union[Unset, XBasicWorkflowOptsT]):  Example: {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu':
-               {'limit': '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2,
-               'gpu-type': 'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Blanditiis quos officia.', 'memory':
-               {'limit': '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'}.
+           basic (XBasicWorkflowOptsT | Unset):  Example: {'command': ['/bin/sh', '-c', 'echo $PATH'], 'cpu': {'limit':
+               '100m', 'request': '10m'}, 'ephemeral-storage': {'limit': '4Gi', 'request': '2Gi'}, 'gpu-number': 2, 'gpu-type':
+               'nvidia-tesla-t4', 'image': 'alpine', 'image-pull-policy': 'Blanditiis quos officia.', 'memory': {'limit':
+               '100Mi', 'request': '10Mi'}, 'shared-memory': '1Gi'}.
     """
 
     type_: str
-    argo: Unset | Any = UNSET
-    basic: Union[Unset, "XBasicWorkflowOptsT"] = UNSET
+    argo: Any | Unset = UNSET
+    basic: XBasicWorkflowOptsT | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -44,7 +47,7 @@ class XWorkflowT:
 
         argo = self.argo
 
-        basic: Unset | dict[str, Any] = UNSET
+        basic: dict[str, Any] | Unset = UNSET
         if not isinstance(self.basic, Unset):
             basic = self.basic.to_dict()
 
@@ -63,16 +66,16 @@ class XWorkflowT:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.x_basic_workflow_opts_t import XBasicWorkflowOptsT
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         type_ = d.pop("type")
 
         argo = d.pop("argo", UNSET)
 
         _basic = d.pop("basic", UNSET)
-        basic: Unset | XBasicWorkflowOptsT
+        basic: XBasicWorkflowOptsT | Unset
         if isinstance(_basic, Unset):
             basic = UNSET
         else:

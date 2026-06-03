@@ -52,7 +52,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     # Only deploy when a commit lands on main
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref_name == 'main')
     permissions:
       contents: write
 

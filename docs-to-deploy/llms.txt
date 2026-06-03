@@ -1,0 +1,44 @@
+# IVCAP Client SDK (Python)
+
+> Python SDK for interacting with IVCAP deployments — discover services, run jobs, manage artifacts and metadata
+
+ivcap_client is a Python SDK for interacting with IVCAP
+(Intelligent Visual Computing and Analytics Platform) deployments.
+Use it to discover services, submit jobs, manage artifacts, read/write
+Aspects in the DataFabric, and orchestrate multi-agent pipelines.
+All list methods return iterators; authentication is via JWT token or environment variables.
+
+
+## Getting Started
+
+- [Installation](https://ivcap-works.github.io/ivcap-client-sdk-python/getting-started/installation/index.md)
+- [Quick Start](https://ivcap-works.github.io/ivcap-client-sdk-python/getting-started/quick-start/index.md)
+- [Authentication](https://ivcap-works.github.io/ivcap-client-sdk-python/getting-started/authentication/index.md)
+
+## Guides
+
+- [Discovering Services](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/services/index.md)
+- [Running Jobs](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/jobs/index.md)
+- [Working with Artifacts](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/artifacts/index.md)
+- [The Datafabric & Aspects](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/aspects/index.md)
+- [Async Usage](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/async-usage/index.md)
+- [Error Handling](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/error-handling/index.md)
+- [Agent Integration](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/agents/index.md)
+- [Search (Datalog)](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/search/index.md)
+
+## API Reference
+
+- [IVCAP Client](https://ivcap-works.github.io/ivcap-client-sdk-python/api/ivcap/index.md)
+- [Service](https://ivcap-works.github.io/ivcap-client-sdk-python/api/service/index.md)
+- [Job](https://ivcap-works.github.io/ivcap-client-sdk-python/api/job/index.md)
+- [Artifact](https://ivcap-works.github.io/ivcap-client-sdk-python/api/artifact/index.md)
+- [Aspect](https://ivcap-works.github.io/ivcap-client-sdk-python/api/aspect/index.md)
+- [Exceptions](https://ivcap-works.github.io/ivcap-client-sdk-python/api/exceptions/index.md)
+
+## Examples
+
+- [Service Discovery](https://ivcap-works.github.io/ivcap-client-sdk-python/examples/services/index.md)
+- [Job Workflows](https://ivcap-works.github.io/ivcap-client-sdk-python/examples/jobs/index.md)
+- [Artifacts](https://ivcap-works.github.io/ivcap-client-sdk-python/examples/artifacts/index.md)
+- [Aspects & Search](https://ivcap-works.github.io/ivcap-client-sdk-python/examples/aspects/index.md)
+- [Async & Parallel](https://ivcap-works.github.io/ivcap-client-sdk-python/examples/async-parallel/index.md)

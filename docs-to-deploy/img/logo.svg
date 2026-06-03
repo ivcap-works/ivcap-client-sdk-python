@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid slice" class="icon"
+  stroke="white" fill="none">
+  <path d="M 7 5 A 9.6 9.6, 0, 1, 0, 22 15
+           M 12 8 L 12 18" stroke-width="3" />
+  <circle cx="12" cy="3.5" r="2.5" stroke-width="2" />
+</svg>

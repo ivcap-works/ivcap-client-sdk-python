@@ -1,0 +1,2877 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Python SDK for interacting with IVCAP deployments — discover services, run jobs, manage artifacts and metadata">
+      
+      
+        <meta name="author" content="CSIRO">
+      
+      
+        <link rel="canonical" href="https://ivcap-works.github.io/ivcap-client-sdk-python/agent/">
+      
+      
+        <link rel="prev" href="../reference/glossary/">
+      
+      
+        <link rel="next" href="../community/contributing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Agent Guide - IVCAP Client SDK (Python)</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../css/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agent-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="IVCAP Client SDK (Python)" class="md-header__button md-logo" aria-label="IVCAP Client SDK (Python)" data-md-component="logo">
+      
+  <img src="../img/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IVCAP Client SDK (Python)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Agent Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ivcap-works/ivcap-client-sdk-python" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ivcap-client-sdk-python
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../getting-started/installation/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guides/overview/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/overview/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../examples/overview/" class="md-tabs__link">
+          
+  
+  
+  Examples
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../reference/environment-variables/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Agent Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../community/contributing/" class="md-tabs__link">
+          
+  
+  
+  Community
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="IVCAP Client SDK (Python)" class="md-nav__button md-logo" aria-label="IVCAP Client SDK (Python)" data-md-component="logo">
+      
+  <img src="../img/logo.svg" alt="logo">
+
+    </a>
+    IVCAP Client SDK (Python)
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ivcap-works/ivcap-client-sdk-python" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ivcap-client-sdk-python
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/quick-start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discovering Services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/jobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running Jobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/artifacts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with Artifacts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/aspects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Datafabric & Aspects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/async-usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Async Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/error-handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search (Datalog)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/ivcap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IVCAP Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Service
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/job/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Job
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/artifact/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Artifact
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/aspect/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aspect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exceptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Examples
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Service Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/jobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Job Workflows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/artifacts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Artifacts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/aspects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aspects & Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/async-parallel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Async & Parallel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/environment-variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environment Variables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Community
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Community
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../community/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../community/conduct/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code of Conduct
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="agent-guide">Agent Guide<a class="headerlink" href="#agent-guide" title="Permanent link">&para;</a></h1>
+<p>This page is the machine-readable quick-reference for <code>ivcap-client</code>, designed for
+AI coding assistants (Copilot, Cursor, Claude, Cline, …).</p>
+<p>It is also available at the project root as
+<a href="https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENT.md"><code>AGENT.md</code></a>
+for agents that scan repository metadata before writing code.</p>
+<hr />
+<h1 id="agentmd-ivcap-client">AGENT.md — ivcap-client<a class="headerlink" href="#agentmd-ivcap-client" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>For AI coding assistants (Copilot, Cursor, Claude, Cline, …).</strong> This file is the
+authoritative quick-reference for using the <code>ivcap-client</code> Python SDK.
+Full docs: <a href="https://ivcap-works.github.io/ivcap-client-sdk-python/">https://ivcap-works.github.io/ivcap-client-sdk-python/</a>
+Also available as <a href="https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENT.md"><code>AGENT.md</code></a>
+at the repository root.</p>
+</blockquote>
+<p>This document teaches AI agents how to use the <code>ivcap_client</code> Python library to interact
+with an <a href="https://github.com/reinventingscience/ivcap-core/">IVCAP</a> (Intelligent Visual
+Computing and Analytics Platform) deployment.</p>
+<blockquote>
+<p><strong>Scope of this library:</strong> <code>ivcap_client</code> is primarily designed for <strong>programmatic
+interaction with the IVCAP platform from outside it</strong> — for example, orchestrating
+workflows, integrating IVCAP into data pipelines, submitting and monitoring jobs,
+managing artifacts and metadata, or building agent tooling that calls IVCAP services.</p>
+<p>If you want to <strong>build and deploy your own analytic service on IVCAP</strong>, use the
+<a href="https://pypi.org/project/ivcap_service/"><strong>ivcap-service-sdk</strong></a> instead. Packaging
+your code as an IVCAP service lets it take full advantage of the platform's managed
+compute, memory, and storage infrastructure, and — crucially — makes it a reusable,
+discoverable building block that other users, workflows, and agents can invoke through
+the same API described in this document.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#1-platform-concepts">Platform Concepts</a></li>
+<li><a href="#2-installation--setup">Installation &amp; Setup</a></li>
+<li><a href="#3-creating-an-ivcap-connection">Creating an IVCAP Connection</a></li>
+<li><a href="#4-discovering--inspecting-services">Discovering &amp; Inspecting Services</a></li>
+<li><a href="#5-running-jobs-service-execution">Running Jobs (Service Execution)</a></li>
+<li><a href="#6-monitoring-jobs">Monitoring Jobs</a></li>
+<li><a href="#7-artifacts--upload--download">Artifacts — Upload &amp; Download</a></li>
+<li><a href="#8-aspects--metadata-on-any-entity">Aspects — Metadata on Any Entity</a></li>
+<li><a href="#9-secrets">Secrets</a></li>
+<li><a href="#10-agents">Agents</a></li>
+<li><a href="#11-search-datalog">Search (Datalog)</a></li>
+<li><a href="#12-error-handling">Error Handling</a></li>
+<li><a href="#13-async-usage">Async Usage</a></li>
+<li><a href="#14-environment-variable-reference">Environment Variable Reference</a></li>
+</ol>
+<hr />
+<h2 id="1-platform-concepts">1. Platform Concepts<a class="headerlink" href="#1-platform-concepts" title="Permanent link">&para;</a></h2>
+<p>Before using the API, it is essential to understand the five first-class concepts that
+IVCAP is built around. Everything the platform does — data storage, computation,
+provenance tracking — is expressed through this model.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Provider  ──registers──▶  Service  ◀──requests──  User / Agent
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                               │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                          executes
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                               │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                               ▼
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                   ---------- Job ---------
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                  ╱                        ╲
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        consumes / produces        consumes / produces
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                │                               │
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                ▼                               ▼
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>            Artifact                          Aspect
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>      (blob in Storage +              (typed assertion in
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>       described by Aspects           Datafabric, attached
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>       in Datafabric)                  to any entity URN)
+</code></pre></div>
+<h3 id="11-services">1.1 Services<a class="headerlink" href="#11-services" title="Permanent link">&para;</a></h3>
+<p>A <strong>Service</strong> is a registered, executable analytic capability. A provider (organisation
+or researcher) packages their analysis code into a Docker image, describes its input
+parameters (what arguments it takes, what types they are), and publishes it to IVCAP.
+Once published, any authorised user can discover and invoke it.</p>
+<p>A service description is stored in the Datafabric under schema
+<code>urn:ivcap:schema.service.2</code>. When you call <code>ivcap.get_service(...)</code>, you are reading
+that aspect.</p>
+<p>Services support multiple <strong>execution models</strong>, selected by the service author at
+registration time:</p>
+<table>
+<thead>
+<tr>
+<th>Execution model</th>
+<th>How it runs</th>
+<th>Good for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lambda</strong></td>
+<td>A single long-running K8s Deployment that accepts many sequential HTTP jobs</td>
+<td>Low-latency, lightweight tasks</td>
+</tr>
+<tr>
+<td><strong>Batch</strong></td>
+<td>A fresh K8s Job container per invocation</td>
+<td>CPU/memory-intensive, one-shot jobs</td>
+</tr>
+<tr>
+<td><strong>Nextflow</strong></td>
+<td>A Nextflow pipeline on K8s</td>
+<td>Multi-step scientific workflows</td>
+</tr>
+<tr>
+<td><strong>Argo</strong></td>
+<td>An Argo Workflow</td>
+<td>DAG-style complex pipelines</td>
+</tr>
+</tbody>
+</table>
+<p>As an agent or client you do <strong>not</strong> need to know which execution model is in use — the
+<code>Service.request_job()</code> call is the same regardless. The platform's Service Controller
+selects the right dispatcher automatically.</p>
+<h3 id="12-jobs">1.2 Jobs<a class="headerlink" href="#12-jobs" title="Permanent link">&para;</a></h3>
+<p>A <strong>Job</strong> is the tracked execution of one service invocation. When you call
+<code>service.request_job(data)</code>, the platform:</p>
+<ol>
+<li>Creates a job record (<code>urn:ivcap:job:&lt;uuid&gt;</code>) in the <strong>Datafabric</strong> with status <code>pending</code>.</li>
+<li>Selects the appropriate <strong>Dispatcher</strong> (Lambda, Batch, Nextflow, or Argo).</li>
+<li>Launches the service container alongside a <strong>Service Sidecar</strong> in Kubernetes.</li>
+<li>The sidecar is the pod's gateway to the platform — it handles auth, artifact I/O, secret access, and result reporting on behalf of the container.</li>
+<li>When the service container finishes and calls <code>POST /results/&lt;jobURN&gt;</code>, the sidecar writes the result as a Datafabric <strong>Aspect</strong> and emits completion events.</li>
+<li>The platform's K8s monitor picks up those events and updates the job aspect to <code>succeeded / failed / error</code>.</li>
+</ol>
+<p><strong>Job Lifecycle:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pending → scheduled → executing → succeeded
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>                                → failed
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>                                → error
+</code></pre></div>
+<ul>
+<li><code>pending</code> — job record created, waiting for a dispatcher slot</li>
+<li><code>scheduled</code> — dispatcher has provisioned the execution environment (K8s resources created)</li>
+<li><code>executing</code> — service container has picked up the job and started processing</li>
+<li><code>succeeded</code> — service reported success; result is available via <code>job.result</code></li>
+<li><code>failed</code> — service reported failure (business-logic failure)</li>
+<li><code>error</code> — platform-level error (infrastructure, timeout, OOM, etc.)</li>
+</ul>
+<p>The authoritative job state is <strong>always the Datafabric</strong> — the SDK reads job state
+directly from it. There is no separate jobs database.</p>
+<h3 id="13-artifacts">1.3 Artifacts<a class="headerlink" href="#13-artifacts" title="Permanent link">&para;</a></h3>
+<p>An <strong>Artifact</strong> is any binary or structured data blob consumed or produced by a Job:
+an image, a CSV file, a NetCDF dataset, a trained model checkpoint, etc.</p>
+<p>An artifact has two complementary parts:</p>
+<ol>
+<li><strong>Blob</strong> — the raw bytes, stored in an object store (Google Cloud Storage or
+   S3-compatible). Accessed via TUS upload (writes) or streaming HTTP GET (reads).</li>
+<li><strong>Aspects in the Datafabric</strong> — typed metadata records describing the artifact's MIME
+   type, size, provenance (which job produced it), access policy, and any
+   domain-specific annotations you choose to attach.</li>
+</ol>
+<p>This separation means you can query, filter, and reason about artifact metadata in the
+Datafabric (e.g., "find all JPEG images produced by this service version in the last
+week") without loading the actual bytes.</p>
+<blockquote>
+<p><strong>Deduplication:</strong> The Python SDK tracks uploads using a local <code>.ivcap-&lt;filename&gt;.txt</code>
+sidecar file containing an MD5 hash of the source file. On a repeated <code>upload_artifact</code>
+call for the same unchanged file, the SDK returns the existing <code>Artifact</code> object
+immediately without re-uploading. Use <code>force_upload=True</code> to override.</p>
+</blockquote>
+<h3 id="14-the-datafabric-aspects">1.4 The Datafabric &amp; Aspects<a class="headerlink" href="#14-the-datafabric-aspects" title="Permanent link">&para;</a></h3>
+<p>The <strong>Datafabric</strong> is the <strong>single source of truth</strong> for all platform state. It
+implements an <em>aspect-oriented, assertion-based, provenance-preserving information store</em>.</p>
+<p>Every piece of platform state — a service description, a job status update, an
+artifact's MIME type, a provenance record linking a job to its inputs — is stored as
+an <strong>Aspect</strong>.</p>
+<p>An <strong>Aspect</strong> is a typed, time-bounded assertion attached to any entity URN:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Aspect {
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  id        : urn:ivcap:aspect:&lt;uuid&gt;   # unique aspect record identifier
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  entity    : URN                        # the entity this aspect describes
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  schema    : URN                        # defines the shape/meaning of content
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  content   : JSON                       # the actual information payload
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  asserter  : urn:ivcap:user:&lt;uuid&gt;      # who asserted this information
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  policy    : urn:ivcap:policy:&lt;name&gt;    # who can read/retract this aspect
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  validFrom : timestamp                  # when this assertion became valid
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  validTo   : timestamp | null           # null = &quot;still valid&quot;
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  replaces  : urn:ivcap:aspect:&lt;uuid&gt;    # the prior version (for logical updates)
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>}
+</code></pre></div>
+<p><strong>Critical rules to understand:</strong></p>
+<ol>
+<li>
+<p><strong>Aspects are assertions.</strong> Each aspect is a <em>claim</em> made by an <code>asserter</code> (user,
+   service, or platform component) that the <code>content</code> accurately describes the <code>entity</code>
+   at <code>validFrom</code>.</p>
+</li>
+<li>
+<p><strong>Aspects are never modified or deleted.</strong> To "update" information, the old aspect is
+   <em>retracted</em> (<code>validTo</code> is set to now) and a new one is created. The Datafabric is a
+   <strong>complete, append-only audit log</strong> — every past state is always recoverable.</p>
+</li>
+<li>
+<p><strong>Multiple aspects per entity are normal.</strong> Different principals can assert different
+   (possibly conflicting) things about the same entity. Multiple versions of the same
+   claim are kept as a historical record.</p>
+</li>
+<li>
+<p><strong>Time-aware queries.</strong> <code>list_aspects(at_time=T)</code> returns aspects that were valid at
+   time T. This is the foundation of historical provenance: "what did the platform know
+   about this artifact two weeks ago?"</p>
+</li>
+<li>
+<p><strong>Aspects are a valid job output.</strong> A service does not have to produce a binary
+   artifact. It can write structured results directly as Aspects in the Datafabric — for
+   example, an annotation service can attach classification labels to an image artifact
+   without creating a new binary blob.</p>
+</li>
+<li>
+<p><strong>Aspects form a provenance graph.</strong> Aspects can embed URN references in their JSON
+   content. Over time, the complete set of aspects forms an <em>emergent knowledge graph</em>:
+   artifacts linked to jobs, jobs linked to services, services linked to accounts,
+   annotations linked to artifacts. The Search service (Datalog/Mangle) can traverse
+   this graph.</p>
+</li>
+</ol>
+<p><strong>Well-known platform schemas:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Schema URN</th>
+<th>What it records</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>urn:ivcap:schema.service.2</code></td>
+<td>A service description</td>
+</tr>
+<tr>
+<td><code>urn:ivcap:schema.job.2</code></td>
+<td>Job state and metadata</td>
+</tr>
+<tr>
+<td><code>urn:ivcap:schema.job-result.1</code></td>
+<td>Link from a job to its result artifact</td>
+</tr>
+<tr>
+<td><code>urn:ivcap:schema.artifact.1</code></td>
+<td>Artifact MIME type, size, storage location</td>
+</tr>
+<tr>
+<td><code>urn:sd-core:schema.ai-tool.1</code></td>
+<td>Service's Pydantic/JSON input schema (used by <code>request_model</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>You can attach your own aspects</strong> using any schema URN you choose. This is how you
+add domain-specific metadata to any entity — artifact, job, or any custom entity URN.</p>
+<h3 id="15-urns-universal-identifiers">1.5 URNs — Universal Identifiers<a class="headerlink" href="#15-urns-universal-identifiers" title="Permanent link">&para;</a></h3>
+<p>Every entity in IVCAP is identified by a <strong>URN</strong> — a globally unique, typeless
+identifier. Information <em>about</em> an entity is carried exclusively by its aspects.</p>
+<table>
+<thead>
+<tr>
+<th>Entity type</th>
+<th>URN pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Service</td>
+<td><code>urn:ivcap:service:&lt;uuid&gt;</code></td>
+</tr>
+<tr>
+<td>Job</td>
+<td><code>urn:ivcap:job:&lt;uuid&gt;</code></td>
+</tr>
+<tr>
+<td>Artifact</td>
+<td><code>urn:ivcap:artifact:&lt;uuid&gt;</code></td>
+</tr>
+<tr>
+<td>Aspect</td>
+<td><code>urn:ivcap:aspect:&lt;uuid&gt;</code></td>
+</tr>
+<tr>
+<td>Account</td>
+<td><code>urn:ivcap:account:&lt;uuid&gt;</code></td>
+</tr>
+<tr>
+<td>Policy</td>
+<td><code>urn:ivcap:policy:&lt;name&gt;</code></td>
+</tr>
+<tr>
+<td>Schema</td>
+<td><code>urn:ivcap:schema.&lt;name&gt;.&lt;version&gt;</code></td>
+</tr>
+<tr>
+<td>Queue</td>
+<td><code>urn:ivcap:queue:&lt;uuid&gt;</code></td>
+</tr>
+<tr>
+<td>User</td>
+<td><code>urn:ivcap:user:&lt;uuid&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>When you see a string like <code>"urn:ivcap:service:3678e5f1-..."</code> in code or API
+responses, you are looking at the canonical identifier for a platform entity.</p>
+<h3 id="16-end-to-end-flow-summary">1.6 End-to-End Flow Summary<a class="headerlink" href="#16-end-to-end-flow-summary" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>1. You call service.request_job(data)
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>      │
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>      ▼
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>2. API Gateway authenticates your JWT and authorises the request
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>      │
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>      ▼
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>3. Service Controller loads the service from Datafabric,
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>   creates a job record (status: pending), selects a Dispatcher
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>      │
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>      ▼
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>4. Dispatcher launches the execution environment (K8s Job / Deployment)
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>   and updates job to &quot;scheduled&quot;
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>      │
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>      ▼
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>5. Service Sidecar fetches the job; service container starts processing
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>   → job status becomes &quot;executing&quot;
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>      │
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>      ▼
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>6. Service reads input Artifacts/Aspects, runs analysis
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>      │
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>      ▼
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>7. Service writes results back via the sidecar:
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>   - New Artifacts uploaded to Storage
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>   - Result Aspects written to Datafabric
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>   → job status becomes &quot;succeeded&quot; or &quot;failed&quot; / &quot;error&quot;
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>      │
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>      ▼
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>8. You call job.refresh() / job.result to retrieve the outcome
+</code></pre></div>
+<hr />
+<h2 id="2-installation-setup">2. Installation &amp; Setup<a class="headerlink" href="#2-installation-setup" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pip<span class="w"> </span>install<span class="w"> </span>ivcap-client
+</code></pre></div>
+<p>The library requires an IVCAP deployment URL and a JWT access token. The easiest way
+to get a token is via the <a href="https://github.com/reinventingscience/ivcap-cli">ivcap-cli</a>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ivcap<span class="w"> </span>context<span class="w"> </span>get<span class="w"> </span>access-token
+</code></pre></div>
+<p>Store credentials in a <code>.env</code> file (loaded via <code>python-dotenv</code>) or set them as
+environment variables before running your script:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>IVCAP_URL=https://api.your-ivcap-deployment.net
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>IVCAP_JWT=&lt;your-jwt-token&gt;
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>IVCAP_ACCOUNT_ID=urn:ivcap:account:&lt;uuid&gt;
+</code></pre></div>
+<hr />
+<h2 id="3-creating-an-ivcap-connection">3. Creating an IVCAP Connection<a class="headerlink" href="#3-creating-an-ivcap-connection" title="Permanent link">&para;</a></h2>
+<p>The <code>IVCAP</code> class is the single entry point for all operations.</p>
+<h3 id="from-environment-variables-recommended">From environment variables (recommended)<a class="headerlink" href="#from-environment-variables-recommended" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># Reads IVCAP_URL and IVCAP_JWT from the environment automatically</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+</code></pre></div>
+<blockquote>
+<p>The <code>IVCAP</code> object is a lightweight Python client — it does not run inside the
+platform. It communicates with the IVCAP API Gateway over HTTPS using your JWT token.
+When code <em>runs inside</em> a Job container (on the platform itself), the sidecar handles
+auth and <code>IVCAP_BASE_URL</code> is injected automatically — no token is needed.</p>
+</blockquote>
+<h3 id="with-explicit-credentials">With explicit credentials<a class="headerlink" href="#with-explicit-credentials" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">(</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://api.your-ivcap-deployment.net&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">token</span><span class="o">=</span><span class="s2">&quot;&lt;jwt-token&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">account_id</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:account:&lt;uuid&gt;&quot;</span><span class="p">,</span>  <span class="c1"># optional</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="inside-the-ivcap-platform">Inside the IVCAP platform<a class="headerlink" href="#inside-the-ivcap-platform" title="Permanent link">&para;</a></h3>
+<p>When a service runs <em>inside</em> IVCAP (e.g., as a container job), the platform injects
+<code>IVCAP_BASE_URL</code>. In this case no JWT token is needed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># IVCAP_BASE_URL is set by the platform; no token required</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="common-pattern-in-examples">Common pattern in examples<a class="headerlink" href="#common-pattern-in-examples" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">load_dotenv</span><span class="p">(</span><span class="s1">&#39;.dbg-env&#39;</span><span class="p">)</span>  <span class="c1"># loads IVCAP_URL and IVCAP_JWT from a local file</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<h2 id="4-discovering-inspecting-services">4. Discovering &amp; Inspecting Services<a class="headerlink" href="#4-discovering-inspecting-services" title="Permanent link">&para;</a></h2>
+<h3 id="list-all-services">List all services<a class="headerlink" href="#list-all-services" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">service</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ivcap</span><span class="o">.</span><span class="n">list_services</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">50</span><span class="p">)):</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">service</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><code>list_services()</code> returns a lazy iterator — pages are fetched automatically as you iterate.</p>
+<blockquote>
+<p><strong>Under the hood:</strong> each <code>Service</code> object is backed by a <code>urn:ivcap:schema.service.2</code>
+aspect in the Datafabric. Calling <code>service.parameters</code> or <code>service.request_model</code>
+triggers a live read from the Datafabric if the data is not already cached locally.</p>
+</blockquote>
+<p><strong>Keyword arguments:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>limit</code></td>
+<td><code>int</code></td>
+<td>Max items per page (default 10)</td>
+</tr>
+<tr>
+<td><code>filter</code></td>
+<td><code>str</code></td>
+<td>OData-style filter, e.g. <code>"name~='hello%'"</code></td>
+</tr>
+<tr>
+<td><code>order_by</code></td>
+<td><code>str</code></td>
+<td>Field to sort by</td>
+</tr>
+<tr>
+<td><code>order_desc</code></td>
+<td><code>bool</code></td>
+<td>Sort descending (default False)</td>
+</tr>
+<tr>
+<td><code>at_time</code></td>
+<td><code>datetime</code></td>
+<td>Return state at a historical point in time</td>
+</tr>
+</tbody>
+</table>
+<h3 id="find-a-service-by-name">Find a service by name<a class="headerlink" href="#find-a-service-by-name" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;hello-world-python&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># Raises ResourceNotFound if no match, AmbiguousRequest if multiple matches</span>
+</code></pre></div>
+<h3 id="get-a-service-by-urn">Get a service by URN<a class="headerlink" href="#get-a-service-by-urn" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:3678e5f1-8fb7-5ad6-b65b-8bd8c23c0948&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="inspect-service-parameters">Inspect service parameters<a class="headerlink" href="#inspect-service-parameters" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;my-service&quot;</span><span class="p">)</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1"># All parameters</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">service</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: type=</span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">, optional=</span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">is_optional</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># Only mandatory parameters</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Required:&quot;</span><span class="p">,</span> <span class="n">service</span><span class="o">.</span><span class="n">mandatory_parameters</span><span class="p">)</span>
+</code></pre></div>
+<p>Each <code>ServiceParameter</code> has:</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>str</code></td>
+<td>Parameter name (hyphens replaced with underscores)</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>PType</code></td>
+<td>Enum: STRING, INT, FLOAT, BOOL, OPTION, ARTIFACT, COLLECTION</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>str</code></td>
+<td>Human-readable description</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td><code>str</code></td>
+<td>UI label</td>
+</tr>
+<tr>
+<td><code>is_optional</code></td>
+<td><code>bool</code></td>
+<td>Whether the parameter can be omitted</td>
+</tr>
+<tr>
+<td><code>default</code></td>
+<td><code>str</code></td>
+<td>Default value (if any)</td>
+</tr>
+<tr>
+<td><code>options</code></td>
+<td><code>list</code></td>
+<td>Allowed values for OPTION type</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get-the-request-model-pydantic-schema">Get the request model (Pydantic schema)<a class="headerlink" href="#get-the-request-model-pydantic-schema" title="Permanent link">&para;</a></h3>
+<p>Many services expose a structured Pydantic model describing their input. This model is
+stored as a <code>urn:sd-core:schema.ai-tool.1</code> aspect attached to the service entity in the
+Datafabric. The SDK fetches it and dynamically constructs a Pydantic <code>BaseModel</code> class:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">request_model</span>          <span class="c1"># type[BaseModel]</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">Model</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">())</span>       <span class="c1"># inspect the JSON schema</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">instance</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">param_a</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="n">param_b</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="5-running-jobs-service-execution">5. Running Jobs (Service Execution)<a class="headerlink" href="#5-running-jobs-service-execution" title="Permanent link">&para;</a></h2>
+<p>A <em>job</em> is created by submitting a request to a service. The request payload (JSON) is
+forwarded to the appropriate dispatcher (Lambda, Batch, Nextflow, or Argo) which
+launches the service container in Kubernetes. Input data can be a Pydantic <code>BaseModel</code>
+instance, a Python dataclass, or a JSON <code>IO</code> stream.</p>
+<blockquote>
+<p><strong>How <code>timeout</code> works:</strong> The IVCAP API Gateway passes a <code>Timeout</code> header to the
+Service Controller. If <code>timeout=0</code>, the gateway returns <code>202 Accepted</code> immediately
+with a job ID (async pattern). If <code>timeout &gt; 0</code>, the gateway holds the HTTP connection
+open and returns <code>200 OK</code> with the result inline when the job finishes within that
+window. If the job hasn't finished by the timeout, you get a <code>202</code> and must poll.
+Use <code>job.refresh()</code> and <code>job.finished</code> for the polling pattern.</p>
+</blockquote>
+<h3 id="synchronous-fire-and-check">Synchronous fire-and-check<a class="headerlink" href="#synchronous-fire-and-check" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1"># Build the request</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">req</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">duration_seconds</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">target_cpu_percent</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="c1"># Submit — returns immediately (timeout=0 means &quot;don&#39;t wait&quot;)</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created job &#39;</span><span class="si">{</span><span class="n">job</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="synchronous-wait-for-completion-blocking">Synchronous wait for completion (blocking)<a class="headerlink" href="#synchronous-wait-for-completion-blocking" title="Permanent link">&para;</a></h3>
+<p>Pass <code>timeout</code> in seconds; the service gateway will block until done or the timeout
+elapses. Use <code>timeout=None</code> to wait indefinitely:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>   <span class="c1"># block up to 120 s server-side</span>
+</code></pre></div>
+<blockquote>
+<p><strong>Note:</strong> <code>timeout=0</code> means "submit and return immediately with a 202 Accepted".
+Use <code>job.refresh()</code> / <code>job.finished</code> to poll progress.</p>
+</blockquote>
+<h3 id="submit-with-a-raw-json-string-io-stream">Submit with a raw JSON string / IO stream<a class="headerlink" href="#submit-with-a-raw-json-string-io-stream" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">payload</span> <span class="o">=</span> <span class="s1">&#39;{&quot;wordle&quot;: {&quot;maxattempts&quot;: 2, &quot;thinking_time&quot;: 1}}&#39;</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
+</code></pre></div>
+<h3 id="submit-with-a-pydantic-model-defined-inline">Submit with a Pydantic model defined inline<a class="headerlink" href="#submit-with-a-pydantic-model-defined-inline" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyReq</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>    <span class="n">duration_seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>    <span class="n">throw_exception_at_end</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">MyReq</span><span class="p">())</span>
+</code></pre></div>
+<hr />
+<h2 id="6-monitoring-jobs">6. Monitoring Jobs<a class="headerlink" href="#6-monitoring-jobs" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Under the hood:</strong> <code>job.refresh()</code> reads the job's latest <code>urn:ivcap:schema.job.2</code>
+aspect from the Datafabric. The job result (when available) is stored as a separate
+<code>urn:ivcap:schema.job-result.1</code> aspect linking the job entity to its result artifact
+or inline JSON content. This is why <code>job.result</code> may trigger a second network round-
+trip if it hasn't been fetched yet.</p>
+</blockquote>
+<h3 id="job-status-values-jobstatus-enum">Job status values (<code>JobStatus</code> enum)<a class="headerlink" href="#job-status-values-jobstatus-enum" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="c1"># Values: UNKNOWN, PENDING, SCHEDULED, EXECUTING, SUCCEEDED, FAILED, ERROR</span>
+</code></pre></div>
+<h3 id="poll-until-finished">Poll until finished<a class="headerlink" href="#poll-until-finished" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>    <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>    <span class="n">job</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>                    <span class="c1"># update status from server</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">())</span>                  <span class="c1"># JobStatus.SUCCEEDED / .FAILED / .ERROR</span>
+</code></pre></div>
+<h3 id="batch-job-monitoring-with-csv-logging">Batch job monitoring with CSV logging<a class="headerlink" href="#batch-job-monitoring-with-csv-logging" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span><span class="p">,</span> <span class="n">time</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="n">jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;results.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>    <span class="n">w</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>        <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>        <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>        <span class="n">done</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs</span> <span class="k">if</span> <span class="n">j</span><span class="o">.</span><span class="n">finished</span><span class="p">)</span>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a>        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a>            <span class="n">j</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a>            <span class="n">w</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">elapsed</span><span class="p">,</span> <span class="n">j</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">j</span><span class="o">.</span><span class="n">status</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">])</span>
+<a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a>        <span class="n">f</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+<a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Progress: </span><span class="si">{</span><span class="n">done</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">jobs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a>        <span class="k">if</span> <span class="n">done</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">jobs</span><span class="p">):</span>
+<a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a>            <span class="k">break</span>
+</code></pre></div>
+<h3 id="access-job-result">Access job result<a class="headerlink" href="#access-job-result" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">result</span>      <span class="c1"># parsed response body (dict / object)</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="job-properties">Job properties<a class="headerlink" href="#job-properties" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property/Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>job.id</code></td>
+<td>URN of the job</td>
+</tr>
+<tr>
+<td><code>job.status()</code></td>
+<td>Refresh and return current <code>JobStatus</code></td>
+</tr>
+<tr>
+<td><code>job.finished</code></td>
+<td><code>True</code> if SUCCEEDED, FAILED, or ERROR</td>
+</tr>
+<tr>
+<td><code>job.succeeded</code></td>
+<td><code>True</code> only if SUCCEEDED</td>
+</tr>
+<tr>
+<td><code>job.result</code></td>
+<td>Result payload (fetched on demand)</td>
+</tr>
+<tr>
+<td><code>job.refresh()</code></td>
+<td>Pull latest state from the server</td>
+</tr>
+<tr>
+<td><code>job.requested_at</code></td>
+<td>When the job was submitted</td>
+</tr>
+<tr>
+<td><code>job.started_at</code></td>
+<td>When execution began</td>
+</tr>
+<tr>
+<td><code>job.finished_at</code></td>
+<td>When execution ended</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-artifacts-upload-download">7. Artifacts — Upload &amp; Download<a class="headerlink" href="#7-artifacts-upload-download" title="Permanent link">&para;</a></h2>
+<p>Artifacts are binary or text blobs (images, CSV files, JSON, etc.) stored in IVCAP.
+Each artifact has two parts: the <strong>blob</strong> (stored in GCS/S3 object storage, accessed
+via the TUS protocol for writes and streaming HTTP for reads) and <strong>Aspects</strong> in the
+Datafabric (describing its MIME type, size, provenance, and any domain metadata).</p>
+<blockquote>
+<p><strong>Artifact URNs as service inputs:</strong> When a service parameter has type <code>ARTIFACT</code>,
+you pass the artifact's URN (<code>urn:ivcap:artifact:&lt;uuid&gt;</code>) as the parameter value.
+The service container can then download the artifact bytes via its local sidecar at
+<code>GET http://ivcap.local/1/artifacts/&lt;uuid&gt;/blob</code>.</p>
+</blockquote>
+<h3 id="upload-a-file">Upload a file<a class="headerlink" href="#upload-a-file" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-image&quot;</span><span class="p">,</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>    <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/path/to/image.jpg&quot;</span><span class="p">,</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>    <span class="n">policy</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:policy:ivcap.open.artifact&quot;</span><span class="p">,</span>  <span class="c1"># optional, makes it public</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="p">)</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="c1"># &lt;Artifact id=urn:ivcap:artifact:&lt;uuid&gt;, status=ready&gt;</span>
+</code></pre></div>
+<h3 id="upload-from-an-in-memory-stream">Upload from an in-memory stream<a class="headerlink" href="#upload-from-an-in-memory-stream" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;col1,col2</span><span class="se">\n</span><span class="s2">1,2</span><span class="se">\n</span><span class="s2">3,4</span><span class="se">\n</span><span class="s2">&quot;</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-data.csv&quot;</span><span class="p">,</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>    <span class="n">io_stream</span><span class="o">=</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>    <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;text/csv&quot;</span><span class="p">,</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>    <span class="n">content_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="upload-parameters">Upload parameters<a class="headerlink" href="#upload-parameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>str</code></td>
+<td>Human-readable name for the artifact</td>
+</tr>
+<tr>
+<td><code>file_path</code></td>
+<td><code>str</code></td>
+<td>Local path to upload</td>
+</tr>
+<tr>
+<td><code>io_stream</code></td>
+<td><code>IO</code></td>
+<td>In-memory stream (requires <code>content_type</code>)</td>
+</tr>
+<tr>
+<td><code>content_type</code></td>
+<td><code>str</code></td>
+<td>MIME type (auto-detected from <code>file_path</code> extension if omitted)</td>
+</tr>
+<tr>
+<td><code>content_size</code></td>
+<td><code>int</code></td>
+<td>Size in bytes (-1 = unknown)</td>
+</tr>
+<tr>
+<td><code>collection</code></td>
+<td><code>URN</code></td>
+<td>Add to a named collection (<code>urn:ivcap:collection:...</code>)</td>
+</tr>
+<tr>
+<td><code>policy</code></td>
+<td><code>URN</code></td>
+<td>Access policy (<code>urn:ivcap:policy:...</code>)</td>
+</tr>
+<tr>
+<td><code>chunk_size</code></td>
+<td><code>int</code></td>
+<td>TUS upload chunk size (default: max)</td>
+</tr>
+<tr>
+<td><code>retries</code></td>
+<td><code>int</code></td>
+<td>Number of retry attempts on upload failure</td>
+</tr>
+<tr>
+<td><code>retry_delay</code></td>
+<td><code>int</code></td>
+<td>Seconds between retries</td>
+</tr>
+<tr>
+<td><code>force_upload</code></td>
+<td><code>bool</code></td>
+<td>Re-upload even if file was previously uploaded</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Deduplication:</strong> The SDK automatically tracks uploaded files using a hidden
+<code>.ivcap-&lt;filename&gt;.txt</code> sidecar. If you call <code>upload_artifact</code> again for the same
+unchanged file, it will return the existing artifact without re-uploading.
+Override with <code>force_upload=True</code>.</p>
+</blockquote>
+<h3 id="check-if-a-file-was-already-uploaded">Check if a file was already uploaded<a class="headerlink" href="#check-if-a-file-was-already-uploaded" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">artifact_for_file</span><span class="p">(</span><span class="s2">&quot;/path/to/file.jpg&quot;</span><span class="p">)</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="k">if</span> <span class="n">artifact</span><span class="p">:</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Already uploaded as </span><span class="si">{</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="get-an-artifact-by-urn">Get an artifact by URN<a class="headerlink" href="#get-an-artifact-by-urn" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="download-stream-artifact-content">Download / stream artifact content<a class="headerlink" href="#download-stream-artifact-content" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># Stream to a file</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/tmp/output.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_stream</span><span class="p">():</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="c1"># Open as a file-like object (loads into memory)</span>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="c1"># Download to a temp file (auto-deleted on context exit)</span>
+<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
+<a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a>    <span class="c1"># process path here...</span>
+<a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a>    <span class="c1"># file is deleted when &#39;with&#39; block exits</span>
+</code></pre></div>
+<h3 id="list-artifacts">List artifacts<a class="headerlink" href="#list-artifacts" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_artifacts</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>    <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  schema: </span><span class="si">{</span><span class="n">meta</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="artifact-provenance-in-the-datafabric">Artifact provenance in the Datafabric<a class="headerlink" href="#artifact-provenance-in-the-datafabric" title="Permanent link">&para;</a></h3>
+<p>Every upload and every artifact produced by a job is recorded as a set of Aspects:</p>
+<ul>
+<li><code>urn:ivcap:schema.artifact.1</code> — MIME type, size, storage location</li>
+<li><code>urn:ivcap:schema.artifact-produced-by-order</code> — link: artifact → job that created it</li>
+<li><code>urn:ivcap:schema.artifact-used-by-order</code> — link: artifact → jobs that consumed it</li>
+</ul>
+<p>These provenance aspects are written automatically by the platform. You can query them
+with <code>ivcap.list_aspects(entity=artifact.id)</code> to reconstruct full data lineage.</p>
+<h3 id="local-file-artifacts">Local-file artifacts<a class="headerlink" href="#local-file-artifacts" title="Permanent link">&para;</a></h3>
+<p>When a job runs inside IVCAP the platform provides local file paths as artifact URNs:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;file:///data/input.csv&quot;</span><span class="p">)</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="c1"># Returns a LocalFileArtifact — open()/as_local_file() work without network calls</span>
+</code></pre></div>
+<hr />
+<h2 id="8-aspects-metadata-on-any-entity">8. Aspects — Metadata on Any Entity<a class="headerlink" href="#8-aspects-metadata-on-any-entity" title="Permanent link">&para;</a></h2>
+<p>Aspects are typed JSON documents attached to any IVCAP entity (artifact, service,
+job, etc.). They form the <strong>Datafabric</strong> — the universal, append-only,
+provenance-preserving knowledge graph of the entire IVCAP platform.</p>
+<p>As an agent you interact with aspects in two distinct roles:</p>
+<ol>
+<li><strong>Reading platform state</strong> — job status, service descriptions, artifact metadata, and
+   all provenance records are all aspects. The <code>list_aspects()</code> API lets you query any
+   of them.</li>
+<li><strong>Attaching your own domain knowledge</strong> — you can annotate any entity (artifact, job,
+   or any custom entity URN) with any JSON payload under any schema you choose.
+   These annotations are first-class platform objects: they are access-controlled,
+   versioned, time-stamped, and queryable.</li>
+</ol>
+<blockquote>
+<p><strong>Immutability:</strong> <code>add_aspect</code> creates a <strong>new</strong> assertion; if a prior aspect with the
+same <code>(entity, schema)</code> pair exists, both remain valid concurrently. Use
+<code>update_aspect</code> when you want to <strong>replace</strong> a prior assertion — it retracts the old
+one first by setting its <code>validTo = now</code>. Use <code>retract()</code> to close an aspect without
+replacing it.</p>
+</blockquote>
+<h3 id="add-an-aspect-to-an-entity">Add an aspect to an entity<a class="headerlink" href="#add-an-aspect-to-an-entity" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">aspect</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">add_aspect</span><span class="p">(</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>    <span class="n">aspect</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>        <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my-project:schema:image-annotation.1&quot;</span><span class="p">,</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">,</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="mf">0.97</span><span class="p">,</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a>    <span class="p">},</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="p">)</span>
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="update-replace-an-existing-aspect">Update (replace) an existing aspect<a class="headerlink" href="#update-replace-an-existing-aspect" title="Permanent link">&para;</a></h3>
+<p><code>update_aspect</code> retracts any previous aspect with the same <code>(entity, schema)</code> pair
+before creating the new one:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="n">aspect</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">update_aspect</span><span class="p">(</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>    <span class="n">aspect</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>        <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my-project:schema:image-annotation.1&quot;</span><span class="p">,</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;dog&quot;</span><span class="p">,</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="mf">0.88</span><span class="p">,</span>
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a>    <span class="p">},</span>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="add-metadata-directly-to-an-artifact">Add metadata directly to an artifact<a class="headerlink" href="#add-metadata-directly-to-an-artifact" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="n">artifact</span><span class="o">.</span><span class="n">add_metadata</span><span class="p">({</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>    <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my:schema:tag.1&quot;</span><span class="p">,</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;marine&quot;</span><span class="p">,</span> <span class="s2">&quot;coral&quot;</span><span class="p">],</span>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="p">})</span>
+</code></pre></div>
+<h3 id="list-search-aspects">List / search aspects<a class="headerlink" href="#list-search-aspects" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="c1"># All aspects with a given schema</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span>
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>    <span class="n">schema</span><span class="o">=</span><span class="s2">&quot;urn:common:schema:in_collection.1&quot;</span><span class="p">,</span>
+<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a>    <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a>    <span class="n">include_content</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="p">):</span>
+<a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
+<a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">aspect</span><span class="p">)</span>           <span class="c1"># the JSON content dict</span>
+<a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a>
+<a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="c1"># Aspects for a specific entity</span>
+<a id="__codelineno-34-11" name="__codelineno-34-11" href="#__codelineno-34-11"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">):</span>
+<a id="__codelineno-34-12" name="__codelineno-34-12" href="#__codelineno-34-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
+</code></pre></div>
+<p><strong><code>list_aspects()</code> parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>entity</code></td>
+<td>Filter by entity URN</td>
+</tr>
+<tr>
+<td><code>schema</code></td>
+<td>Filter by schema prefix (supports <code>%</code> wildcard)</td>
+</tr>
+<tr>
+<td><code>content_path</code></td>
+<td>JSONPath filter applied to aspect content</td>
+</tr>
+<tr>
+<td><code>at_time</code></td>
+<td>Historical snapshot time</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>Max items (default 10)</td>
+</tr>
+<tr>
+<td><code>filter</code></td>
+<td>OData-style filter expression</td>
+</tr>
+<tr>
+<td><code>order_by</code></td>
+<td>Sort field (default <code>valid_from</code>)</td>
+</tr>
+<tr>
+<td><code>order_direction</code></td>
+<td><code>"ASC"</code> or <code>"DESC"</code> (default <code>"DESC"</code>)</td>
+</tr>
+<tr>
+<td><code>include_content</code></td>
+<td>Include aspect JSON content in listing (default <code>True</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="query-aspects-at-a-point-in-time">Query aspects at a point in time<a class="headerlink" href="#query-aspects-at-a-point-in-time" title="Permanent link">&para;</a></h3>
+<p>Because the Datafabric is append-only, you can reconstruct the exact state of any entity
+at any past moment:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="n">past</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span>
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a>    <span class="n">at_time</span><span class="o">=</span><span class="n">past</span><span class="p">,</span>
+<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a>    <span class="n">include_content</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="p">):</span>
+<a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Valid from </span><span class="si">{</span><span class="n">aspect</span><span class="o">.</span><span class="n">valid_from</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">aspect</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="retract-an-aspect">Retract an aspect<a class="headerlink" href="#retract-an-aspect" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="n">aspects</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s2">&quot;urn:my:schema:tag.1&quot;</span><span class="p">))</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="k">if</span> <span class="n">aspects</span><span class="p">:</span>
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>    <span class="n">aspects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">retract</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<h2 id="9-secrets">9. Secrets<a class="headerlink" href="#9-secrets" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="k">for</span> <span class="n">secret</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_secrets</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">secret</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="10-agents">10. Agents<a class="headerlink" href="#10-agents" title="Permanent link">&para;</a></h2>
+<p>Agents are services that follow an agent pattern (they wrap a <code>Service</code> internally).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_agent</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a>
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="c1"># Get the Pydantic request model</span>
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">request_model</span>
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>
+<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="c1"># Execute the agent and wait for completion (blocks until done)</span>
+<a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a><span class="n">job</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">exec_agent</span><span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">some_param</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">))</span>
+<a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<p><code>exec_agent()</code> submits the job and polls until <code>job.finished</code>, then returns the <code>Job</code>.</p>
+<hr />
+<h2 id="11-search-datalog">11. Search (Datalog)<a class="headerlink" href="#11-search-datalog" title="Permanent link">&para;</a></h2>
+<p>IVCAP supports a Datalog/Mangle query language over its knowledge graph. The search
+service traverses the <em>emergent graph</em> formed by URN references embedded in aspect
+content — for example, the link from a job aspect to the service URN, or from a
+job-result aspect to an artifact URN. This allows queries such as "find all artifacts
+produced by jobs that used this particular service version".</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="c1"># ivcap.search() expects a str query, not bytes</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="s2">:- ivcap_artifact(Id, Name, MimeType),</span>
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="s2">   MimeType = &quot;image/jpeg&quot;.</span>
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a>
+<a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a><span class="n">results</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+<a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+<a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="12-error-handling">12. Error Handling<a class="headerlink" href="#12-error-handling" title="Permanent link">&para;</a></h2>
+<p>Import exceptions from <code>ivcap_client.exception</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.exception</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>    <span class="n">IvcapError</span><span class="p">,</span>          <span class="c1"># base class for all IVCAP exceptions</span>
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a>    <span class="n">IvcapApiError</span><span class="p">,</span>       <span class="c1"># HTTP error from the API (has .status_code, .operation)</span>
+<a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a>    <span class="n">NotAuthorizedException</span><span class="p">,</span>  <span class="c1"># HTTP 401/403</span>
+<a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a>    <span class="n">ResourceNotFound</span><span class="p">,</span>    <span class="c1"># service or artifact not found</span>
+<a id="__codelineno-40-6" name="__codelineno-40-6" href="#__codelineno-40-6"></a>    <span class="n">AmbiguousRequest</span><span class="p">,</span>    <span class="c1"># get_service_by_name matched more than one service</span>
+<a id="__codelineno-40-7" name="__codelineno-40-7" href="#__codelineno-40-7"></a>    <span class="n">MissingParameterValue</span><span class="p">,</span>   <span class="c1"># required parameter missing when creating an aspect</span>
+<a id="__codelineno-40-8" name="__codelineno-40-8" href="#__codelineno-40-8"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="typical-patterns">Typical patterns<a class="headerlink" href="#typical-patterns" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.exception</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResourceNotFound</span><span class="p">,</span> <span class="n">AmbiguousRequest</span>
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>
+<a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a>    <span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;my-service&quot;</span><span class="p">)</span>
+<a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a><span class="k">except</span> <span class="n">ResourceNotFound</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Service not found: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">resource</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a><span class="k">except</span> <span class="n">AmbiguousRequest</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-41-8" name="__codelineno-41-8" href="#__codelineno-41-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ambiguous: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.exception</span><span class="w"> </span><span class="kn">import</span> <span class="n">IvcapApiError</span>
+<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>
+<a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a>    <span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/data.csv&quot;</span><span class="p">)</span>
+<a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a><span class="k">except</span> <span class="n">IvcapApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Upload failed [</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">]: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="job-failure-detection">Job failure detection<a class="headerlink" href="#job-failure-detection" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+<a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a>
+<a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
+<a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a>    <span class="n">job</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a>
+<a id="__codelineno-43-7" name="__codelineno-43-7" href="#__codelineno-43-7"></a><span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
+<a id="__codelineno-43-8" name="__codelineno-43-8" href="#__codelineno-43-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done:&quot;</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+<a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a><span class="k">elif</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">FAILED</span><span class="p">:</span>
+<a id="__codelineno-43-10" name="__codelineno-43-10" href="#__codelineno-43-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Job reported failure&quot;</span><span class="p">)</span>
+<a id="__codelineno-43-11" name="__codelineno-43-11" href="#__codelineno-43-11"></a><span class="k">elif</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">:</span>
+<a id="__codelineno-43-12" name="__codelineno-43-12" href="#__codelineno-43-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Job encountered an internal error&quot;</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="13-async-usage">13. Async Usage<a class="headerlink" href="#13-async-usage" title="Permanent link">&para;</a></h2>
+<p>All major operations have <code>_async</code> variants that are compatible with <code>asyncio</code>.</p>
+<h3 id="async-job-submission-and-waiting">Async job submission and waiting<a class="headerlink" href="#async-job-submission-and-waiting" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a>
+<a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
+<a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a>    <span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+<a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a>    <span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-44-7" name="__codelineno-44-7" href="#__codelineno-44-7"></a>
+<a id="__codelineno-44-8" name="__codelineno-44-8" href="#__codelineno-44-8"></a>    <span class="c1"># Fetch request model asynchronously</span>
+<a id="__codelineno-44-9" name="__codelineno-44-9" href="#__codelineno-44-9"></a>    <span class="n">Model</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model_async</span><span class="p">()</span>
+<a id="__codelineno-44-10" name="__codelineno-44-10" href="#__codelineno-44-10"></a>    <span class="n">req</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">duration_seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-44-11" name="__codelineno-44-11" href="#__codelineno-44-11"></a>
+<a id="__codelineno-44-12" name="__codelineno-44-12" href="#__codelineno-44-12"></a>    <span class="c1"># Submit and wait until the job finishes</span>
+<a id="__codelineno-44-13" name="__codelineno-44-13" href="#__codelineno-44-13"></a>    <span class="n">job</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job_async</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<a id="__codelineno-44-14" name="__codelineno-44-14" href="#__codelineno-44-14"></a>    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">job</span><span class="o">.</span><span class="n">result_async</span><span class="p">()</span>
+<a id="__codelineno-44-15" name="__codelineno-44-15" href="#__codelineno-44-15"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<a id="__codelineno-44-16" name="__codelineno-44-16" href="#__codelineno-44-16"></a>
+<a id="__codelineno-44-17" name="__codelineno-44-17" href="#__codelineno-44-17"></a><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">run</span><span class="p">())</span>
+</code></pre></div>
+<h3 id="async-polling-loop">Async polling loop<a class="headerlink" href="#async-polling-loop" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
+<a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a>    <span class="n">job</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job_async</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">max_wait_time</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a>    <span class="k">while</span> <span class="ow">not</span> <span class="k">await</span> <span class="n">job</span><span class="o">.</span><span class="n">finished_async</span><span class="p">():</span>
+<a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a id="__codelineno-45-5" name="__codelineno-45-5" href="#__codelineno-45-5"></a>    <span class="n">status</span> <span class="o">=</span> <span class="k">await</span> <span class="n">job</span><span class="o">.</span><span class="n">status_async</span><span class="p">(</span><span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-45-6" name="__codelineno-45-6" href="#__codelineno-45-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="parallel-jobs-async">Parallel jobs (async)<a class="headerlink" href="#parallel-jobs-async" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
+<a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a>    <span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a>    <span class="n">Model</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model_async</span><span class="p">()</span>
+<a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a>    <span class="n">req</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">)</span>
+<a id="__codelineno-46-5" name="__codelineno-46-5" href="#__codelineno-46-5"></a>
+<a id="__codelineno-46-6" name="__codelineno-46-6" href="#__codelineno-46-6"></a>    <span class="n">jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+<a id="__codelineno-46-7" name="__codelineno-46-7" href="#__codelineno-46-7"></a>
+<a id="__codelineno-46-8" name="__codelineno-46-8" href="#__codelineno-46-8"></a>    <span class="n">running</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">jobs</span><span class="p">)</span>
+<a id="__codelineno-46-9" name="__codelineno-46-9" href="#__codelineno-46-9"></a>    <span class="k">while</span> <span class="n">running</span><span class="p">:</span>
+<a id="__codelineno-46-10" name="__codelineno-46-10" href="#__codelineno-46-10"></a>        <span class="n">job</span> <span class="o">=</span> <span class="n">running</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<a id="__codelineno-46-11" name="__codelineno-46-11" href="#__codelineno-46-11"></a>        <span class="n">status</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-46-12" name="__codelineno-46-12" href="#__codelineno-46-12"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
+<a id="__codelineno-46-13" name="__codelineno-46-13" href="#__codelineno-46-13"></a>            <span class="n">running</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+<a id="__codelineno-46-14" name="__codelineno-46-14" href="#__codelineno-46-14"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="14-environment-variable-reference">14. Environment Variable Reference<a class="headerlink" href="#14-environment-variable-reference" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IVCAP_URL</code></td>
+<td>External URL of IVCAP deployment</td>
+<td><code>IVCAP()</code></td>
+</tr>
+<tr>
+<td><code>IVCAP_BASE_URL</code></td>
+<td>Internal URL (set by platform inside a job)</td>
+<td><code>IVCAP()</code></td>
+</tr>
+<tr>
+<td><code>IVCAP_JWT</code></td>
+<td>JWT bearer token for authentication</td>
+<td><code>IVCAP()</code></td>
+</tr>
+<tr>
+<td><code>IVCAP_ACCOUNT_ID</code></td>
+<td>Account URN for artifact/aspect ownership</td>
+<td>Application code</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="quick-start-cheatsheet">Quick-Start Cheatsheet<a class="headerlink" href="#quick-start-cheatsheet" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+<a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a>
+<a id="__codelineno-47-5" name="__codelineno-47-5" href="#__codelineno-47-5"></a><span class="n">load_dotenv</span><span class="p">(</span><span class="s1">&#39;.dbg-env&#39;</span><span class="p">)</span>
+<a id="__codelineno-47-6" name="__codelineno-47-6" href="#__codelineno-47-6"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+<a id="__codelineno-47-7" name="__codelineno-47-7" href="#__codelineno-47-7"></a>
+<a id="__codelineno-47-8" name="__codelineno-47-8" href="#__codelineno-47-8"></a><span class="c1"># --- Discover ---</span>
+<a id="__codelineno-47-9" name="__codelineno-47-9" href="#__codelineno-47-9"></a><span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;my-service&quot;</span><span class="p">)</span>
+<a id="__codelineno-47-10" name="__codelineno-47-10" href="#__codelineno-47-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">svc</span><span class="p">,</span> <span class="n">svc</span><span class="o">.</span><span class="n">mandatory_parameters</span><span class="p">)</span>
+<a id="__codelineno-47-11" name="__codelineno-47-11" href="#__codelineno-47-11"></a>
+<a id="__codelineno-47-12" name="__codelineno-47-12" href="#__codelineno-47-12"></a><span class="c1"># --- Run ---</span>
+<a id="__codelineno-47-13" name="__codelineno-47-13" href="#__codelineno-47-13"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model</span>
+<a id="__codelineno-47-14" name="__codelineno-47-14" href="#__codelineno-47-14"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">param</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">))</span>
+<a id="__codelineno-47-15" name="__codelineno-47-15" href="#__codelineno-47-15"></a>
+<a id="__codelineno-47-16" name="__codelineno-47-16" href="#__codelineno-47-16"></a><span class="c1"># --- Poll ---</span>
+<a id="__codelineno-47-17" name="__codelineno-47-17" href="#__codelineno-47-17"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
+<a id="__codelineno-47-18" name="__codelineno-47-18" href="#__codelineno-47-18"></a>    <span class="n">job</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<a id="__codelineno-47-19" name="__codelineno-47-19" href="#__codelineno-47-19"></a><span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
+<a id="__codelineno-47-20" name="__codelineno-47-20" href="#__codelineno-47-20"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+<a id="__codelineno-47-21" name="__codelineno-47-21" href="#__codelineno-47-21"></a>
+<a id="__codelineno-47-22" name="__codelineno-47-22" href="#__codelineno-47-22"></a><span class="c1"># --- Artifacts ---</span>
+<a id="__codelineno-47-23" name="__codelineno-47-23" href="#__codelineno-47-23"></a><span class="n">art</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/data.csv&quot;</span><span class="p">)</span>
+<a id="__codelineno-47-24" name="__codelineno-47-24" href="#__codelineno-47-24"></a><span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="n">art</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-47-25" name="__codelineno-47-25" href="#__codelineno-47-25"></a><span class="k">with</span> <span class="n">art</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
+<a id="__codelineno-47-26" name="__codelineno-47-26" href="#__codelineno-47-26"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+<a id="__codelineno-47-27" name="__codelineno-47-27" href="#__codelineno-47-27"></a>
+<a id="__codelineno-47-28" name="__codelineno-47-28" href="#__codelineno-47-28"></a><span class="c1"># --- Aspects ---</span>
+<a id="__codelineno-47-29" name="__codelineno-47-29" href="#__codelineno-47-29"></a><span class="n">ivcap</span><span class="o">.</span><span class="n">add_aspect</span><span class="p">(</span><span class="n">art</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my:schema:tag.1&quot;</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">})</span>
+<a id="__codelineno-47-30" name="__codelineno-47-30" href="#__codelineno-47-30"></a><span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">art</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+<a id="__codelineno-47-31" name="__codelineno-47-31" href="#__codelineno-47-31"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">aspect</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2022-2026 CSIRO
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+        <script src="../js/mermaid-init.js"></script>
+      
+    
+  </body>
+</html>

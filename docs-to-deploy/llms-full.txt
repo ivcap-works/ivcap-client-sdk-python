@@ -1,0 +1,2400 @@
+# IVCAP Client SDK (Python)
+
+> Python SDK for interacting with IVCAP deployments — discover services, run jobs, manage artifacts and metadata
+
+ivcap_client is a Python SDK for interacting with IVCAP
+(Intelligent Visual Computing and Analytics Platform) deployments.
+Use it to discover services, submit jobs, manage artifacts, read/write
+Aspects in the DataFabric, and orchestrate multi-agent pipelines.
+All list methods return iterators; authentication is via JWT token or environment variables.
+
+
+# Getting Started
+
+## Installation
+
+# Installation
+
+## Prerequisites
+
+- Python 3.11 or higher
+- pip or poetry package manager
+- Access to an IVCAP deployment (URL and JWT token)
+
+## From PyPI
+
+The easiest way to install the IVCAP Client SDK:
+
+```bash
+pip install ivcap-client
+```
+
+Or with poetry:
+
+```bash
+poetry add ivcap-client
+```
+
+## From Source
+
+For development or to use the latest unreleased features:
+
+```bash
+git clone https://github.com/ivcap-works/ivcap-client-sdk-python.git
+cd ivcap-client-sdk-python
+poetry install
+```
+
+## Verify Installation
+
+Test your installation:
+
+```bash
+python -c "import ivcap_client; print(ivcap_client.__version__)"
+```
+
+You should see the version number printed.
+
+## Optional: Development Dependencies
+
+If you plan to contribute or build documentation locally:
+
+```bash
+# Development tools
+poetry install --with dev
+```
+
+```bash
+# Documentation tools (MkDocs) — run from the project root
+pip install -r docs/requirements.txt
+```
+
+## Next Steps
+
+- Set up your [authentication credentials](authentication.md)
+- Follow the [Quick Start](quick-start.md) guide
+- Browse the [Examples](../examples/overview.md)
+
+## Troubleshooting
+
+### ImportError: No module named 'ivcap_client'
+
+Make sure you've installed the package:
+```bash
+pip install ivcap-client
+```
+
+If using a virtual environment, ensure it's activated.
+
+### Python Version Error
+
+Check your Python version:
+```bash
+python --version
+```
+
+The SDK requires Python 3.11+.
+
+### Permission Denied
+
+If you get permission errors during installation, use:
+```bash
+pip install --user ivcap-client
+```
+
+## Getting Help
+
+- [Open an issue](https://github.com/ivcap-works/ivcap-client-sdk-python/issues)
+- See [Contributing](../community/contributing.md)
+
+
+## Quick Start
+
+# Quick Start
+
+Get a working IVCAP client workflow running in 5 minutes.
+
+## 1. Install the SDK
+
+```bash
+pip install ivcap-client
+```
+
+## 2. Set Up Credentials
+
+```bash
+export IVCAP_URL=https://api.your-ivcap-deployment.net
+export IVCAP_JWT=$(ivcap context get access-token)
+```
+
+Or use a `.env` file — see [Authentication](authentication.md) for details.
+
+## 3. Connect and Explore Services
+
+```python
+from ivcap_client.ivcap import IVCAP
+
+# Connect (reads IVCAP_URL and IVCAP_JWT from environment)
+ivcap = IVCAP()
+
+# List available services
+for service in ivcap.list_services(limit=10):
+    print(service)
+```
+
+## 4. Find a Service and Run a Job
+
+```python
+import io, json
+
+# Find a service by name
+service = ivcap.get_service_by_name("hello-world-python")
+print(service)
+
+# Inspect its parameters
+for name, param in service.parameters.items():
+    print(f"  {name}: type={param.type}, optional={param.is_optional}")
+
+# Submit a job — request_job accepts a Pydantic BaseModel, a dataclass,
+# or an IO[str] containing JSON (plain dicts must be wrapped):
+job = service.request_job(io.StringIO(json.dumps({"msg": "Hello, IVCAP!"})))
+print(f"Created job: {job.id}")
+```
+
+## 5. Wait for the Result
+
+```python
+import time
+
+while not job.finished:
+    time.sleep(5)
+    job.refresh()
+
+print("Status:", job.status())
+print("Result:", job.result)
+```
+
+## 6. Upload and Use an Artifact
+
+```python
+# Upload a local file
+artifact = ivcap.upload_artifact(
+    name="my-data",
+    file_path="/path/to/data.csv",
+)
+print(f"Uploaded: {artifact.id}")
+
+# Pass the artifact URN to a service (wrap the dict in io.StringIO)
+import io, json
+job = service.request_job(io.StringIO(json.dumps({"input": artifact.id})))
+```
+
+## 7. Attach Metadata (Aspects)
+
+```python
+# Attach typed metadata to any entity
+ivcap.add_aspect(
+    entity="urn:ivcap:artifact:<uuid>",
+    aspect={
+        "$schema": "urn:my-project:schema:annotation.1",
+        "label": "coral reef",
+        "confidence": 0.97,
+    },
+)
+```
+
+## What's Next
+
+- **[Discovering Services](../guides/services.md)** — Advanced service lookup and parameter inspection
+- **[Running Jobs](../guides/jobs.md)** — Timeout strategies, async patterns, batch monitoring
+- **[Working with Artifacts](../guides/artifacts.md)** — Upload, download, streams, deduplication
+- **[The Datafabric & Aspects](../guides/aspects.md)** — Full metadata API
+- **[API Reference](../api/overview.md)** — Complete class documentation
+- **[Examples](../examples/overview.md)** — Ready-to-run scripts
+
+## Common Patterns
+
+### Typed requests with Pydantic
+
+Some services expose a structured Pydantic model for their inputs:
+
+```python
+service = ivcap.get_service("urn:ivcap:service:<uuid>")
+Model = service.request_model        # dynamically constructed BaseModel
+req = Model(duration_seconds=6, target_cpu_percent=90)
+job = service.request_job(req)
+```
+
+### Async workflow
+
+```python
+import asyncio
+from ivcap_client.ivcap import IVCAP
+
+async def run():
+    ivcap = IVCAP()
+    svc = ivcap.get_service("urn:ivcap:service:<uuid>")
+    Model = await svc.request_model_async()
+    job = await svc.request_job_async(Model(param="value"))
+    result = await job.result_async()
+    print(result)
+
+asyncio.run(run())
+```
+
+## Troubleshooting
+
+### "Service not found"
+
+```python
+from ivcap_client.exception import ResourceNotFound
+
+try:
+    service = ivcap.get_service_by_name("my-service")
+except ResourceNotFound:
+    print("Service not found — check the name with ivcap.list_services()")
+```
+
+### JWT token expired
+
+```bash
+# Refresh your token
+export IVCAP_JWT=$(ivcap context get access-token)
+```
+
+
+## Authentication
+
+# Authentication
+
+The IVCAP Client SDK connects to an IVCAP deployment over HTTPS using your JWT access token.
+
+## Getting Credentials
+
+You need two things:
+
+1. **IVCAP deployment URL** — the API endpoint for your IVCAP cluster
+2. **JWT access token** — obtained via the `ivcap-cli`
+
+The easiest way to get a token is via the [ivcap-cli](https://github.com/reinventingscience/ivcap-cli):
+
+```bash
+ivcap context get access-token
+```
+
+## Setting Credentials
+
+### Environment Variables (Recommended)
+
+Set credentials as environment variables before running your script:
+
+```bash
+export IVCAP_URL=https://api.your-ivcap-deployment.net
+export IVCAP_JWT=<your-jwt-token>
+export IVCAP_ACCOUNT_ID=urn:ivcap:account:<uuid>   # optional
+```
+
+### `.env` File
+
+Create a `.env` file in your project directory (never commit this to version control):
+
+```
+IVCAP_URL=https://api.your-ivcap-deployment.net
+IVCAP_JWT=<your-jwt-token>
+IVCAP_ACCOUNT_ID=urn:ivcap:account:<uuid>
+```
+
+Then load it with `python-dotenv`:
+
+```python
+from dotenv import load_dotenv
+from ivcap_client.ivcap import IVCAP
+
+load_dotenv('.env')   # or load_dotenv('.dbg-env') as used in examples
+ivcap = IVCAP()
+```
+
+### Explicit Credentials in Code
+
+For programmatic configuration (e.g., in CI/CD pipelines):
+
+```python
+from ivcap_client.ivcap import IVCAP
+
+ivcap = IVCAP(
+    url="https://api.your-ivcap-deployment.net",
+    token="<jwt-token>",
+    account_id="urn:ivcap:account:<uuid>",  # optional
+)
+```
+
+## Inside the IVCAP Platform
+
+When code runs *inside* an IVCAP service container (as a deployed job), the platform
+automatically injects `IVCAP_BASE_URL`. In this case no JWT token is needed:
+
+```python
+# IVCAP_BASE_URL is set by the platform sidecar; no token required
+ivcap = IVCAP()
+```
+
+## Environment Variable Reference
+
+| Variable | Required | Description |
+|---|---|---|
+| `IVCAP_URL` | Yes | Base URL for the IVCAP platform |
+| `IVCAP_JWT` | Yes (external) | JWT access token |
+| `IVCAP_BASE_URL` | No | Used inside platform containers (overrides `IVCAP_URL`) |
+| `IVCAP_ACCOUNT_ID` | No | Your account URN (some operations require this) |
+
+See the [full environment variable reference](../reference/environment-variables.md) for all options.
+
+## Security Best Practices
+
+- **Never commit** JWT tokens or `.env` files to version control
+- Add `.env` and `.dbg-env` to your `.gitignore`
+- JWT tokens expire — use `ivcap context get access-token` to refresh
+- Use environment variables or secrets management in production pipelines
+
+## Next Steps
+
+- Follow the [Quick Start](quick-start.md) guide
+- Learn about [Discovering Services](../guides/services.md)
+
+
+# Guides
+
+## Discovering Services
+
+# Discovering Services
+
+This guide covers how to find, inspect, and understand the IVCAP services available on your deployment.
+
+## Overview
+
+A **Service** is a registered, executable analytic capability. When you call
+`ivcap.get_service(...)`, you are reading a `urn:ivcap:schema.service.2` aspect from
+the Datafabric. Every service has a URN identifier, a name, a description, and a set
+of typed parameters.
+
+Services support multiple **execution models**, selected by the service author:
+
+| Execution model | How it runs |
+|---|---|
+| **Lambda** | Long-running K8s Deployment, low-latency sequential HTTP jobs |
+| **Batch** | Fresh K8s Job container per invocation, CPU/memory-intensive tasks |
+| **Nextflow** | Nextflow pipeline on K8s, multi-step scientific workflows |
+| **Argo** | Argo Workflow, DAG-style complex pipelines |
+
+As a client you **do not** need to know the execution model — `service.request_job()` is
+the same for all of them.
+
+## Listing All Services
+
+```python
+from ivcap_client.ivcap import IVCAP
+
+ivcap = IVCAP()
+
+for i, service in enumerate(ivcap.list_services(limit=50)):
+    print(f"{i}: {service}")
+```
+
+`list_services()` returns a **lazy iterator** — pages are fetched from the server
+automatically as you iterate through them.
+
+### Filtering and Ordering
+
+```python
+# Filter by name pattern
+for service in ivcap.list_services(filter="name~='hello%'", limit=10):
+    print(service)
+
+# Sort by name, ascending
+for service in ivcap.list_services(order_by="name", order_desc=False, limit=20):
+    print(service)
+```
+
+**`list_services()` keyword arguments:**
+
+| Argument | Type | Description |
+|---|---|---|
+| `limit` | `int` | Max items per page (default 10) |
+| `filter` | `str` | OData-style filter, e.g. `"name~='hello%'"` |
+| `order_by` | `str` | Field to sort by (e.g. `"name"`, `"created_at"`) |
+| `order_desc` | `bool` | Sort descending (default `False`) |
+| `at_time` | `datetime` | Return state at a historical point in time |
+
+## Finding a Service by Name
+
+```python
+service = ivcap.get_service_by_name("hello-world-python")
+print(service)
+```
+
+> **Raises:**
+> - `ResourceNotFound` — if no service matches the name
+> - `AmbiguousRequest` — if more than one service matches
+
+## Getting a Service by URN
+
+```python
+service = ivcap.get_service("urn:ivcap:service:3678e5f1-8fb7-5ad6-b65b-8bd8c23c0948")
+```
+
+## Inspecting Service Parameters
+
+Each service exposes its input parameters through `service.parameters`. Each
+`ServiceParameter` has a name, type, and description:
+
+```python
+service = ivcap.get_service_by_name("my-service")
+
+# All parameters
+for name, param in service.parameters.items():
+    print(f"  {name}: type={param.type}, optional={param.is_optional}")
+
+# Only mandatory parameters
+print("Required:", service.mandatory_parameters)
+```
+
+**`ServiceParameter` attributes:**
+
+| Attribute | Type | Description |
+|---|---|---|
+| `name` | `str` | Parameter name (hyphens replaced with underscores) |
+| `type` | `PType` | Enum: STRING, INT, FLOAT, BOOL, OPTION, ARTIFACT, COLLECTION |
+| `description` | `str` | Human-readable description |
+| `label` | `str` | UI label |
+| `is_optional` | `bool` | Whether the parameter can be omitted |
+| `default` | `str` | Default value (if any) |
+| `options` | `list` | Allowed values for OPTION type |
+
+## Getting the Request Model (Pydantic)
+
+Many services expose a structured Pydantic `BaseModel` for their inputs. The SDK fetches
+this from the `urn:sd-core:schema.ai-tool.1` aspect in the Datafabric and dynamically
+constructs a typed class:
+
+```python
+service = ivcap.get_service("urn:ivcap:service:<uuid>")
+
+# Access synchronously
+Model = service.request_model          # type[BaseModel]
+print(Model.model_json_schema())       # inspect the JSON schema
+
+instance = Model(param_a="foo", param_b=42)
+```
+
+Or asynchronously:
+
+```python
+Model = await service.request_model_async()
+```
+
+## Common Patterns
+
+### Discover then run
+
+```python
+service = ivcap.get_service_by_name("image-classifier")
+Model = service.request_model
+req = Model(image="urn:ivcap:artifact:<uuid>", threshold=0.8)
+job = service.request_job(req)
+```
+
+### List all services with their parameters
+
+```python
+for service in ivcap.list_services(limit=100):
+    print(f"\n=== {service.name} ({service.id}) ===")
+    for name, param in service.parameters.items():
+        optional = " [optional]" if param.is_optional else ""
+        default = f" (default: {param.default})" if param.default else ""
+        print(f"  {name}: {param.type}{optional}{default}")
+        if param.description:
+            print(f"    {param.description}")
+```
+
+## See Also
+
+- [Running Jobs](jobs.md) — Submit and monitor jobs
+- [API Reference: Service](../api/service.md) — Full `Service` class documentation
+- [API Reference: IVCAP Client](../api/ivcap.md) — `list_services()`, `get_service()`, `get_service_by_name()`
+
+
+## Running Jobs
+
+# Running Jobs
+
+This guide covers submitting jobs to IVCAP services and monitoring their execution.
+
+## Overview
+
+A **Job** is the tracked execution of one service invocation. When you call
+`service.request_job(data)`, the platform:
+
+1. Creates a job record (`urn:ivcap:job:<uuid>`) with status `pending`
+2. Selects the appropriate dispatcher (Lambda, Batch, Nextflow, or Argo)
+3. Launches the service container in Kubernetes
+4. Runs the computation and writes results back to the Datafabric
+
+## Job Lifecycle
+
+```
+pending → scheduled → executing → succeeded
+                                → failed
+                                → error
+```
+
+| Status | Meaning |
+|---|---|
+| `pending` | Job record created, waiting for a dispatcher slot |
+| `scheduled` | Dispatcher has provisioned the execution environment |
+| `executing` | Service container is processing the job |
+| `succeeded` | Service reported success; result is available |
+| `failed` | Service reported failure (business-logic failure) |
+| `error` | Platform-level error (infrastructure, timeout, OOM) |
+
+## Submitting a Job
+
+### Fire and check (non-blocking)
+
+```python
+import io, json
+from ivcap_client.ivcap import IVCAP
+
+ivcap = IVCAP()
+svc = ivcap.get_service("urn:ivcap:service:<uuid>")
+
+# Submit — returns immediately (timeout=0)
+# request_job accepts a Pydantic BaseModel, a dataclass, or an IO[str] (JSON)
+job = svc.request_job(io.StringIO(json.dumps({"param": "value"})))
+print(f"Created job: {job.id}")
+```
+
+### With a Pydantic model
+
+```python
+Model = svc.request_model
+req = Model(duration_seconds=6, target_cpu_percent=90)
+job = svc.request_job(req)
+```
+
+### Blocking (wait for completion server-side)
+
+Pass a `timeout` in seconds. The API gateway holds the connection open until the job
+completes or the timeout elapses:
+
+```python
+# Block up to 120 seconds server-side
+job = svc.request_job(req, timeout=120)
+
+# Block indefinitely
+job = svc.request_job(req, timeout=None)
+```
+
+> **Note:** `timeout=0` (the default) means "submit and return immediately with 202 Accepted".
+> The gateway does not wait; poll with `job.refresh()`.
+
+### With a raw JSON string or IO stream
+
+```python
+import io
+
+payload = '{"wordle": {"maxattempts": 2, "thinking_time": 1}}'
+job = svc.request_job(io.StringIO(payload))
+```
+
+## Polling for Completion
+
+```python
+import time
+from ivcap_client import JobStatus
+
+while not job.finished:
+    time.sleep(5)
+    job.refresh()             # pull latest state from server
+
+print(job.status())           # JobStatus.SUCCEEDED / .FAILED / .ERROR
+print(job.result)             # parsed response body
+```
+
+`job.finished` is `True` when status is `SUCCEEDED`, `FAILED`, or `ERROR`.
+
+## Accessing the Result
+
+```python
+if job.status() == JobStatus.SUCCEEDED:
+    result = job.result      # dict / object
+    print(result)
+```
+
+> **Under the hood:** `job.refresh()` reads the `urn:ivcap:schema.job.2` aspect from
+> the Datafabric. The result is stored as a `urn:ivcap:schema.job-result.1` aspect —
+> accessing `job.result` may trigger a second network round-trip.
+
+## Job Properties
+
+| Property/Method | Description |
+|---|---|
+| `job.id` | URN of the job |
+| `job.status()` | Current `JobStatus` (re-fetched from server) |
+| `job.finished` | `True` if SUCCEEDED, FAILED, or ERROR |
+| `job.succeeded` | `True` only if SUCCEEDED |
+| `job.result` | Result payload (fetched on demand) |
+| `job.refresh()` | Pull latest state from the server |
+| `job.requested_at` | When the job was submitted |
+| `job.started_at` | When execution began |
+| `job.finished_at` | When execution ended |
+
+## Batch Job Monitoring
+
+Monitor many jobs simultaneously:
+
+```python
+import csv
+from time import sleep, time
+
+jobs = [svc.request_job(req) for _ in range(10)]
+
+with open("results.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    start = time()
+    while True:
+        sleep(10)
+        elapsed = int(time() - start)
+        for j in jobs:
+            j.refresh()
+            w.writerow([elapsed, j.id, j.status().value])
+        f.flush()
+        done = sum(1 for j in jobs if j.finished)
+        print(f"Progress: {done}/{len(jobs)}")
+        if done == len(jobs):
+            break
+```
+
+## Handling Job Failures
+
+```python
+from ivcap_client import JobStatus
+
+while not job.finished:
+    time.sleep(5)
+    job.refresh()
+
+if job.status() == JobStatus.SUCCEEDED:
+    print("Done:", job.result)
+elif job.status() == JobStatus.FAILED:
+    print("Job reported failure (check service logs)")
+elif job.status() == JobStatus.ERROR:
+    print("Platform-level error (infrastructure, OOM, timeout)")
+```
+
+## See Also
+
+- [Discovering Services](services.md) — Find and inspect services
+- [Async Usage](async-usage.md) — Async job patterns and parallel execution
+- [Error Handling](error-handling.md) — Exception types and retry strategies
+- [API Reference: Job](../api/job.md) — Full `Job` class documentation
+- [Examples: Job Workflows](../examples/jobs.md) — Ready-to-run scripts
+
+
+## Working with Artifacts
+
+# Working with Artifacts
+
+This guide covers uploading data, downloading results, and managing binary blobs in IVCAP.
+
+## Overview
+
+An **Artifact** is any binary or structured data blob consumed or produced by a job:
+an image, a CSV file, a NetCDF dataset, a trained model checkpoint, etc.
+
+An artifact has two complementary parts:
+
+1. **Blob** — the raw bytes, stored in object storage (GCS/S3-compatible), accessed via
+   TUS upload (writes) or streaming HTTP GET (reads).
+2. **Aspects in the Datafabric** — typed metadata describing the artifact's MIME type,
+   size, provenance (which job produced it), access policy, and any domain annotations.
+
+> **Artifact URNs as service inputs:** When a service parameter has type `ARTIFACT`,
+> you pass the artifact's URN (`urn:ivcap:artifact:<uuid>`) as the parameter value.
+
+## Uploading Files
+
+### Upload a local file
+
+```python
+from ivcap_client.ivcap import IVCAP
+
+ivcap = IVCAP()
+
+artifact = ivcap.upload_artifact(
+    name="my-image",
+    file_path="/path/to/image.jpg",
+    policy="urn:ivcap:policy:ivcap.open.artifact",  # optional, makes it public
+)
+print(artifact)
+# <Artifact id=urn:ivcap:artifact:<uuid>, status=ready>
+```
+
+### Upload from an in-memory stream
+
+```python
+import io
+
+data = b"col1,col2\n1,2\n3,4\n"
+artifact = ivcap.upload_artifact(
+    name="my-data.csv",
+    io_stream=io.BytesIO(data),
+    content_type="text/csv",
+    content_size=len(data),
+)
+```
+
+### Upload parameters
+
+| Parameter | Type | Description |
+|---|---|---|
+| `name` | `str` | Human-readable name for the artifact |
+| `file_path` | `str` | Local path to upload |
+| `io_stream` | `IO` | In-memory stream (requires `content_type`) |
+| `content_type` | `str` | MIME type (auto-detected from `file_path` extension if omitted) |
+| `content_size` | `int` | Size in bytes (-1 = unknown) |
+| `collection` | `URN` | Add to a named collection (`urn:ivcap:collection:...`) |
+| `policy` | `URN` | Access policy (`urn:ivcap:policy:...`) |
+| `chunk_size` | `int` | TUS upload chunk size (default: max) |
+| `retries` | `int` | Number of retry attempts on upload failure |
+| `retry_delay` | `int` | Seconds between retries |
+| `force_upload` | `bool` | Re-upload even if file was previously uploaded |
+
+## Automatic Deduplication
+
+The SDK tracks uploads using a hidden `.ivcap-<filename>.txt` sidecar file containing
+an MD5 hash of the source file. If you call `upload_artifact` again for the same
+unchanged file, it returns the existing artifact immediately without re-uploading.
+
+```python
+# First call — uploads the file
+artifact1 = ivcap.upload_artifact(name="data", file_path="/data/file.csv")
+
+# Second call — returns immediately (file hasn't changed)
+artifact2 = ivcap.upload_artifact(name="data", file_path="/data/file.csv")
+
+print(artifact1.id == artifact2.id)  # True
+```
+
+Use `force_upload=True` to bypass deduplication.
+
+### Check if a file was already uploaded
+
+```python
+artifact = ivcap.artifact_for_file("/path/to/file.jpg")
+if artifact:
+    print(f"Already uploaded as {artifact.id}")
+else:
+    artifact = ivcap.upload_artifact(name="file", file_path="/path/to/file.jpg")
+```
+
+## Getting an Artifact by URN
+
+```python
+artifact = ivcap.get_artifact("urn:ivcap:artifact:<uuid>")
+print(artifact.name, artifact.size, artifact.mime_type)
+```
+
+## Downloading Artifact Content
+
+### Stream to a file
+
+```python
+with open("/tmp/output.jpg", "wb") as f:
+    for chunk in artifact.as_stream():
+        f.write(chunk)
+```
+
+### Open as a file-like object
+
+```python
+with artifact.open() as f:
+    data = f.read()
+```
+
+### Download to a temporary file
+
+```python
+# Auto-deleted when the 'with' block exits
+with artifact.as_local_file() as path:
+    print(f"Downloaded to: {path}")
+    # process the file here...
+```
+
+## Listing Artifacts
+
+```python
+for artifact in ivcap.list_artifacts(limit=20):
+    print(artifact.id, artifact.name, artifact.mime_type)
+    for meta in artifact.metadata:
+        print(f"  schema: {meta.schema}")
+```
+
+## Artifact Provenance
+
+Every upload and every artifact produced by a job is automatically recorded in the
+Datafabric with provenance aspects:
+
+| Aspect Schema | What it records |
+|---|---|
+| `urn:ivcap:schema.artifact.1` | MIME type, size, storage location |
+| `urn:ivcap:schema.artifact-produced-by-order` | Link: artifact → job that created it |
+| `urn:ivcap:schema.artifact-used-by-order` | Link: artifact → jobs that consumed it |
+
+Query provenance:
+
+```python
+for aspect in ivcap.list_aspects(entity=artifact.id):
+    print(aspect.schema, aspect.entity)
+```
+
+## Adding Metadata to Artifacts
+
+```python
+artifact = ivcap.get_artifact("urn:ivcap:artifact:<uuid>")
+artifact.add_metadata({
+    "$schema": "urn:my:schema:tag.1",
+    "tags": ["marine", "coral"],
+})
+```
+
+## Local-File Artifacts
+
+When code runs inside IVCAP the platform provides local file paths as artifact URNs:
+
+```python
+artifact = ivcap.get_artifact("file:///data/input.csv")
+# Returns a LocalFileArtifact — open()/as_local_file() work without network calls
+```
+
+## Common Patterns
+
+### Upload data → run service → download result
+
+```python
+import io, json
+ivcap = IVCAP()
+
+# Upload input
+artifact = ivcap.upload_artifact(name="input-image", file_path="/data/photo.jpg")
+
+# Submit job
+service = ivcap.get_service_by_name("my-image-processor")
+job = service.request_job(io.StringIO(json.dumps({"image": artifact.id, "threshold": 0.8})))
+
+# Wait for result
+import time
+while not job.finished:
+    time.sleep(5)
+    job.refresh()
+
+# Download output
+output = ivcap.get_artifact(job.result["output_artifact"])
+with output.as_local_file() as path:
+    print(f"Result saved at: {path}")
+```
+
+## See Also
+
+- [The Datafabric & Aspects](aspects.md) — Attach metadata to artifacts
+- [Running Jobs](jobs.md) — Using artifact URNs as service inputs
+- [API Reference: Artifact](../api/artifact.md) — Full `Artifact` class documentation
+- [Examples: Artifacts](../examples/artifacts.md) — Ready-to-run scripts
+
+
+## The Datafabric & Aspects
+
+# The Datafabric & Aspects
+
+This guide explains IVCAP's metadata system and how to read, write, and query typed
+assertions (Aspects) on any platform entity.
+
+## What is the Datafabric?
+
+The **Datafabric** is the **single source of truth** for all platform state. It implements
+an *aspect-oriented, assertion-based, provenance-preserving information store*.
+
+Every piece of platform state — a service description, a job status update, an artifact's
+MIME type, a provenance record — is stored as an **Aspect**.
+
+## What is an Aspect?
+
+An **Aspect** is a typed, time-bounded assertion attached to any entity URN:
+
+```
+Aspect {
+  id        : urn:ivcap:aspect:<uuid>   # unique aspect record identifier
+  entity    : URN                        # the entity this aspect describes
+  schema    : URN                        # defines the shape/meaning of content
+  content   : JSON                       # the actual information payload
+  asserter  : urn:ivcap:user:<uuid>      # who asserted this information
+  policy    : urn:ivcap:policy:<name>    # who can read/retract this aspect
+  validFrom : timestamp                  # when this assertion became valid
+  validTo   : timestamp | null           # null = "still valid"
+  replaces  : urn:ivcap:aspect:<uuid>    # the prior version (for updates)
+}
+```
+
+**Key rules:**
+
+1. **Aspects are assertions.** Each is a *claim* by an `asserter` that `content` describes `entity` at `validFrom`.
+2. **Aspects are never deleted.** To "update" a fact, the old aspect is *retracted* (`validTo` = now) and a new one created. The Datafabric is a complete, append-only audit log.
+3. **Multiple aspects per entity are normal.** Different principals can assert different things about the same entity.
+4. **Time-aware queries.** `list_aspects(at_time=T)` returns aspects valid at time T — the foundation of provenance.
+5. **Aspects are valid job output.** A service can write structured results directly as Aspects without creating binary artifacts.
+
+## Well-Known Platform Schemas
+
+| Schema URN | What it records |
+|---|---|
+| `urn:ivcap:schema.service.2` | A service description |
+| `urn:ivcap:schema.job.2` | Job state and metadata |
+| `urn:ivcap:schema.job-result.1` | Link from a job to its result artifact |
+| `urn:ivcap:schema.artifact.1` | Artifact MIME type, size, storage location |
+| `urn:sd-core:schema.ai-tool.1` | Service's Pydantic/JSON input schema |
+
+## Adding an Aspect
+
+Attach typed metadata to any entity URN (artifact, job, or any custom URN):
+
+```python
+from ivcap_client.ivcap import IVCAP
+
+ivcap = IVCAP()
+
+aspect = ivcap.add_aspect(
+    entity="urn:ivcap:artifact:<uuid>",
+    aspect={
+        "$schema": "urn:my-project:schema:image-annotation.1",
+        "label": "coral reef",
+        "confidence": 0.97,
+    },
+)
+print(aspect)
+```
+
+## Updating an Aspect
+
+`update_aspect` retracts any previous aspect with the same `(entity, schema)` pair
+before creating the new one:
+
+```python
+aspect = ivcap.update_aspect(
+    entity="urn:ivcap:artifact:<uuid>",
+    aspect={
+        "$schema": "urn:my-project:schema:image-annotation.1",
+        "label": "dog",
+        "confidence": 0.88,
+    },
+)
+```
+
+## Adding Metadata Directly to an Artifact
+
+```python
+artifact = ivcap.get_artifact("urn:ivcap:artifact:<uuid>")
+artifact.add_metadata({
+    "$schema": "urn:my:schema:tag.1",
+    "tags": ["marine", "coral"],
+})
+```
+
+## Listing and Searching Aspects
+
+### By schema
+
+```python
+for aspect in ivcap.list_aspects(
+    schema="urn:common:schema:in_collection.1",
+    limit=20,
+    include_content=True,
+):
+    print(aspect.entity, aspect.schema)
+    print(aspect.aspect)           # the JSON content dict
+```
+
+### By entity
+
+```python
+for aspect in ivcap.list_aspects(entity="urn:ivcap:artifact:<uuid>"):
+    print(aspect.schema)
+```
+
+### With a filter expression
+
+```python
+schema = 'urn:common:schema:in_collection.1'
+filter = "collection~='urn:ibenthos:collection:indo_flores_0922'"
+
+for aspect in ivcap.list_aspects(schema=schema, filter=filter, limit=20):
+    print(aspect.entity)
+```
+
+**`list_aspects()` parameters:**
+
+| Parameter | Description |
+|---|---|
+| `entity` | Filter by entity URN |
+| `schema` | Filter by schema prefix (supports `%` wildcard) |
+| `content_path` | JSONPath filter applied to aspect content |
+| `at_time` | Historical snapshot time |
+| `limit` | Max items (default 10) |
+| `filter` | OData-style filter expression |
+| `order_by` | Sort field (default `valid_from`) |
+| `order_direction` | `"ASC"` or `"DESC"` (default `"DESC"`) |
+| `include_content` | Include aspect JSON content in listing (default `True`) |
+
+## Historical Queries
+
+Query the exact state of any entity at any past moment:
+
+```python
+from datetime import datetime, timezone
+
+past = datetime(2025, 1, 1, tzinfo=timezone.utc)
+for aspect in ivcap.list_aspects(
+    entity="urn:ivcap:artifact:<uuid>",
+    at_time=past,
+    include_content=True,
+):
+    print(f"Valid from {aspect.valid_from}: {aspect.schema}")
+    print(aspect.aspect)
+```
+
+## Retracting an Aspect
+
+Mark an aspect as no longer valid without creating a replacement:
+
+```python
+aspects = list(ivcap.list_aspects(
+    entity="urn:ivcap:artifact:<uuid>",
+    schema="urn:my:schema:tag.1"
+))
+if aspects:
+    aspects[0].retract()
+```
+
+## Using Your Own Schemas
+
+You can use any schema URN you choose — the platform does not enforce a registry.
+By convention, use a namespaced URN like `urn:<project>:schema:<name>.<version>`.
+
+```python
+# Attach project-specific metadata
+ivcap.add_aspect(
+    entity="urn:ivcap:job:<uuid>",
+    aspect={
+        "$schema": "urn:my-project:schema:experiment-metadata.1",
+        "experiment_id": "EXP-2025-001",
+        "researcher": "alice@csiro.au",
+        "parameters": {"threshold": 0.8, "model_version": "v3.2"},
+    },
+)
+```
+
+## See Also
+
+- [Working with Artifacts](artifacts.md) — Attach metadata to artifact entities
+- [Search (Datalog)](search.md) — Graph traversal queries over aspect data
+- [API Reference: Aspect](../api/aspect.md) — Full `Aspect` class documentation
+- [API Reference: IVCAP Client](../api/ivcap.md) — `add_aspect()`, `update_aspect()`, `list_aspects()`
+- [Examples: Aspects & Search](../examples/aspects.md) — Ready-to-run scripts
+
+
+## Async Usage
+
+# Async Usage
+
+The IVCAP Client SDK provides `_async` variants of all major operations for use with
+Python's `asyncio`. This is especially useful for running many jobs in parallel.
+
+## When to Use Async
+
+- **Parallel jobs** — submit dozens or hundreds of jobs and wait for all of them concurrently
+- **Async applications** — integrate IVCAP into FastAPI, aiohttp, or other async frameworks
+- **Responsive notebooks** — avoid blocking the event loop while waiting for jobs
+
+## Async Job Submission and Waiting
+
+```python
+import asyncio
+from ivcap_client.ivcap import IVCAP
+
+async def run():
+    ivcap = IVCAP()
+    svc = ivcap.get_service("urn:ivcap:service:<uuid>")
+
+    # Fetch request model asynchronously
+    Model = await svc.request_model_async()
+    req = Model(duration_seconds=2)
+
+    # Submit job and wait until finished
+    job = await svc.request_job_async(req)
+    result = await job.result_async()
+    print(result)
+
+asyncio.run(run())
+```
+
+## Async Polling Loop
+
+When you don't want to block indefinitely, use an async polling loop:
+
+```python
+async def run():
+    svc = ivcap.get_service("urn:ivcap:service:<uuid>")
+    Model = await svc.request_model_async()
+    job = await svc.request_job_async(Model(duration_seconds=5), max_wait_time=None)
+
+    while not await job.finished_async():
+        await asyncio.sleep(5)
+
+    status = await job.status_async(refresh=False)
+    print(status)
+```
+
+## Running Many Jobs in Parallel
+
+Use `asyncio.gather()` to submit and wait for multiple jobs concurrently:
+
+```python
+import asyncio
+from ivcap_client.ivcap import IVCAP
+
+async def run_job(svc, req):
+    job = await svc.request_job_async(req)
+    result = await job.result_async()
+    return result
+
+async def run_all():
+    ivcap = IVCAP()
+    svc = ivcap.get_service("urn:ivcap:service:<uuid>")
+    Model = await svc.request_model_async()
+
+    # Create 10 requests
+    requests = [Model(duration_seconds=i) for i in range(1, 11)]
+
+    # Submit and wait for all in parallel
+    results = await asyncio.gather(*[run_job(svc, req) for req in requests])
+
+    for i, result in enumerate(results):
+        print(f"Job {i}: {result}")
+
+asyncio.run(run_all())
+```
+
+## Async Variants Reference
+
+| Synchronous | Async variant |
+|---|---|
+| `svc.request_model` | `await svc.request_model_async()` |
+| `svc.request_job(req)` | `await svc.request_job_async(req)` |
+| `job.refresh()` | `await job.refresh_async()` |
+| `job.finished` | `await job.finished_async()` |
+| `job.status()` | `await job.status_async()` |
+| `job.result` | `await job.result_async()` |
+
+## Error Handling in Async Code
+
+```python
+from ivcap_client.exception import IvcapApiError, ResourceNotFound
+
+async def safe_run():
+    try:
+        svc = ivcap.get_service_by_name("my-service")
+        Model = await svc.request_model_async()
+        job = await svc.request_job_async(Model())
+        return await job.result_async()
+    except ResourceNotFound:
+        print("Service not found")
+    except IvcapApiError as e:
+        print(f"API error [{e.status_code}]: {e}")
+```
+
+## See Also
+
+- [Running Jobs](jobs.md) — Synchronous job patterns
+- [Error Handling](error-handling.md) — Exception types and recovery
+- [Examples: Async & Parallel](../examples/async-parallel.md) — Ready-to-run scripts
+
+
+## Error Handling
+
+# Error Handling
+
+This guide covers all exception types raised by the IVCAP Client SDK and how to handle them.
+
+## Exception Hierarchy
+
+The IVCAP SDK uses a mixed exception hierarchy. HTTP/API errors inherit from
+`IvcapError`, while the remaining exceptions inherit from the built-in `Exception`:
+
+```
+Exception
+├── IvcapError
+│   └── IvcapApiError      # HTTP error from the platform API
+│       ├── NotAuthorizedException   # 401/403
+│       └── HttpException            # backward-compat alias for IvcapApiError
+├── ResourceNotFound       # 404 (service or artifact not found)
+├── AmbiguousRequest       # get_service_by_name matched multiple services
+└── MissingParameterValue  # required parameter missing when creating an aspect
+```
+
+!!! warning
+    `ResourceNotFound`, `AmbiguousRequest`, and `MissingParameterValue` do **not**
+    inherit from `IvcapError`. Catching `IvcapError` will **not** catch these.
+    Always catch them individually or use the base `Exception`.
+
+## Importing Exceptions
+
+```python
+from ivcap_client.exception import (
+    IvcapError,               # base class for all IVCAP exceptions
+    IvcapApiError,            # HTTP error from the API (.status_code, .operation)
+    NotAuthorizedException,   # HTTP 401/403
+    ResourceNotFound,         # service or artifact not found
+    AmbiguousRequest,         # get_service_by_name matched more than one service
+    MissingParameterValue,    # required parameter missing
+)
+```
+
+## Common Patterns
+
+### Service lookup
+
+```python
+from ivcap_client.exception import ResourceNotFound, AmbiguousRequest
+
+try:
+    service = ivcap.get_service_by_name("my-service")
+except ResourceNotFound as e:
+    print(f"Service not found: {e.resource}")
+except AmbiguousRequest as e:
+    print(f"Multiple services match: {e}")
+```
+
+### API errors (upload, download, etc.)
+
+```python
+from ivcap_client.exception import IvcapApiError
+
+try:
+    artifact = ivcap.upload_artifact(file_path="/tmp/data.csv")
+except IvcapApiError as e:
+    print(f"Upload failed [{e.status_code}]: {e}")
+    print(f"Operation: {e.operation}")
+```
+
+### Authorization errors
+
+```python
+from ivcap_client.exception import NotAuthorizedException
+
+try:
+    for svc in ivcap.list_services():
+        print(svc)
+except NotAuthorizedException:
+    print("JWT token is invalid or expired — refresh with: ivcap context get access-token")
+```
+
+## Job Failure Detection
+
+There are two kinds of job non-success outcomes:
+
+| Status | Cause | Action |
+|---|---|---|
+| `FAILED` | Service reported a business-logic failure | Check service logs; fix input data |
+| `ERROR` | Platform-level error (OOM, timeout, infra) | Retry; check cluster health |
+
+```python
+from ivcap_client import JobStatus
+
+while not job.finished:
+    import time; time.sleep(5)
+    job.refresh()
+
+if job.status() == JobStatus.SUCCEEDED:
+    print("Done:", job.result)
+elif job.status() == JobStatus.FAILED:
+    print("Job failed — check the service's error log")
+elif job.status() == JobStatus.ERROR:
+    print("Platform error — consider retrying")
+```
+
+## Retry Patterns
+
+For transient failures, implement a simple retry loop:
+
+```python
+import time
+from ivcap_client.exception import IvcapApiError
+
+def submit_with_retry(svc, req, max_retries=3, delay=10):
+    for attempt in range(max_retries):
+        try:
+            return svc.request_job(req)
+        except IvcapApiError as e:
+            if attempt < max_retries - 1 and e.status_code >= 500:
+                print(f"Attempt {attempt + 1} failed ({e.status_code}), retrying in {delay}s...")
+                time.sleep(delay)
+            else:
+                raise
+```
+
+## Catching All IVCAP Errors
+
+```python
+from ivcap_client.exception import IvcapError
+
+try:
+    service = ivcap.get_service_by_name("my-service")
+    job = service.request_job(req)
+except IvcapError as e:
+    print(f"IVCAP error: {e}")
+except Exception as e:
+    print(f"Unexpected error: {e}")
+    raise
+```
+
+## See Also
+
+- [Running Jobs](jobs.md) — Job status values and failure modes
+- [Async Usage](async-usage.md) — Error handling in async code
+- [API Reference: Exceptions](../api/exceptions.md) — Full exception class documentation
+
+
+## Agent Integration
+
+# Agent Integration
+
+The IVCAP Client SDK includes an `Agent` wrapper for services that follow an agent
+pattern. Agents are IVCAP services designed to be invoked interactively or as part of
+AI orchestration pipelines.
+
+## What is an Agent?
+
+An agent is a special kind of IVCAP service that wraps a conversational or
+decision-making process. From the client's perspective, interacting with an agent is
+similar to running a regular job — you submit a request and wait for a result.
+
+## Getting an Agent
+
+```python
+from ivcap_client.ivcap import IVCAP
+
+ivcap = IVCAP()
+
+# Agents are services; get them by URN
+agent = ivcap.get_agent("urn:ivcap:service:<uuid>")
+```
+
+## Getting the Request Model
+
+```python
+# Synchronous
+Model = agent.request_model
+
+# Asynchronous
+Model = await agent.request_model_async()
+```
+
+## Executing an Agent
+
+`exec_agent()` submits the job and polls until `job.finished`, then returns the
+completed `Job`:
+
+```python
+Model = agent.request_model
+job = agent.exec_agent(Model(some_param="value"))
+print(job.result)
+```
+
+## Using CrewAI with IVCAP
+
+The `examples/run_crewai_agent.py` script demonstrates how to use a CrewAI-based
+agent deployed on IVCAP:
+
+```python
+from _common import ivcap, pp
+
+# Get a CrewAI agent service
+agent = ivcap.get_agent("urn:ivcap:service:<uuid>")
+
+# Get the typed request model
+Model = agent.request_model
+
+# Execute and wait for result
+job = agent.exec_agent(Model(
+    topic="climate change mitigation strategies",
+    max_iterations=5,
+))
+print(job.result)
+```
+
+## Async Agent Execution
+
+!!! warning "Limited async support"
+    `Agent` does not currently expose `request_job_async()` directly.
+    To run an agent asynchronously, use `asyncio.to_thread` to call
+    `exec_agent()` in a thread pool, or use the underlying service's
+    async API via `agent._service.request_job_async()`:
+
+```python
+import asyncio
+from ivcap_client.ivcap import IVCAP
+
+async def run():
+    ivcap = IVCAP()
+    agent = ivcap.get_agent("urn:ivcap:service:<uuid>")
+    Model = await agent.request_model_async()
+
+    # Option A — run the blocking exec_agent in a thread pool
+    job = await asyncio.to_thread(agent.exec_agent, Model(param="value"))
+    print(job.result)
+
+    # Option B — use the underlying service's async API directly
+    job = await agent._service.request_job_async(Model(param="value"))
+    result = await job.result_async()
+    print(result)
+
+asyncio.run(run())
+```
+
+## See Also
+
+- [Discovering Services](services.md) — Services and agents share the same discovery API
+- [Running Jobs](jobs.md) — Job submission and monitoring patterns
+- [Async Usage](async-usage.md) — Async agent patterns
+- [API Reference: IVCAP Client](../api/ivcap.md) — `get_agent()` method
+
+
+## Search (Datalog)
+
+# Search (Datalog)
+
+IVCAP includes a Datalog/Mangle query language for traversing the knowledge graph formed
+by aspect data. This lets you run graph queries across provenance links, entity
+relationships, and metadata.
+
+## Overview
+
+The **Search service** traverses the *emergent graph* formed by URN references embedded
+in aspect content. For example:
+- A job aspect references the service URN → you can find "all jobs that used service X"
+- A job-result aspect references an artifact URN → you can find "all artifacts produced by jobs of service X"
+- A custom aspect references other entities → you can traverse your domain graph
+
+## Basic Usage
+
+```python
+from ivcap_client.ivcap import IVCAP
+
+ivcap = IVCAP()
+
+# Datalog query — find all JPEG artifacts
+# ivcap.search() expects a str (not bytes)
+query = """
+:- ivcap_artifact(Id, Name, MimeType),
+   MimeType = "image/jpeg".
+"""
+
+results = ivcap.search(query)
+for r in results.items:
+    print(r)
+```
+
+## Query Language
+
+The query language is **Mangle** (a Datalog dialect). Queries are written as Horn
+clauses that the system evaluates over the aspect graph.
+
+### Common predicates
+
+| Predicate | Description |
+|---|---|
+| `ivcap_artifact(Id, Name, MimeType)` | Enumerate artifacts |
+| `ivcap_job(Id, Status, ServiceId)` | Enumerate jobs |
+| `ivcap_service(Id, Name)` | Enumerate services |
+| `ivcap_aspect(Entity, Schema, Content)` | Enumerate aspects |
+
+### Find artifacts by MIME type
+
+```python
+query = """
+:- ivcap_artifact(Id, Name, MimeType),
+   MimeType = "text/csv".
+"""
+results = ivcap.search(query)
+```
+
+### Find artifacts produced by a specific service
+
+```python
+query = """
+:- ivcap_job(JobId, "succeeded", ServiceId),
+   ServiceId = "urn:ivcap:service:<uuid>",
+   ivcap_artifact_produced_by(ArtifactId, JobId).
+"""
+results = ivcap.search(query)
+```
+
+### Find all jobs for a service
+
+```python
+query = """
+:- ivcap_job(JobId, Status, ServiceId),
+   ServiceId = "urn:ivcap:service:<uuid>".
+"""
+results = ivcap.search(query)
+for r in results.items:
+    print(r)
+```
+
+## Result Structure
+
+`ivcap.search()` returns a result object with an `items` list. Each item is a dict
+containing the bound variables from your query.
+
+```python
+results = ivcap.search(query)
+print(f"Found {len(results.items)} results")
+for r in results.items:
+    print(r)
+```
+
+## Relationship to Aspects
+
+Aspects are the raw data nodes of the graph. The search service:
+1. Indexes all aspect content in the Datafabric
+2. Resolves URN references between aspects to build the graph
+3. Evaluates Datalog rules over the graph
+
+This means any URN you embed in an aspect's JSON content becomes a traversable edge
+in the graph — enabling rich provenance queries.
+
+## See Also
+
+- [The Datafabric & Aspects](aspects.md) — Understanding the underlying data model
+- [API Reference: IVCAP Client](../api/ivcap.md) — `search()` method
+- [Examples: Aspects & Search](../examples/aspects.md) — Working search examples
+
+
+# API Reference
+
+## IVCAP Client
+
+# IVCAP Client
+
+The `IVCAP` class is the single entry point for all client operations. It manages
+authentication, connection, and exposes all high-level methods for working with
+services, jobs, artifacts, and aspects.
+
+## Quick Reference
+
+```python
+from ivcap_client.ivcap import IVCAP
+
+# From environment variables (recommended)
+ivcap = IVCAP()
+
+# With explicit credentials
+ivcap = IVCAP(
+    url="https://api.your-ivcap-deployment.net",
+    token="<jwt-token>",
+    account_id="urn:ivcap:account:<uuid>",
+)
+```
+
+## Class Documentation
+
+::: ivcap_client.ivcap.IVCAP
+
+
+## Service
+
+# Service
+
+A `Service` represents a registered, executable analytic capability on the IVCAP
+platform. Services are discovered via `ivcap.list_services()`, `ivcap.get_service()`,
+or `ivcap.get_service_by_name()`.
+
+## Quick Reference
+
+```python
+from ivcap_client.ivcap import IVCAP
+
+ivcap = IVCAP()
+
+# Get a service
+service = ivcap.get_service_by_name("my-service")
+
+# Inspect parameters
+for name, param in service.parameters.items():
+    print(f"  {name}: {param.type}, optional={param.is_optional}")
+
+# Get Pydantic request model
+Model = service.request_model
+req = Model(param_a="foo", param_b=42)
+
+# Submit a job
+job = service.request_job(req)
+```
+
+## Class Documentation
+
+::: ivcap_client.service.Service
+
+
+## Job
+
+# Job
+
+A `Job` represents a running or completed execution of an IVCAP service. Jobs are
+created by calling `service.request_job()` and tracked via `job.refresh()`.
+
+## Quick Reference
+
+```python
+import time
+from ivcap_client import JobStatus
+
+# Submit
+job = service.request_job(req)
+print(f"Job ID: {job.id}")
+
+# Poll
+while not job.finished:
+    time.sleep(5)
+    job.refresh()
+
+# Check result
+if job.status() == JobStatus.SUCCEEDED:
+    print(job.result)
+```
+
+## JobStatus Enum
+
+`JobStatus` represents all possible states of a job:
+
+| Value | Meaning |
+|---|---|
+| `UNKNOWN` | Status cannot be determined |
+| `PENDING` | Job created, awaiting a dispatcher slot |
+| `SCHEDULED` | Dispatcher has provisioned compute resources |
+| `EXECUTING` | Service container is actively processing |
+| `SUCCEEDED` | Job completed successfully; result is available |
+| `FAILED` | Service reported a business-logic failure |
+| `ERROR` | Platform-level error (OOM, timeout, infrastructure) |
+
+## Class Documentation
+
+::: ivcap_client.job.Job
+
+## Enum Documentation
+
+::: ivcap_client.job.JobStatus
+
+
+## Artifact
+
+# Artifact
+
+An `Artifact` represents a binary data blob stored in IVCAP — images, CSV files,
+NetCDF datasets, model checkpoints, etc. Artifacts are created by
+`ivcap.upload_artifact()` or `ivcap.get_artifact()`.
+
+## Quick Reference
+
+```python
+from ivcap_client.ivcap import IVCAP
+
+ivcap = IVCAP()
+
+# Upload a file
+artifact = ivcap.upload_artifact(
+    name="my-data",
+    file_path="/path/to/file.csv",
+)
+print(artifact.id, artifact.mime_type)
+
+# Download
+with artifact.as_local_file() as path:
+    print(f"Downloaded to: {path}")
+
+# Stream to disk
+with open("/tmp/output.csv", "wb") as f:
+    for chunk in artifact.as_stream():
+        f.write(chunk)
+```
+
+## Class Documentation
+
+::: ivcap_client.artifact.Artifact
+
+
+## Aspect
+
+# Aspect
+
+An `Aspect` is a typed, time-bounded assertion attached to any entity URN in the
+Datafabric. Aspects are the building blocks of IVCAP's knowledge graph.
+
+## Quick Reference
+
+```python
+from ivcap_client.ivcap import IVCAP
+
+ivcap = IVCAP()
+
+# Add an aspect
+aspect = ivcap.add_aspect(
+    entity="urn:ivcap:artifact:<uuid>",
+    aspect={
+        "$schema": "urn:my-project:schema:annotation.1",
+        "label": "coral",
+        "confidence": 0.97,
+    },
+)
+
+# List aspects for an entity
+for aspect in ivcap.list_aspects(entity="urn:ivcap:artifact:<uuid>"):
+    print(aspect.schema, aspect.entity)
+    print(aspect.aspect)   # JSON content
+
+# Retract
+aspect.retract()
+```
+
+## Class Documentation
+
+::: ivcap_client.aspect.Aspect
+
+
+## Exceptions
+
+# Exceptions
+
+All exceptions raised by the IVCAP Client SDK. Import them from
+`ivcap_client.exception`.
+
+## Quick Reference
+
+```python
+from ivcap_client.exception import (
+    IvcapError,               # base class
+    IvcapApiError,            # HTTP errors (.status_code, .operation)
+    NotAuthorizedException,   # 401/403
+    ResourceNotFound,         # 404
+    AmbiguousRequest,         # multiple matches for get_service_by_name
+    MissingParameterValue,    # missing required parameter
+)
+```
+
+## Hierarchy
+
+```
+Exception
+├── IvcapError
+│   └── IvcapApiError
+│       ├── NotAuthorizedException
+│       └── HttpException            (backward-compat alias)
+├── ResourceNotFound
+├── AmbiguousRequest
+└── MissingParameterValue
+```
+
+!!! note
+    `ResourceNotFound`, `AmbiguousRequest`, and `MissingParameterValue` inherit
+    directly from the built-in `Exception`, **not** from `IvcapError`. Catch
+    `IvcapError` to handle HTTP/API errors only; use individual exception types
+    (or the base `Exception`) when you also need to catch these.
+
+## Exception Documentation
+
+::: ivcap_client.exception
+
+
+# Examples
+
+## Service Discovery
+
+# Example: Service Discovery
+
+These examples show how to find and inspect IVCAP services.
+
+## List All Services (`list_services.py`)
+
+```python
+from _common import ivcap, pp
+
+for i, s in enumerate(ivcap.list_services(limit=50)):
+    print(f"===== {i}")
+    pp.pprint(s)
+    for n, p in s.parameters.items():
+        print(f".. {n}: {p}")
+```
+
+**What it demonstrates:**
+- `ivcap.list_services()` returns a lazy iterator
+- Each `Service` object prints its name, URN, and description
+- `service.parameters` is a dict of `{name: ServiceParameter}`
+
+**Run it:**
+
+```bash
+cd examples/
+python list_services.py
+```
+
+## Find a Service by Name (`find_service_by_name.py`)
+
+```python
+from _common import ivcap, pp
+from ivcap_client.exception import ResourceNotFound, AmbiguousRequest
+
+service_name = "hello-world-python"
+
+try:
+    service = ivcap.get_service_by_name(service_name)
+    pp.pprint(service)
+
+    # Inspect request model
+    Model = service.request_model
+    print(Model.model_json_schema())
+
+except ResourceNotFound:
+    print(f"No service found with name '{service_name}'")
+except AmbiguousRequest:
+    print(f"Multiple services match '{service_name}' — use get_service() with a URN")
+```
+
+**What it demonstrates:**
+- `get_service_by_name()` raises `ResourceNotFound` or `AmbiguousRequest`
+- `service.request_model` dynamically fetches the Pydantic schema from the Datafabric
+
+**Expected output:**
+```
+Service(
+  id='urn:ivcap:service:<uuid>',
+  name='hello-world-python',
+  description='...',
+  ...
+)
+```
+
+## See Also
+
+- [Guide: Discovering Services](../guides/services.md)
+- [API: Service](../api/service.md)
+- [API: IVCAP Client](../api/ivcap.md)
+
+
+## Job Workflows
+
+# Example: Job Workflows
+
+These examples cover submitting jobs and monitoring their execution.
+
+## Async Job (`run_async_job.py`)
+
+```python
+from _common import ivcap, pp
+
+req = {
+    "duration_seconds": 2,
+    "target_cpu_percent": 90,
+    "throw_exception_at_end": False,
+    "create_oom_error_at_end": False,
+}
+
+async def run():
+    svc = ivcap.get_service("urn:ivcap:service:3678e5f1-8fb7-5ad6-b65b-8bd8c23c0948")
+    pp.pprint(svc)
+    req_model = await svc.request_model_async()
+    passreq = req_model(**req)
+
+    # Submit job and wait for it to finish
+    job = await svc.request_job_async(passreq)
+    pp.pprint(job)
+
+    # Get and print the result
+    r = await job.result_async()
+    pp.pprint(r)
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(run())
+```
+
+**What it demonstrates:**
+- `request_model_async()` — async fetch of Pydantic schema
+- `request_job_async()` — async job submission and wait
+- `result_async()` — async result retrieval
+
+## Synchronous Job with Polling
+
+```python
+import time
+from _common import ivcap, pp
+from ivcap_client import JobStatus
+
+svc = ivcap.get_service_by_name("my-service")
+Model = svc.request_model
+job = svc.request_job(Model(param="value"))
+
+print(f"Created job: {job.id}")
+
+while not job.finished:
+    time.sleep(5)
+    job.refresh()
+    print(f"Status: {job.status()}")
+
+if job.status() == JobStatus.SUCCEEDED:
+    pp.pprint(job.result)
+```
+
+## Run and Monitor with Logging
+
+```python
+import time, csv
+from _common import ivcap, create_log_file
+
+svc = ivcap.get_service("urn:ivcap:service:<uuid>")
+Model = svc.request_model
+
+jobs = [svc.request_job(Model(duration_seconds=10)) for _ in range(5)]
+log = create_log_file("job-run")
+
+with open(log, "w", newline="") as f:
+    writer = csv.writer(f)
+    start = time.time()
+    while True:
+        time.sleep(10)
+        elapsed = int(time.time() - start)
+        done = 0
+        for j in jobs:
+            j.refresh()
+            writer.writerow([elapsed, j.id, j.status().value])
+            if j.finished:
+                done += 1
+        f.flush()
+        print(f"Progress: {done}/{len(jobs)}")
+        if done == len(jobs):
+            break
+```
+
+## See Also
+
+- [Guide: Running Jobs](../guides/jobs.md)
+- [Guide: Async Usage](../guides/async-usage.md)
+- [API: Job](../api/job.md)
+
+
+## Artifacts
+
+# Example: Artifacts
+
+These examples cover uploading, downloading, and listing artifacts.
+
+## Upload a File (`upload_artifact.py`)
+
+```python
+import os
+from _common import ivcap, pp, this_dir
+
+artifact = ivcap.upload_artifact(
+    name="test-576",
+    file_path=os.path.join(this_dir, "data", "576-small.JPG"),
+    policy="urn:ivcap:policy:ivcap.open.artifact"
+)
+pp.pprint(artifact)
+```
+
+**What it demonstrates:**
+- `ivcap.upload_artifact()` with `file_path` and optional `policy`
+- The SDK auto-detects MIME type from the file extension
+- Returns an `Artifact` object with `id`, `name`, `mime_type`, `size`
+
+**Expected output:**
+```
+Artifact(
+  id='urn:ivcap:artifact:<uuid>',
+  name='test-576',
+  mime_type='image/jpeg',
+  status='ready',
+  ...
+)
+```
+
+## Download an Artifact (`download_artifact.py`)
+
+```python
+from _common import ivcap, pp
+
+# Get artifact by URN
+artifact = ivcap.get_artifact("urn:ivcap:artifact:<uuid>")
+pp.pprint(artifact)
+
+# Stream to disk
+output_path = "/tmp/downloaded.jpg"
+with open(output_path, "wb") as f:
+    for chunk in artifact.as_stream():
+        f.write(chunk)
+print(f"Downloaded to: {output_path}")
+```
+
+**What it demonstrates:**
+- `ivcap.get_artifact()` retrieves metadata without downloading bytes
+- `artifact.as_stream()` yields chunks for streaming download
+
+## Download to Temp File
+
+```python
+with artifact.as_local_file() as path:
+    print(f"Available at: {path}")
+    # use path here (e.g., open with PIL, pandas, etc.)
+    import shutil
+    shutil.copy(path, "/output/result.jpg")
+# file is automatically deleted here
+```
+
+## List Artifacts (`list_artifacts.py`)
+
+```python
+from _common import ivcap, pp
+
+for artifact in ivcap.list_artifacts(limit=20):
+    print(f"{artifact.id}  {artifact.name}  ({artifact.mime_type})")
+    for meta in artifact.metadata:
+        print(f"  schema: {meta.schema}")
+```
+
+**What it demonstrates:**
+- `ivcap.list_artifacts()` — lazy paginated iterator
+- Each artifact exposes `.metadata` — a list of aspects describing it
+
+## Upload from Memory
+
+```python
+import io
+from _common import ivcap, pp
+
+data = b"col1,col2\n1,2\n3,4\n5,6\n"
+artifact = ivcap.upload_artifact(
+    name="inline-data.csv",
+    io_stream=io.BytesIO(data),
+    content_type="text/csv",
+    content_size=len(data),
+)
+pp.pprint(artifact)
+```
+
+## Check Deduplication
+
+```python
+from _common import ivcap
+
+# Check if a file was already uploaded (without re-uploading)
+existing = ivcap.artifact_for_file("/path/to/file.jpg")
+if existing:
+    print(f"Already uploaded: {existing.id}")
+else:
+    artifact = ivcap.upload_artifact(name="file", file_path="/path/to/file.jpg")
+    print(f"Uploaded: {artifact.id}")
+```
+
+## See Also
+
+- [Guide: Working with Artifacts](../guides/artifacts.md)
+- [API: Artifact](../api/artifact.md)
+- [API: IVCAP Client](../api/ivcap.md)
+
+
+## Aspects & Search
+
+# Example: Aspects & Search
+
+These examples show how to query the Datafabric and manage typed metadata.
+
+## Search Aspects (`search_aspect.py`)
+
+```python
+from _common import ivcap, pp
+
+schema = 'urn:common:schema:in_collection.1'
+filter = "collection~='urn:ibenthos:collection:indo_flores_0922:LB4 UQ PhotoTransect'"
+
+for i, m in enumerate(ivcap.list_aspects(
+    schema=schema,
+    filter=filter,
+    include_content=False,
+    limit=20
+)):
+    print(f"=========== {i + 1}")
+    pp.pprint(m)
+    pp.pprint(m.aspect)
+```
+
+**What it demonstrates:**
+- `ivcap.list_aspects()` with `schema` and `filter` arguments
+- OData-style filter with `~=` (contains-like) operator
+- `include_content=False` — returns aspect metadata only, not the JSON content
+- `m.aspect` — the JSON content dict (may be `None` when `include_content=False`)
+
+## Add Metadata to an Artifact
+
+```python
+from _common import ivcap, pp
+
+# Get or upload an artifact
+artifact = ivcap.get_artifact("urn:ivcap:artifact:<uuid>")
+
+# Attach custom metadata
+artifact.add_metadata({
+    "$schema": "urn:my-project:schema:image-annotation.1",
+    "label": "coral reef",
+    "confidence": 0.97,
+    "annotator": "alice@csiro.au",
+})
+
+# Verify
+for aspect in ivcap.list_aspects(
+    entity=artifact.id,
+    schema="urn:my-project:schema:image-annotation.1",
+    include_content=True,
+):
+    pp.pprint(aspect.aspect)
+```
+
+## Add and Update an Aspect
+
+```python
+from _common import ivcap, pp
+
+# Add a new aspect
+aspect = ivcap.add_aspect(
+    entity="urn:ivcap:artifact:<uuid>",
+    aspect={
+        "$schema": "urn:my:schema:status.1",
+        "status": "pending-review",
+    },
+)
+print(f"Added aspect: {aspect.id}")
+
+# Update (retracts old, creates new)
+updated = ivcap.update_aspect(
+    entity="urn:ivcap:artifact:<uuid>",
+    aspect={
+        "$schema": "urn:my:schema:status.1",
+        "status": "approved",
+    },
+)
+print(f"Updated aspect: {updated.id}")
+```
+
+## List All Aspects for an Entity
+
+```python
+from _common import ivcap, pp
+
+entity = "urn:ivcap:artifact:<uuid>"
+
+for aspect in ivcap.list_aspects(
+    entity=entity,
+    include_content=True,
+    order_by="valid_from",
+    order_direction="ASC",
+):
+    print(f"[{aspect.valid_from}] {aspect.schema}")
+    if aspect.aspect:
+        pp.pprint(aspect.aspect)
+```
+
+## Historical Aspect Query
+
+```python
+from _common import ivcap
+from datetime import datetime, timezone
+
+# What did we know about this artifact on 2025-01-01?
+past = datetime(2025, 1, 1, tzinfo=timezone.utc)
+for aspect in ivcap.list_aspects(
+    entity="urn:ivcap:artifact:<uuid>",
+    at_time=past,
+    include_content=True,
+):
+    print(f"Valid from {aspect.valid_from}: {aspect.schema}")
+    print(aspect.aspect)
+```
+
+## Retract an Aspect
+
+```python
+from _common import ivcap
+
+aspects = list(ivcap.list_aspects(
+    entity="urn:ivcap:artifact:<uuid>",
+    schema="urn:my:schema:status.1",
+))
+if aspects:
+    aspects[0].retract()
+    print(f"Retracted: {aspects[0].id}")
+```
+
+## See Also
+
+- [Guide: The Datafabric & Aspects](../guides/aspects.md)
+- [Guide: Search (Datalog)](../guides/search.md)
+- [API: Aspect](../api/aspect.md)
+- [API: IVCAP Client](../api/ivcap.md)
+
+
+## Async & Parallel
+
+# Example: Async & Parallel
+
+These examples demonstrate running many jobs concurrently using asyncio.
+
+## Async Single Job (`run_async_job.py`)
+
+The simplest async pattern — submit one job and await its result:
+
+```python
+from _common import ivcap, pp
+
+async def run():
+    svc = ivcap.get_service("urn:ivcap:service:3678e5f1-8fb7-5ad6-b65b-8bd8c23c0948")
+    req_model = await svc.request_model_async()
+    passreq = req_model(
+        duration_seconds=2,
+        target_cpu_percent=90,
+        throw_exception_at_end=False,
+        create_oom_error_at_end=False,
+    )
+
+    job = await svc.request_job_async(passreq)
+    pp.pprint(job)
+
+    r = await job.result_async()
+    pp.pprint(r)
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(run())
+```
+
+## Batch Stress Test (`batch_stress_test.py`)
+
+Submit many jobs to a Batch-mode service and track all of them:
+
+```python
+import asyncio
+import csv
+from time import time
+from _common import ivcap, create_log_file
+
+NUM_JOBS = 20
+POLL_INTERVAL = 10  # seconds
+
+async def run():
+    svc = ivcap.get_service("urn:ivcap:service:<uuid>")
+    Model = await svc.request_model_async()
+
+    # Submit all jobs in parallel
+    jobs = await asyncio.gather(*[
+        svc.request_job_async(Model(duration_seconds=30))
+        for _ in range(NUM_JOBS)
+    ])
+    print(f"Submitted {len(jobs)} jobs")
+
+    # Monitor
+    log = create_log_file("batch-stress")
+    with open(log, "w", newline="") as f:
+        writer = csv.writer(f)
+        start = time()
+        while True:
+            await asyncio.sleep(POLL_INTERVAL)
+            elapsed = int(time() - start)
+            done = 0
+            for j in jobs:
+                await j.refresh_async()
+                writer.writerow([elapsed, j.id, j.status().value])
+                if j.finished:
+                    done += 1
+            f.flush()
+            print(f"[{elapsed}s] Progress: {done}/{len(jobs)}")
+            if done == len(jobs):
+                break
+
+    print("All jobs finished!")
+    print(f"Results log: {log}")
+
+if __name__ == "__main__":
+    asyncio.run(run())
+```
+
+## Parallel Jobs with `asyncio.gather()`
+
+The canonical pattern for running N jobs concurrently and collecting all results:
+
+```python
+import asyncio
+from ivcap_client.ivcap import IVCAP
+
+async def run_one(svc, req):
+    """Submit one job and return its result."""
+    job = await svc.request_job_async(req)
+    return await job.result_async()
+
+async def run_all():
+    ivcap = IVCAP()
+    svc = ivcap.get_service("urn:ivcap:service:<uuid>")
+    Model = await svc.request_model_async()
+
+    requests = [Model(param=i) for i in range(10)]
+
+    results = await asyncio.gather(*[
+        run_one(svc, req) for req in requests
+    ])
+
+    for i, result in enumerate(results):
+        print(f"Job {i}: {result}")
+
+asyncio.run(run_all())
+```
+
+## Running a CrewAI Agent (`run_crewai_agent.py`)
+
+Execute a CrewAI agent deployed as an IVCAP service:
+
+```python
+from _common import ivcap, pp
+
+# Get the agent (same as getting a service)
+agent = ivcap.get_agent("urn:ivcap:service:<uuid>")
+
+# Get the typed request model
+Model = agent.request_model
+
+# Execute and wait for result (blocks until done)
+job = agent.exec_agent(Model(
+    topic="best practices for data-intensive scientific workflows",
+))
+pp.pprint(job.result)
+```
+
+## See Also
+
+- [Guide: Async Usage](../guides/async-usage.md)
+- [Guide: Running Jobs](../guides/jobs.md)
+- [Guide: Agent Integration](../guides/agents.md)
+- [API: Job](../api/job.md)

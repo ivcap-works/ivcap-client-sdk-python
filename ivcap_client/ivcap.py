@@ -21,6 +21,17 @@ from ivcap_client.artifact import (
     check_file_already_uploaded,
 )
 from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
+from ivcap_client.collection import (
+    Collection,
+    CollectionItem,
+    CollectionItemIter,
+    add_item_to_collection,
+    create_collection,
+    get_collection,
+    list_collections,
+    remove_item_from_collection,
+    retract_collection,
+)
 from ivcap_client.client.client import AuthenticatedClient, Client
 from ivcap_client.exception import AmbiguousRequest, ResourceNotFound
 from ivcap_client.order import Order, OrderIter
@@ -465,6 +476,152 @@ class IVCAP:
         if id.startswith("file://") or id.startswith("urn:file://"):
             return LocalFileArtifact(id)
         return Artifact(self, id=id).refresh()
+
+    #### COLLECTIONS
+
+    def create_collection(
+        self,
+        urn: str,
+        name: str,
+        *,
+        description: str | None = None,
+        policy: URN | None = None,
+    ) -> Collection:
+        """Create or update a collection definition (idempotent via PUT).
+
+        Calling this method on an already-existing collection URN **replaces**
+        the previous name/description without affecting its items.
+
+        Args:
+            urn (str): The collection entity URN
+                (e.g. ``urn:ivcap:collection:<uuid>``).
+            name (str): Human-readable collection name.
+            description (Optional[str]): Optional description.
+            policy (Optional[URN]): Access policy URN
+                (``urn:ivcap:policy:…``).
+
+        Returns:
+            Collection: The created or updated collection.
+        """
+        return create_collection(
+            self, urn, name, description=description, policy=policy
+        )
+
+    def get_collection(
+        self,
+        urn: str,
+        *,
+        at_time: datetime | None = None,
+    ) -> Collection:
+        """Fetch a collection definition by its URN.
+
+        Args:
+            urn (str): The collection entity URN.
+            at_time (Optional[datetime]): Retrieve the state at this point in
+                time.
+
+        Returns:
+            Collection: The collection instance.
+
+        Raises:
+            ResourceNotFound: If no collection with the given URN exists.
+        """
+        return get_collection(self, urn, at_time=at_time)
+
+    def list_collections(
+        self,
+        *,
+        name_filter: str | None = None,
+        limit: int | None = 10,
+        at_time: datetime | None = None,
+    ) -> Iterator[Collection]:
+        """Return an iterator over collection definitions.
+
+        Args:
+            name_filter (Optional[str]): A JSONPath comparison expression
+                applied to the collection ``name`` field.  The expression is
+                wrapped as ``$.name ? (@ <name_filter>)`` before being sent
+                to the server.
+
+                Examples::
+
+                    '== "My Ocean Survey"'
+                    'starts with "CTD"'
+                    'like_regex ".*ocean.*" flag "i"'
+
+            limit (Optional[int]): Maximum number of collections to return.
+                Default: 10.
+            at_time (Optional[datetime]): Return collections valid at this
+                point in time.
+
+        Returns:
+            Iterator[Collection]: An iterator over collections.
+        """
+        return list_collections(
+            self, name_filter=name_filter, limit=limit, at_time=at_time
+        )
+
+    def add_to_collection(
+        self,
+        collection_urn: str,
+        item_urn: str,
+    ) -> CollectionItem | None:
+        """Add an item to a collection with automatic deduplication.
+
+        Checks whether *item_urn* is already a member before creating the
+        membership aspect.  If it is already present, returns ``None``
+        (skip silently).
+
+        Args:
+            collection_urn (str): The collection entity URN.
+            item_urn (str): URN of the entity to add.
+
+        Returns:
+            CollectionItem if the item was newly added, ``None`` if it was
+            already a member.
+        """
+        return add_item_to_collection(self, collection_urn, item_urn)
+
+    def remove_from_collection(
+        self,
+        collection_urn: str,
+        item_urn: str,
+    ) -> bool:
+        """Remove an item from a collection by retracting its membership aspect.
+
+        Items that are not currently members of the collection are silently
+        skipped.
+
+        Args:
+            collection_urn (str): The collection entity URN.
+            item_urn (str): URN of the entity to remove.
+
+        Returns:
+            ``True`` if the membership aspect was retracted, ``False`` if the
+            item was not a member.
+        """
+        return remove_item_from_collection(self, collection_urn, item_urn)
+
+    def retract_collection(
+        self,
+        collection_urn: str,
+    ) -> int:
+        """Fully retract a collection and all its item memberships.
+
+        All membership aspects are retracted first (paginated), then the
+        collection definition aspect is retracted.  This operation cannot
+        be undone.
+
+        Args:
+            collection_urn (str): URN of the collection to retract.
+
+        Returns:
+            Total number of aspect records retracted (items + 1 definition).
+
+        Raises:
+            ResourceNotFound: If no collection definition exists for the URN.
+        """
+        return retract_collection(self, collection_urn)
 
     #### SECRETS
 

@@ -30,7 +30,6 @@ from ivcap_client.collection import (
 from ivcap_client.exception import MissingParameterValue, ResourceNotFound
 from ivcap_client.types import UNSET
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -67,7 +66,7 @@ def _make_list_item_rt(
     item.entity = entity
     item.schema = schema
     item.valid_from = valid_from or datetime.datetime(
-        2024, 1, 1, tzinfo=datetime.timezone.utc
+        2024, 1, 1, tzinfo=datetime.UTC
     )
     item.valid_to = UNSET
     item.additional_properties = {}
@@ -176,7 +175,7 @@ class TestCollection:
         assert isinstance(coll.valid_from, datetime.datetime)
 
     def test_update_with_datetime_object(self):
-        dt = datetime.datetime(2024, 6, 1, tzinfo=datetime.timezone.utc)
+        dt = datetime.datetime(2024, 6, 1, tzinfo=datetime.UTC)
         coll = Collection(_ivcap(), urn=COLL_URN, name="T", valid_from=dt)
         assert coll.valid_from == dt
 
@@ -688,7 +687,7 @@ def _make_item_rt(aspect_id: str) -> SimpleNamespace:
     item.id = aspect_id
     item.entity = COLL_URN
     item.schema = COLLECTION_ITEM_SCHEMA
-    item.valid_from = datetime.datetime(2024, 1, 1, tzinfo=datetime.timezone.utc)
+    item.valid_from = datetime.datetime(2024, 1, 1, tzinfo=datetime.UTC)
     item.valid_to = UNSET
     item.additional_properties = {}
     item.content = UNSET
@@ -700,7 +699,7 @@ def _make_def_rt(aspect_id: str = DEF_ASPECT_URN) -> SimpleNamespace:
     item.id = aspect_id
     item.entity = COLL_URN
     item.schema = COLLECTION_SCHEMA
-    item.valid_from = datetime.datetime(2024, 1, 1, tzinfo=datetime.timezone.utc)
+    item.valid_from = datetime.datetime(2024, 1, 1, tzinfo=datetime.UTC)
     item.valid_to = UNSET
     item.additional_properties = {}
     item.content = UNSET

@@ -21,6 +21,7 @@ from ivcap_client.artifact import (
     check_file_already_uploaded,
 )
 from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
+from ivcap_client.client.client import AuthenticatedClient, Client
 from ivcap_client.collection import (
     Collection,
     CollectionItem,
@@ -32,7 +33,6 @@ from ivcap_client.collection import (
     remove_item_from_collection,
     retract_collection,
 )
-from ivcap_client.client.client import AuthenticatedClient, Client
 from ivcap_client.exception import AmbiguousRequest, ResourceNotFound
 from ivcap_client.order import Order, OrderIter
 from ivcap_client.secret import Secret, SecretIter

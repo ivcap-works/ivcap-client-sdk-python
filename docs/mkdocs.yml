@@ -61,6 +61,7 @@ plugins:
           - guides/jobs.md
           - guides/artifacts.md
           - guides/aspects.md
+          - guides/collections.md
           - guides/async-usage.md
           - guides/error-handling.md
           - guides/agents.md
@@ -71,12 +72,14 @@ plugins:
           - api/job.md
           - api/artifact.md
           - api/aspect.md
+          - api/collection.md
           - api/exceptions.md
         Examples:
           - examples/services.md
           - examples/jobs.md
           - examples/artifacts.md
           - examples/aspects.md
+          - examples/collections.md
           - examples/async-parallel.md
 
 markdown_extensions:
@@ -120,6 +123,7 @@ nav:
     - Running Jobs: guides/jobs.md
     - Working with Artifacts: guides/artifacts.md
     - The Datafabric & Aspects: guides/aspects.md
+    - Collections: guides/collections.md
     - Async Usage: guides/async-usage.md
     - Error Handling: guides/error-handling.md
     - Agent Integration: guides/agents.md
@@ -131,6 +135,7 @@ nav:
     - Job: api/job.md
     - Artifact: api/artifact.md
     - Aspect: api/aspect.md
+    - Collection: api/collection.md
     - Exceptions: api/exceptions.md
   - Examples:
     - Overview: examples/overview.md
@@ -138,6 +143,7 @@ nav:
     - Job Workflows: examples/jobs.md
     - Artifacts: examples/artifacts.md
     - Aspects & Search: examples/aspects.md
+    - Collections: examples/collections.md
     - Async & Parallel: examples/async-parallel.md
   - Reference:
     - Environment Variables: reference/environment-variables.md

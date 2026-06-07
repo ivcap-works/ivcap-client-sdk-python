@@ -64,6 +64,7 @@ gen:
 	rm -rf ${ROOT_DIR}/build && mkdir -p ${ROOT_DIR}/build
 	cd ${ROOT_DIR}/build \
 	  && curl ${OPENAPI_URL} > openapi3.json \
+		&& poetry run python ${ROOT_DIR}/patch_openapi.py openapi3.json \
 		&& poetry run openapi-python-client generate --path openapi3.json --config ${ROOT_DIR}/config.yml \
 		&& poetry run python ${ROOT_DIR}/fix_auto_generated.py \
 		&& cd sdk_client/ivcap_client && mkdir client && mv *.py client \
@@ -85,8 +86,8 @@ gen-test:
 
 
 add-license:
-	licenseheaders -t .license.tmpl -y 2023-$(shell date +%Y) -f ivcap_client/*.py
-	licenseheaders -t .license.tmpl -y 2023-$(shell date +%Y) -d ivcap_client/client
+	poetry run licenseheaders -t .license.tmpl -y 2023-$(shell date +%Y) -f ivcap_client/*.py
+	poetry run licenseheaders -t .license.tmpl -y 2023-$(shell date +%Y) -d ivcap_client/client
 
 docs-image:
 	@echo "Building docs Docker image ($(DOCS_IMAGE))..."

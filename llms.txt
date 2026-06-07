@@ -21,6 +21,7 @@ All list methods return iterators; authentication is via JWT token or environmen
 - [Running Jobs](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/jobs/index.md)
 - [Working with Artifacts](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/artifacts/index.md)
 - [The Datafabric & Aspects](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/aspects/index.md)
+- [Collections](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/collections/index.md)
 - [Async Usage](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/async-usage/index.md)
 - [Error Handling](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/error-handling/index.md)
 - [Agent Integration](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/agents/index.md)
@@ -33,6 +34,7 @@ All list methods return iterators; authentication is via JWT token or environmen
 - [Job](https://ivcap-works.github.io/ivcap-client-sdk-python/api/job/index.md)
 - [Artifact](https://ivcap-works.github.io/ivcap-client-sdk-python/api/artifact/index.md)
 - [Aspect](https://ivcap-works.github.io/ivcap-client-sdk-python/api/aspect/index.md)
+- [Collection](https://ivcap-works.github.io/ivcap-client-sdk-python/api/collection/index.md)
 - [Exceptions](https://ivcap-works.github.io/ivcap-client-sdk-python/api/exceptions/index.md)
 
 ## Examples
@@ -41,4 +43,5 @@ All list methods return iterators; authentication is via JWT token or environmen
 - [Job Workflows](https://ivcap-works.github.io/ivcap-client-sdk-python/examples/jobs/index.md)
 - [Artifacts](https://ivcap-works.github.io/ivcap-client-sdk-python/examples/artifacts/index.md)
 - [Aspects & Search](https://ivcap-works.github.io/ivcap-client-sdk-python/examples/aspects/index.md)
+- [Collections](https://ivcap-works.github.io/ivcap-client-sdk-python/examples/collections/index.md)
 - [Async & Parallel](https://ivcap-works.github.io/ivcap-client-sdk-python/examples/async-parallel/index.md)

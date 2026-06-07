@@ -16,6 +16,7 @@ except Exception:
     __version__ = "???"  # should only happen when running the local examples
 
 from .artifact import Artifact
+from .collection import Collection, CollectionItem
 from .ivcap import IVCAP, URN
 from .job import Job, JobStatus
 from .order import Order

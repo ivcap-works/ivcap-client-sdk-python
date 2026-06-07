@@ -8,7 +8,7 @@ authors = ["Max Ott <max.ott@csiro.au>",
 
 readme = "README.md"
 
-include = ["CHANGELOG.md", "ivcap_sdk_client/py.typed"]
+include = ["CHANGELOG.md", "AGENT.md", "ivcap_client/py.typed"]
 
 [tool.poe.tasks]    # using poethepoet
 lint = "ruff check ."

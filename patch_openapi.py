@@ -6,8 +6,8 @@ Run from the build/ directory (or pass the JSON path as the first argument).
 """
 
 import json
-import sys
 import os
+import sys
 
 spec_path = sys.argv[1] if len(sys.argv) > 1 else "openapi3.json"
 spec_path = os.path.abspath(spec_path)

@@ -4550,7 +4550,10 @@ If <em>collection_urn</em> or <em>item_urn</em> are empty.</p>
 <span class="normal"><a href="#__codelineno-0-556">556</a></span>
 <span class="normal"><a href="#__codelineno-0-557">557</a></span>
 <span class="normal"><a href="#__codelineno-0-558">558</a></span>
-<span class="normal"><a href="#__codelineno-0-559">559</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-495" name="__codelineno-0-495"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_item_to_collection</span><span class="p">(</span>
+<span class="normal"><a href="#__codelineno-0-559">559</a></span>
+<span class="normal"><a href="#__codelineno-0-560">560</a></span>
+<span class="normal"><a href="#__codelineno-0-561">561</a></span>
+<span class="normal"><a href="#__codelineno-0-562">562</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-495" name="__codelineno-0-495"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_item_to_collection</span><span class="p">(</span>
 <a id="__codelineno-0-496" name="__codelineno-0-496"></a>    <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">,</span>
 <a id="__codelineno-0-497" name="__codelineno-0-497"></a>    <span class="n">collection_urn</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <a id="__codelineno-0-498" name="__codelineno-0-498"></a>    <span class="n">item_urn</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -4585,36 +4588,39 @@ If <em>collection_urn</em> or <em>item_urn</em> are empty.</p>
 <a id="__codelineno-0-527" name="__codelineno-0-527"></a>        <span class="k">raise</span> <span class="n">MissingParameterValue</span><span class="p">(</span><span class="s2">&quot;Missing item URN&quot;</span><span class="p">)</span>
 <a id="__codelineno-0-528" name="__codelineno-0-528"></a>
 <a id="__codelineno-0-529" name="__codelineno-0-529"></a>    <span class="c1"># Dedup check — use JSONPath filter to avoid fetching full content.</span>
-<a id="__codelineno-0-530" name="__codelineno-0-530"></a>    <span class="n">dedup_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;$.item ? (@ == &quot;</span><span class="si">{</span><span class="n">item_urn</span><span class="si">}</span><span class="s1">&quot;)&#39;</span>
-<a id="__codelineno-0-531" name="__codelineno-0-531"></a>    <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span>
-<a id="__codelineno-0-532" name="__codelineno-0-532"></a>        <span class="n">entity</span><span class="o">=</span><span class="n">collection_urn</span><span class="p">,</span>
-<a id="__codelineno-0-533" name="__codelineno-0-533"></a>        <span class="n">schema</span><span class="o">=</span><span class="n">COLLECTION_ITEM_SCHEMA</span><span class="p">,</span>
-<a id="__codelineno-0-534" name="__codelineno-0-534"></a>        <span class="n">content_path</span><span class="o">=</span><span class="n">dedup_path</span><span class="p">,</span>
-<a id="__codelineno-0-535" name="__codelineno-0-535"></a>        <span class="n">include_content</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<a id="__codelineno-0-536" name="__codelineno-0-536"></a>        <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-<a id="__codelineno-0-537" name="__codelineno-0-537"></a>        <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
-<a id="__codelineno-0-538" name="__codelineno-0-538"></a>    <span class="p">)</span>
-<a id="__codelineno-0-539" name="__codelineno-0-539"></a>    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
-<a id="__codelineno-0-540" name="__codelineno-0-540"></a>        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;add_item_to_collection_check&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-<a id="__codelineno-0-541" name="__codelineno-0-541"></a>
-<a id="__codelineno-0-542" name="__codelineno-0-542"></a>    <span class="n">parsed</span><span class="p">:</span> <span class="n">AspectListRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
-<a id="__codelineno-0-543" name="__codelineno-0-543"></a>    <span class="k">if</span> <span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-<a id="__codelineno-0-544" name="__codelineno-0-544"></a>        <span class="c1"># Already a member — skip silently.</span>
-<a id="__codelineno-0-545" name="__codelineno-0-545"></a>        <span class="k">return</span> <span class="kc">None</span>
-<a id="__codelineno-0-546" name="__codelineno-0-546"></a>
-<a id="__codelineno-0-547" name="__codelineno-0-547"></a>    <span class="c1"># Create the membership aspect (POST — append, not replace).</span>
-<a id="__codelineno-0-548" name="__codelineno-0-548"></a>    <span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-0-549" name="__codelineno-0-549"></a>        <span class="s2">&quot;collection&quot;</span><span class="p">:</span> <span class="n">collection_urn</span><span class="p">,</span>
-<a id="__codelineno-0-550" name="__codelineno-0-550"></a>        <span class="s2">&quot;item&quot;</span><span class="p">:</span> <span class="n">item_urn</span><span class="p">,</span>
-<a id="__codelineno-0-551" name="__codelineno-0-551"></a>    <span class="p">}</span>
-<a id="__codelineno-0-552" name="__codelineno-0-552"></a>    <span class="n">aspect</span> <span class="o">=</span> <span class="n">_add_update_aspect</span><span class="p">(</span>
-<a id="__codelineno-0-553" name="__codelineno-0-553"></a>        <span class="n">ivcap</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">collection_urn</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">COLLECTION_ITEM_SCHEMA</span><span class="p">,</span> <span class="n">policy</span><span class="o">=</span><span class="n">policy</span>
-<a id="__codelineno-0-554" name="__codelineno-0-554"></a>    <span class="p">)</span>
-<a id="__codelineno-0-555" name="__codelineno-0-555"></a>    <span class="k">return</span> <span class="n">CollectionItem</span><span class="p">(</span>
-<a id="__codelineno-0-556" name="__codelineno-0-556"></a>        <span class="nb">id</span><span class="o">=</span><span class="n">aspect</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-<a id="__codelineno-0-557" name="__codelineno-0-557"></a>        <span class="n">collection</span><span class="o">=</span><span class="n">collection_urn</span><span class="p">,</span>
-<a id="__codelineno-0-558" name="__codelineno-0-558"></a>        <span class="n">item</span><span class="o">=</span><span class="n">item_urn</span><span class="p">,</span>
-<a id="__codelineno-0-559" name="__codelineno-0-559"></a>    <span class="p">)</span>
+<a id="__codelineno-0-530" name="__codelineno-0-530"></a>    <span class="c1"># Some deployments do not support JSONPath content_path filter expressions</span>
+<a id="__codelineno-0-531" name="__codelineno-0-531"></a>    <span class="c1"># and return 5xx/EOF for such queries.  In that case we fall through to</span>
+<a id="__codelineno-0-532" name="__codelineno-0-532"></a>    <span class="c1"># the POST rather than failing hard; the worst outcome is a duplicate</span>
+<a id="__codelineno-0-533" name="__codelineno-0-533"></a>    <span class="c1"># membership aspect, which is benign.</span>
+<a id="__codelineno-0-534" name="__codelineno-0-534"></a>    <span class="n">dedup_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;$.item ? (@ == &quot;</span><span class="si">{</span><span class="n">item_urn</span><span class="si">}</span><span class="s1">&quot;)&#39;</span>
+<a id="__codelineno-0-535" name="__codelineno-0-535"></a>    <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span>
+<a id="__codelineno-0-536" name="__codelineno-0-536"></a>        <span class="n">entity</span><span class="o">=</span><span class="n">collection_urn</span><span class="p">,</span>
+<a id="__codelineno-0-537" name="__codelineno-0-537"></a>        <span class="n">schema</span><span class="o">=</span><span class="n">COLLECTION_ITEM_SCHEMA</span><span class="p">,</span>
+<a id="__codelineno-0-538" name="__codelineno-0-538"></a>        <span class="n">content_path</span><span class="o">=</span><span class="n">dedup_path</span><span class="p">,</span>
+<a id="__codelineno-0-539" name="__codelineno-0-539"></a>        <span class="n">include_content</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-540" name="__codelineno-0-540"></a>        <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-0-541" name="__codelineno-0-541"></a>        <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
+<a id="__codelineno-0-542" name="__codelineno-0-542"></a>    <span class="p">)</span>
+<a id="__codelineno-0-543" name="__codelineno-0-543"></a>    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">:</span>
+<a id="__codelineno-0-544" name="__codelineno-0-544"></a>        <span class="n">parsed</span><span class="p">:</span> <span class="n">AspectListRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+<a id="__codelineno-0-545" name="__codelineno-0-545"></a>        <span class="k">if</span> <span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+<a id="__codelineno-0-546" name="__codelineno-0-546"></a>            <span class="c1"># Already a member — skip silently.</span>
+<a id="__codelineno-0-547" name="__codelineno-0-547"></a>            <span class="k">return</span> <span class="kc">None</span>
+<a id="__codelineno-0-548" name="__codelineno-0-548"></a>    <span class="c1"># If the dedup check returned 4xx/5xx, fall through to POST.</span>
+<a id="__codelineno-0-549" name="__codelineno-0-549"></a>
+<a id="__codelineno-0-550" name="__codelineno-0-550"></a>    <span class="c1"># Create the membership aspect (POST — append, not replace).</span>
+<a id="__codelineno-0-551" name="__codelineno-0-551"></a>    <span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-0-552" name="__codelineno-0-552"></a>        <span class="s2">&quot;collection&quot;</span><span class="p">:</span> <span class="n">collection_urn</span><span class="p">,</span>
+<a id="__codelineno-0-553" name="__codelineno-0-553"></a>        <span class="s2">&quot;item&quot;</span><span class="p">:</span> <span class="n">item_urn</span><span class="p">,</span>
+<a id="__codelineno-0-554" name="__codelineno-0-554"></a>    <span class="p">}</span>
+<a id="__codelineno-0-555" name="__codelineno-0-555"></a>    <span class="n">aspect</span> <span class="o">=</span> <span class="n">_add_update_aspect</span><span class="p">(</span>
+<a id="__codelineno-0-556" name="__codelineno-0-556"></a>        <span class="n">ivcap</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">collection_urn</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">COLLECTION_ITEM_SCHEMA</span><span class="p">,</span> <span class="n">policy</span><span class="o">=</span><span class="n">policy</span>
+<a id="__codelineno-0-557" name="__codelineno-0-557"></a>    <span class="p">)</span>
+<a id="__codelineno-0-558" name="__codelineno-0-558"></a>    <span class="k">return</span> <span class="n">CollectionItem</span><span class="p">(</span>
+<a id="__codelineno-0-559" name="__codelineno-0-559"></a>        <span class="nb">id</span><span class="o">=</span><span class="n">aspect</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+<a id="__codelineno-0-560" name="__codelineno-0-560"></a>        <span class="n">collection</span><span class="o">=</span><span class="n">collection_urn</span><span class="p">,</span>
+<a id="__codelineno-0-561" name="__codelineno-0-561"></a>        <span class="n">item</span><span class="o">=</span><span class="n">item_urn</span><span class="p">,</span>
+<a id="__codelineno-0-562" name="__codelineno-0-562"></a>    <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -4754,10 +4760,7 @@ If <em>collection_urn</em> or <em>item_urn</em> are empty.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>ivcap_client/collection.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-562">562</a></span>
-<span class="normal"><a href="#__codelineno-0-563">563</a></span>
-<span class="normal"><a href="#__codelineno-0-564">564</a></span>
-<span class="normal"><a href="#__codelineno-0-565">565</a></span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-565">565</a></span>
 <span class="normal"><a href="#__codelineno-0-566">566</a></span>
 <span class="normal"><a href="#__codelineno-0-567">567</a></span>
 <span class="normal"><a href="#__codelineno-0-568">568</a></span>
@@ -4811,64 +4814,67 @@ If <em>collection_urn</em> or <em>item_urn</em> are empty.</p>
 <span class="normal"><a href="#__codelineno-0-616">616</a></span>
 <span class="normal"><a href="#__codelineno-0-617">617</a></span>
 <span class="normal"><a href="#__codelineno-0-618">618</a></span>
-<span class="normal"><a href="#__codelineno-0-619">619</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-562" name="__codelineno-0-562"></a><span class="k">def</span><span class="w"> </span><span class="nf">remove_item_from_collection</span><span class="p">(</span>
-<a id="__codelineno-0-563" name="__codelineno-0-563"></a>    <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">,</span>
-<a id="__codelineno-0-564" name="__codelineno-0-564"></a>    <span class="n">collection_urn</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-<a id="__codelineno-0-565" name="__codelineno-0-565"></a>    <span class="n">item_urn</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-<a id="__codelineno-0-566" name="__codelineno-0-566"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<a id="__codelineno-0-567" name="__codelineno-0-567"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove an item from a collection by retracting its membership aspect.</span>
-<a id="__codelineno-0-568" name="__codelineno-0-568"></a>
-<a id="__codelineno-0-569" name="__codelineno-0-569"></a><span class="sd">    Looks up the active ``collection-item.1`` aspect for the</span>
-<a id="__codelineno-0-570" name="__codelineno-0-570"></a><span class="sd">    ``(collection_urn, item_urn)`` pair using a JSONPath filter, then</span>
-<a id="__codelineno-0-571" name="__codelineno-0-571"></a><span class="sd">    retracts it via ``DELETE /1/aspects/&lt;id&gt;``.  Items that are not</span>
-<a id="__codelineno-0-572" name="__codelineno-0-572"></a><span class="sd">    currently members of the collection are silently skipped.</span>
-<a id="__codelineno-0-573" name="__codelineno-0-573"></a>
-<a id="__codelineno-0-574" name="__codelineno-0-574"></a><span class="sd">    This operation leaves a retracted (inactive) aspect record in the</span>
-<a id="__codelineno-0-575" name="__codelineno-0-575"></a><span class="sd">    DataFabric — the store is append-only by design.  The item can be</span>
-<a id="__codelineno-0-576" name="__codelineno-0-576"></a><span class="sd">    re-added later by calling :func:`add_item_to_collection` again.</span>
-<a id="__codelineno-0-577" name="__codelineno-0-577"></a>
-<a id="__codelineno-0-578" name="__codelineno-0-578"></a><span class="sd">    Args:</span>
-<a id="__codelineno-0-579" name="__codelineno-0-579"></a><span class="sd">        ivcap:          The IVCAP client instance.</span>
-<a id="__codelineno-0-580" name="__codelineno-0-580"></a><span class="sd">        collection_urn: The collection entity URN.</span>
-<a id="__codelineno-0-581" name="__codelineno-0-581"></a><span class="sd">        item_urn:       URN of the entity to remove.</span>
-<a id="__codelineno-0-582" name="__codelineno-0-582"></a>
-<a id="__codelineno-0-583" name="__codelineno-0-583"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-584" name="__codelineno-0-584"></a><span class="sd">        ``True`` if the membership aspect was found and retracted,</span>
-<a id="__codelineno-0-585" name="__codelineno-0-585"></a><span class="sd">        ``False`` if the item was not a member.</span>
-<a id="__codelineno-0-586" name="__codelineno-0-586"></a>
-<a id="__codelineno-0-587" name="__codelineno-0-587"></a><span class="sd">    Raises:</span>
-<a id="__codelineno-0-588" name="__codelineno-0-588"></a><span class="sd">        :exc:`~ivcap_client.exception.MissingParameterValue`:</span>
-<a id="__codelineno-0-589" name="__codelineno-0-589"></a><span class="sd">            If *collection_urn* or *item_urn* are empty.</span>
-<a id="__codelineno-0-590" name="__codelineno-0-590"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-591" name="__codelineno-0-591"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">collection_urn</span><span class="p">:</span>
-<a id="__codelineno-0-592" name="__codelineno-0-592"></a>        <span class="k">raise</span> <span class="n">MissingParameterValue</span><span class="p">(</span><span class="s2">&quot;Missing collection URN&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-593" name="__codelineno-0-593"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">item_urn</span><span class="p">:</span>
-<a id="__codelineno-0-594" name="__codelineno-0-594"></a>        <span class="k">raise</span> <span class="n">MissingParameterValue</span><span class="p">(</span><span class="s2">&quot;Missing item URN&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-595" name="__codelineno-0-595"></a>
-<a id="__codelineno-0-596" name="__codelineno-0-596"></a>    <span class="c1"># Find the active membership aspect for this item.</span>
-<a id="__codelineno-0-597" name="__codelineno-0-597"></a>    <span class="n">find_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;$.item ? (@ == &quot;</span><span class="si">{</span><span class="n">item_urn</span><span class="si">}</span><span class="s1">&quot;)&#39;</span>
-<a id="__codelineno-0-598" name="__codelineno-0-598"></a>    <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span>
-<a id="__codelineno-0-599" name="__codelineno-0-599"></a>        <span class="n">entity</span><span class="o">=</span><span class="n">collection_urn</span><span class="p">,</span>
-<a id="__codelineno-0-600" name="__codelineno-0-600"></a>        <span class="n">schema</span><span class="o">=</span><span class="n">COLLECTION_ITEM_SCHEMA</span><span class="p">,</span>
-<a id="__codelineno-0-601" name="__codelineno-0-601"></a>        <span class="n">content_path</span><span class="o">=</span><span class="n">find_path</span><span class="p">,</span>
-<a id="__codelineno-0-602" name="__codelineno-0-602"></a>        <span class="n">include_content</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<a id="__codelineno-0-603" name="__codelineno-0-603"></a>        <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-<a id="__codelineno-0-604" name="__codelineno-0-604"></a>        <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
-<a id="__codelineno-0-605" name="__codelineno-0-605"></a>    <span class="p">)</span>
-<a id="__codelineno-0-606" name="__codelineno-0-606"></a>    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
-<a id="__codelineno-0-607" name="__codelineno-0-607"></a>        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;remove_item_from_collection_find&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-<a id="__codelineno-0-608" name="__codelineno-0-608"></a>
-<a id="__codelineno-0-609" name="__codelineno-0-609"></a>    <span class="n">parsed</span><span class="p">:</span> <span class="n">AspectListRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
-<a id="__codelineno-0-610" name="__codelineno-0-610"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-<a id="__codelineno-0-611" name="__codelineno-0-611"></a>        <span class="c1"># Not a member — skip silently.</span>
-<a id="__codelineno-0-612" name="__codelineno-0-612"></a>        <span class="k">return</span> <span class="kc">False</span>
-<a id="__codelineno-0-613" name="__codelineno-0-613"></a>
-<a id="__codelineno-0-614" name="__codelineno-0-614"></a>    <span class="n">aspect_id</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
-<a id="__codelineno-0-615" name="__codelineno-0-615"></a>    <span class="n">r2</span> <span class="o">=</span> <span class="n">aspect_retract</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">aspect_id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
-<a id="__codelineno-0-616" name="__codelineno-0-616"></a>    <span class="k">if</span> <span class="n">r2</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
-<a id="__codelineno-0-617" name="__codelineno-0-617"></a>        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;remove_item_from_collection_retract&quot;</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
-<a id="__codelineno-0-618" name="__codelineno-0-618"></a>
-<a id="__codelineno-0-619" name="__codelineno-0-619"></a>    <span class="k">return</span> <span class="kc">True</span>
+<span class="normal"><a href="#__codelineno-0-619">619</a></span>
+<span class="normal"><a href="#__codelineno-0-620">620</a></span>
+<span class="normal"><a href="#__codelineno-0-621">621</a></span>
+<span class="normal"><a href="#__codelineno-0-622">622</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-565" name="__codelineno-0-565"></a><span class="k">def</span><span class="w"> </span><span class="nf">remove_item_from_collection</span><span class="p">(</span>
+<a id="__codelineno-0-566" name="__codelineno-0-566"></a>    <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">,</span>
+<a id="__codelineno-0-567" name="__codelineno-0-567"></a>    <span class="n">collection_urn</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-568" name="__codelineno-0-568"></a>    <span class="n">item_urn</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-569" name="__codelineno-0-569"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-0-570" name="__codelineno-0-570"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove an item from a collection by retracting its membership aspect.</span>
+<a id="__codelineno-0-571" name="__codelineno-0-571"></a>
+<a id="__codelineno-0-572" name="__codelineno-0-572"></a><span class="sd">    Looks up the active ``collection-item.1`` aspect for the</span>
+<a id="__codelineno-0-573" name="__codelineno-0-573"></a><span class="sd">    ``(collection_urn, item_urn)`` pair using a JSONPath filter, then</span>
+<a id="__codelineno-0-574" name="__codelineno-0-574"></a><span class="sd">    retracts it via ``DELETE /1/aspects/&lt;id&gt;``.  Items that are not</span>
+<a id="__codelineno-0-575" name="__codelineno-0-575"></a><span class="sd">    currently members of the collection are silently skipped.</span>
+<a id="__codelineno-0-576" name="__codelineno-0-576"></a>
+<a id="__codelineno-0-577" name="__codelineno-0-577"></a><span class="sd">    This operation leaves a retracted (inactive) aspect record in the</span>
+<a id="__codelineno-0-578" name="__codelineno-0-578"></a><span class="sd">    DataFabric — the store is append-only by design.  The item can be</span>
+<a id="__codelineno-0-579" name="__codelineno-0-579"></a><span class="sd">    re-added later by calling :func:`add_item_to_collection` again.</span>
+<a id="__codelineno-0-580" name="__codelineno-0-580"></a>
+<a id="__codelineno-0-581" name="__codelineno-0-581"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-582" name="__codelineno-0-582"></a><span class="sd">        ivcap:          The IVCAP client instance.</span>
+<a id="__codelineno-0-583" name="__codelineno-0-583"></a><span class="sd">        collection_urn: The collection entity URN.</span>
+<a id="__codelineno-0-584" name="__codelineno-0-584"></a><span class="sd">        item_urn:       URN of the entity to remove.</span>
+<a id="__codelineno-0-585" name="__codelineno-0-585"></a>
+<a id="__codelineno-0-586" name="__codelineno-0-586"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-587" name="__codelineno-0-587"></a><span class="sd">        ``True`` if the membership aspect was found and retracted,</span>
+<a id="__codelineno-0-588" name="__codelineno-0-588"></a><span class="sd">        ``False`` if the item was not a member.</span>
+<a id="__codelineno-0-589" name="__codelineno-0-589"></a>
+<a id="__codelineno-0-590" name="__codelineno-0-590"></a><span class="sd">    Raises:</span>
+<a id="__codelineno-0-591" name="__codelineno-0-591"></a><span class="sd">        :exc:`~ivcap_client.exception.MissingParameterValue`:</span>
+<a id="__codelineno-0-592" name="__codelineno-0-592"></a><span class="sd">            If *collection_urn* or *item_urn* are empty.</span>
+<a id="__codelineno-0-593" name="__codelineno-0-593"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-594" name="__codelineno-0-594"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">collection_urn</span><span class="p">:</span>
+<a id="__codelineno-0-595" name="__codelineno-0-595"></a>        <span class="k">raise</span> <span class="n">MissingParameterValue</span><span class="p">(</span><span class="s2">&quot;Missing collection URN&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-596" name="__codelineno-0-596"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">item_urn</span><span class="p">:</span>
+<a id="__codelineno-0-597" name="__codelineno-0-597"></a>        <span class="k">raise</span> <span class="n">MissingParameterValue</span><span class="p">(</span><span class="s2">&quot;Missing item URN&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-598" name="__codelineno-0-598"></a>
+<a id="__codelineno-0-599" name="__codelineno-0-599"></a>    <span class="c1"># Find the active membership aspect for this item.</span>
+<a id="__codelineno-0-600" name="__codelineno-0-600"></a>    <span class="n">find_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;$.item ? (@ == &quot;</span><span class="si">{</span><span class="n">item_urn</span><span class="si">}</span><span class="s1">&quot;)&#39;</span>
+<a id="__codelineno-0-601" name="__codelineno-0-601"></a>    <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span>
+<a id="__codelineno-0-602" name="__codelineno-0-602"></a>        <span class="n">entity</span><span class="o">=</span><span class="n">collection_urn</span><span class="p">,</span>
+<a id="__codelineno-0-603" name="__codelineno-0-603"></a>        <span class="n">schema</span><span class="o">=</span><span class="n">COLLECTION_ITEM_SCHEMA</span><span class="p">,</span>
+<a id="__codelineno-0-604" name="__codelineno-0-604"></a>        <span class="n">content_path</span><span class="o">=</span><span class="n">find_path</span><span class="p">,</span>
+<a id="__codelineno-0-605" name="__codelineno-0-605"></a>        <span class="n">include_content</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-606" name="__codelineno-0-606"></a>        <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-0-607" name="__codelineno-0-607"></a>        <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
+<a id="__codelineno-0-608" name="__codelineno-0-608"></a>    <span class="p">)</span>
+<a id="__codelineno-0-609" name="__codelineno-0-609"></a>    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
+<a id="__codelineno-0-610" name="__codelineno-0-610"></a>        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;remove_item_from_collection_find&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<a id="__codelineno-0-611" name="__codelineno-0-611"></a>
+<a id="__codelineno-0-612" name="__codelineno-0-612"></a>    <span class="n">parsed</span><span class="p">:</span> <span class="n">AspectListRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+<a id="__codelineno-0-613" name="__codelineno-0-613"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+<a id="__codelineno-0-614" name="__codelineno-0-614"></a>        <span class="c1"># Not a member — skip silently.</span>
+<a id="__codelineno-0-615" name="__codelineno-0-615"></a>        <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-616" name="__codelineno-0-616"></a>
+<a id="__codelineno-0-617" name="__codelineno-0-617"></a>    <span class="n">aspect_id</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
+<a id="__codelineno-0-618" name="__codelineno-0-618"></a>    <span class="n">r2</span> <span class="o">=</span> <span class="n">aspect_retract</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">aspect_id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
+<a id="__codelineno-0-619" name="__codelineno-0-619"></a>    <span class="k">if</span> <span class="n">r2</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
+<a id="__codelineno-0-620" name="__codelineno-0-620"></a>        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;remove_item_from_collection_retract&quot;</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+<a id="__codelineno-0-621" name="__codelineno-0-621"></a>
+<a id="__codelineno-0-622" name="__codelineno-0-622"></a>    <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -5000,10 +5006,7 @@ If no collection definition aspect exists for <em>collection_urn</em>.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>ivcap_client/collection.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-622">622</a></span>
-<span class="normal"><a href="#__codelineno-0-623">623</a></span>
-<span class="normal"><a href="#__codelineno-0-624">624</a></span>
-<span class="normal"><a href="#__codelineno-0-625">625</a></span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-625">625</a></span>
 <span class="normal"><a href="#__codelineno-0-626">626</a></span>
 <span class="normal"><a href="#__codelineno-0-627">627</a></span>
 <span class="normal"><a href="#__codelineno-0-628">628</a></span>
@@ -5086,93 +5089,96 @@ If no collection definition aspect exists for <em>collection_urn</em>.</p>
 <span class="normal"><a href="#__codelineno-0-705">705</a></span>
 <span class="normal"><a href="#__codelineno-0-706">706</a></span>
 <span class="normal"><a href="#__codelineno-0-707">707</a></span>
-<span class="normal"><a href="#__codelineno-0-708">708</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-622" name="__codelineno-0-622"></a><span class="k">def</span><span class="w"> </span><span class="nf">retract_collection</span><span class="p">(</span>
-<a id="__codelineno-0-623" name="__codelineno-0-623"></a>    <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">,</span>
-<a id="__codelineno-0-624" name="__codelineno-0-624"></a>    <span class="n">collection_urn</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-<a id="__codelineno-0-625" name="__codelineno-0-625"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<a id="__codelineno-0-626" name="__codelineno-0-626"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fully retract a collection and all its item memberships.</span>
-<a id="__codelineno-0-627" name="__codelineno-0-627"></a>
-<a id="__codelineno-0-628" name="__codelineno-0-628"></a><span class="sd">    All active ``collection-item.1`` aspects for *collection_urn* are</span>
-<a id="__codelineno-0-629" name="__codelineno-0-629"></a><span class="sd">    retracted first (one ``DELETE`` per membership record, paginated), then</span>
-<a id="__codelineno-0-630" name="__codelineno-0-630"></a><span class="sd">    the ``collection.1`` definition aspect is retracted.</span>
-<a id="__codelineno-0-631" name="__codelineno-0-631"></a>
-<a id="__codelineno-0-632" name="__codelineno-0-632"></a><span class="sd">    The DataFabric is append-only — this leaves retracted (inactive) records</span>
-<a id="__codelineno-0-633" name="__codelineno-0-633"></a><span class="sd">    behind but makes the collection invisible to normal queries.  The</span>
-<a id="__codelineno-0-634" name="__codelineno-0-634"></a><span class="sd">    operation cannot be undone.</span>
-<a id="__codelineno-0-635" name="__codelineno-0-635"></a>
-<a id="__codelineno-0-636" name="__codelineno-0-636"></a><span class="sd">    Args:</span>
-<a id="__codelineno-0-637" name="__codelineno-0-637"></a><span class="sd">        ivcap:          The IVCAP client instance.</span>
-<a id="__codelineno-0-638" name="__codelineno-0-638"></a><span class="sd">        collection_urn: URN of the collection to retract.</span>
-<a id="__codelineno-0-639" name="__codelineno-0-639"></a>
-<a id="__codelineno-0-640" name="__codelineno-0-640"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-641" name="__codelineno-0-641"></a><span class="sd">        Total number of aspect records retracted (items + 1 definition).</span>
+<span class="normal"><a href="#__codelineno-0-708">708</a></span>
+<span class="normal"><a href="#__codelineno-0-709">709</a></span>
+<span class="normal"><a href="#__codelineno-0-710">710</a></span>
+<span class="normal"><a href="#__codelineno-0-711">711</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-625" name="__codelineno-0-625"></a><span class="k">def</span><span class="w"> </span><span class="nf">retract_collection</span><span class="p">(</span>
+<a id="__codelineno-0-626" name="__codelineno-0-626"></a>    <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">,</span>
+<a id="__codelineno-0-627" name="__codelineno-0-627"></a>    <span class="n">collection_urn</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-628" name="__codelineno-0-628"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-0-629" name="__codelineno-0-629"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fully retract a collection and all its item memberships.</span>
+<a id="__codelineno-0-630" name="__codelineno-0-630"></a>
+<a id="__codelineno-0-631" name="__codelineno-0-631"></a><span class="sd">    All active ``collection-item.1`` aspects for *collection_urn* are</span>
+<a id="__codelineno-0-632" name="__codelineno-0-632"></a><span class="sd">    retracted first (one ``DELETE`` per membership record, paginated), then</span>
+<a id="__codelineno-0-633" name="__codelineno-0-633"></a><span class="sd">    the ``collection.1`` definition aspect is retracted.</span>
+<a id="__codelineno-0-634" name="__codelineno-0-634"></a>
+<a id="__codelineno-0-635" name="__codelineno-0-635"></a><span class="sd">    The DataFabric is append-only — this leaves retracted (inactive) records</span>
+<a id="__codelineno-0-636" name="__codelineno-0-636"></a><span class="sd">    behind but makes the collection invisible to normal queries.  The</span>
+<a id="__codelineno-0-637" name="__codelineno-0-637"></a><span class="sd">    operation cannot be undone.</span>
+<a id="__codelineno-0-638" name="__codelineno-0-638"></a>
+<a id="__codelineno-0-639" name="__codelineno-0-639"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-640" name="__codelineno-0-640"></a><span class="sd">        ivcap:          The IVCAP client instance.</span>
+<a id="__codelineno-0-641" name="__codelineno-0-641"></a><span class="sd">        collection_urn: URN of the collection to retract.</span>
 <a id="__codelineno-0-642" name="__codelineno-0-642"></a>
-<a id="__codelineno-0-643" name="__codelineno-0-643"></a><span class="sd">    Raises:</span>
-<a id="__codelineno-0-644" name="__codelineno-0-644"></a><span class="sd">        :exc:`~ivcap_client.exception.MissingParameterValue`:</span>
-<a id="__codelineno-0-645" name="__codelineno-0-645"></a><span class="sd">            If *collection_urn* is empty.</span>
-<a id="__codelineno-0-646" name="__codelineno-0-646"></a><span class="sd">        :exc:`~ivcap_client.exception.ResourceNotFound`:</span>
-<a id="__codelineno-0-647" name="__codelineno-0-647"></a><span class="sd">            If no collection definition aspect exists for *collection_urn*.</span>
-<a id="__codelineno-0-648" name="__codelineno-0-648"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-649" name="__codelineno-0-649"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">collection_urn</span><span class="p">:</span>
-<a id="__codelineno-0-650" name="__codelineno-0-650"></a>        <span class="k">raise</span> <span class="n">MissingParameterValue</span><span class="p">(</span><span class="s2">&quot;Missing collection URN&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-651" name="__codelineno-0-651"></a>
-<a id="__codelineno-0-652" name="__codelineno-0-652"></a>    <span class="n">retracted</span> <span class="o">=</span> <span class="mi">0</span>
-<a id="__codelineno-0-653" name="__codelineno-0-653"></a>
-<a id="__codelineno-0-654" name="__codelineno-0-654"></a>    <span class="c1"># ------------------------------------------------------------------</span>
-<a id="__codelineno-0-655" name="__codelineno-0-655"></a>    <span class="c1"># Step 1 — retract all collection-item.1 membership aspects</span>
-<a id="__codelineno-0-656" name="__codelineno-0-656"></a>    <span class="c1"># ------------------------------------------------------------------</span>
-<a id="__codelineno-0-657" name="__codelineno-0-657"></a>    <span class="n">page_cursor</span> <span class="o">=</span> <span class="n">UNSET</span>
-<a id="__codelineno-0-658" name="__codelineno-0-658"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<a id="__codelineno-0-659" name="__codelineno-0-659"></a>        <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-0-660" name="__codelineno-0-660"></a>            <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">collection_urn</span><span class="p">,</span>
-<a id="__codelineno-0-661" name="__codelineno-0-661"></a>            <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">COLLECTION_ITEM_SCHEMA</span><span class="p">,</span>
-<a id="__codelineno-0-662" name="__codelineno-0-662"></a>            <span class="s2">&quot;include_content&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-<a id="__codelineno-0-663" name="__codelineno-0-663"></a>            <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
-<a id="__codelineno-0-664" name="__codelineno-0-664"></a>            <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
-<a id="__codelineno-0-665" name="__codelineno-0-665"></a>        <span class="p">}</span>
-<a id="__codelineno-0-666" name="__codelineno-0-666"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">page_cursor</span><span class="p">,</span> <span class="n">Unset</span><span class="p">):</span>
-<a id="__codelineno-0-667" name="__codelineno-0-667"></a>            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;page&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_cursor</span>
-<a id="__codelineno-0-668" name="__codelineno-0-668"></a>
-<a id="__codelineno-0-669" name="__codelineno-0-669"></a>        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<a id="__codelineno-0-670" name="__codelineno-0-670"></a>        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
-<a id="__codelineno-0-671" name="__codelineno-0-671"></a>            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;retract_collection_list_items&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-<a id="__codelineno-0-672" name="__codelineno-0-672"></a>
-<a id="__codelineno-0-673" name="__codelineno-0-673"></a>        <span class="n">parsed</span><span class="p">:</span> <span class="n">AspectListRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
-<a id="__codelineno-0-674" name="__codelineno-0-674"></a>        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-<a id="__codelineno-0-675" name="__codelineno-0-675"></a>            <span class="n">r2</span> <span class="o">=</span> <span class="n">aspect_retract</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
-<a id="__codelineno-0-676" name="__codelineno-0-676"></a>            <span class="k">if</span> <span class="n">r2</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
-<a id="__codelineno-0-677" name="__codelineno-0-677"></a>                <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;retract_collection_retract_item&quot;</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
-<a id="__codelineno-0-678" name="__codelineno-0-678"></a>            <span class="n">retracted</span> <span class="o">+=</span> <span class="mi">1</span>
-<a id="__codelineno-0-679" name="__codelineno-0-679"></a>
-<a id="__codelineno-0-680" name="__codelineno-0-680"></a>        <span class="c1"># Advance the pagination cursor.</span>
-<a id="__codelineno-0-681" name="__codelineno-0-681"></a>        <span class="n">links</span> <span class="o">=</span> <span class="n">Links</span><span class="p">(</span><span class="n">parsed</span><span class="o">.</span><span class="n">links</span><span class="p">)</span>
-<a id="__codelineno-0-682" name="__codelineno-0-682"></a>        <span class="k">if</span> <span class="n">links</span><span class="o">.</span><span class="n">next</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-683" name="__codelineno-0-683"></a>            <span class="k">break</span>
-<a id="__codelineno-0-684" name="__codelineno-0-684"></a>        <span class="n">page_cursor</span> <span class="o">=</span> <span class="n">links</span><span class="o">.</span><span class="n">next</span>
-<a id="__codelineno-0-685" name="__codelineno-0-685"></a>
-<a id="__codelineno-0-686" name="__codelineno-0-686"></a>    <span class="c1"># ------------------------------------------------------------------</span>
-<a id="__codelineno-0-687" name="__codelineno-0-687"></a>    <span class="c1"># Step 2 — retract the collection definition aspect</span>
-<a id="__codelineno-0-688" name="__codelineno-0-688"></a>    <span class="c1"># ------------------------------------------------------------------</span>
-<a id="__codelineno-0-689" name="__codelineno-0-689"></a>    <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span>
-<a id="__codelineno-0-690" name="__codelineno-0-690"></a>        <span class="n">entity</span><span class="o">=</span><span class="n">collection_urn</span><span class="p">,</span>
-<a id="__codelineno-0-691" name="__codelineno-0-691"></a>        <span class="n">schema</span><span class="o">=</span><span class="n">COLLECTION_SCHEMA</span><span class="p">,</span>
-<a id="__codelineno-0-692" name="__codelineno-0-692"></a>        <span class="n">include_content</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<a id="__codelineno-0-693" name="__codelineno-0-693"></a>        <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-<a id="__codelineno-0-694" name="__codelineno-0-694"></a>        <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
-<a id="__codelineno-0-695" name="__codelineno-0-695"></a>    <span class="p">)</span>
-<a id="__codelineno-0-696" name="__codelineno-0-696"></a>    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
-<a id="__codelineno-0-697" name="__codelineno-0-697"></a>        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;retract_collection_find_def&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-<a id="__codelineno-0-698" name="__codelineno-0-698"></a>
-<a id="__codelineno-0-699" name="__codelineno-0-699"></a>    <span class="n">parsed</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
-<a id="__codelineno-0-700" name="__codelineno-0-700"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-<a id="__codelineno-0-701" name="__codelineno-0-701"></a>        <span class="k">raise</span> <span class="n">ResourceNotFound</span><span class="p">(</span><span class="n">collection_urn</span><span class="p">)</span>
-<a id="__codelineno-0-702" name="__codelineno-0-702"></a>
-<a id="__codelineno-0-703" name="__codelineno-0-703"></a>    <span class="n">r2</span> <span class="o">=</span> <span class="n">aspect_retract</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
-<a id="__codelineno-0-704" name="__codelineno-0-704"></a>    <span class="k">if</span> <span class="n">r2</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
-<a id="__codelineno-0-705" name="__codelineno-0-705"></a>        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;retract_collection_retract_def&quot;</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
-<a id="__codelineno-0-706" name="__codelineno-0-706"></a>    <span class="n">retracted</span> <span class="o">+=</span> <span class="mi">1</span>
-<a id="__codelineno-0-707" name="__codelineno-0-707"></a>
-<a id="__codelineno-0-708" name="__codelineno-0-708"></a>    <span class="k">return</span> <span class="n">retracted</span>
+<a id="__codelineno-0-643" name="__codelineno-0-643"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-644" name="__codelineno-0-644"></a><span class="sd">        Total number of aspect records retracted (items + 1 definition).</span>
+<a id="__codelineno-0-645" name="__codelineno-0-645"></a>
+<a id="__codelineno-0-646" name="__codelineno-0-646"></a><span class="sd">    Raises:</span>
+<a id="__codelineno-0-647" name="__codelineno-0-647"></a><span class="sd">        :exc:`~ivcap_client.exception.MissingParameterValue`:</span>
+<a id="__codelineno-0-648" name="__codelineno-0-648"></a><span class="sd">            If *collection_urn* is empty.</span>
+<a id="__codelineno-0-649" name="__codelineno-0-649"></a><span class="sd">        :exc:`~ivcap_client.exception.ResourceNotFound`:</span>
+<a id="__codelineno-0-650" name="__codelineno-0-650"></a><span class="sd">            If no collection definition aspect exists for *collection_urn*.</span>
+<a id="__codelineno-0-651" name="__codelineno-0-651"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-652" name="__codelineno-0-652"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">collection_urn</span><span class="p">:</span>
+<a id="__codelineno-0-653" name="__codelineno-0-653"></a>        <span class="k">raise</span> <span class="n">MissingParameterValue</span><span class="p">(</span><span class="s2">&quot;Missing collection URN&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-654" name="__codelineno-0-654"></a>
+<a id="__codelineno-0-655" name="__codelineno-0-655"></a>    <span class="n">retracted</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-0-656" name="__codelineno-0-656"></a>
+<a id="__codelineno-0-657" name="__codelineno-0-657"></a>    <span class="c1"># ------------------------------------------------------------------</span>
+<a id="__codelineno-0-658" name="__codelineno-0-658"></a>    <span class="c1"># Step 1 — retract all collection-item.1 membership aspects</span>
+<a id="__codelineno-0-659" name="__codelineno-0-659"></a>    <span class="c1"># ------------------------------------------------------------------</span>
+<a id="__codelineno-0-660" name="__codelineno-0-660"></a>    <span class="n">page_cursor</span> <span class="o">=</span> <span class="n">UNSET</span>
+<a id="__codelineno-0-661" name="__codelineno-0-661"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-0-662" name="__codelineno-0-662"></a>        <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-0-663" name="__codelineno-0-663"></a>            <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">collection_urn</span><span class="p">,</span>
+<a id="__codelineno-0-664" name="__codelineno-0-664"></a>            <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">COLLECTION_ITEM_SCHEMA</span><span class="p">,</span>
+<a id="__codelineno-0-665" name="__codelineno-0-665"></a>            <span class="s2">&quot;include_content&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-666" name="__codelineno-0-666"></a>            <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+<a id="__codelineno-0-667" name="__codelineno-0-667"></a>            <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
+<a id="__codelineno-0-668" name="__codelineno-0-668"></a>        <span class="p">}</span>
+<a id="__codelineno-0-669" name="__codelineno-0-669"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">page_cursor</span><span class="p">,</span> <span class="n">Unset</span><span class="p">):</span>
+<a id="__codelineno-0-670" name="__codelineno-0-670"></a>            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;page&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_cursor</span>
+<a id="__codelineno-0-671" name="__codelineno-0-671"></a>
+<a id="__codelineno-0-672" name="__codelineno-0-672"></a>        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="__codelineno-0-673" name="__codelineno-0-673"></a>        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
+<a id="__codelineno-0-674" name="__codelineno-0-674"></a>            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;retract_collection_list_items&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<a id="__codelineno-0-675" name="__codelineno-0-675"></a>
+<a id="__codelineno-0-676" name="__codelineno-0-676"></a>        <span class="n">parsed</span><span class="p">:</span> <span class="n">AspectListRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+<a id="__codelineno-0-677" name="__codelineno-0-677"></a>        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+<a id="__codelineno-0-678" name="__codelineno-0-678"></a>            <span class="n">r2</span> <span class="o">=</span> <span class="n">aspect_retract</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
+<a id="__codelineno-0-679" name="__codelineno-0-679"></a>            <span class="k">if</span> <span class="n">r2</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
+<a id="__codelineno-0-680" name="__codelineno-0-680"></a>                <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;retract_collection_retract_item&quot;</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+<a id="__codelineno-0-681" name="__codelineno-0-681"></a>            <span class="n">retracted</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-0-682" name="__codelineno-0-682"></a>
+<a id="__codelineno-0-683" name="__codelineno-0-683"></a>        <span class="c1"># Advance the pagination cursor.</span>
+<a id="__codelineno-0-684" name="__codelineno-0-684"></a>        <span class="n">links</span> <span class="o">=</span> <span class="n">Links</span><span class="p">(</span><span class="n">parsed</span><span class="o">.</span><span class="n">links</span><span class="p">)</span>
+<a id="__codelineno-0-685" name="__codelineno-0-685"></a>        <span class="k">if</span> <span class="n">links</span><span class="o">.</span><span class="n">next</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-686" name="__codelineno-0-686"></a>            <span class="k">break</span>
+<a id="__codelineno-0-687" name="__codelineno-0-687"></a>        <span class="n">page_cursor</span> <span class="o">=</span> <span class="n">links</span><span class="o">.</span><span class="n">next</span>
+<a id="__codelineno-0-688" name="__codelineno-0-688"></a>
+<a id="__codelineno-0-689" name="__codelineno-0-689"></a>    <span class="c1"># ------------------------------------------------------------------</span>
+<a id="__codelineno-0-690" name="__codelineno-0-690"></a>    <span class="c1"># Step 2 — retract the collection definition aspect</span>
+<a id="__codelineno-0-691" name="__codelineno-0-691"></a>    <span class="c1"># ------------------------------------------------------------------</span>
+<a id="__codelineno-0-692" name="__codelineno-0-692"></a>    <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_list</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span>
+<a id="__codelineno-0-693" name="__codelineno-0-693"></a>        <span class="n">entity</span><span class="o">=</span><span class="n">collection_urn</span><span class="p">,</span>
+<a id="__codelineno-0-694" name="__codelineno-0-694"></a>        <span class="n">schema</span><span class="o">=</span><span class="n">COLLECTION_SCHEMA</span><span class="p">,</span>
+<a id="__codelineno-0-695" name="__codelineno-0-695"></a>        <span class="n">include_content</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-696" name="__codelineno-0-696"></a>        <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-0-697" name="__codelineno-0-697"></a>        <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span>
+<a id="__codelineno-0-698" name="__codelineno-0-698"></a>    <span class="p">)</span>
+<a id="__codelineno-0-699" name="__codelineno-0-699"></a>    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
+<a id="__codelineno-0-700" name="__codelineno-0-700"></a>        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;retract_collection_find_def&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<a id="__codelineno-0-701" name="__codelineno-0-701"></a>
+<a id="__codelineno-0-702" name="__codelineno-0-702"></a>    <span class="n">parsed</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+<a id="__codelineno-0-703" name="__codelineno-0-703"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+<a id="__codelineno-0-704" name="__codelineno-0-704"></a>        <span class="k">raise</span> <span class="n">ResourceNotFound</span><span class="p">(</span><span class="n">collection_urn</span><span class="p">)</span>
+<a id="__codelineno-0-705" name="__codelineno-0-705"></a>
+<a id="__codelineno-0-706" name="__codelineno-0-706"></a>    <span class="n">r2</span> <span class="o">=</span> <span class="n">aspect_retract</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
+<a id="__codelineno-0-707" name="__codelineno-0-707"></a>    <span class="k">if</span> <span class="n">r2</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
+<a id="__codelineno-0-708" name="__codelineno-0-708"></a>        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;retract_collection_retract_def&quot;</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+<a id="__codelineno-0-709" name="__codelineno-0-709"></a>    <span class="n">retracted</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-0-710" name="__codelineno-0-710"></a>
+<a id="__codelineno-0-711" name="__codelineno-0-711"></a>    <span class="k">return</span> <span class="n">retracted</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>

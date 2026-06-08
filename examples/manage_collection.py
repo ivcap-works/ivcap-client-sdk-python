@@ -27,13 +27,12 @@ from __future__ import annotations
 import sys
 import uuid
 
-from client import client  # local helper that builds an IVCAP instance
+from _common import ivcap
 
-from ivcap_client import IVCAP, Collection
+from ivcap_client import Collection
 
 
 def main() -> None:
-    ivcap: IVCAP = client.ivcap()
 
     # ------------------------------------------------------------------
     # 1. Create (or update) a collection

@@ -65,9 +65,7 @@ def _make_list_item_rt(
     item.id = ASPECT_URN
     item.entity = entity
     item.schema = schema
-    item.valid_from = valid_from or datetime.datetime(
-        2024, 1, 1, tzinfo=datetime.UTC
-    )
+    item.valid_from = valid_from or datetime.datetime(2024, 1, 1, tzinfo=datetime.UTC)
     item.valid_to = UNSET
     item.additional_properties = {}
 
@@ -209,23 +207,31 @@ class TestCreateCollectionValidation:
         with pytest.raises(MissingParameterValue, match="name"):
             create_collection(_ivcap(), COLL_URN, None)
 
-    def test_valid_call_invokes_add_update_aspect(self):
-        """create_collection should call _add_update_aspect with is_update=True."""
+    def test_new_collection_uses_post(self):
+        """create_collection should use POST (is_update=False) when the collection does not exist yet."""
         ivcap = _ivcap()
         mock_aspect = SimpleNamespace(
             id=ASPECT_URN, entity=COLL_URN, schema=COLLECTION_SCHEMA, content={}
         )
-        with patch(
-            "ivcap_client.collection._add_update_aspect",
-            return_value=mock_aspect,
-        ) as mock_aua:
+        # aspect_list returns empty → collection does not exist → expect POST
+        empty_response = _make_ok_response(_make_aspect_list_rt(items=[]))
+        with (
+            patch(
+                "ivcap_client.collection.aspect_list.sync_detailed",
+                return_value=empty_response,
+            ),
+            patch(
+                "ivcap_client.collection._add_update_aspect",
+                return_value=mock_aspect,
+            ) as mock_aua,
+        ):
             coll = create_collection(
                 ivcap, COLL_URN, "Ocean Survey", description="CTD casts"
             )
 
-        # Must use PUT (is_update=True)
+        # Must use POST (is_update=False) for a brand-new collection
         args = mock_aua.call_args
-        assert args[0][1] is True, "expected is_update=True for PUT semantics"
+        assert args[0][1] is False, "expected is_update=False (POST) for new collection"
         assert args[0][2] == COLL_URN
         assert args[1]["schema"] == COLLECTION_SCHEMA
 
@@ -233,6 +239,40 @@ class TestCreateCollectionValidation:
         assert coll.urn == COLL_URN
         assert coll.name == "Ocean Survey"
         assert coll.description == "CTD casts"
+
+    def test_existing_collection_uses_put(self):
+        """create_collection should use PUT (is_update=True) when the collection already exists."""
+        ivcap = _ivcap()
+        mock_aspect = SimpleNamespace(
+            id=ASPECT_URN, entity=COLL_URN, schema=COLLECTION_SCHEMA, content={}
+        )
+        # aspect_list returns an item → collection exists → expect PUT
+        existing_item = _make_list_item_rt()
+        existing_response = _make_ok_response(
+            _make_aspect_list_rt(items=[existing_item])
+        )
+        with (
+            patch(
+                "ivcap_client.collection.aspect_list.sync_detailed",
+                return_value=existing_response,
+            ),
+            patch(
+                "ivcap_client.collection._add_update_aspect",
+                return_value=mock_aspect,
+            ) as mock_aua,
+        ):
+            coll = create_collection(ivcap, COLL_URN, "Ocean Survey Updated")
+
+        # Must use PUT (is_update=True) for an existing collection
+        args = mock_aua.call_args
+        assert args[0][1] is True, (
+            "expected is_update=True (PUT) for existing collection"
+        )
+        assert args[0][2] == COLL_URN
+        assert args[1]["schema"] == COLLECTION_SCHEMA
+
+        assert isinstance(coll, Collection)
+        assert coll.urn == COLL_URN
 
 
 # ---------------------------------------------------------------------------
@@ -486,8 +526,21 @@ class TestCollectionAddItem:
         ) as mock_fn:
             result = coll.add_item(ITEM_URN)
 
-        mock_fn.assert_called_once_with(ivcap, COLL_URN, ITEM_URN)
+        mock_fn.assert_called_once_with(ivcap, COLL_URN, ITEM_URN, policy=None)
         assert result is None
+
+    def test_delegates_policy_to_module_function(self):
+        ivcap = _ivcap()
+        coll = Collection(ivcap, urn=COLL_URN, name="Test")
+        policy = "urn:ivcap:policy:open"
+
+        with patch(
+            "ivcap_client.collection.add_item_to_collection",
+            return_value=None,
+        ) as mock_fn:
+            coll.add_item(ITEM_URN, policy=policy)
+
+        mock_fn.assert_called_once_with(ivcap, COLL_URN, ITEM_URN, policy=policy)
 
 
 # ---------------------------------------------------------------------------

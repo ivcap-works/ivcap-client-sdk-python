@@ -565,6 +565,8 @@ class IVCAP:
         self,
         collection_urn: str,
         item_urn: str,
+        *,
+        policy: URN | None = None,
     ) -> CollectionItem | None:
         """Add an item to a collection with automatic deduplication.
 
@@ -575,12 +577,14 @@ class IVCAP:
         Args:
             collection_urn (str): The collection entity URN.
             item_urn (str): URN of the entity to add.
+            policy (Optional[URN]): Optional access policy URN for the
+                membership aspect (``urn:ivcap:policy:…``).
 
         Returns:
             CollectionItem if the item was newly added, ``None`` if it was
             already a member.
         """
-        return add_item_to_collection(self, collection_urn, item_urn)
+        return add_item_to_collection(self, collection_urn, item_urn, policy=policy)
 
     def remove_from_collection(
         self,

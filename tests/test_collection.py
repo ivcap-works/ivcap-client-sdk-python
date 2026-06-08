@@ -65,9 +65,7 @@ def _make_list_item_rt(
     item.id = ASPECT_URN
     item.entity = entity
     item.schema = schema
-    item.valid_from = valid_from or datetime.datetime(
-        2024, 1, 1, tzinfo=datetime.UTC
-    )
+    item.valid_from = valid_from or datetime.datetime(2024, 1, 1, tzinfo=datetime.UTC)
     item.valid_to = UNSET
     item.additional_properties = {}
 
@@ -318,33 +316,45 @@ class TestListCollections:
         assert isinstance(result[0], Collection)
         assert result[0].name == "Survey 1"
 
-    def test_name_filter_builds_content_path(self):
+    def test_name_filter_applied_client_side(self):
+        """name_filter must filter Collection objects client-side, not via content_path."""
         ivcap = _ivcap()
-        response = _make_ok_response(_make_aspect_list_rt(items=[]))
+        matching = _make_list_item_rt(content_dict={"name": "Ocean Survey"})
+        non_matching = _make_list_item_rt(content_dict={"name": "Freshwater Survey"})
+        response = _make_ok_response(
+            _make_aspect_list_rt(items=[matching, non_matching])
+        )
 
         with patch(
             "ivcap_client.collection.aspect_list.sync_detailed", return_value=response
         ) as mock_list:
-            list(list_collections(ivcap, name_filter='== "Ocean Survey"', limit=5))
+            results = list(
+                list_collections(ivcap, name_filter='== "Ocean Survey"', limit=5)
+            )
 
+        # Server call must NOT include content_path.
         call_kwargs = mock_list.call_args[1]
-        assert "$.name" in call_kwargs["content_path"]
-        assert "Ocean Survey" in call_kwargs["content_path"]
+        assert "content_path" not in call_kwargs
+        # Only the matching collection should be returned.
+        assert len(results) == 1
+        assert results[0].name == "Ocean Survey"
 
-    def test_no_name_filter_omits_content_path(self):
+    def test_no_name_filter_returns_all(self):
+        """Without a name_filter every collection is returned unchanged."""
         ivcap = _ivcap()
-        response = _make_ok_response(_make_aspect_list_rt(items=[]))
+        item1 = _make_list_item_rt(content_dict={"name": "Survey A"})
+        item2 = _make_list_item_rt(content_dict={"name": "Survey B"})
+        response = _make_ok_response(_make_aspect_list_rt(items=[item1, item2]))
 
         with patch(
             "ivcap_client.collection.aspect_list.sync_detailed", return_value=response
         ) as mock_list:
-            list(list_collections(ivcap, limit=5))
+            results = list(list_collections(ivcap, limit=5))
 
         call_kwargs = mock_list.call_args[1]
-        # content_path should be UNSET (falsy) when no filter is provided
-        from ivcap_client.types import Unset
-
-        assert isinstance(call_kwargs.get("content_path"), Unset)
+        # No content_path sent to server at all.
+        assert "content_path" not in call_kwargs
+        assert len(results) == 2
 
     def test_always_queries_collection_schema(self):
         ivcap = _ivcap()
@@ -382,9 +392,13 @@ class TestAddItemToCollection:
             add_item_to_collection(_ivcap(), COLL_URN, None)
 
     def test_returns_none_when_already_member(self):
-        """If the dedup check finds an existing record, must return None."""
+        """If the client-side scan finds an existing record, must return None."""
         ivcap = _ivcap()
-        existing_item = _make_list_item_rt(schema=COLLECTION_ITEM_SCHEMA)
+        # Content dict must contain the item URN so the client-side scan matches it.
+        existing_item = _make_list_item_rt(
+            schema=COLLECTION_ITEM_SCHEMA,
+            content_dict={"collection": COLL_URN, "item": ITEM_URN},
+        )
         dedup_response = _make_ok_response(_make_aspect_list_rt(items=[existing_item]))
 
         with patch(
@@ -425,8 +439,8 @@ class TestAddItemToCollection:
         assert result.collection == COLL_URN
         assert result.item == ITEM_URN
 
-    def test_dedup_check_uses_jsonpath_filter(self):
-        """The dedup query must use a content_path JSONPath filter containing the item URN."""
+    def test_dedup_check_queries_correct_schema_and_entity(self):
+        """The dedup scan must query collection-item.1 for the correct collection entity."""
         ivcap = _ivcap()
         empty_dedup = _make_ok_response(_make_aspect_list_rt(items=[]))
         mock_aspect = SimpleNamespace(
@@ -443,31 +457,12 @@ class TestAddItemToCollection:
                 add_item_to_collection(ivcap, COLL_URN, ITEM_URN)
 
         call_kwargs = mock_list.call_args[1]
-        assert ITEM_URN in call_kwargs["content_path"], (
-            "dedup query must embed the item URN in a JSONPath content_path filter"
-        )
         assert call_kwargs["schema"] == COLLECTION_ITEM_SCHEMA
         assert call_kwargs["entity"] == COLL_URN
-
-    def test_dedup_check_does_not_request_content(self):
-        """The dedup query should set include_content=False to minimise data transfer."""
-        ivcap = _ivcap()
-        empty_dedup = _make_ok_response(_make_aspect_list_rt(items=[]))
-        mock_aspect = SimpleNamespace(
-            id=ASPECT_URN, entity=COLL_URN, schema=COLLECTION_ITEM_SCHEMA, content={}
-        )
-
-        with patch(
-            "ivcap_client.collection.aspect_list.sync_detailed",
-            return_value=empty_dedup,
-        ) as mock_list:
-            with patch(
-                "ivcap_client.collection._add_update_aspect", return_value=mock_aspect
-            ):
-                add_item_to_collection(ivcap, COLL_URN, ITEM_URN)
-
-        call_kwargs = mock_list.call_args[1]
-        assert call_kwargs.get("include_content") is False
+        # Client-side scan requires content to compare item URNs.
+        assert call_kwargs.get("include_content") is True
+        # No server-side JSONPath filter — content_path must not be present.
+        assert "content_path" not in call_kwargs
 
 
 # ---------------------------------------------------------------------------
@@ -560,9 +555,13 @@ class TestRemoveItemFromCollection:
         assert result is False
 
     def test_retracts_aspect_when_member(self):
-        """If the find query returns an aspect, retract it and return True."""
+        """If the client-side scan finds an aspect, retract it and return True."""
         ivcap = _ivcap()
-        existing_item = _make_list_item_rt(schema=COLLECTION_ITEM_SCHEMA)
+        # Content dict must contain the item URN so the client-side scan matches it.
+        existing_item = _make_list_item_rt(
+            schema=COLLECTION_ITEM_SCHEMA,
+            content_dict={"collection": COLL_URN, "item": ITEM_URN},
+        )
         find_response = _make_ok_response(_make_aspect_list_rt(items=[existing_item]))
 
         retract_response = SimpleNamespace()
@@ -582,8 +581,8 @@ class TestRemoveItemFromCollection:
         assert result is True
         mock_retract.assert_called_once_with(ASPECT_URN, client=ivcap._client)
 
-    def test_find_query_uses_jsonpath_filter(self):
-        """The find query must embed the item URN in a JSONPath content_path filter."""
+    def test_find_query_uses_client_side_scan(self):
+        """The find query must scan content client-side (include_content=True, no content_path)."""
         ivcap = _ivcap()
         empty_response = _make_ok_response(_make_aspect_list_rt(items=[]))
 
@@ -594,13 +593,14 @@ class TestRemoveItemFromCollection:
             remove_item_from_collection(ivcap, COLL_URN, ITEM_URN)
 
         call_kwargs = mock_list.call_args[1]
-        assert ITEM_URN in call_kwargs["content_path"]
         assert call_kwargs["schema"] == COLLECTION_ITEM_SCHEMA
         assert call_kwargs["entity"] == COLL_URN
-        assert call_kwargs.get("include_content") is False
+        # Client-side scan: must request content, must not use a server-side content_path.
+        assert call_kwargs.get("include_content") is True
+        assert "content_path" not in call_kwargs
 
-    def test_find_query_limit_is_1(self):
-        """Efficiency: the find query must use limit=1."""
+    def test_find_query_page_size(self):
+        """The client-side scan should use a reasonable page size (50)."""
         ivcap = _ivcap()
         empty_response = _make_ok_response(_make_aspect_list_rt(items=[]))
 
@@ -611,7 +611,7 @@ class TestRemoveItemFromCollection:
             remove_item_from_collection(ivcap, COLL_URN, ITEM_URN)
 
         call_kwargs = mock_list.call_args[1]
-        assert call_kwargs.get("limit") == 1
+        assert call_kwargs.get("limit") == 50
 
 
 # ---------------------------------------------------------------------------

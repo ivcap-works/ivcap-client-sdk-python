@@ -22,7 +22,8 @@ creating or querying aspects.
 from __future__ import annotations  # postpone evaluation of annotations
 
 import datetime
-from collections.abc import Iterator
+import re
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
@@ -418,6 +419,51 @@ def get_collection(
     )
 
 
+def _parse_name_filter(name_filter: str) -> Callable[[str], bool]:
+    """Convert a JSONPath name-filter fragment into a Python predicate.
+
+    Supported forms (same syntax accepted by ``list_collections``):
+
+    * ``== "X"``                      — exact match
+    * ``!= "X"``                      — not equal
+    * ``starts with "X"``             — prefix match
+    * ``like_regex "pattern"``        — regex search (case-sensitive)
+    * ``like_regex "pattern" flag "i"`` — regex search (case-insensitive)
+
+    Falls back to a case-insensitive substring match for unrecognised forms.
+    """
+    nf = name_filter.strip()
+
+    m = re.match(r'^==\s+"([^"]*)"$', nf)
+    if m:
+        value = m.group(1)
+        return lambda name: name == value
+
+    m = re.match(r'^!=\s+"([^"]*)"$', nf)
+    if m:
+        value = m.group(1)
+        return lambda name: name != value
+
+    m = re.match(r'^starts\s+with\s+"([^"]*)"$', nf, re.IGNORECASE)
+    if m:
+        prefix = m.group(1)
+        return lambda name: name.startswith(prefix)
+
+    m = re.match(r'^like_regex\s+"([^"]*)"\s+flag\s+"i"$', nf, re.IGNORECASE)
+    if m:
+        pattern = m.group(1)
+        return lambda name, p=pattern: bool(re.search(p, name, re.IGNORECASE))
+
+    m = re.match(r'^like_regex\s+"([^"]*)"$', nf)
+    if m:
+        pattern = m.group(1)
+        return lambda name, p=pattern: bool(re.search(p, name))
+
+    # Fallback: case-insensitive substring match
+    nf_lower = nf.lower()
+    return lambda name: nf_lower in name.lower()
+
+
 def list_collections(
     ivcap: IVCAP,
     *,
@@ -429,36 +475,91 @@ def list_collections(
 
     Args:
         ivcap:       The IVCAP client instance.
-        name_filter: Optional JSONPath comparison expression applied to the
-                     collection ``name`` field.  The expression is wrapped as
-                     ``$.name ? (@ <name_filter>)`` before being sent to the
-                     server.
+        name_filter: Optional filter expression applied **client-side** to
+                     the collection ``name`` field.
 
-                     Examples::
+                     Note: the server-side ``content_path`` JSONPath filter
+                     is not reliably supported on all deployments, so
+                     filtering is always done in the client after fetching.
+
+                     Supported forms::
 
                          '== "My Ocean Survey"'
+                         '!= "My Ocean Survey"'
                          'starts with "CTD"'
+                         'like_regex ".*ocean.*"'
                          'like_regex ".*ocean.*" flag "i"'
 
-        limit:       Maximum number of collections to return.  Defaults to 10.
+        limit:       Maximum number of collections to return per page.
+                     Defaults to 10.
         at_time:     Return collections that were valid at this point in time.
 
     Returns:
         An iterator over :class:`Collection` objects.
     """
-    content_path: str | None = None
-    if name_filter:
-        content_path = f"$.name ? (@ {name_filter})"
-
     kwargs = {
         "schema": COLLECTION_SCHEMA,
         "include_content": True,
         "limit": _wrap(limit),
         "at_time": _wrap(at_time),
-        "content_path": _wrap(content_path),
         "client": ivcap._client,
     }
-    return CollectionIter(ivcap, **kwargs)
+    it: Iterator[Collection] = CollectionIter(ivcap, **kwargs)
+
+    if not name_filter:
+        return it
+
+    filter_fn = _parse_name_filter(name_filter)
+    return (c for c in it if filter_fn(c.name))
+
+
+def _find_collection_item_id(
+    ivcap: IVCAP,
+    collection_urn: str,
+    item_urn: str,
+) -> str | None:
+    """Return the aspect ID of the active membership record for *item_urn*, or ``None``.
+
+    Scans membership aspects client-side (pagination-aware) because the
+    server-side ``content_path`` JSONPath filter is not reliably supported on
+    all deployments.
+
+    Args:
+        ivcap:          The IVCAP client instance.
+        collection_urn: The collection entity URN.
+        item_urn:       The member entity URN to look for.
+
+    Returns:
+        The aspect ID string if found, ``None`` otherwise.
+    """
+    page_cursor: str | Unset = UNSET
+    while True:
+        kwargs: dict = {
+            "entity": collection_urn,
+            "schema": COLLECTION_ITEM_SCHEMA,
+            "include_content": True,
+            "limit": 50,
+            "client": ivcap._client,
+        }
+        if not isinstance(page_cursor, Unset):
+            kwargs["page"] = page_cursor
+
+        r = aspect_list.sync_detailed(**kwargs)
+        if r.status_code >= 300:
+            return process_error("find_collection_item", r)
+
+        parsed: AspectListRT = r.parsed
+        for el in parsed.items:
+            content_dict: dict = {}
+            if not isinstance(el.content, Unset):
+                content_dict = el.content.to_dict()
+            if content_dict.get("item") == item_urn:
+                return el.id
+
+        links = Links(parsed.links)
+        if links.next is None:
+            return None
+        page_cursor = links.next
 
 
 def add_item_to_collection(
@@ -472,6 +573,10 @@ def add_item_to_collection(
     that no active ``collection-item.1`` aspect already records this
     ``(collection, item)`` pair.  If found the call returns ``None`` (skip
     silently).  Otherwise a new aspect record is created with ``POST``.
+
+    Note: deduplication is performed client-side by scanning existing items
+    because the server-side ``content_path`` JSONPath filter is not reliably
+    supported on all deployments.
 
     Args:
         ivcap:          The IVCAP client instance.
@@ -491,22 +596,8 @@ def add_item_to_collection(
     if not item_urn:
         raise MissingParameterValue("Missing item URN")
 
-    # Dedup check — use JSONPath filter to avoid fetching full content.
-    dedup_path = f'$.item ? (@ == "{item_urn}")'
-    r = aspect_list.sync_detailed(
-        entity=collection_urn,
-        schema=COLLECTION_ITEM_SCHEMA,
-        content_path=dedup_path,
-        include_content=False,
-        limit=1,
-        client=ivcap._client,
-    )
-    if r.status_code >= 300:
-        return process_error("add_item_to_collection_check", r)
-
-    parsed: AspectListRT = r.parsed
-    if parsed.items:
-        # Already a member — skip silently.
+    # Dedup check — scan items client-side.
+    if _find_collection_item_id(ivcap, collection_urn, item_urn) is not None:
         return None
 
     # Create the membership aspect (POST — append, not replace).
@@ -558,25 +649,12 @@ def remove_item_from_collection(
     if not item_urn:
         raise MissingParameterValue("Missing item URN")
 
-    # Find the active membership aspect for this item.
-    find_path = f'$.item ? (@ == "{item_urn}")'
-    r = aspect_list.sync_detailed(
-        entity=collection_urn,
-        schema=COLLECTION_ITEM_SCHEMA,
-        content_path=find_path,
-        include_content=False,
-        limit=1,
-        client=ivcap._client,
-    )
-    if r.status_code >= 300:
-        return process_error("remove_item_from_collection_find", r)
-
-    parsed: AspectListRT = r.parsed
-    if not parsed.items:
+    # Find the active membership aspect for this item — scan client-side.
+    aspect_id = _find_collection_item_id(ivcap, collection_urn, item_urn)
+    if aspect_id is None:
         # Not a member — skip silently.
         return False
 
-    aspect_id = parsed.items[0].id
     r2 = aspect_retract.sync_detailed(aspect_id, client=ivcap._client)
     if r2.status_code >= 300:
         return process_error("remove_item_from_collection_retract", r2)

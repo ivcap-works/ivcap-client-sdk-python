@@ -192,7 +192,12 @@ class Collection:
     # Methods
     # ------------------------------------------------------------------
 
-    def add_item(self, item_urn: str) -> CollectionItem | None:
+    def add_item(
+        self,
+        item_urn: str,
+        *,
+        policy: URN | None = None,
+    ) -> CollectionItem | None:
         """Add an item to this collection with automatic deduplication.
 
         Checks whether *item_urn* is already a member before creating the
@@ -200,12 +205,14 @@ class Collection:
 
         Args:
             item_urn: URN of the entity to add.
+            policy:   Optional access policy URN for the membership aspect
+                      (``urn:ivcap:policy:…``).
 
         Returns:
             A :class:`CollectionItem` if the item was newly added, ``None``
             if it was already a member.
         """
-        return add_item_to_collection(self._ivcap, self.urn, item_urn)
+        return add_item_to_collection(self._ivcap, self.urn, item_urn, policy=policy)
 
     def remove_item(self, item_urn: str) -> bool:
         """Remove an item from this collection by retracting its membership aspect.
@@ -331,10 +338,15 @@ def create_collection(
     description: str | None = None,
     policy: URN | None = None,
 ) -> Collection:
-    """Create or update a collection definition using PUT (idempotent).
+    """Create or update a collection definition (idempotent).
 
-    Calling this on an already-existing collection URN **replaces** the
-    previous definition (name + description) without affecting its items.
+    Checks whether a ``collection.1`` aspect already exists for *urn*:
+
+    * If **not found** — issues a ``POST`` (create) to add the definition.
+    * If **found** — issues a ``PUT`` (update) to replace the definition.
+
+    This avoids the server-side "not authorised for method 'add'" error that
+    occurs when a plain PUT is sent for a collection that does not yet exist.
 
     Args:
         ivcap:       The IVCAP client instance.
@@ -361,8 +373,27 @@ def create_collection(
     if description:
         body["description"] = description
 
-    # PUT (is_update=True) ensures idempotency — re-running replaces the old def.
-    _add_update_aspect(ivcap, True, urn, body, schema=COLLECTION_SCHEMA, policy=policy)
+    # Check whether a collection definition already exists for this URN.
+    # Use POST (is_update=False) for new collections and PUT (is_update=True)
+    # for updates.  This avoids the server-side "not authorised for method
+    # 'add'" error that some deployments raise when a PUT is sent for a
+    # collection entity that does not yet have any aspects.
+    r = aspect_list.sync_detailed(
+        entity=urn,
+        schema=COLLECTION_SCHEMA,
+        include_content=False,
+        limit=1,
+        client=ivcap._client,
+    )
+    if r.status_code >= 300:
+        return process_error("create_collection_check", r)
+
+    parsed: AspectListRT = r.parsed
+    is_update = bool(parsed.items)
+
+    _add_update_aspect(
+        ivcap, is_update, urn, body, schema=COLLECTION_SCHEMA, policy=policy
+    )
 
     return Collection(ivcap, urn=urn, name=name, description=description)
 
@@ -465,6 +496,8 @@ def add_item_to_collection(
     ivcap: IVCAP,
     collection_urn: str,
     item_urn: str,
+    *,
+    policy: URN | None = None,
 ) -> CollectionItem | None:
     """Add an item to a collection with a prior deduplication check.
 
@@ -477,6 +510,8 @@ def add_item_to_collection(
         ivcap:          The IVCAP client instance.
         collection_urn: The collection entity URN.
         item_urn:       URN of the entity to add as a member.
+        policy:         Optional access policy URN for the membership aspect
+                        (``urn:ivcap:policy:…``).
 
     Returns:
         A :class:`CollectionItem` if the item was added, ``None`` if it
@@ -515,7 +550,7 @@ def add_item_to_collection(
         "item": item_urn,
     }
     aspect = _add_update_aspect(
-        ivcap, False, collection_urn, body, schema=COLLECTION_ITEM_SCHEMA
+        ivcap, False, collection_urn, body, schema=COLLECTION_ITEM_SCHEMA, policy=policy
     )
     return CollectionItem(
         id=aspect.id,

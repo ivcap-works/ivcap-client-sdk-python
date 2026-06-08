@@ -527,6 +527,10 @@ def add_item_to_collection(
         raise MissingParameterValue("Missing item URN")
 
     # Dedup check — use JSONPath filter to avoid fetching full content.
+    # Some deployments do not support JSONPath content_path filter expressions
+    # and return 5xx/EOF for such queries.  In that case we fall through to
+    # the POST rather than failing hard; the worst outcome is a duplicate
+    # membership aspect, which is benign.
     dedup_path = f'$.item ? (@ == "{item_urn}")'
     r = aspect_list.sync_detailed(
         entity=collection_urn,
@@ -536,13 +540,12 @@ def add_item_to_collection(
         limit=1,
         client=ivcap._client,
     )
-    if r.status_code >= 300:
-        return process_error("add_item_to_collection_check", r)
-
-    parsed: AspectListRT = r.parsed
-    if parsed.items:
-        # Already a member — skip silently.
-        return None
+    if r.status_code < 300:
+        parsed: AspectListRT = r.parsed
+        if parsed.items:
+            # Already a member — skip silently.
+            return None
+    # If the dedup check returned 4xx/5xx, fall through to POST.
 
     # Create the membership aspect (POST — append, not replace).
     body = {

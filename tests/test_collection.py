@@ -509,6 +509,35 @@ class TestAddItemToCollection:
         call_kwargs = mock_list.call_args[1]
         assert call_kwargs.get("include_content") is False
 
+    def test_proceeds_to_post_when_dedup_check_fails_with_5xx(self):
+        """If the dedup check returns 5xx (e.g. EOF / content_path not supported),
+        add_item_to_collection must fall through to POST rather than raising."""
+        ivcap = _ivcap()
+        # Simulate a 500 response from the dedup check
+        error_response = SimpleNamespace()
+        error_response.status_code = HTTPStatus(500)
+        error_response.parsed = None
+        mock_aspect = SimpleNamespace(
+            id=ASPECT_URN, entity=COLL_URN, schema=COLLECTION_ITEM_SCHEMA, content={}
+        )
+
+        with patch(
+            "ivcap_client.collection.aspect_list.sync_detailed",
+            return_value=error_response,
+        ):
+            with patch(
+                "ivcap_client.collection._add_update_aspect",
+                return_value=mock_aspect,
+            ) as mock_aua:
+                result = add_item_to_collection(ivcap, COLL_URN, ITEM_URN)
+
+        # Must have fallen through to POST despite the 500 dedup check
+        mock_aua.assert_called_once()
+        args = mock_aua.call_args
+        assert args[0][1] is False, "should still use POST (is_update=False)"
+        assert isinstance(result, CollectionItem)
+        assert result.item == ITEM_URN
+
 
 # ---------------------------------------------------------------------------
 # Collection.add_item — delegates to add_item_to_collection

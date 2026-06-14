@@ -29,6 +29,29 @@ Complete reference of all environment variables used by the IVCAP Client SDK.
 - **Description**: Your account URN. Some operations (e.g., listing secrets) require this.
 - **Example**: `urn:ivcap:account:a1b2c3d4-e5f6-...`
 
+## Local Mode Configuration
+
+### IVCAP_LOCAL_DIR
+- **Type**: String (filesystem path)
+- **Required**: No
+- **Default**: `./ivcap-artifacts`
+- **Description**: Root directory for local artifact storage when running in **local mode**
+  (i.e. when `IVCAP_URL` / `IVCAP_BASE_URL` are not set and `IVCAP.local()` /
+  `LocalIVCAP` is used).  All artifacts written via `upload_artifact()` are stored
+  under this directory.  The directory is created automatically on first use.
+- **Example**: `./output/artifacts`
+
+This variable is read by `IVCAP.local()` when no explicit `base_dir` argument is passed:
+
+```python
+# With IVCAP_LOCAL_DIR=./output/artifacts set:
+ivcap = IVCAP.local()          # base_dir → ./output/artifacts
+ivcap = IVCAP.local("./other") # base_dir → ./other  (explicit arg wins)
+```
+
+See [Local Mode vs Platform Mode](../guides/artifacts.md#local-mode-vs-platform-mode)
+for full usage details.
+
 ## Usage
 
 ### In a `.env` / `.dbg-env` file (recommended for development)

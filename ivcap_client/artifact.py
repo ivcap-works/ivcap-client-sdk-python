@@ -9,9 +9,12 @@ import base64
 import datetime
 import hashlib
 import io
+import logging
 import mimetypes
 import os
+import shutil
 import tempfile
+import uuid
 from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import datetime
@@ -19,6 +22,8 @@ from pathlib import Path
 from sys import maxsize as MAXSIZE
 from typing import IO, TYPE_CHECKING, BinaryIO
 from urllib.parse import urlparse
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from typing import Self
@@ -229,6 +234,126 @@ class LocalFileArtifact:
         if not mime_type:
             mime_type = "application/octet-stream"
         return mime_type
+
+    def __repr__(self) -> str:
+        return f"<LocalFileArtifact id={self.id}>"
+
+
+class LocalIVCAP:
+    """A filesystem-backed implementation of the IVCAP client interface for use
+    in local development and testing.  All artifacts are written under ``base_dir``.
+    No network calls are made.
+
+    This is the drop-in replacement for :class:`~ivcap_client.ivcap.IVCAP` when no
+    IVCAP platform URL is available — for example when running a service locally with
+    a test JSON file.
+
+    Use the factory method :meth:`~ivcap_client.ivcap.IVCAP.local` to obtain an
+    instance, or construct one directly:
+
+    .. code-block:: python
+
+        from ivcap_client import LocalIVCAP
+
+        ivcap = LocalIVCAP(base_dir="./my-artifacts")
+        artifact = ivcap.upload_artifact(name="report.txt", file_path="/tmp/report.txt")
+        print(artifact.id)  # urn:file:///abs/path/to/my-artifacts/report.txt
+
+    The root directory for local artifact storage can also be configured via the
+    ``IVCAP_LOCAL_DIR`` environment variable (default: ``./ivcap-artifacts``).
+    """
+
+    def __init__(self, base_dir: str | Path = "./ivcap-artifacts"):
+        """Create a new LocalIVCAP instance.
+
+        Args:
+            base_dir: Root directory under which all artifacts are stored.
+                Relative paths are resolved relative to the current working
+                directory at the time of the first upload.  The directory is
+                created on demand.  Defaults to ``./ivcap-artifacts``.
+        """
+        self._base_dir = Path(base_dir)
+
+    @property
+    def base_dir(self) -> Path:
+        """The root directory for local artifact storage."""
+        return self._base_dir
+
+    def upload_artifact(
+        self,
+        *,
+        name: str | None = None,
+        file_path: str | None = None,
+        io_stream: IO | None = None,
+        content_type: str | None = None,
+        content_size: int | None = -1,
+        collection: URN | None = None,
+        policy: URN | None = None,
+        **kwargs,
+    ) -> LocalFileArtifact:
+        """Write content to the local filesystem and return a :class:`LocalFileArtifact`.
+
+        The content is written to ``base_dir / name``.  Parent directories are
+        created automatically (``mkdir -p`` semantics).
+
+        Args:
+            name: Relative path under ``base_dir`` for the saved artifact.
+                May contain subdirectory components (e.g. ``"results/output.csv"``).
+                If ``None``, a UUID-based filename is generated (preserving the
+                source file extension when ``file_path`` is given).
+            file_path: Local source file to copy into ``base_dir``.
+            io_stream: Byte-stream (or text-stream) to write into ``base_dir``.
+                Provide either ``file_path`` or ``io_stream`` — not both.
+            content_type: Accepted for interface compatibility; ignored locally.
+            content_size: Accepted for interface compatibility; ignored locally.
+            collection: Accepted for interface compatibility; silently ignored.
+            policy: Accepted for interface compatibility; silently ignored.
+            **kwargs: Any additional keyword arguments are silently ignored so
+                that callers can pass platform-specific options without branching.
+
+        Returns:
+            LocalFileArtifact: A local-file artifact whose ``.id`` is
+            ``urn:file://<absolute_path>``.
+
+        Raises:
+            ValueError: If neither ``file_path`` nor ``io_stream`` is provided.
+        """
+        if not (file_path or io_stream):
+            raise ValueError("require either 'file_path' or 'io_stream'")
+
+        if name is None:
+            suffix = Path(file_path).suffix if file_path else ""
+            name = f"{uuid.uuid4()}{suffix}"
+
+        dest = self._base_dir / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+
+        if file_path:
+            shutil.copy2(file_path, dest)
+        else:
+            raw = io_stream.read()
+            if isinstance(raw, str):
+                dest.write_text(raw)
+            else:
+                dest.write_bytes(raw)
+
+        urn = f"urn:file://{dest.resolve()}"
+        logger.info("LocalIVCAP: written artifact '%s' → %s", name, dest)
+        return LocalFileArtifact(urn)
+
+    def get_artifact(self, id: str) -> LocalFileArtifact:
+        """Return a :class:`LocalFileArtifact` for the given local-file URN.
+
+        Args:
+            id: A ``file://`` or ``urn:file://`` URN pointing to a local file.
+
+        Returns:
+            LocalFileArtifact: The local file artifact.
+        """
+        return LocalFileArtifact(id)
+
+    def __repr__(self) -> str:
+        return f"<LocalIVCAP base_dir={self._base_dir}>"
 
 
 #### HELPER FUNCTIONS ####

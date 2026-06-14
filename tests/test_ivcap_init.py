@@ -125,3 +125,71 @@ def test_artifact_for_file_returns_none_when_not_uploaded(tmp_path):
     iv = IVCAP(url="http://example.com", token="tok")
     result = iv.artifact_for_file(str(f))
     assert result is None
+
+
+# ---------------------------------------------------------------------------
+# Auto-detection: IVCAP() falls back to LocalIVCAP when no URL is set
+# ---------------------------------------------------------------------------
+
+
+def test_ivcap_auto_detects_local_when_no_url(monkeypatch):
+    """IVCAP() with no URL env vars and no explicit token returns LocalIVCAP."""
+    from ivcap_client.artifact import LocalIVCAP
+
+    monkeypatch.delenv("IVCAP_URL", raising=False)
+    monkeypatch.delenv("IVCAP_BASE_URL", raising=False)
+    monkeypatch.delenv("IVCAP_LOCAL_DIR", raising=False)
+
+    ivcap = IVCAP()
+    assert isinstance(ivcap, LocalIVCAP)
+
+
+def test_ivcap_auto_detect_uses_ivcap_local_dir(monkeypatch, tmp_path):
+    """IVCAP() auto-detect respects IVCAP_LOCAL_DIR."""
+    from ivcap_client.artifact import LocalIVCAP
+
+    monkeypatch.delenv("IVCAP_URL", raising=False)
+    monkeypatch.delenv("IVCAP_BASE_URL", raising=False)
+    monkeypatch.setenv("IVCAP_LOCAL_DIR", str(tmp_path / "auto-dir"))
+
+    ivcap = IVCAP()
+    assert isinstance(ivcap, LocalIVCAP)
+    assert str(ivcap.base_dir) == str(tmp_path / "auto-dir")
+
+
+def test_ivcap_auto_detect_local_can_upload(monkeypatch, tmp_path):
+    """IVCAP() in auto-detect local mode can upload artifacts end-to-end."""
+    from ivcap_client.artifact import LocalFileArtifact
+
+    monkeypatch.delenv("IVCAP_URL", raising=False)
+    monkeypatch.delenv("IVCAP_BASE_URL", raising=False)
+    monkeypatch.setenv("IVCAP_LOCAL_DIR", str(tmp_path / "artifacts"))
+
+    src = tmp_path / "input.txt"
+    src.write_text("auto-detect content")
+
+    ivcap = IVCAP()
+    artifact = ivcap.upload_artifact(name="output.txt", file_path=str(src))
+    assert isinstance(artifact, LocalFileArtifact)
+    assert (tmp_path / "artifacts" / "output.txt").read_text() == "auto-detect content"
+
+
+def test_ivcap_with_explicit_token_and_no_url_still_raises(monkeypatch):
+    """Passing an explicit token signals platform intent — should still raise."""
+    monkeypatch.delenv("IVCAP_URL", raising=False)
+    monkeypatch.delenv("IVCAP_BASE_URL", raising=False)
+    with pytest.raises(ValueError, match="url"):
+        IVCAP(token="my-jwt")
+
+
+def test_ivcap_with_url_env_var_is_not_local(monkeypatch):
+    """When IVCAP_URL is set, IVCAP() must NOT return LocalIVCAP."""
+    from ivcap_client.artifact import LocalIVCAP
+
+    monkeypatch.setenv("IVCAP_URL", "http://example.com")
+    monkeypatch.setenv("IVCAP_JWT", "tok")
+    monkeypatch.delenv("IVCAP_BASE_URL", raising=False)
+
+    ivcap = IVCAP()
+    assert not isinstance(ivcap, LocalIVCAP)
+    assert isinstance(ivcap, IVCAP)

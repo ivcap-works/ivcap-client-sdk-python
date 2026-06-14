@@ -6,11 +6,14 @@
 
 from __future__ import annotations  # postpone evaluation of annotations
 
+import logging
 import os
 from collections.abc import Iterator
 from datetime import datetime
 from sys import maxsize as MAXSIZE
 from typing import IO, Any
+
+logger = logging.getLogger(__name__)
 
 from ivcap_client.agent import Agent
 from ivcap_client.api.search import search_search
@@ -18,6 +21,7 @@ from ivcap_client.artifact import (
     Artifact,
     ArtifactIter,
     LocalFileArtifact,
+    LocalIVCAP,
     check_file_already_uploaded,
 )
 from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
@@ -44,7 +48,61 @@ URN = str
 
 
 class IVCAP:
-    """A class to represent a particular IVCAP deployment and it's capabilities"""
+    """A class to represent a particular IVCAP deployment and it's capabilities.
+
+    When no platform URL is available (neither ``url`` argument nor ``IVCAP_URL``/
+    ``IVCAP_BASE_URL`` environment variables are set), ``IVCAP()`` transparently
+    returns a :class:`~ivcap_client.artifact.LocalIVCAP` instance instead.  This
+    means your code does not need to change between local development and deployed
+    operation — simply write ``ivcap = IVCAP()`` everywhere:
+
+    .. code-block:: python
+
+        from ivcap_client import IVCAP
+
+        ivcap = IVCAP()  # → LocalIVCAP locally, IVCAP on the platform
+        artifact = ivcap.upload_artifact(name="result.csv", file_path="/tmp/result.csv")
+
+    The local artifact root directory is controlled by the ``IVCAP_LOCAL_DIR``
+    environment variable (default: ``./ivcap-artifacts``).
+    """
+
+    def __new__(
+        cls,
+        url: str | None = None,
+        token: str | None = None,
+        account_id: str | None = None,
+    ):
+        """Auto-detect platform vs local mode.
+
+        The decision logic is:
+
+        1. If an explicit ``token`` is passed the caller clearly intends to
+           connect to a platform — return a normal ``IVCAP`` instance and let
+           ``__init__`` raise if the URL is also missing.
+        2. Otherwise, check for a platform URL (``url`` arg or ``IVCAP_URL`` /
+           ``IVCAP_BASE_URL`` env vars).  If one is found, return a normal
+           ``IVCAP`` instance.
+        3. If no URL and no explicit token — the environment is unambiguously
+           local.  Return a :class:`~ivcap_client.artifact.LocalIVCAP` backed
+           by ``IVCAP_LOCAL_DIR`` (default: ``./ivcap-artifacts``).
+        """
+        # Explicit token ⇒ platform intent; let __init__ handle validation.
+        if token is not None:
+            return super().__new__(cls)
+
+        effective_url = (
+            url or os.environ.get("IVCAP_URL") or os.environ.get("IVCAP_BASE_URL")
+        )
+        if not effective_url:
+            base_dir = os.environ.get("IVCAP_LOCAL_DIR", "./ivcap-artifacts")
+            logger.info(
+                "No IVCAP platform URL found — using local artifact storage at %r",
+                base_dir,
+            )
+            return LocalIVCAP(base_dir=base_dir)
+        # Normal platform instance — Python will call __init__ on this.
+        return super().__new__(cls)
 
     def __init__(
         self,
@@ -68,6 +126,8 @@ class IVCAP:
                 url = os.environ.get("IVCAP_BASE_URL")
                 inside_platform = url is not None
         if not url:
+            # This branch should not be reached in normal use because __new__
+            # would have returned a LocalIVCAP already, but guard defensively.
             raise ValueError(
                 "missing 'url' argument or environment variables 'IVCAP_URL' or 'IVCAP_BASE_URL' not set."
             )
@@ -686,6 +746,41 @@ class IVCAP:
         if r.status_code >= 300:
             return process_error("search", r)
         return r.parsed
+
+    @classmethod
+    def local(cls, base_dir: str | None = None) -> LocalIVCAP:
+        """Return a :class:`~ivcap_client.artifact.LocalIVCAP` instance for
+        filesystem-only (no-network) development and testing.
+
+        This is the preferred way to get a local-mode client when you do not
+        want to (or cannot) connect to an IVCAP platform deployment:
+
+        .. code-block:: python
+
+            from ivcap_client import IVCAP
+
+            ivcap = IVCAP.local(base_dir="./my-artifacts")
+            artifact = ivcap.upload_artifact(name="result.csv", file_path="/tmp/result.csv")
+
+        The ``base_dir`` can also be provided via the ``IVCAP_LOCAL_DIR``
+        environment variable.  Precedence (highest first):
+
+        1. The ``base_dir`` argument to this method.
+        2. The ``IVCAP_LOCAL_DIR`` environment variable.
+        3. The default ``"./ivcap-artifacts"``.
+
+        Args:
+            base_dir: Root directory for artifact storage.  Created on
+                demand.  Defaults to ``IVCAP_LOCAL_DIR`` env var, or
+                ``"./ivcap-artifacts"`` if neither is set.
+
+        Returns:
+            LocalIVCAP: A filesystem-backed client with the same
+            ``upload_artifact`` / ``get_artifact`` interface as :class:`IVCAP`.
+        """
+        if base_dir is None:
+            base_dir = os.environ.get("IVCAP_LOCAL_DIR", "./ivcap-artifacts")
+        return LocalIVCAP(base_dir=base_dir)
 
     @property
     def url(self) -> str:

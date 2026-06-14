@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#collections" class="md-skip">
+        <a href="#collections-implementation-guide" class="md-skip">
           Skip to content
         </a>
       
@@ -846,55 +846,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-is-a-collection" class="md-nav__link">
+  <a href="#1-concept-overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is a Collection?
+        1. Concept Overview
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#creating-a-collection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Creating a Collection
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#adding-items" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Adding Items
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Adding Items">
+    <nav class="md-nav" aria-label="1. Concept Overview">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#add-a-single-urn" class="md-nav__link">
+  <a href="#datafabric-semantics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Add a single URN
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#add-using-the-top-level-client" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Add using the top-level client
+        DataFabric semantics
       
     </span>
   </a>
@@ -907,33 +874,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#listing-items-in-a-collection" class="md-nav__link">
+  <a href="#2-data-models" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Listing Items in a Collection
+        2. Data Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Data Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-collection-definition-aspect-body" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Collection definition aspect body
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#listing-all-collections" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#22-collection-item-membership-aspect-body" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Listing All Collections
+        2.2 Collection-item membership aspect body
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Listing All Collections">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
-  <a href="#filter-by-name-jsonpath-expression" class="md-nav__link">
+  <a href="#23-aspectlistitemrt-aspect-list-response-item" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Filter by name (JSONPath expression)
+        2.3 AspectListItemRT — aspect list response item
       
     </span>
   </a>
@@ -946,22 +924,55 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#fetching-a-collection-by-urn" class="md-nav__link">
+  <a href="#3-api-operations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fetching a Collection by URN
+        3. API Operations
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Fetching a Collection by URN">
+    <nav class="md-nav" aria-label="3. API Operations">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#historical-snapshot" class="md-nav__link">
+  <a href="#31-list-aspects" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Historical snapshot
+        3.1 List aspects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-create-aspect-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Create aspect (POST)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-update-aspect-put" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Update aspect (PUT)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-retract-aspect-delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Retract aspect (DELETE)
       
     </span>
   </a>
@@ -974,22 +985,88 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#removing-items" class="md-nav__link">
+  <a href="#4-operation-specifications" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Removing Items
+        4. Operation Specifications
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Removing Items">
+    <nav class="md-nav" aria-label="4. Operation Specifications">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#via-the-top-level-client" class="md-nav__link">
+  <a href="#41-create_collectionurn-name-description-policy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Via the top-level client
+        4.1 create_collection(urn, name, description?, policy?)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-get_collectionurn-at_time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 get_collection(urn, at_time?)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-list_collectionsname_filter-limit-at_time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 list_collections(name_filter?, limit?, at_time?)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-add_item_to_collectioncollection_urn-item_urn-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 add_item_to_collection(collection_urn, item_urn, policy?)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-remove_item_from_collectioncollection_urn-item_urn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 remove_item_from_collection(collection_urn, item_urn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-list_collection_itemscollection_urn-limit-at_time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 list_collection_items(collection_urn, limit?, at_time?)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-retract_collectioncollection_urn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 retract_collection(collection_urn)
       
     </span>
   </a>
@@ -1002,10 +1079,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#retracting-an-entire-collection" class="md-nav__link">
+  <a href="#5-pagination" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Retracting an Entire Collection
+        5. Pagination
       
     </span>
   </a>
@@ -1013,10 +1090,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-model" class="md-nav__link">
+  <a href="#6-error-handling" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Data Model
+        6. Error Handling
       
     </span>
   </a>
@@ -1024,10 +1101,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#refreshing-a-collection-object" class="md-nav__link">
+  <a href="#7-complete-operation-call-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Refreshing a Collection Object
+        7. Complete Operation Call Reference
       
     </span>
   </a>
@@ -1035,10 +1112,60 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
+  <a href="#8-suggested-sdk-surface" class="md-nav__link">
     <span class="md-ellipsis">
       
-        See Also
+        8. Suggested SDK Surface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Suggested SDK Surface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-client-top-level-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Client / top-level methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-collection-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Collection object
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-collectionitem-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 CollectionItem object
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-key-invariants-test-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Key Invariants (test checklist)
       
     </span>
   </a>
@@ -1995,55 +2122,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-is-a-collection" class="md-nav__link">
+  <a href="#1-concept-overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is a Collection?
+        1. Concept Overview
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#creating-a-collection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Creating a Collection
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#adding-items" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Adding Items
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Adding Items">
+    <nav class="md-nav" aria-label="1. Concept Overview">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#add-a-single-urn" class="md-nav__link">
+  <a href="#datafabric-semantics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Add a single URN
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#add-using-the-top-level-client" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Add using the top-level client
+        DataFabric semantics
       
     </span>
   </a>
@@ -2056,33 +2150,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#listing-items-in-a-collection" class="md-nav__link">
+  <a href="#2-data-models" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Listing Items in a Collection
+        2. Data Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Data Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-collection-definition-aspect-body" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Collection definition aspect body
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#listing-all-collections" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#22-collection-item-membership-aspect-body" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Listing All Collections
+        2.2 Collection-item membership aspect body
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Listing All Collections">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
-  <a href="#filter-by-name-jsonpath-expression" class="md-nav__link">
+  <a href="#23-aspectlistitemrt-aspect-list-response-item" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Filter by name (JSONPath expression)
+        2.3 AspectListItemRT — aspect list response item
       
     </span>
   </a>
@@ -2095,22 +2200,55 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#fetching-a-collection-by-urn" class="md-nav__link">
+  <a href="#3-api-operations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fetching a Collection by URN
+        3. API Operations
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Fetching a Collection by URN">
+    <nav class="md-nav" aria-label="3. API Operations">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#historical-snapshot" class="md-nav__link">
+  <a href="#31-list-aspects" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Historical snapshot
+        3.1 List aspects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-create-aspect-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Create aspect (POST)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-update-aspect-put" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Update aspect (PUT)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-retract-aspect-delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Retract aspect (DELETE)
       
     </span>
   </a>
@@ -2123,22 +2261,88 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#removing-items" class="md-nav__link">
+  <a href="#4-operation-specifications" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Removing Items
+        4. Operation Specifications
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Removing Items">
+    <nav class="md-nav" aria-label="4. Operation Specifications">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#via-the-top-level-client" class="md-nav__link">
+  <a href="#41-create_collectionurn-name-description-policy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Via the top-level client
+        4.1 create_collection(urn, name, description?, policy?)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-get_collectionurn-at_time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 get_collection(urn, at_time?)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-list_collectionsname_filter-limit-at_time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 list_collections(name_filter?, limit?, at_time?)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-add_item_to_collectioncollection_urn-item_urn-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 add_item_to_collection(collection_urn, item_urn, policy?)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-remove_item_from_collectioncollection_urn-item_urn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 remove_item_from_collection(collection_urn, item_urn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-list_collection_itemscollection_urn-limit-at_time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 list_collection_items(collection_urn, limit?, at_time?)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-retract_collectioncollection_urn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 retract_collection(collection_urn)
       
     </span>
   </a>
@@ -2151,10 +2355,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#retracting-an-entire-collection" class="md-nav__link">
+  <a href="#5-pagination" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Retracting an Entire Collection
+        5. Pagination
       
     </span>
   </a>
@@ -2162,10 +2366,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-model" class="md-nav__link">
+  <a href="#6-error-handling" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Data Model
+        6. Error Handling
       
     </span>
   </a>
@@ -2173,10 +2377,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#refreshing-a-collection-object" class="md-nav__link">
+  <a href="#7-complete-operation-call-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Refreshing a Collection Object
+        7. Complete Operation Call Reference
       
     </span>
   </a>
@@ -2184,10 +2388,60 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
+  <a href="#8-suggested-sdk-surface" class="md-nav__link">
     <span class="md-ellipsis">
       
-        See Also
+        8. Suggested SDK Surface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Suggested SDK Surface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-client-top-level-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Client / top-level methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-collection-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Collection object
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-collectionitem-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 CollectionItem object
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-key-invariants-test-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Key Invariants (test checklist)
       
     </span>
   </a>
@@ -2214,14 +2468,17 @@
   
 
 
-<h1 id="collections">Collections<a class="headerlink" href="#collections" title="Permanent link">&para;</a></h1>
-<p>This guide explains how to create and manage <strong>collections</strong> — named, described
-groupings of entities — using the IVCAP Python SDK.</p>
-<h2 id="what-is-a-collection">What is a Collection?<a class="headerlink" href="#what-is-a-collection" title="Permanent link">&para;</a></h2>
-<p>A <strong>collection</strong> is a virtual resource that groups any set of IVCAP entity URNs
-(most commonly artifacts) under a human-readable name and optional description.</p>
-<p>Collections are implemented entirely through the <strong>DataFabric aspect store</strong> — there
-is no separate REST endpoint. Two aspect schemas govern the feature:</p>
+<h1 id="collections-implementation-guide">Collections — Implementation Guide<a class="headerlink" href="#collections-implementation-guide" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Audience:</strong> SDK implementors porting the IVCAP collection/item feature to a different language.
+This document describes the semantics, REST calls, and behavioural contracts that the Python SDK implements.</p>
+</blockquote>
+<hr />
+<h2 id="1-concept-overview">1. Concept Overview<a class="headerlink" href="#1-concept-overview" title="Permanent link">&para;</a></h2>
+<p>A <strong>collection</strong> is a named, described grouping of entities (typically artifact URNs, but any valid IVCAP URN is accepted).</p>
+<p>Collections are <strong>not</strong> a first-class REST resource.  There is <strong>no</strong> dedicated <code>/collections</code> endpoint.
+Instead, the feature is implemented entirely on top of the <strong>DataFabric aspect store</strong> (<code>/1/aspects</code>).
+Two well-known schemas govern the feature:</p>
 <table>
 <thead>
 <tr>
@@ -2232,145 +2489,630 @@ is no separate REST endpoint. Two aspect schemas govern the feature:</p>
 <tbody>
 <tr>
 <td><code>urn:ivcap:schema:collection.1</code></td>
-<td>Collection definition (name + description)</td>
+<td>Collection <strong>definition</strong> (name + optional description)</td>
 </tr>
 <tr>
 <td><code>urn:ivcap:schema:collection-item.1</code></td>
-<td>One membership record per item</td>
+<td>Membership <strong>record</strong> — one aspect per item</td>
 </tr>
 </tbody>
 </table>
-<p>Both aspect types are attached to the <strong>collection entity URN</strong> — i.e. the URN you
-choose to represent the collection is used as the <code>entity</code> field for all aspect
-operations.</p>
-<h2 id="creating-a-collection">Creating a Collection<a class="headerlink" href="#creating-a-collection" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">coll</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">create_collection</span><span class="p">(</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="s2">&quot;urn:ivcap:collection:my-ocean-survey&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Ocean CTD Survey&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;CTD casts from voyage V2025-03&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">coll</span><span class="p">)</span>  <span class="c1"># &lt;Collection urn=&#39;urn:ivcap:collection:my-ocean-survey&#39;, name=&#39;Ocean CTD Survey&#39;&gt;</span>
+<p>Both schema types are attached to the <strong>same entity URN</strong> — the URN the client chose to identify the collection (e.g. <code>urn:ivcap:collection:&lt;uuid&gt;</code>).</p>
+<pre class="mermaid"><code>flowchart LR
+    C["Collection entity URN\nurn:ivcap:collection:&amp;lt;uuid&amp;gt;"]
+    D["collection.1 aspect\n{ name, description }"]
+    I1["collection-item.1 aspect\n{ collection, item: URN-A }"]
+    I2["collection-item.1 aspect\n{ collection, item: URN-B }"]
+    C --&gt;|entity| D
+    C --&gt;|entity| I1
+    C --&gt;|entity| I2</code></pre>
+<h3 id="datafabric-semantics">DataFabric semantics<a class="headerlink" href="#datafabric-semantics" title="Permanent link">&para;</a></h3>
+<p>The aspect store is <strong>append-only with temporal versioning</strong>:</p>
+<ul>
+<li><code>POST /1/aspects</code> — create a <strong>new</strong> aspect record (multiple records with the same <code>entity+schema</code> are allowed — used for membership records).</li>
+<li><code>PUT /1/aspects</code> — <strong>replace</strong> the most-recent active aspect for a given <code>entity+schema</code> pair (used to update the collection definition).</li>
+<li><code>DELETE /1/aspects/&lt;id&gt;</code> — <strong>retract</strong> a specific aspect record (marks it inactive; the record is never deleted).</li>
+<li><code>GET /1/aspects</code> — list aspects, filterable by <code>entity</code>, <code>schema</code>, <code>content-path</code> (JSONPath), <code>at-time</code>, <code>limit</code>, <code>page</code>.</li>
+</ul>
+<hr />
+<h2 id="2-data-models">2. Data Models<a class="headerlink" href="#2-data-models" title="Permanent link">&para;</a></h2>
+<h3 id="21-collection-definition-aspect-body">2.1 Collection definition aspect body<a class="headerlink" href="#21-collection-definition-aspect-body" title="Permanent link">&para;</a></h3>
+<p>Stored as the body of a <code>urn:ivcap:schema:collection.1</code> aspect attached to the collection entity URN.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;urn:ivcap:schema:collection.1&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;$entity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;urn:ivcap:collection:&lt;uuid&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ocean CTD Survey&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CTD casts from voyage V2025-03&quot;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
 </code></pre></div>
-<p><code>create_collection</code> uses a DataFabric <strong>PUT</strong> (idempotent update), so calling it
-again on an existing URN simply replaces the name/description without touching
-the membership records.</p>
-<div class="admonition tip">
-<p class="admonition-title">Collection URN format</p>
-<p>The collection URN must be a valid IVCAP URN. A common pattern is
-<code>urn:ivcap:collection:&lt;uuid&gt;</code> — use <code>uuid.uuid4()</code> to generate a fresh one.</p>
-</div>
-<h2 id="adding-items">Adding Items<a class="headerlink" href="#adding-items" title="Permanent link">&para;</a></h2>
-<h3 id="add-a-single-urn">Add a single URN<a class="headerlink" href="#add-a-single-urn" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">item</span> <span class="o">=</span> <span class="n">coll</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:artifact:22222222-...&quot;</span><span class="p">)</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Already a member — skipped&quot;</span><span class="p">)</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added, membership aspect id: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$schema</code></td>
+<td>string (URN)</td>
+<td>yes</td>
+<td>Always <code>urn:ivcap:schema:collection.1</code></td>
+</tr>
+<tr>
+<td><code>$entity</code></td>
+<td>string (URN)</td>
+<td>yes</td>
+<td>The collection entity URN</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>yes</td>
+<td>Human-readable name</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string</td>
+<td>no</td>
+<td>Optional free-text description</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-collection-item-membership-aspect-body">2.2 Collection-item membership aspect body<a class="headerlink" href="#22-collection-item-membership-aspect-body" title="Permanent link">&para;</a></h3>
+<p>Stored as the body of a <code>urn:ivcap:schema:collection-item.1</code> aspect, also attached to the collection entity URN.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;urn:ivcap:schema:collection-item.1&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;$entity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;urn:ivcap:collection:&lt;uuid&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;collection&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;urn:ivcap:collection:&lt;uuid&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;item&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;urn:ivcap:artifact:&lt;item-uuid&gt;&quot;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">}</span>
 </code></pre></div>
-<p>Each call performs a <strong>deduplication check</strong> (a server-side JSONPath filter) before
-creating the membership aspect with <code>POST</code>.  If the item is already a member,
-<code>add_item</code> returns <code>None</code> silently.</p>
-<h3 id="add-using-the-top-level-client">Add using the top-level client<a class="headerlink" href="#add-using-the-top-level-client" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">ivcap</span><span class="o">.</span><span class="n">add_to_collection</span><span class="p">(</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="s2">&quot;urn:ivcap:collection:my-ocean-survey&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="s2">&quot;urn:ivcap:artifact:33333333-...&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">)</span>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$schema</code></td>
+<td>string (URN)</td>
+<td>yes</td>
+<td>Always <code>urn:ivcap:schema:collection-item.1</code></td>
+</tr>
+<tr>
+<td><code>$entity</code></td>
+<td>string (URN)</td>
+<td>yes</td>
+<td>The <strong>collection</strong> entity URN (not the item URN)</td>
+</tr>
+<tr>
+<td><code>collection</code></td>
+<td>string (URN)</td>
+<td>yes</td>
+<td>Same as <code>$entity</code> — the collection the item belongs to</td>
+</tr>
+<tr>
+<td><code>item</code></td>
+<td>string (URN)</td>
+<td>yes</td>
+<td>URN of the entity being added as a member</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-aspectlistitemrt-aspect-list-response-item">2.3 AspectListItemRT — aspect list response item<a class="headerlink" href="#23-aspectlistitemrt-aspect-list-response-item" title="Permanent link">&para;</a></h3>
+<p>The <code>GET /1/aspects</code> endpoint returns a list of items.  The fields used by the collection feature are:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>string (URN)</td>
+<td>Aspect record URN — needed for <code>DELETE /1/aspects/&lt;id&gt;</code></td>
+</tr>
+<tr>
+<td><code>entity</code></td>
+<td>string (URN)</td>
+<td>The entity the aspect is attached to</td>
+</tr>
+<tr>
+<td><code>schema</code></td>
+<td>string (URN)</td>
+<td>The aspect schema URN</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>object</td>
+<td>Aspect body (present when <code>include-content=true</code>)</td>
+</tr>
+<tr>
+<td><code>valid_from</code></td>
+<td>datetime</td>
+<td>When this record became active</td>
+</tr>
+<tr>
+<td><code>valid_to</code></td>
+<td>datetime | null</td>
+<td>When this record was retracted (<code>null</code> = still active)</td>
+</tr>
+</tbody>
+</table>
+<p>Pagination is handled via a <code>links</code> field on the response.  The <code>next</code> link (if present) carries the <code>page</code> cursor for the next request.</p>
+<hr />
+<h2 id="3-api-operations">3. API Operations<a class="headerlink" href="#3-api-operations" title="Permanent link">&para;</a></h2>
+<p>All calls go to the single aspects endpoint: <strong><code>/1/aspects</code></strong> (list/create) or <strong><code>/1/aspects/&lt;id&gt;</code></strong> (read/update/retract).</p>
+<h3 id="31-list-aspects">3.1 List aspects<a class="headerlink" href="#31-list-aspects" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>GET /1/aspects
 </code></pre></div>
-<h2 id="listing-items-in-a-collection">Listing Items in a Collection<a class="headerlink" href="#listing-items-in-a-collection" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">for</span> <span class="n">ci</span> <span class="ow">in</span> <span class="n">coll</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">ci</span><span class="o">.</span><span class="n">item</span><span class="p">,</span> <span class="n">ci</span><span class="o">.</span><span class="n">collection</span><span class="p">)</span>
+<p>Query parameters used by the collection feature:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>entity</code></td>
+<td>string</td>
+<td>Filter by entity URN</td>
+</tr>
+<tr>
+<td><code>schema</code></td>
+<td>string</td>
+<td>Filter by schema URN (exact match or prefix with <code>%</code>)</td>
+</tr>
+<tr>
+<td><code>content-path</code></td>
+<td>string</td>
+<td>JSONPath filter expression applied to aspect body</td>
+</tr>
+<tr>
+<td><code>at-time</code></td>
+<td>ISO 8601 datetime</td>
+<td>Return aspects that were active at this timestamp</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>int</td>
+<td>Maximum number of results (default 10)</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>string</td>
+<td>Opaque pagination cursor</td>
+</tr>
+<tr>
+<td><code>include-content</code></td>
+<td>bool</td>
+<td>When <code>true</code>, include aspect body in each item</td>
+</tr>
+</tbody>
+</table>
+<p>Response (200 OK):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="cm">/* AspectListItemRT[] */</span><span class="w"> </span><span class="p">],</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;links&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;next&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;cursor&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;self&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">}</span>
+</code></pre></div></p>
+<h3 id="32-create-aspect-post">3.2 Create aspect (POST)<a class="headerlink" href="#32-create-aspect-post" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>POST /1/aspects
 </code></pre></div>
-<p><code>items()</code> returns a paginated iterator of <a href="../../api/collection/"><code>CollectionItem</code></a>
-records.</p>
-<h2 id="listing-all-collections">Listing All Collections<a class="headerlink" href="#listing-all-collections" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_collections</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">urn</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+<p>Headers: <code>Content-Type: application/json</code></p>
+<p>Query parameters:
+- <code>entity</code> — entity URN
+- <code>schema</code> — schema URN
+- <code>policy</code> — (optional) access policy URN</p>
+<p>Body: the aspect object (must include <code>$schema</code> and <code>$entity</code>).</p>
+<p>Response: 201 Created with <code>AspectIDRT</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;urn:ivcap:aspect:&lt;uuid&gt;&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div></p>
+<h3 id="33-update-aspect-put">3.3 Update aspect (PUT)<a class="headerlink" href="#33-update-aspect-put" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>PUT /1/aspects
 </code></pre></div>
-<h3 id="filter-by-name-jsonpath-expression">Filter by name (JSONPath expression)<a class="headerlink" href="#filter-by-name-jsonpath-expression" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Exact match</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_collections</span><span class="p">(</span><span class="n">name_filter</span><span class="o">=</span><span class="s1">&#39;== &quot;Ocean CTD Survey&quot;&#39;</span><span class="p">):</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">urn</span><span class="p">)</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># Prefix match</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_collections</span><span class="p">(</span><span class="n">name_filter</span><span class="o">=</span><span class="s1">&#39;starts with &quot;Ocean&quot;&#39;</span><span class="p">):</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">urn</span><span class="p">)</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="c1"># Case-insensitive regex</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_collections</span><span class="p">(</span><span class="n">name_filter</span><span class="o">=</span><span class="s1">&#39;like_regex &quot;.*ocean.*&quot; flag &quot;i&quot;&#39;</span><span class="p">):</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">urn</span><span class="p">)</span>
+<p>Same headers, query parameters, and body shape as POST.
+Semantics: retracts the currently active aspect for this <code>entity+schema</code> pair and creates a new one atomically.</p>
+<p>Response: 200 OK with <code>AspectIDRT</code>.</p>
+<h3 id="34-retract-aspect-delete">3.4 Retract aspect (DELETE)<a class="headerlink" href="#34-retract-aspect-delete" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>DELETE /1/aspects/&lt;aspect-id&gt;
 </code></pre></div>
-<p>The <code>name_filter</code> expression is wrapped as <code>$.name ? (@ &lt;expr&gt;)</code> before being
-sent to the server as a PostgreSQL JSONPath <code>content_path</code> filter.</p>
-<h2 id="fetching-a-collection-by-urn">Fetching a Collection by URN<a class="headerlink" href="#fetching-a-collection-by-urn" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">coll</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_collection</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:collection:my-ocean-survey&quot;</span><span class="p">)</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">coll</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">coll</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">coll</span><span class="o">.</span><span class="n">asserter</span><span class="p">,</span> <span class="n">coll</span><span class="o">.</span><span class="n">valid_from</span><span class="p">)</span>
+<p>Response: 204 No Content on success.</p>
+<hr />
+<h2 id="4-operation-specifications">4. Operation Specifications<a class="headerlink" href="#4-operation-specifications" title="Permanent link">&para;</a></h2>
+<p>The following pseudo-code describes each operation in language-agnostic terms.</p>
+<h3 id="41-create_collectionurn-name-description-policy">4.1 <code>create_collection(urn, name, description?, policy?)</code><a class="headerlink" href="#41-create_collectionurn-name-description-policy" title="Permanent link">&para;</a></h3>
+<p>Create or idempotently update a collection definition.</p>
+<p><strong>Why check first?</strong>
+Some IVCAP deployments reject a bare <code>PUT</code> for an entity that has no existing aspects ("not authorised for method 'add'").  The check-then-create/update pattern avoids this.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>function create_collection(urn, name, description, policy):
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    validate: urn must be non-empty
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    validate: name must be non-empty
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    # Step 1 — check whether a definition already exists
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    response = GET /1/aspects
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>        entity        = urn
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>        schema        = &quot;urn:ivcap:schema:collection.1&quot;
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>        include-content = false
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>        limit         = 1
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    if response.items is non-empty:
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>        is_update = true   # entity already has a definition → PUT
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    else:
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>        is_update = false  # brand-new collection → POST
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>    # Step 2 — create or update the definition
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>    body = {
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>        &quot;$schema&quot;: &quot;urn:ivcap:schema:collection.1&quot;,
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>        &quot;$entity&quot;: urn,
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>        &quot;name&quot;: name
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>    }
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>    if description is provided:
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>        body[&quot;description&quot;] = description
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>    if is_update:
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a>        PUT /1/aspects?entity=urn&amp;schema=urn:ivcap:schema:collection.1[&amp;policy=...]  body=body
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a>    else:
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a>        POST /1/aspects?entity=urn&amp;schema=urn:ivcap:schema:collection.1[&amp;policy=...] body=body
+<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a>
+<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a>    return Collection(urn=urn, name=name, description=description)
 </code></pre></div>
-<p>Raises <code>ResourceNotFound</code> if the collection does not exist.</p>
-<h3 id="historical-snapshot">Historical snapshot<a class="headerlink" href="#historical-snapshot" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">past</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">coll</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_collection</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:collection:...&quot;</span><span class="p">,</span> <span class="n">at_time</span><span class="o">=</span><span class="n">past</span><span class="p">)</span>
+<h3 id="42-get_collectionurn-at_time">4.2 <code>get_collection(urn, at_time?)</code><a class="headerlink" href="#42-get_collectionurn-at_time" title="Permanent link">&para;</a></h3>
+<p>Fetch a collection definition.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>function get_collection(urn, at_time):
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    response = GET /1/aspects
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>        entity          = urn
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        schema          = &quot;urn:ivcap:schema:collection.1&quot;
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>        include-content = true
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        limit           = 2         # 2 to detect unexpected duplicates
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>        [at-time        = at_time]  # omit if not provided
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    if response.items is empty:
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>        raise ResourceNotFound(urn)
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    item = response.items[0]
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>    return Collection(
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>        urn         = item.entity,
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>        name        = item.content[&quot;name&quot;],
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>        description = item.content.get(&quot;description&quot;),
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>        asserter    = item.additional_properties.get(&quot;asserter&quot;),
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>        valid_from  = item.valid_from,
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>        valid_to    = item.valid_to,
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>    )
 </code></pre></div>
-<h2 id="removing-items">Removing Items<a class="headerlink" href="#removing-items" title="Permanent link">&para;</a></h2>
-<p>Remove a single item by retracting its membership aspect:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">was_removed</span> <span class="o">=</span> <span class="n">coll</span><span class="o">.</span><span class="n">remove_item</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:artifact:22222222-...&quot;</span><span class="p">)</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">was_removed</span><span class="p">)</span>  <span class="c1"># True if retracted, False if it was not a member</span>
+<h3 id="43-list_collectionsname_filter-limit-at_time">4.3 <code>list_collections(name_filter?, limit?, at_time?)</code><a class="headerlink" href="#43-list_collectionsname_filter-limit-at_time" title="Permanent link">&para;</a></h3>
+<p>Return a paginated iterator over all collection definitions.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>function list_collections(name_filter, limit, at_time):
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    content_path = UNSET
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    if name_filter is provided:
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>        # name_filter is a JSONPath comparison operator expression,
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        # e.g. &#39;== &quot;Ocean Survey&quot;&#39; or &#39;starts with &quot;CTD&quot;&#39;
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>        content_path = &#39;$.name ? (@ &#39; + name_filter + &#39;)&#39;
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>    # Paginate lazily — yield items across pages until limit reached
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    # or no more pages
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>    page_cursor = UNSET
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>    items_yielded = 0
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>    while true:
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>        response = GET /1/aspects
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>            schema          = &quot;urn:ivcap:schema:collection.1&quot;
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>            include-content = true
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>            limit           = min(limit - items_yielded, page_size)
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>            [at-time        = at_time]
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>            [content-path   = content_path]
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>            [page           = page_cursor]
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>        for item in response.items:
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>            yield Collection from item
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>            items_yielded += 1
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>            if items_yielded &gt;= limit: return
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>        if response.links.next is absent: return
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>        page_cursor = response.links.next
 </code></pre></div>
-<p>Items that are not currently members are <strong>silently skipped</strong> (returns <code>False</code>).</p>
-<h3 id="via-the-top-level-client">Via the top-level client<a class="headerlink" href="#via-the-top-level-client" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">ivcap</span><span class="o">.</span><span class="n">remove_from_collection</span><span class="p">(</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="s2">&quot;urn:ivcap:collection:my-ocean-survey&quot;</span><span class="p">,</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="s2">&quot;urn:ivcap:artifact:22222222-...&quot;</span><span class="p">,</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">)</span>
+<p><strong>Name filter examples:</strong></p>
+<table>
+<thead>
+<tr>
+<th><code>name_filter</code> argument</th>
+<th>Resulting <code>content-path</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>'== "Ocean Survey"'</code></td>
+<td><code>$.name ? (@ == "Ocean Survey")</code></td>
+</tr>
+<tr>
+<td><code>'starts with "CTD"'</code></td>
+<td><code>$.name ? (@ starts with "CTD")</code></td>
+</tr>
+<tr>
+<td><code>'like_regex ".*ocean.*" flag "i"'</code></td>
+<td><code>$.name ? (@ like_regex ".*ocean.*" flag "i")</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="44-add_item_to_collectioncollection_urn-item_urn-policy">4.4 <code>add_item_to_collection(collection_urn, item_urn, policy?)</code><a class="headerlink" href="#44-add_item_to_collectioncollection_urn-item_urn-policy" title="Permanent link">&para;</a></h3>
+<p>Add an item to a collection with automatic deduplication.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>function add_item_to_collection(collection_urn, item_urn, policy):
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    validate: collection_urn must be non-empty
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    validate: item_urn must be non-empty
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    # Step 1 — dedup check (best-effort)
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    dedup_path = &#39;$.item ? (@ == &quot;&#39; + item_urn + &#39;&quot;)&#39;
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>    dedup_response = GET /1/aspects
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>        entity          = collection_urn
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>        schema          = &quot;urn:ivcap:schema:collection-item.1&quot;
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>        content-path    = dedup_path
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>        include-content = false
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>        limit           = 1
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>    if dedup_response.status == 2xx AND dedup_response.items is non-empty:
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>        return null   # already a member — skip silently
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>    # NOTE: if the dedup check returns 4xx/5xx (e.g. content-path not
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>    # supported by this deployment), fall through to POST rather than
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>    # raising an error.  A duplicate membership aspect is harmless.
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>    # Step 2 — create the membership aspect (always POST — never PUT)
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>    body = {
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>        &quot;$schema&quot;: &quot;urn:ivcap:schema:collection-item.1&quot;,
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>        &quot;$entity&quot;: collection_urn,
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>        &quot;collection&quot;: collection_urn,
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a>        &quot;item&quot;: item_urn,
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a>    }
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a>    response = POST /1/aspects
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>        entity = collection_urn
+<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a>        schema = &quot;urn:ivcap:schema:collection-item.1&quot;
+<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a>        [policy = policy]
+<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a>        body = body
+<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a>
+<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a>    return CollectionItem(
+<a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a>        id         = response.id,
+<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a>        collection = collection_urn,
+<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a>        item       = item_urn,
+<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a>    )
 </code></pre></div>
-<h2 id="retracting-an-entire-collection">Retracting an Entire Collection<a class="headerlink" href="#retracting-an-entire-collection" title="Permanent link">&para;</a></h2>
-<p>Retract all membership records and then the definition itself:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">total</span> <span class="o">=</span> <span class="n">coll</span><span class="o">.</span><span class="n">retract</span><span class="p">()</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retracted </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2"> aspect records&quot;</span><span class="p">)</span>  <span class="c1"># items + 1 definition</span>
+<h3 id="45-remove_item_from_collectioncollection_urn-item_urn">4.5 <code>remove_item_from_collection(collection_urn, item_urn)</code><a class="headerlink" href="#45-remove_item_from_collectioncollection_urn-item_urn" title="Permanent link">&para;</a></h3>
+<p>Remove an item from a collection by retracting its membership aspect.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>function remove_item_from_collection(collection_urn, item_urn):
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    validate: collection_urn must be non-empty
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    validate: item_urn must be non-empty
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    # Step 1 — find the active membership aspect for this item
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    find_path = &#39;$.item ? (@ == &quot;&#39; + item_urn + &#39;&quot;)&#39;
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    find_response = GET /1/aspects
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>        entity          = collection_urn
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>        schema          = &quot;urn:ivcap:schema:collection-item.1&quot;
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>        content-path    = find_path
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>        include-content = false
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>        limit           = 1
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>    if find_response.items is empty:
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>        return false    # not a member — skip silently
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>    aspect_id = find_response.items[0].id
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>    # Step 2 — retract the membership aspect
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>    DELETE /1/aspects/&lt;aspect_id&gt;
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>    return true
 </code></pre></div>
-<p>Or equivalently:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">total</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">retract_collection</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:collection:my-ocean-survey&quot;</span><span class="p">)</span>
+<h3 id="46-list_collection_itemscollection_urn-limit-at_time">4.6 <code>list_collection_items(collection_urn, limit?, at_time?)</code><a class="headerlink" href="#46-list_collection_itemscollection_urn-limit-at_time" title="Permanent link">&para;</a></h3>
+<p>Return a paginated iterator over all items belonging to a collection.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>function list_collection_items(collection_urn, limit, at_time):
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    # Paginate lazily — same pattern as list_collections
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    page_cursor = UNSET
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    items_yielded = 0
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    while true:
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>        response = GET /1/aspects
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>            entity          = collection_urn
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>            schema          = &quot;urn:ivcap:schema:collection-item.1&quot;
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>            include-content = true
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>            limit           = min(limit - items_yielded, page_size)
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>            [at-time        = at_time]
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>            [page           = page_cursor]
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>        for item in response.items:
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>            content = item.content or {}
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>            yield CollectionItem(
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>                id         = item.id,
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>                collection = content.get(&quot;collection&quot;) or item.entity,
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>                item       = content[&quot;item&quot;],
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>                valid_from = item.valid_from,
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>                valid_to   = item.valid_to,
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a>            )
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a>            items_yielded += 1
+<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a>            if items_yielded &gt;= limit: return
+<a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a>
+<a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a>        if response.links.next is absent: return
+<a id="__codelineno-13-28" name="__codelineno-13-28" href="#__codelineno-13-28"></a>        page_cursor = response.links.next
 </code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">This operation cannot be undone</p>
-<p>Like all DataFabric operations, retraction leaves inactive records behind
-(the store is append-only).  The collection simply becomes invisible to
-normal queries.  Items <em>can</em> be re-added later by calling <code>add_item</code> or
-<code>add_to_collection</code> again.</p>
-</div>
-<h2 id="data-model">Data Model<a class="headerlink" href="#data-model" title="Permanent link">&para;</a></h2>
+<h3 id="47-retract_collectioncollection_urn">4.7 <code>retract_collection(collection_urn)</code><a class="headerlink" href="#47-retract_collectioncollection_urn" title="Permanent link">&para;</a></h3>
+<p>Fully retract a collection and all its membership records (two-phase).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>function retract_collection(collection_urn):
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    validate: collection_urn must be non-empty
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    retracted = 0
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    # Phase 1 — retract all collection-item.1 membership aspects (paginated)
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>    page_cursor = UNSET
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    while true:
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>        response = GET /1/aspects
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>            entity          = collection_urn
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>            schema          = &quot;urn:ivcap:schema:collection-item.1&quot;
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>            include-content = false
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>            limit           = 50
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>            [page           = page_cursor]
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>        for item in response.items:
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>            DELETE /1/aspects/&lt;item.id&gt;
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>            retracted += 1
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>        if response.links.next is absent: break
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a>        page_cursor = response.links.next
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a>
+<a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a>    # Phase 2 — retract the collection.1 definition aspect
+<a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a>    def_response = GET /1/aspects
+<a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a>        entity          = collection_urn
+<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a>        schema          = &quot;urn:ivcap:schema:collection.1&quot;
+<a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a>        include-content = false
+<a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a>        limit           = 1
+<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a>
+<a id="__codelineno-14-29" name="__codelineno-14-29" href="#__codelineno-14-29"></a>    if def_response.items is empty:
+<a id="__codelineno-14-30" name="__codelineno-14-30" href="#__codelineno-14-30"></a>        raise ResourceNotFound(collection_urn)
+<a id="__codelineno-14-31" name="__codelineno-14-31" href="#__codelineno-14-31"></a>
+<a id="__codelineno-14-32" name="__codelineno-14-32" href="#__codelineno-14-32"></a>    DELETE /1/aspects/&lt;def_response.items[0].id&gt;
+<a id="__codelineno-14-33" name="__codelineno-14-33" href="#__codelineno-14-33"></a>    retracted += 1
+<a id="__codelineno-14-34" name="__codelineno-14-34" href="#__codelineno-14-34"></a>
+<a id="__codelineno-14-35" name="__codelineno-14-35" href="#__codelineno-14-35"></a>    return retracted   # total aspect records retracted
+</code></pre></div>
+<hr />
+<h2 id="5-pagination">5. Pagination<a class="headerlink" href="#5-pagination" title="Permanent link">&para;</a></h2>
+<p>The aspect list endpoint uses <strong>cursor-based pagination</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>GET /1/aspects?schema=urn:ivcap:schema:collection.1&amp;limit=10
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>→ { &quot;items&quot;: [...], &quot;links&quot;: { &quot;next&quot;: &quot;&lt;cursor&gt;&quot;, &quot;self&quot;: &quot;...&quot; } }
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>GET /1/aspects?schema=urn:ivcap:schema:collection.1&amp;limit=10&amp;page=&lt;cursor&gt;
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>→ next page ...
+</code></pre></div>
+<ul>
+<li>The <code>links</code> object may be absent or <code>null</code> — treat as no further pages.</li>
+<li><code>links.next</code> is an opaque string cursor; pass it verbatim as the <code>page</code> query parameter.</li>
+<li>When the <code>next</code> key is absent or <code>null</code>, there are no more pages.</li>
+</ul>
+<hr />
+<h2 id="6-error-handling">6. Error Handling<a class="headerlink" href="#6-error-handling" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Recommended behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /1/aspects</code> returns empty items for <code>get_collection</code></td>
+<td>Raise / return <code>ResourceNotFound</code></td>
+</tr>
+<tr>
+<td><code>GET /1/aspects</code> returns empty items for <code>remove_item_from_collection</code></td>
+<td>Return <code>false</code> (silent no-op)</td>
+</tr>
+<tr>
+<td>Dedup check in <code>add_item_to_collection</code> returns 4xx/5xx</td>
+<td><strong>Fall through to POST</strong> — do not raise; the duplicate membership aspect is benign</td>
+</tr>
+<tr>
+<td>Any other non-2xx response</td>
+<td>Raise an appropriate HTTP / server error</td>
+</tr>
+<tr>
+<td><code>retract_collection</code> cannot find the definition aspect</td>
+<td>Raise <code>ResourceNotFound</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-complete-operation-call-reference">7. Complete Operation Call Reference<a class="headerlink" href="#7-complete-operation-call-reference" title="Permanent link">&para;</a></h2>
+<p>The table below summarises every HTTP call made by each SDK operation.</p>
 <pre class="mermaid"><code>sequenceDiagram
     participant Client
-    participant DataFabric
+    participant API as IVCAP /1/aspects
 
-    Client-&gt;&gt;DataFabric: PUT /1/aspects?entity=&lt;collURN&gt;&amp;schema=collection.1
-    Note right of DataFabric: {name, description}
-    DataFabric--&gt;&gt;Client: 200 OK
+    Note over Client,API: create_collection
+    Client-&gt;&gt;API: GET /1/aspects?entity=COLL&amp;schema=collection.1&amp;limit=1
+    API--&gt;&gt;Client: 200 { items: [] }  (or items with existing def)
+    Client-&gt;&gt;API: POST /1/aspects (or PUT) body={name, description}
+    API--&gt;&gt;Client: 201 { id: "urn:ivcap:aspect:..." }
 
-    Client-&gt;&gt;DataFabric: GET /1/aspects?entity=&lt;collURN&gt;&amp;schema=collection-item.1&amp;aspect-path=$.item?(@ == itemURN)&amp;limit=1
-    DataFabric--&gt;&gt;Client: {items: []}  ← not a member
+    Note over Client,API: add_item_to_collection
+    Client-&gt;&gt;API: GET /1/aspects?entity=COLL&amp;schema=collection-item.1&amp;content-path=$.item?(@ == ITEM)&amp;limit=1
+    API--&gt;&gt;Client: 200 { items: [] }  (not a member)
+    Client-&gt;&gt;API: POST /1/aspects body={collection, item}
+    API--&gt;&gt;Client: 201 { id: "urn:ivcap:aspect:..." }
 
-    Client-&gt;&gt;DataFabric: POST /1/aspects?entity=&lt;collURN&gt;&amp;schema=collection-item.1
-    Note right of DataFabric: {collection, item}
-    DataFabric--&gt;&gt;Client: 201 Created</code></pre>
-<h2 id="refreshing-a-collection-object">Refreshing a Collection Object<a class="headerlink" href="#refreshing-a-collection-object" title="Permanent link">&para;</a></h2>
-<p>If the definition has changed server-side, reload it in-place:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">coll</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">coll</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># updated</span>
+    Note over Client,API: remove_item_from_collection
+    Client-&gt;&gt;API: GET /1/aspects?entity=COLL&amp;schema=collection-item.1&amp;content-path=$.item?(@ == ITEM)&amp;limit=1
+    API--&gt;&gt;Client: 200 { items: [{id: "ASPECT_ID", ...}] }
+    Client-&gt;&gt;API: DELETE /1/aspects/ASPECT_ID
+    API--&gt;&gt;Client: 204
+
+    Note over Client,API: retract_collection
+    Client-&gt;&gt;API: GET /1/aspects?entity=COLL&amp;schema=collection-item.1&amp;limit=50
+    API--&gt;&gt;Client: 200 { items: [...membership aspects...] }
+    loop for each membership aspect
+        Client-&gt;&gt;API: DELETE /1/aspects/&lt;item.id&gt;
+        API--&gt;&gt;Client: 204
+    end
+    Client-&gt;&gt;API: GET /1/aspects?entity=COLL&amp;schema=collection.1&amp;limit=1
+    API--&gt;&gt;Client: 200 { items: [{id: "DEF_ASPECT_ID"}] }
+    Client-&gt;&gt;API: DELETE /1/aspects/DEF_ASPECT_ID
+    API--&gt;&gt;Client: 204</code></pre>
+<hr />
+<h2 id="8-suggested-sdk-surface">8. Suggested SDK Surface<a class="headerlink" href="#8-suggested-sdk-surface" title="Permanent link">&para;</a></h2>
+<p>A minimal SDK implementation should expose the following operations.  Method signatures are language-agnostic.</p>
+<h3 id="81-client-top-level-methods">8.1 Client / top-level methods<a class="headerlink" href="#81-client-top-level-methods" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>create_collection(urn, name, description?, policy?) → Collection
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>get_collection(urn, at_time?) → Collection
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>list_collections(name_filter?, limit?, at_time?) → Iterator&lt;Collection&gt;
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>add_to_collection(collection_urn, item_urn, policy?) → CollectionItem | null
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>remove_from_collection(collection_urn, item_urn) → bool
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>retract_collection(collection_urn) → int
 </code></pre></div>
-<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="../artifacts/">Working with Artifacts</a> — Upload files and manage binary data</li>
-<li><a href="../aspects/">The Datafabric &amp; Aspects</a> — How aspects work under the hood</li>
-<li><a href="../../api/collection/">API Reference: Collection</a> — Full class and function docs</li>
-<li><a href="../../examples/collections/">Examples: Collections</a> — Ready-to-run scripts</li>
-</ul>
+<h3 id="82-collection-object">8.2 <code>Collection</code> object<a class="headerlink" href="#82-collection-object" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>urn         : string   // collection entity URN (aka id)
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>name        : string
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>description : string?
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>asserter    : string?
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>valid_from  : datetime?
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>valid_to    : datetime?  // null = still active
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>add_item(item_urn, policy?) → CollectionItem | null
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>remove_item(item_urn) → bool
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>items(limit?, at_time?) → Iterator&lt;CollectionItem&gt;
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>retract() → int
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>refresh() → Collection   // reload from server
+</code></pre></div>
+<h3 id="83-collectionitem-object">8.3 <code>CollectionItem</code> object<a class="headerlink" href="#83-collectionitem-object" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>id         : string   // aspect record URN
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>collection : string   // collection entity URN
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>item       : string   // member entity URN
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>valid_from : datetime?
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>valid_to   : datetime?
+</code></pre></div>
+<hr />
+<h2 id="9-key-invariants-test-checklist">9. Key Invariants (test checklist)<a class="headerlink" href="#9-key-invariants-test-checklist" title="Permanent link">&para;</a></h2>
+<p>These invariants must hold for a correct implementation:</p>
+<ol>
+<li><strong><code>create_collection</code> with a new URN</strong> issues <code>POST</code> (not <code>PUT</code>).</li>
+<li><strong><code>create_collection</code> with an existing URN</strong> issues <code>PUT</code> (not <code>POST</code>).</li>
+<li><strong><code>add_item_to_collection</code> duplicate</strong> — when the dedup check finds an existing record, the method returns <code>null</code>/<code>None</code> and does <strong>not</strong> issue a <code>POST</code>.</li>
+<li><strong><code>add_item_to_collection</code> with a failing dedup check (5xx)</strong> — the method falls through to <code>POST</code> and does <strong>not</strong> raise.</li>
+<li><strong><code>remove_item_from_collection</code> non-member</strong> — returns <code>false</code>; does not call <code>DELETE</code>.</li>
+<li><strong><code>remove_item_from_collection</code> member</strong> — calls <code>DELETE /1/aspects/&lt;id&gt;</code> with the correct aspect ID and returns <code>true</code>.</li>
+<li><strong><code>retract_collection</code></strong> retracts all membership aspects <strong>before</strong> retracting the definition aspect.</li>
+<li><strong><code>get_collection</code> missing</strong> — raises <code>ResourceNotFound</code>.</li>
+<li><strong><code>retract_collection</code> missing definition</strong> — raises <code>ResourceNotFound</code>.</li>
+<li><strong>All list operations</strong> correctly advance the pagination cursor and stop when <code>links.next</code> is absent.</li>
+<li><strong>Dedup / find JSONPath</strong> — the <code>content-path</code> filter must embed the item URN, e.g. <code>$.item ? (@ == "urn:ivcap:artifact:...")</code>.</li>
+<li><strong>Dedup / find queries</strong> set <code>include-content=false</code> to minimise data transfer.</li>
+</ol>
         <div id="llms-copy-button" style="position: fixed; z-index: 1100; top: 80px; right: 20px;">
             <button onclick="copyMarkdownToClipboard()" style="cursor: pointer; background: #007acc; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">Copy Markdown</button>
         </div>

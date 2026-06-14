@@ -163,13 +163,105 @@ artifact.add_metadata({
 })
 ```
 
-## Local-File Artifacts
+## Local Mode vs Platform Mode
 
-When code runs inside IVCAP the platform provides local file paths as artifact URNs:
+IVCAP supports two distinct operating modes for working with artifacts.  The same
+`upload_artifact` / `get_artifact` call-sites work in **both** modes — no `if/else`
+branching in your service code is needed.
+
+### Auto-detection (recommended)
+
+`IVCAP()` **automatically selects the right mode** based on environment variables —
+no code changes needed between local development and deployed operation:
+
+```python
+from ivcap_client import IVCAP
+
+ivcap = IVCAP()  # LocalIVCAP locally, platform IVCAP when deployed
+artifact = ivcap.upload_artifact(name="result.csv", file_path="/tmp/result.csv")
+```
+
+Decision logic (in order):
+
+| Condition | Result |
+|---|---|
+| `IVCAP_URL` or `IVCAP_BASE_URL` env var is set | Platform `IVCAP` instance |
+| `url` arg is provided | Platform `IVCAP` instance |
+| `token` arg is provided (no URL) | `ValueError` — signals misconfiguration |
+| None of the above | `LocalIVCAP` using `IVCAP_LOCAL_DIR` (default: `./ivcap-artifacts`) |
+
+### Platform mode
+
+Connect to a running IVCAP deployment.  Requires `IVCAP_URL` + `IVCAP_JWT` (external
+access), or `IVCAP_BASE_URL` (injected automatically when running inside a platform
+container).
+
+```python
+from ivcap_client import IVCAP
+
+# Reads credentials from environment variables
+ivcap = IVCAP()
+artifact = ivcap.upload_artifact(name="result.csv", file_path="/tmp/result.csv")
+print(artifact.id)  # urn:ivcap:artifact:<uuid>
+```
+
+### Explicit local mode
+
+Use `IVCAP.local()` (or construct `LocalIVCAP` directly) when you want to **force**
+local mode regardless of environment variables — for example in unit tests:
+
+```python
+from ivcap_client import IVCAP
+
+ivcap = IVCAP.local(base_dir="./my-artifacts")
+artifact = ivcap.upload_artifact(name="result.csv", file_path="/tmp/result.csv")
+print(artifact.id)
+# urn:file:///abs/path/to/my-artifacts/result.csv
+```
+
+You can also construct `LocalIVCAP` directly:
+
+```python
+from ivcap_client import LocalIVCAP
+
+ivcap = LocalIVCAP(base_dir="./my-artifacts")
+```
+
+The `base_dir` defaults to `./ivcap-artifacts` and can be set via the
+`IVCAP_LOCAL_DIR` environment variable.
+
+#### What `LocalIVCAP` supports
+
+| Method | Behaviour in local mode |
+|---|---|
+| `upload_artifact(name, file_path, ...)` | Copies source file to `base_dir/name` |
+| `upload_artifact(name, io_stream, ...)` | Writes stream bytes/text to `base_dir/name` |
+| `get_artifact("file://..." or "urn:file://...")` | Returns a `LocalFileArtifact` for an existing file |
+| `collection`, `policy` arguments | Accepted, silently ignored |
+
+`LocalIVCAP` does **not** implement `list_artifacts`, `list_services`, or other
+platform-only methods.  It is scoped exclusively to artifact read/write.
+
+#### Local-file artifact URNs
+
+Artifacts written by `LocalIVCAP` have URNs of the form `urn:file:///absolute/path`.
+These URNs can be passed back to `LocalIVCAP.get_artifact()` or to `IVCAP.get_artifact()`
+(on the platform, which also supports `file://` URNs for locally-mounted inputs):
 
 ```python
 artifact = ivcap.get_artifact("file:///data/input.csv")
 # Returns a LocalFileArtifact — open()/as_local_file() work without network calls
+```
+
+#### Auto-naming
+
+When `name` is omitted, `upload_artifact` generates a UUID-based filename, preserving
+the source file extension if one can be inferred:
+
+```python
+artifact = ivcap.upload_artifact(file_path="/tmp/model.pkl")
+print(artifact.id)
+# urn:file:///abs/path/to/ivcap-artifacts/3f4a...UUID....pkl
 ```
 
 ## Common Patterns

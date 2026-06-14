@@ -1644,6 +1644,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#local-mode-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Mode Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Local Mode Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ivcap_local_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IVCAP_LOCAL_DIR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2000,6 +2028,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#local-mode-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Mode Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Local Mode Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ivcap_local_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IVCAP_LOCAL_DIR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2134,30 +2190,49 @@
 <li><strong>Description</strong>: Your account URN. Some operations (e.g., listing secrets) require this.</li>
 <li><strong>Example</strong>: <code>urn:ivcap:account:a1b2c3d4-e5f6-...</code></li>
 </ul>
+<h2 id="local-mode-configuration">Local Mode Configuration<a class="headerlink" href="#local-mode-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="ivcap_local_dir">IVCAP_LOCAL_DIR<a class="headerlink" href="#ivcap_local_dir" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Type</strong>: String (filesystem path)</li>
+<li><strong>Required</strong>: No</li>
+<li><strong>Default</strong>: <code>./ivcap-artifacts</code></li>
+<li><strong>Description</strong>: Root directory for local artifact storage when running in <strong>local mode</strong>
+  (i.e. when <code>IVCAP_URL</code> / <code>IVCAP_BASE_URL</code> are not set and <code>IVCAP.local()</code> /
+  <code>LocalIVCAP</code> is used).  All artifacts written via <code>upload_artifact()</code> are stored
+  under this directory.  The directory is created automatically on first use.</li>
+<li><strong>Example</strong>: <code>./output/artifacts</code></li>
+</ul>
+<p>This variable is read by <code>IVCAP.local()</code> when no explicit <code>base_dir</code> argument is passed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># With IVCAP_LOCAL_DIR=./output/artifacts set:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>          <span class="c1"># base_dir → ./output/artifacts</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="o">.</span><span class="n">local</span><span class="p">(</span><span class="s2">&quot;./other&quot;</span><span class="p">)</span> <span class="c1"># base_dir → ./other  (explicit arg wins)</span>
+</code></pre></div>
+<p>See <a href="../../guides/artifacts/#local-mode-vs-platform-mode">Local Mode vs Platform Mode</a>
+for full usage details.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <h3 id="in-a-env-dbg-env-file-recommended-for-development">In a <code>.env</code> / <code>.dbg-env</code> file (recommended for development)<a class="headerlink" href="#in-a-env-dbg-env-file-recommended-for-development" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>IVCAP_URL=https://api.your-ivcap-deployment.net
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>IVCAP_JWT=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>IVCAP_ACCOUNT_ID=urn:ivcap:account:&lt;uuid&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>IVCAP_URL=https://api.your-ivcap-deployment.net
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>IVCAP_JWT=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>IVCAP_ACCOUNT_ID=urn:ivcap:account:&lt;uuid&gt;
 </code></pre></div>
 <p>Load with <code>python-dotenv</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">load_dotenv</span><span class="p">(</span><span class="s1">&#39;.dbg-env&#39;</span><span class="p">)</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">load_dotenv</span><span class="p">(</span><span class="s1">&#39;.dbg-env&#39;</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
 </code></pre></div>
 <h3 id="as-shell-environment-variables">As shell environment variables<a class="headerlink" href="#as-shell-environment-variables" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">IVCAP_URL</span><span class="o">=</span>https://api.your-ivcap-deployment.net
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">IVCAP_JWT</span><span class="o">=</span><span class="k">$(</span>ivcap<span class="w"> </span>context<span class="w"> </span>get<span class="w"> </span>access-token<span class="k">)</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">IVCAP_ACCOUNT_ID</span><span class="o">=</span>urn:ivcap:account:&lt;uuid&gt;
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>python<span class="w"> </span>my_script.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">IVCAP_URL</span><span class="o">=</span>https://api.your-ivcap-deployment.net
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">IVCAP_JWT</span><span class="o">=</span><span class="k">$(</span>ivcap<span class="w"> </span>context<span class="w"> </span>get<span class="w"> </span>access-token<span class="k">)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">IVCAP_ACCOUNT_ID</span><span class="o">=</span>urn:ivcap:account:&lt;uuid&gt;
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>python<span class="w"> </span>my_script.py
 </code></pre></div>
 <h3 id="in-cicd-github-actions">In CI/CD (GitHub Actions)<a class="headerlink" href="#in-cicd-github-actions" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">env</span><span class="p">:</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">IVCAP_URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.IVCAP_URL }}</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">IVCAP_JWT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.IVCAP_JWT }}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">IVCAP_URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.IVCAP_URL }}</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">IVCAP_JWT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.IVCAP_JWT }}</span>
 </code></pre></div>
 <h2 id="variable-priority">Variable Priority<a class="headerlink" href="#variable-priority" title="Permanent link">&para;</a></h2>
 <p>When <code>IVCAP_BASE_URL</code> is set (inside a platform container), it takes precedence over
@@ -2167,9 +2242,9 @@ locally (with <code>IVCAP_URL</code> + <code>IVCAP_JWT</code>) and inside IVCAP 
 <ul>
 <li>Never commit <code>.env</code> or <code>.dbg-env</code> files to version control</li>
 <li>Add them to <code>.gitignore</code>:
-  <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>.env
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>.dbg-env
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>*.env
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>.env
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>.dbg-env
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>*.env
 </code></pre></div></li>
 <li>JWT tokens expire — use <code>ivcap context get access-token</code> to refresh</li>
 <li>In production, use a secrets manager (AWS Secrets Manager, HashiCorp Vault, etc.)</li>

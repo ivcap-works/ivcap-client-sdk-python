@@ -2133,20 +2133,81 @@ auth and <code>IVCAP_BASE_URL</code> is injected automatically — no token is n
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># IVCAP_BASE_URL is set by the platform; no token required</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
 </code></pre></div>
+<h3 id="local-mode-no-platform-available">Local mode (no platform available)<a class="headerlink" href="#local-mode-no-platform-available" title="Permanent link">&para;</a></h3>
+<p>When neither <code>IVCAP_URL</code> nor <code>IVCAP_BASE_URL</code> is set and no explicit <code>token</code> is
+passed, <code>IVCAP()</code> <strong>automatically returns a <code>LocalIVCAP</code> instance</strong> — a
+filesystem-backed drop-in replacement that stores artifacts under a local directory.
+No network calls are made.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="n">LocalIVCAP</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>  <span class="c1"># → LocalIVCAP when no URL env var is set</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;result.csv&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/result.csv&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># urn:file:///abs/path/to/ivcap-artifacts/result.csv</span>
+</code></pre></div>
+<p>Auto-detection decision (in order):</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IVCAP_URL</code> or <code>IVCAP_BASE_URL</code> env var is set</td>
+<td>Platform <code>IVCAP</code> instance</td>
+</tr>
+<tr>
+<td><code>url</code> argument is provided</td>
+<td>Platform <code>IVCAP</code> instance</td>
+</tr>
+<tr>
+<td><code>token</code> argument provided without a URL</td>
+<td><code>ValueError</code> — signals misconfiguration</td>
+</tr>
+<tr>
+<td>None of the above</td>
+<td><code>LocalIVCAP</code> using <code>IVCAP_LOCAL_DIR</code> (default: <code>./ivcap-artifacts</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Force local mode explicitly</strong> (useful in tests):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="o">.</span><span class="n">local</span><span class="p">(</span><span class="n">base_dir</span><span class="o">=</span><span class="s2">&quot;./my-artifacts&quot;</span><span class="p">)</span>  <span class="c1"># always LocalIVCAP</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># or directly:</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalIVCAP</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">LocalIVCAP</span><span class="p">(</span><span class="n">base_dir</span><span class="o">=</span><span class="s2">&quot;./my-artifacts&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Detect which mode is active at runtime:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ivcap</span><span class="p">,</span> <span class="n">LocalIVCAP</span><span class="p">):</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Local mode — artifacts at:&quot;</span><span class="p">,</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">base_dir</span><span class="p">)</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Platform mode — connected to:&quot;</span><span class="p">,</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p><strong>Scope:</strong> <code>LocalIVCAP</code> supports artifact read/write (<code>upload_artifact</code>,
+<code>get_artifact</code>) and limited aspect operations (<code>add_aspect</code>, <code>update_aspect</code>,
+<code>get_aspect</code>).  The directory layout under <code>base_dir</code> is:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>&lt;base_dir&gt;/
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>  artifacts/   ← artifact files written by upload_artifact
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>  aspects/     ← aspect JSON files written by add_aspect / update_aspect
+</code></pre></div>
+<p>Methods such as <code>list_services</code>, <code>list_artifacts</code>, and <code>list_aspects</code> are
+platform-only and are not available in local mode.</p>
+</blockquote>
 <h3 id="common-pattern-in-examples">Common pattern in examples<a class="headerlink" href="#common-pattern-in-examples" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">load_dotenv</span><span class="p">(</span><span class="s1">&#39;.dbg-env&#39;</span><span class="p">)</span>  <span class="c1"># loads IVCAP_URL and IVCAP_JWT from a local file</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">load_dotenv</span><span class="p">(</span><span class="s1">&#39;.dbg-env&#39;</span><span class="p">)</span>  <span class="c1"># loads IVCAP_URL and IVCAP_JWT from a local file</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
 </code></pre></div>
 <hr />
 <h2 id="4-discovering-inspecting-services">4. Discovering &amp; Inspecting Services<a class="headerlink" href="#4-discovering-inspecting-services" title="Permanent link">&para;</a></h2>
 <h3 id="list-all-services">List all services<a class="headerlink" href="#list-all-services" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">service</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ivcap</span><span class="o">.</span><span class="n">list_services</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">50</span><span class="p">)):</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">service</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">service</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ivcap</span><span class="o">.</span><span class="n">list_services</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">50</span><span class="p">)):</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">service</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p><code>list_services()</code> returns a lazy iterator — pages are fetched automatically as you iterate.</p>
 <blockquote>
@@ -2192,22 +2253,22 @@ triggers a live read from the Datafabric if the data is not already cached local
 </tbody>
 </table>
 <h3 id="find-a-service-by-name">Find a service by name<a class="headerlink" href="#find-a-service-by-name" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;hello-world-python&quot;</span><span class="p">)</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># Raises ResourceNotFound if no match, AmbiguousRequest if multiple matches</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;hello-world-python&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="c1"># Raises ResourceNotFound if no match, AmbiguousRequest if multiple matches</span>
 </code></pre></div>
 <h3 id="get-a-service-by-urn">Get a service by URN<a class="headerlink" href="#get-a-service-by-urn" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:3678e5f1-8fb7-5ad6-b65b-8bd8c23c0948&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:3678e5f1-8fb7-5ad6-b65b-8bd8c23c0948&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="inspect-service-parameters">Inspect service parameters<a class="headerlink" href="#inspect-service-parameters" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;my-service&quot;</span><span class="p">)</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1"># All parameters</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">service</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: type=</span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">, optional=</span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">is_optional</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># Only mandatory parameters</span>
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Required:&quot;</span><span class="p">,</span> <span class="n">service</span><span class="o">.</span><span class="n">mandatory_parameters</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;my-service&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="c1"># All parameters</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">service</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: type=</span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">, optional=</span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">is_optional</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="c1"># Only mandatory parameters</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Required:&quot;</span><span class="p">,</span> <span class="n">service</span><span class="o">.</span><span class="n">mandatory_parameters</span><span class="p">)</span>
 </code></pre></div>
 <p>Each <code>ServiceParameter</code> has:</p>
 <table>
@@ -2260,11 +2321,11 @@ triggers a live read from the Datafabric if the data is not already cached local
 <p>Many services expose a structured Pydantic model describing their input. This model is
 stored as a <code>urn:sd-core:schema.ai-tool.1</code> aspect attached to the service entity in the
 Datafabric. The SDK fetches it and dynamically constructs a Pydantic <code>BaseModel</code> class:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">request_model</span>          <span class="c1"># type[BaseModel]</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">Model</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">())</span>       <span class="c1"># inspect the JSON schema</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">instance</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">param_a</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="n">param_b</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">request_model</span>          <span class="c1"># type[BaseModel]</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">Model</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">())</span>       <span class="c1"># inspect the JSON schema</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="n">instance</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">param_a</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="n">param_b</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 </code></pre></div>
 <hr />
 <h2 id="5-running-jobs-service-execution">5. Running Jobs (Service Execution)<a class="headerlink" href="#5-running-jobs-service-execution" title="Permanent link">&para;</a></h2>
@@ -2281,42 +2342,42 @@ window. If the job hasn't finished by the timeout, you get a <code>202</code> an
 Use <code>job.refresh()</code> and <code>job.finished</code> for the polling pattern.</p>
 </blockquote>
 <h3 id="synchronous-fire-and-check">Synchronous fire-and-check<a class="headerlink" href="#synchronous-fire-and-check" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1"># Build the request</span>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model</span>
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">req</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">duration_seconds</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">target_cpu_percent</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
-<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="c1"># Submit — returns immediately (timeout=0 means &quot;don&#39;t wait&quot;)</span>
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created job &#39;</span><span class="si">{</span><span class="n">job</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="c1"># Build the request</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="n">req</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">duration_seconds</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">target_cpu_percent</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="c1"># Submit — returns immediately (timeout=0 means &quot;don&#39;t wait&quot;)</span>
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created job &#39;</span><span class="si">{</span><span class="n">job</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="synchronous-wait-for-completion-blocking">Synchronous wait for completion (blocking)<a class="headerlink" href="#synchronous-wait-for-completion-blocking" title="Permanent link">&para;</a></h3>
 <p>Pass <code>timeout</code> in seconds; the service gateway will block until done or the timeout
 elapses. Use <code>timeout=None</code> to wait indefinitely:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>   <span class="c1"># block up to 120 s server-side</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>   <span class="c1"># block up to 120 s server-side</span>
 </code></pre></div>
 <blockquote>
 <p><strong>Note:</strong> <code>timeout=0</code> means "submit and return immediately with a 202 Accepted".
 Use <code>job.refresh()</code> / <code>job.finished</code> to poll progress.</p>
 </blockquote>
 <h3 id="submit-with-a-raw-json-string-io-stream">Submit with a raw JSON string / IO stream<a class="headerlink" href="#submit-with-a-raw-json-string-io-stream" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">payload</span> <span class="o">=</span> <span class="s1">&#39;{&quot;wordle&quot;: {&quot;maxattempts&quot;: 2, &quot;thinking_time&quot;: 1}}&#39;</span>
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="n">payload</span> <span class="o">=</span> <span class="s1">&#39;{&quot;wordle&quot;: {&quot;maxattempts&quot;: 2, &quot;thinking_time&quot;: 1}}&#39;</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
 </code></pre></div>
 <h3 id="submit-with-a-pydantic-model-defined-inline">Submit with a Pydantic model defined inline<a class="headerlink" href="#submit-with-a-pydantic-model-defined-inline" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyReq</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>    <span class="n">duration_seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>    <span class="n">throw_exception_at_end</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>
-<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">MyReq</span><span class="p">())</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyReq</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>    <span class="n">duration_seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>    <span class="n">throw_exception_at_end</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">MyReq</span><span class="p">())</span>
 </code></pre></div>
 <hr />
 <h2 id="6-monitoring-jobs">6. Monitoring Jobs<a class="headerlink" href="#6-monitoring-jobs" title="Permanent link">&para;</a></h2>
@@ -2328,45 +2389,45 @@ or inline JSON content. This is why <code>job.result</code> may trigger a second
 trip if it hasn't been fetched yet.</p>
 </blockquote>
 <h3 id="job-status-values-jobstatus-enum">Job status values (<code>JobStatus</code> enum)<a class="headerlink" href="#job-status-values-jobstatus-enum" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
-<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="c1"># Values: UNKNOWN, PENDING, SCHEDULED, EXECUTING, SUCCEEDED, FAILED, ERROR</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="c1"># Values: UNKNOWN, PENDING, SCHEDULED, EXECUTING, SUCCEEDED, FAILED, ERROR</span>
 </code></pre></div>
 <h3 id="poll-until-finished">Poll until finished<a class="headerlink" href="#poll-until-finished" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
-<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
-<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
-<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>    <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>    <span class="n">job</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>                    <span class="c1"># update status from server</span>
-<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>
-<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">())</span>                  <span class="c1"># JobStatus.SUCCEEDED / .FAILED / .ERROR</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>    <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>    <span class="n">job</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>                    <span class="c1"># update status from server</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">())</span>                  <span class="c1"># JobStatus.SUCCEEDED / .FAILED / .ERROR</span>
 </code></pre></div>
 <h3 id="batch-job-monitoring-with-csv-logging">Batch job monitoring with CSV logging<a class="headerlink" href="#batch-job-monitoring-with-csv-logging" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span><span class="p">,</span> <span class="n">time</span>
-<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
-<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="n">jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
-<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>
-<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;results.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>    <span class="n">w</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
-<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>        <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>        <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
-<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>        <span class="n">done</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs</span> <span class="k">if</span> <span class="n">j</span><span class="o">.</span><span class="n">finished</span><span class="p">)</span>
-<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a>        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
-<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a>            <span class="n">j</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a>            <span class="n">w</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">elapsed</span><span class="p">,</span> <span class="n">j</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">j</span><span class="o">.</span><span class="n">status</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">])</span>
-<a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a>        <span class="n">f</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
-<a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Progress: </span><span class="si">{</span><span class="n">done</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">jobs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a>        <span class="k">if</span> <span class="n">done</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">jobs</span><span class="p">):</span>
-<a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a>            <span class="k">break</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span><span class="p">,</span> <span class="n">time</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="n">jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;results.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a>    <span class="n">w</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>        <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>        <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a>        <span class="n">done</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs</span> <span class="k">if</span> <span class="n">j</span><span class="o">.</span><span class="n">finished</span><span class="p">)</span>
+<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a>        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
+<a id="__codelineno-26-14" name="__codelineno-26-14" href="#__codelineno-26-14"></a>            <span class="n">j</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<a id="__codelineno-26-15" name="__codelineno-26-15" href="#__codelineno-26-15"></a>            <span class="n">w</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">elapsed</span><span class="p">,</span> <span class="n">j</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">j</span><span class="o">.</span><span class="n">status</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">])</span>
+<a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a>        <span class="n">f</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+<a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Progress: </span><span class="si">{</span><span class="n">done</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">jobs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-26-18" name="__codelineno-26-18" href="#__codelineno-26-18"></a>        <span class="k">if</span> <span class="n">done</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">jobs</span><span class="p">):</span>
+<a id="__codelineno-26-19" name="__codelineno-26-19" href="#__codelineno-26-19"></a>            <span class="k">break</span>
 </code></pre></div>
 <h3 id="access-job-result">Access job result<a class="headerlink" href="#access-job-result" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">result</span>      <span class="c1"># parsed response body (dict / object)</span>
-<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">result</span>      <span class="c1"># parsed response body (dict / object)</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="job-properties">Job properties<a class="headerlink" href="#job-properties" title="Permanent link">&para;</a></h3>
 <table>
@@ -2428,24 +2489,24 @@ The service container can then download the artifact bytes via its local sidecar
 <code>GET http://ivcap.local/1/artifacts/&lt;uuid&gt;/blob</code>.</p>
 </blockquote>
 <h3 id="upload-a-file">Upload a file<a class="headerlink" href="#upload-a-file" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-image&quot;</span><span class="p">,</span>
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>    <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/path/to/image.jpg&quot;</span><span class="p">,</span>
-<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>    <span class="n">policy</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:policy:ivcap.open.artifact&quot;</span><span class="p">,</span>  <span class="c1"># optional, makes it public</span>
-<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="p">)</span>
-<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
-<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="c1"># &lt;Artifact id=urn:ivcap:artifact:&lt;uuid&gt;, status=ready&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-image&quot;</span><span class="p">,</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>    <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/path/to/image.jpg&quot;</span><span class="p">,</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>    <span class="n">policy</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:policy:ivcap.open.artifact&quot;</span><span class="p">,</span>  <span class="c1"># optional, makes it public</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="p">)</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="c1"># &lt;Artifact id=urn:ivcap:artifact:&lt;uuid&gt;, status=ready&gt;</span>
 </code></pre></div>
 <h3 id="upload-from-an-in-memory-stream">Upload from an in-memory stream<a class="headerlink" href="#upload-from-an-in-memory-stream" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>
-<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;col1,col2</span><span class="se">\n</span><span class="s2">1,2</span><span class="se">\n</span><span class="s2">3,4</span><span class="se">\n</span><span class="s2">&quot;</span>
-<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span>
-<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-data.csv&quot;</span><span class="p">,</span>
-<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>    <span class="n">io_stream</span><span class="o">=</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
-<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>    <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;text/csv&quot;</span><span class="p">,</span>
-<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>    <span class="n">content_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
-<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;col1,col2</span><span class="se">\n</span><span class="s2">1,2</span><span class="se">\n</span><span class="s2">3,4</span><span class="se">\n</span><span class="s2">&quot;</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-data.csv&quot;</span><span class="p">,</span>
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>    <span class="n">io_stream</span><span class="o">=</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>    <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;text/csv&quot;</span><span class="p">,</span>
+<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a>    <span class="n">content_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a><span class="p">)</span>
 </code></pre></div>
 <h3 id="upload-parameters">Upload parameters<a class="headerlink" href="#upload-parameters" title="Permanent link">&para;</a></h3>
 <table>
@@ -2521,35 +2582,35 @@ unchanged file, it will return the existing artifact without re-uploading.
 Override with <code>force_upload=True</code>.</p>
 </blockquote>
 <h3 id="check-if-a-file-was-already-uploaded">Check if a file was already uploaded<a class="headerlink" href="#check-if-a-file-was-already-uploaded" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">artifact_for_file</span><span class="p">(</span><span class="s2">&quot;/path/to/file.jpg&quot;</span><span class="p">)</span>
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="k">if</span> <span class="n">artifact</span><span class="p">:</span>
-<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Already uploaded as </span><span class="si">{</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">artifact_for_file</span><span class="p">(</span><span class="s2">&quot;/path/to/file.jpg&quot;</span><span class="p">)</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="k">if</span> <span class="n">artifact</span><span class="p">:</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Already uploaded as </span><span class="si">{</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="get-an-artifact-by-urn">Get an artifact by URN<a class="headerlink" href="#get-an-artifact-by-urn" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">)</span>
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="download-stream-artifact-content">Download / stream artifact content<a class="headerlink" href="#download-stream-artifact-content" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># Stream to a file</span>
-<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/tmp/output.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_stream</span><span class="p">():</span>
-<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
-<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>
-<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="c1"># Open as a file-like object (loads into memory)</span>
-<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>
-<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="c1"># Download to a temp file (auto-deleted on context exit)</span>
-<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
-<a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a>    <span class="c1"># process path here...</span>
-<a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a>    <span class="c1"># file is deleted when &#39;with&#39; block exits</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1"># Stream to a file</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/tmp/output.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_stream</span><span class="p">():</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="c1"># Open as a file-like object (loads into memory)</span>
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a>
+<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="c1"># Download to a temp file (auto-deleted on context exit)</span>
+<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
+<a id="__codelineno-32-12" name="__codelineno-32-12" href="#__codelineno-32-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-32-13" name="__codelineno-32-13" href="#__codelineno-32-13"></a>    <span class="c1"># process path here...</span>
+<a id="__codelineno-32-14" name="__codelineno-32-14" href="#__codelineno-32-14"></a>    <span class="c1"># file is deleted when &#39;with&#39; block exits</span>
 </code></pre></div>
 <h3 id="list-artifacts">List artifacts<a class="headerlink" href="#list-artifacts" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_artifacts</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>
-<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>    <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
-<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  schema: </span><span class="si">{</span><span class="n">meta</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_artifacts</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>    <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  schema: </span><span class="si">{</span><span class="n">meta</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="artifact-provenance-in-the-datafabric">Artifact provenance in the Datafabric<a class="headerlink" href="#artifact-provenance-in-the-datafabric" title="Permanent link">&para;</a></h3>
 <p>Every upload and every artifact produced by a job is recorded as a set of Aspects:</p>
@@ -2562,8 +2623,8 @@ Override with <code>force_upload=True</code>.</p>
 with <code>ivcap.list_aspects(entity=artifact.id)</code> to reconstruct full data lineage.</p>
 <h3 id="local-file-artifacts">Local-file artifacts<a class="headerlink" href="#local-file-artifacts" title="Permanent link">&para;</a></h3>
 <p>When a job runs inside IVCAP the platform provides local file paths as artifact URNs:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;file:///data/input.csv&quot;</span><span class="p">)</span>
-<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="c1"># Returns a LocalFileArtifact — open()/as_local_file() work without network calls</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;file:///data/input.csv&quot;</span><span class="p">)</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="c1"># Returns a LocalFileArtifact — open()/as_local_file() work without network calls</span>
 </code></pre></div>
 <hr />
 <h2 id="8-aspects-metadata-on-any-entity">8. Aspects — Metadata on Any Entity<a class="headerlink" href="#8-aspects-metadata-on-any-entity" title="Permanent link">&para;</a></h2>
@@ -2588,48 +2649,48 @@ one first by setting its <code>validTo = now</code>. Use <code>retract()</code> 
 replacing it.</p>
 </blockquote>
 <h3 id="add-an-aspect-to-an-entity">Add an aspect to an entity<a class="headerlink" href="#add-an-aspect-to-an-entity" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">aspect</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">add_aspect</span><span class="p">(</span>
-<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span>
-<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>    <span class="n">aspect</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>        <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my-project:schema:image-annotation.1&quot;</span><span class="p">,</span>
-<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">,</span>
-<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="mf">0.97</span><span class="p">,</span>
-<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a>    <span class="p">},</span>
-<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="p">)</span>
-<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="n">aspect</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">add_aspect</span><span class="p">(</span>
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>    <span class="n">aspect</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a>        <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my-project:schema:image-annotation.1&quot;</span><span class="p">,</span>
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a>        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">,</span>
+<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a>        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="mf">0.97</span><span class="p">,</span>
+<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a>    <span class="p">},</span>
+<a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="p">)</span>
+<a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="update-replace-an-existing-aspect">Update (replace) an existing aspect<a class="headerlink" href="#update-replace-an-existing-aspect" title="Permanent link">&para;</a></h3>
 <p><code>update_aspect</code> retracts any previous aspect with the same <code>(entity, schema)</code> pair
 before creating the new one:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="n">aspect</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">update_aspect</span><span class="p">(</span>
-<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span>
-<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>    <span class="n">aspect</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>        <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my-project:schema:image-annotation.1&quot;</span><span class="p">,</span>
-<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;dog&quot;</span><span class="p">,</span>
-<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="mf">0.88</span><span class="p">,</span>
-<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a>    <span class="p">},</span>
-<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="n">aspect</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">update_aspect</span><span class="p">(</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>    <span class="n">aspect</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a>        <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my-project:schema:image-annotation.1&quot;</span><span class="p">,</span>
+<a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a>        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;dog&quot;</span><span class="p">,</span>
+<a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a>        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="mf">0.88</span><span class="p">,</span>
+<a id="__codelineno-36-7" name="__codelineno-36-7" href="#__codelineno-36-7"></a>    <span class="p">},</span>
+<a id="__codelineno-36-8" name="__codelineno-36-8" href="#__codelineno-36-8"></a><span class="p">)</span>
 </code></pre></div>
 <h3 id="add-metadata-directly-to-an-artifact">Add metadata directly to an artifact<a class="headerlink" href="#add-metadata-directly-to-an-artifact" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">)</span>
-<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="n">artifact</span><span class="o">.</span><span class="n">add_metadata</span><span class="p">({</span>
-<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>    <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my:schema:tag.1&quot;</span><span class="p">,</span>
-<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;marine&quot;</span><span class="p">,</span> <span class="s2">&quot;coral&quot;</span><span class="p">],</span>
-<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="p">})</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="n">artifact</span><span class="o">.</span><span class="n">add_metadata</span><span class="p">({</span>
+<a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a>    <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my:schema:tag.1&quot;</span><span class="p">,</span>
+<a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a>    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;marine&quot;</span><span class="p">,</span> <span class="s2">&quot;coral&quot;</span><span class="p">],</span>
+<a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a><span class="p">})</span>
 </code></pre></div>
 <h3 id="list-search-aspects">List / search aspects<a class="headerlink" href="#list-search-aspects" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="c1"># All aspects with a given schema</span>
-<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span>
-<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>    <span class="n">schema</span><span class="o">=</span><span class="s2">&quot;urn:common:schema:in_collection.1&quot;</span><span class="p">,</span>
-<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a>    <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a>    <span class="n">include_content</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="p">):</span>
-<a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
-<a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">aspect</span><span class="p">)</span>           <span class="c1"># the JSON content dict</span>
-<a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a>
-<a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="c1"># Aspects for a specific entity</span>
-<a id="__codelineno-34-11" name="__codelineno-34-11" href="#__codelineno-34-11"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">):</span>
-<a id="__codelineno-34-12" name="__codelineno-34-12" href="#__codelineno-34-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="c1"># All aspects with a given schema</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span>
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a>    <span class="n">schema</span><span class="o">=</span><span class="s2">&quot;urn:common:schema:in_collection.1&quot;</span><span class="p">,</span>
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a>    <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>    <span class="n">include_content</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="p">):</span>
+<a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
+<a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">aspect</span><span class="p">)</span>           <span class="c1"># the JSON content dict</span>
+<a id="__codelineno-38-9" name="__codelineno-38-9" href="#__codelineno-38-9"></a>
+<a id="__codelineno-38-10" name="__codelineno-38-10" href="#__codelineno-38-10"></a><span class="c1"># Aspects for a specific entity</span>
+<a id="__codelineno-38-11" name="__codelineno-38-11" href="#__codelineno-38-11"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">):</span>
+<a id="__codelineno-38-12" name="__codelineno-38-12" href="#__codelineno-38-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
 </code></pre></div>
 <p><strong><code>list_aspects()</code> parameters:</strong></p>
 <table>
@@ -2681,38 +2742,38 @@ before creating the new one:</p>
 <h3 id="query-aspects-at-a-point-in-time">Query aspects at a point in time<a class="headerlink" href="#query-aspects-at-a-point-in-time" title="Permanent link">&para;</a></h3>
 <p>Because the Datafabric is append-only, you can reconstruct the exact state of any entity
 at any past moment:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
-<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>
-<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="n">past</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
-<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span>
-<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span>
-<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a>    <span class="n">at_time</span><span class="o">=</span><span class="n">past</span><span class="p">,</span>
-<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a>    <span class="n">include_content</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="p">):</span>
-<a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Valid from </span><span class="si">{</span><span class="n">aspect</span><span class="o">.</span><span class="n">valid_from</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">aspect</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="n">past</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span>
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a>    <span class="n">at_time</span><span class="o">=</span><span class="n">past</span><span class="p">,</span>
+<a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a>    <span class="n">include_content</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a><span class="p">):</span>
+<a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Valid from </span><span class="si">{</span><span class="n">aspect</span><span class="o">.</span><span class="n">valid_from</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-39-10" name="__codelineno-39-10" href="#__codelineno-39-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">aspect</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="retract-an-aspect">Retract an aspect<a class="headerlink" href="#retract-an-aspect" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="n">aspects</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s2">&quot;urn:my:schema:tag.1&quot;</span><span class="p">))</span>
-<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="k">if</span> <span class="n">aspects</span><span class="p">:</span>
-<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>    <span class="n">aspects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">retract</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="n">aspects</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s2">&quot;urn:my:schema:tag.1&quot;</span><span class="p">))</span>
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="k">if</span> <span class="n">aspects</span><span class="p">:</span>
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a>    <span class="n">aspects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">retract</span><span class="p">()</span>
 </code></pre></div>
 <hr />
 <h2 id="9-secrets">9. Secrets<a class="headerlink" href="#9-secrets" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="k">for</span> <span class="n">secret</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_secrets</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
-<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">secret</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="k">for</span> <span class="n">secret</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_secrets</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">secret</span><span class="p">)</span>
 </code></pre></div>
 <hr />
 <h2 id="10-agents">10. Agents<a class="headerlink" href="#10-agents" title="Permanent link">&para;</a></h2>
 <p>Agents are services that follow an agent pattern (they wrap a <code>Service</code> internally).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_agent</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
-<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a>
-<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="c1"># Get the Pydantic request model</span>
-<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">request_model</span>
-<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>
-<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="c1"># Execute the agent and wait for completion (blocks until done)</span>
-<a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a><span class="n">job</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">exec_agent</span><span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">some_param</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">))</span>
-<a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_agent</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>
+<a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="c1"># Get the Pydantic request model</span>
+<a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">request_model</span>
+<a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a>
+<a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a><span class="c1"># Execute the agent and wait for completion (blocks until done)</span>
+<a id="__codelineno-42-7" name="__codelineno-42-7" href="#__codelineno-42-7"></a><span class="n">job</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">exec_agent</span><span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">some_param</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">))</span>
+<a id="__codelineno-42-8" name="__codelineno-42-8" href="#__codelineno-42-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
 <p><code>exec_agent()</code> submits the job and polls until <code>job.finished</code>, then returns the <code>Job</code>.</p>
 <hr />
@@ -2722,104 +2783,104 @@ service traverses the <em>emergent graph</em> formed by URN references embedded 
 content — for example, the link from a job aspect to the service URN, or from a
 job-result aspect to an artifact URN. This allows queries such as "find all artifacts
 produced by jobs that used this particular service version".</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="c1"># ivcap.search() expects a str query, not bytes</span>
-<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="s2">:- ivcap_artifact(Id, Name, MimeType),</span>
-<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="s2">   MimeType = &quot;image/jpeg&quot;.</span>
-<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a>
-<a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a><span class="n">results</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-<a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-<a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="c1"># ivcap.search() expects a str query, not bytes</span>
+<a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="s2">:- ivcap_artifact(Id, Name, MimeType),</span>
+<a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="s2">   MimeType = &quot;image/jpeg&quot;.</span>
+<a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a>
+<a id="__codelineno-43-7" name="__codelineno-43-7" href="#__codelineno-43-7"></a><span class="n">results</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+<a id="__codelineno-43-8" name="__codelineno-43-8" href="#__codelineno-43-8"></a><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+<a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 </code></pre></div>
 <hr />
 <h2 id="12-error-handling">12. Error Handling<a class="headerlink" href="#12-error-handling" title="Permanent link">&para;</a></h2>
 <p>Import exceptions from <code>ivcap_client.exception</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.exception</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a>    <span class="n">IvcapError</span><span class="p">,</span>          <span class="c1"># base class for all IVCAP exceptions</span>
-<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a>    <span class="n">IvcapApiError</span><span class="p">,</span>       <span class="c1"># HTTP error from the API (has .status_code, .operation)</span>
-<a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a>    <span class="n">NotAuthorizedException</span><span class="p">,</span>  <span class="c1"># HTTP 401/403</span>
-<a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a>    <span class="n">ResourceNotFound</span><span class="p">,</span>    <span class="c1"># service or artifact not found</span>
-<a id="__codelineno-40-6" name="__codelineno-40-6" href="#__codelineno-40-6"></a>    <span class="n">AmbiguousRequest</span><span class="p">,</span>    <span class="c1"># get_service_by_name matched more than one service</span>
-<a id="__codelineno-40-7" name="__codelineno-40-7" href="#__codelineno-40-7"></a>    <span class="n">MissingParameterValue</span><span class="p">,</span>   <span class="c1"># required parameter missing when creating an aspect</span>
-<a id="__codelineno-40-8" name="__codelineno-40-8" href="#__codelineno-40-8"></a><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.exception</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a>    <span class="n">IvcapError</span><span class="p">,</span>          <span class="c1"># base class for all IVCAP exceptions</span>
+<a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a>    <span class="n">IvcapApiError</span><span class="p">,</span>       <span class="c1"># HTTP error from the API (has .status_code, .operation)</span>
+<a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a>    <span class="n">NotAuthorizedException</span><span class="p">,</span>  <span class="c1"># HTTP 401/403</span>
+<a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a>    <span class="n">ResourceNotFound</span><span class="p">,</span>    <span class="c1"># service or artifact not found</span>
+<a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a>    <span class="n">AmbiguousRequest</span><span class="p">,</span>    <span class="c1"># get_service_by_name matched more than one service</span>
+<a id="__codelineno-44-7" name="__codelineno-44-7" href="#__codelineno-44-7"></a>    <span class="n">MissingParameterValue</span><span class="p">,</span>   <span class="c1"># required parameter missing when creating an aspect</span>
+<a id="__codelineno-44-8" name="__codelineno-44-8" href="#__codelineno-44-8"></a><span class="p">)</span>
 </code></pre></div>
 <h3 id="typical-patterns">Typical patterns<a class="headerlink" href="#typical-patterns" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.exception</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResourceNotFound</span><span class="p">,</span> <span class="n">AmbiguousRequest</span>
-<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>
-<a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a>    <span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;my-service&quot;</span><span class="p">)</span>
-<a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a><span class="k">except</span> <span class="n">ResourceNotFound</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Service not found: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">resource</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a><span class="k">except</span> <span class="n">AmbiguousRequest</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-41-8" name="__codelineno-41-8" href="#__codelineno-41-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ambiguous: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.exception</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResourceNotFound</span><span class="p">,</span> <span class="n">AmbiguousRequest</span>
+<a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a>
+<a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a>    <span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;my-service&quot;</span><span class="p">)</span>
+<a id="__codelineno-45-5" name="__codelineno-45-5" href="#__codelineno-45-5"></a><span class="k">except</span> <span class="n">ResourceNotFound</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-45-6" name="__codelineno-45-6" href="#__codelineno-45-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Service not found: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">resource</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-45-7" name="__codelineno-45-7" href="#__codelineno-45-7"></a><span class="k">except</span> <span class="n">AmbiguousRequest</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-45-8" name="__codelineno-45-8" href="#__codelineno-45-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ambiguous: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.exception</span><span class="w"> </span><span class="kn">import</span> <span class="n">IvcapApiError</span>
-<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>
-<a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a>    <span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/data.csv&quot;</span><span class="p">)</span>
-<a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a><span class="k">except</span> <span class="n">IvcapApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Upload failed [</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">]: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.exception</span><span class="w"> </span><span class="kn">import</span> <span class="n">IvcapApiError</span>
+<a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a>
+<a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a>    <span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/data.csv&quot;</span><span class="p">)</span>
+<a id="__codelineno-46-5" name="__codelineno-46-5" href="#__codelineno-46-5"></a><span class="k">except</span> <span class="n">IvcapApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-46-6" name="__codelineno-46-6" href="#__codelineno-46-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Upload failed [</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">]: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="job-failure-detection">Job failure detection<a class="headerlink" href="#job-failure-detection" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
-<a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a>
-<a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
-<a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
-<a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a>    <span class="n">job</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-<a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a>
-<a id="__codelineno-43-7" name="__codelineno-43-7" href="#__codelineno-43-7"></a><span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
-<a id="__codelineno-43-8" name="__codelineno-43-8" href="#__codelineno-43-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done:&quot;</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
-<a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a><span class="k">elif</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">FAILED</span><span class="p">:</span>
-<a id="__codelineno-43-10" name="__codelineno-43-10" href="#__codelineno-43-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Job reported failure&quot;</span><span class="p">)</span>
-<a id="__codelineno-43-11" name="__codelineno-43-11" href="#__codelineno-43-11"></a><span class="k">elif</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">:</span>
-<a id="__codelineno-43-12" name="__codelineno-43-12" href="#__codelineno-43-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Job encountered an internal error&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+<a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a>
+<a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
+<a id="__codelineno-47-5" name="__codelineno-47-5" href="#__codelineno-47-5"></a>    <span class="n">job</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<a id="__codelineno-47-6" name="__codelineno-47-6" href="#__codelineno-47-6"></a>
+<a id="__codelineno-47-7" name="__codelineno-47-7" href="#__codelineno-47-7"></a><span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
+<a id="__codelineno-47-8" name="__codelineno-47-8" href="#__codelineno-47-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done:&quot;</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+<a id="__codelineno-47-9" name="__codelineno-47-9" href="#__codelineno-47-9"></a><span class="k">elif</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">FAILED</span><span class="p">:</span>
+<a id="__codelineno-47-10" name="__codelineno-47-10" href="#__codelineno-47-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Job reported failure&quot;</span><span class="p">)</span>
+<a id="__codelineno-47-11" name="__codelineno-47-11" href="#__codelineno-47-11"></a><span class="k">elif</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">:</span>
+<a id="__codelineno-47-12" name="__codelineno-47-12" href="#__codelineno-47-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Job encountered an internal error&quot;</span><span class="p">)</span>
 </code></pre></div>
 <hr />
 <h2 id="13-async-usage">13. Async Usage<a class="headerlink" href="#13-async-usage" title="Permanent link">&para;</a></h2>
 <p>All major operations have <code>_async</code> variants that are compatible with <code>asyncio</code>.</p>
 <h3 id="async-job-submission-and-waiting">Async job submission and waiting<a class="headerlink" href="#async-job-submission-and-waiting" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
-<a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a>
-<a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
-<a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a>    <span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
-<a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a>    <span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
-<a id="__codelineno-44-7" name="__codelineno-44-7" href="#__codelineno-44-7"></a>
-<a id="__codelineno-44-8" name="__codelineno-44-8" href="#__codelineno-44-8"></a>    <span class="c1"># Fetch request model asynchronously</span>
-<a id="__codelineno-44-9" name="__codelineno-44-9" href="#__codelineno-44-9"></a>    <span class="n">Model</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model_async</span><span class="p">()</span>
-<a id="__codelineno-44-10" name="__codelineno-44-10" href="#__codelineno-44-10"></a>    <span class="n">req</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">duration_seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<a id="__codelineno-44-11" name="__codelineno-44-11" href="#__codelineno-44-11"></a>
-<a id="__codelineno-44-12" name="__codelineno-44-12" href="#__codelineno-44-12"></a>    <span class="c1"># Submit and wait until the job finishes</span>
-<a id="__codelineno-44-13" name="__codelineno-44-13" href="#__codelineno-44-13"></a>    <span class="n">job</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job_async</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
-<a id="__codelineno-44-14" name="__codelineno-44-14" href="#__codelineno-44-14"></a>    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">job</span><span class="o">.</span><span class="n">result_async</span><span class="p">()</span>
-<a id="__codelineno-44-15" name="__codelineno-44-15" href="#__codelineno-44-15"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-<a id="__codelineno-44-16" name="__codelineno-44-16" href="#__codelineno-44-16"></a>
-<a id="__codelineno-44-17" name="__codelineno-44-17" href="#__codelineno-44-17"></a><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">run</span><span class="p">())</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a>
+<a id="__codelineno-48-4" name="__codelineno-48-4" href="#__codelineno-48-4"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
+<a id="__codelineno-48-5" name="__codelineno-48-5" href="#__codelineno-48-5"></a>    <span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+<a id="__codelineno-48-6" name="__codelineno-48-6" href="#__codelineno-48-6"></a>    <span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-48-7" name="__codelineno-48-7" href="#__codelineno-48-7"></a>
+<a id="__codelineno-48-8" name="__codelineno-48-8" href="#__codelineno-48-8"></a>    <span class="c1"># Fetch request model asynchronously</span>
+<a id="__codelineno-48-9" name="__codelineno-48-9" href="#__codelineno-48-9"></a>    <span class="n">Model</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model_async</span><span class="p">()</span>
+<a id="__codelineno-48-10" name="__codelineno-48-10" href="#__codelineno-48-10"></a>    <span class="n">req</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">duration_seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-48-11" name="__codelineno-48-11" href="#__codelineno-48-11"></a>
+<a id="__codelineno-48-12" name="__codelineno-48-12" href="#__codelineno-48-12"></a>    <span class="c1"># Submit and wait until the job finishes</span>
+<a id="__codelineno-48-13" name="__codelineno-48-13" href="#__codelineno-48-13"></a>    <span class="n">job</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job_async</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<a id="__codelineno-48-14" name="__codelineno-48-14" href="#__codelineno-48-14"></a>    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">job</span><span class="o">.</span><span class="n">result_async</span><span class="p">()</span>
+<a id="__codelineno-48-15" name="__codelineno-48-15" href="#__codelineno-48-15"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<a id="__codelineno-48-16" name="__codelineno-48-16" href="#__codelineno-48-16"></a>
+<a id="__codelineno-48-17" name="__codelineno-48-17" href="#__codelineno-48-17"></a><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">run</span><span class="p">())</span>
 </code></pre></div>
 <h3 id="async-polling-loop">Async polling loop<a class="headerlink" href="#async-polling-loop" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
-<a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a>    <span class="n">job</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job_async</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">max_wait_time</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a>    <span class="k">while</span> <span class="ow">not</span> <span class="k">await</span> <span class="n">job</span><span class="o">.</span><span class="n">finished_async</span><span class="p">():</span>
-<a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a id="__codelineno-45-5" name="__codelineno-45-5" href="#__codelineno-45-5"></a>    <span class="n">status</span> <span class="o">=</span> <span class="k">await</span> <span class="n">job</span><span class="o">.</span><span class="n">status_async</span><span class="p">(</span><span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<a id="__codelineno-45-6" name="__codelineno-45-6" href="#__codelineno-45-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
+<a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a>    <span class="n">job</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job_async</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">max_wait_time</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a>    <span class="k">while</span> <span class="ow">not</span> <span class="k">await</span> <span class="n">job</span><span class="o">.</span><span class="n">finished_async</span><span class="p">():</span>
+<a id="__codelineno-49-4" name="__codelineno-49-4" href="#__codelineno-49-4"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a id="__codelineno-49-5" name="__codelineno-49-5" href="#__codelineno-49-5"></a>    <span class="n">status</span> <span class="o">=</span> <span class="k">await</span> <span class="n">job</span><span class="o">.</span><span class="n">status_async</span><span class="p">(</span><span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-49-6" name="__codelineno-49-6" href="#__codelineno-49-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="parallel-jobs-async">Parallel jobs (async)<a class="headerlink" href="#parallel-jobs-async" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
-<a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a>    <span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
-<a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a>    <span class="n">Model</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model_async</span><span class="p">()</span>
-<a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a>    <span class="n">req</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">)</span>
-<a id="__codelineno-46-5" name="__codelineno-46-5" href="#__codelineno-46-5"></a>
-<a id="__codelineno-46-6" name="__codelineno-46-6" href="#__codelineno-46-6"></a>    <span class="n">jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
-<a id="__codelineno-46-7" name="__codelineno-46-7" href="#__codelineno-46-7"></a>
-<a id="__codelineno-46-8" name="__codelineno-46-8" href="#__codelineno-46-8"></a>    <span class="n">running</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">jobs</span><span class="p">)</span>
-<a id="__codelineno-46-9" name="__codelineno-46-9" href="#__codelineno-46-9"></a>    <span class="k">while</span> <span class="n">running</span><span class="p">:</span>
-<a id="__codelineno-46-10" name="__codelineno-46-10" href="#__codelineno-46-10"></a>        <span class="n">job</span> <span class="o">=</span> <span class="n">running</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-<a id="__codelineno-46-11" name="__codelineno-46-11" href="#__codelineno-46-11"></a>        <span class="n">status</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<a id="__codelineno-46-12" name="__codelineno-46-12" href="#__codelineno-46-12"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
-<a id="__codelineno-46-13" name="__codelineno-46-13" href="#__codelineno-46-13"></a>            <span class="n">running</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
-<a id="__codelineno-46-14" name="__codelineno-46-14" href="#__codelineno-46-14"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
+<a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a>    <span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:service:&lt;uuid&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a>    <span class="n">Model</span> <span class="o">=</span> <span class="k">await</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model_async</span><span class="p">()</span>
+<a id="__codelineno-50-4" name="__codelineno-50-4" href="#__codelineno-50-4"></a>    <span class="n">req</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">)</span>
+<a id="__codelineno-50-5" name="__codelineno-50-5" href="#__codelineno-50-5"></a>
+<a id="__codelineno-50-6" name="__codelineno-50-6" href="#__codelineno-50-6"></a>    <span class="n">jobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+<a id="__codelineno-50-7" name="__codelineno-50-7" href="#__codelineno-50-7"></a>
+<a id="__codelineno-50-8" name="__codelineno-50-8" href="#__codelineno-50-8"></a>    <span class="n">running</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">jobs</span><span class="p">)</span>
+<a id="__codelineno-50-9" name="__codelineno-50-9" href="#__codelineno-50-9"></a>    <span class="k">while</span> <span class="n">running</span><span class="p">:</span>
+<a id="__codelineno-50-10" name="__codelineno-50-10" href="#__codelineno-50-10"></a>        <span class="n">job</span> <span class="o">=</span> <span class="n">running</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<a id="__codelineno-50-11" name="__codelineno-50-11" href="#__codelineno-50-11"></a>        <span class="n">status</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-50-12" name="__codelineno-50-12" href="#__codelineno-50-12"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
+<a id="__codelineno-50-13" name="__codelineno-50-13" href="#__codelineno-50-13"></a>            <span class="n">running</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+<a id="__codelineno-50-14" name="__codelineno-50-14" href="#__codelineno-50-14"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </code></pre></div>
 <hr />
 <h2 id="14-environment-variable-reference">14. Environment Variable Reference<a class="headerlink" href="#14-environment-variable-reference" title="Permanent link">&para;</a></h2>
@@ -2834,17 +2895,17 @@ produced by jobs that used this particular service version".</p>
 <tbody>
 <tr>
 <td><code>IVCAP_URL</code></td>
-<td>External URL of IVCAP deployment</td>
+<td>External URL of IVCAP deployment — triggers platform mode</td>
 <td><code>IVCAP()</code></td>
 </tr>
 <tr>
 <td><code>IVCAP_BASE_URL</code></td>
-<td>Internal URL (set by platform inside a job)</td>
+<td>Internal URL injected by the platform inside a job container — no JWT needed</td>
 <td><code>IVCAP()</code></td>
 </tr>
 <tr>
 <td><code>IVCAP_JWT</code></td>
-<td>JWT bearer token for authentication</td>
+<td>JWT bearer token for authentication (external access only)</td>
 <td><code>IVCAP()</code></td>
 </tr>
 <tr>
@@ -2852,41 +2913,69 @@ produced by jobs that used this particular service version".</p>
 <td>Account URN for artifact/aspect ownership</td>
 <td>Application code</td>
 </tr>
+<tr>
+<td><code>IVCAP_LOCAL_DIR</code></td>
+<td>Root directory for local artifact storage in <strong>local mode</strong> (default: <code>./ivcap-artifacts</code>)</td>
+<td><code>IVCAP()</code>, <code>IVCAP.local()</code>, <code>LocalIVCAP</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mode selection summary:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Environment</th>
+<th><code>IVCAP()</code> returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IVCAP_URL</code> set + <code>IVCAP_JWT</code> set</td>
+<td>Platform <code>IVCAP</code> (external)</td>
+</tr>
+<tr>
+<td><code>IVCAP_BASE_URL</code> set (inside container)</td>
+<td>Platform <code>IVCAP</code> (no token needed)</td>
+</tr>
+<tr>
+<td>Neither URL set, no explicit token</td>
+<td><code>LocalIVCAP</code> (filesystem, no network)</td>
+</tr>
 </tbody>
 </table>
 <hr />
 <h2 id="quick-start-cheatsheet">Quick-Start Cheatsheet<a class="headerlink" href="#quick-start-cheatsheet" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
-<a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
-<a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
-<a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a>
-<a id="__codelineno-47-5" name="__codelineno-47-5" href="#__codelineno-47-5"></a><span class="n">load_dotenv</span><span class="p">(</span><span class="s1">&#39;.dbg-env&#39;</span><span class="p">)</span>
-<a id="__codelineno-47-6" name="__codelineno-47-6" href="#__codelineno-47-6"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
-<a id="__codelineno-47-7" name="__codelineno-47-7" href="#__codelineno-47-7"></a>
-<a id="__codelineno-47-8" name="__codelineno-47-8" href="#__codelineno-47-8"></a><span class="c1"># --- Discover ---</span>
-<a id="__codelineno-47-9" name="__codelineno-47-9" href="#__codelineno-47-9"></a><span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;my-service&quot;</span><span class="p">)</span>
-<a id="__codelineno-47-10" name="__codelineno-47-10" href="#__codelineno-47-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">svc</span><span class="p">,</span> <span class="n">svc</span><span class="o">.</span><span class="n">mandatory_parameters</span><span class="p">)</span>
-<a id="__codelineno-47-11" name="__codelineno-47-11" href="#__codelineno-47-11"></a>
-<a id="__codelineno-47-12" name="__codelineno-47-12" href="#__codelineno-47-12"></a><span class="c1"># --- Run ---</span>
-<a id="__codelineno-47-13" name="__codelineno-47-13" href="#__codelineno-47-13"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model</span>
-<a id="__codelineno-47-14" name="__codelineno-47-14" href="#__codelineno-47-14"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">param</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">))</span>
-<a id="__codelineno-47-15" name="__codelineno-47-15" href="#__codelineno-47-15"></a>
-<a id="__codelineno-47-16" name="__codelineno-47-16" href="#__codelineno-47-16"></a><span class="c1"># --- Poll ---</span>
-<a id="__codelineno-47-17" name="__codelineno-47-17" href="#__codelineno-47-17"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
-<a id="__codelineno-47-18" name="__codelineno-47-18" href="#__codelineno-47-18"></a>    <span class="n">job</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-<a id="__codelineno-47-19" name="__codelineno-47-19" href="#__codelineno-47-19"></a><span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
-<a id="__codelineno-47-20" name="__codelineno-47-20" href="#__codelineno-47-20"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
-<a id="__codelineno-47-21" name="__codelineno-47-21" href="#__codelineno-47-21"></a>
-<a id="__codelineno-47-22" name="__codelineno-47-22" href="#__codelineno-47-22"></a><span class="c1"># --- Artifacts ---</span>
-<a id="__codelineno-47-23" name="__codelineno-47-23" href="#__codelineno-47-23"></a><span class="n">art</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/data.csv&quot;</span><span class="p">)</span>
-<a id="__codelineno-47-24" name="__codelineno-47-24" href="#__codelineno-47-24"></a><span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="n">art</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-<a id="__codelineno-47-25" name="__codelineno-47-25" href="#__codelineno-47-25"></a><span class="k">with</span> <span class="n">art</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
-<a id="__codelineno-47-26" name="__codelineno-47-26" href="#__codelineno-47-26"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
-<a id="__codelineno-47-27" name="__codelineno-47-27" href="#__codelineno-47-27"></a>
-<a id="__codelineno-47-28" name="__codelineno-47-28" href="#__codelineno-47-28"></a><span class="c1"># --- Aspects ---</span>
-<a id="__codelineno-47-29" name="__codelineno-47-29" href="#__codelineno-47-29"></a><span class="n">ivcap</span><span class="o">.</span><span class="n">add_aspect</span><span class="p">(</span><span class="n">art</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my:schema:tag.1&quot;</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">})</span>
-<a id="__codelineno-47-30" name="__codelineno-47-30" href="#__codelineno-47-30"></a><span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">art</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
-<a id="__codelineno-47-31" name="__codelineno-47-31" href="#__codelineno-47-31"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">aspect</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+<a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a>
+<a id="__codelineno-51-5" name="__codelineno-51-5" href="#__codelineno-51-5"></a><span class="n">load_dotenv</span><span class="p">(</span><span class="s1">&#39;.dbg-env&#39;</span><span class="p">)</span>
+<a id="__codelineno-51-6" name="__codelineno-51-6" href="#__codelineno-51-6"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+<a id="__codelineno-51-7" name="__codelineno-51-7" href="#__codelineno-51-7"></a>
+<a id="__codelineno-51-8" name="__codelineno-51-8" href="#__codelineno-51-8"></a><span class="c1"># --- Discover ---</span>
+<a id="__codelineno-51-9" name="__codelineno-51-9" href="#__codelineno-51-9"></a><span class="n">svc</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;my-service&quot;</span><span class="p">)</span>
+<a id="__codelineno-51-10" name="__codelineno-51-10" href="#__codelineno-51-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">svc</span><span class="p">,</span> <span class="n">svc</span><span class="o">.</span><span class="n">mandatory_parameters</span><span class="p">)</span>
+<a id="__codelineno-51-11" name="__codelineno-51-11" href="#__codelineno-51-11"></a>
+<a id="__codelineno-51-12" name="__codelineno-51-12" href="#__codelineno-51-12"></a><span class="c1"># --- Run ---</span>
+<a id="__codelineno-51-13" name="__codelineno-51-13" href="#__codelineno-51-13"></a><span class="n">Model</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_model</span>
+<a id="__codelineno-51-14" name="__codelineno-51-14" href="#__codelineno-51-14"></a><span class="n">job</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">param</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">))</span>
+<a id="__codelineno-51-15" name="__codelineno-51-15" href="#__codelineno-51-15"></a>
+<a id="__codelineno-51-16" name="__codelineno-51-16" href="#__codelineno-51-16"></a><span class="c1"># --- Poll ---</span>
+<a id="__codelineno-51-17" name="__codelineno-51-17" href="#__codelineno-51-17"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
+<a id="__codelineno-51-18" name="__codelineno-51-18" href="#__codelineno-51-18"></a>    <span class="n">job</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<a id="__codelineno-51-19" name="__codelineno-51-19" href="#__codelineno-51-19"></a><span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
+<a id="__codelineno-51-20" name="__codelineno-51-20" href="#__codelineno-51-20"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+<a id="__codelineno-51-21" name="__codelineno-51-21" href="#__codelineno-51-21"></a>
+<a id="__codelineno-51-22" name="__codelineno-51-22" href="#__codelineno-51-22"></a><span class="c1"># --- Artifacts ---</span>
+<a id="__codelineno-51-23" name="__codelineno-51-23" href="#__codelineno-51-23"></a><span class="n">art</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/data.csv&quot;</span><span class="p">)</span>
+<a id="__codelineno-51-24" name="__codelineno-51-24" href="#__codelineno-51-24"></a><span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="n">art</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-51-25" name="__codelineno-51-25" href="#__codelineno-51-25"></a><span class="k">with</span> <span class="n">art</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
+<a id="__codelineno-51-26" name="__codelineno-51-26" href="#__codelineno-51-26"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+<a id="__codelineno-51-27" name="__codelineno-51-27" href="#__codelineno-51-27"></a>
+<a id="__codelineno-51-28" name="__codelineno-51-28" href="#__codelineno-51-28"></a><span class="c1"># --- Aspects ---</span>
+<a id="__codelineno-51-29" name="__codelineno-51-29" href="#__codelineno-51-29"></a><span class="n">ivcap</span><span class="o">.</span><span class="n">add_aspect</span><span class="p">(</span><span class="n">art</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my:schema:tag.1&quot;</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">})</span>
+<a id="__codelineno-51-30" name="__codelineno-51-30" href="#__codelineno-51-30"></a><span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">art</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+<a id="__codelineno-51-31" name="__codelineno-51-31" href="#__codelineno-51-31"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">aspect</span><span class="p">)</span>
 </code></pre></div>
 
 

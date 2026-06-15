@@ -7,7 +7,6 @@ import pytest
 from ivcap_client.artifact import LocalFileArtifact, LocalIVCAP
 from ivcap_client.ivcap import IVCAP
 
-
 # ---------------------------------------------------------------------------
 # LocalIVCAP construction
 # ---------------------------------------------------------------------------
@@ -120,7 +119,7 @@ def test_upload_artifact_bytes_stream(tmp_path):
 def test_upload_artifact_text_stream(tmp_path):
     ivcap = LocalIVCAP(base_dir=tmp_path / "out")
 
-    artifact = ivcap.upload_artifact(
+    ivcap.upload_artifact(
         name="notes.txt",
         io_stream=io.StringIO("line1\nline2\n"),
         content_type="text/plain",

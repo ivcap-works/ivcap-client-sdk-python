@@ -18,7 +18,7 @@ import tempfile
 import uuid
 from collections.abc import Iterator
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from pathlib import Path
 from sys import maxsize as MAXSIZE
 from typing import IO, TYPE_CHECKING, BinaryIO
@@ -464,7 +464,7 @@ class LocalIVCAP:
 
         aspect_uuid = str(uuid.uuid4())
         aspect_id = f"urn:ivcap:aspect:{aspect_uuid}"
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
 
         record = {
             "id": aspect_id,

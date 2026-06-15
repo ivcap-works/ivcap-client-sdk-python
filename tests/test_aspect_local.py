@@ -7,7 +7,6 @@ import pytest
 from ivcap_client.artifact import LocalAspect, LocalIVCAP
 from ivcap_client.exception import MissingParameterValue, ResourceNotFound
 
-
 # ---------------------------------------------------------------------------
 # add_aspect — happy path
 # ---------------------------------------------------------------------------

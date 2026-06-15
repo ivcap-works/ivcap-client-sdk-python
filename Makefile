@@ -56,24 +56,36 @@ check: lint typecheck test
 
 SRC_DIR=${ROOT_DIR}/ivcap_client
 OPENAPI_URL=https://raw.githubusercontent.com/ivcap-works/ivcap-core-api/develop/openapi3.json
+OPENAPI_CACHED=${ROOT_DIR}/openapi3.json
+
 gen:
 	@if ! poetry run bash -c "command -v openapi-python-client > /dev/null 2>&1"; then \
 		echo ">>>\n>>> You need to first install 'openapi-python-client'\n>>>"; \
 		exit -1; \
 	fi
-	rm -rf ${ROOT_DIR}/build && mkdir -p ${ROOT_DIR}/build
-	cd ${ROOT_DIR}/build \
-	  && curl ${OPENAPI_URL} > openapi3.json \
-		&& poetry run python ${ROOT_DIR}/patch_openapi.py openapi3.json \
-		&& poetry run openapi-python-client generate --path openapi3.json --config ${ROOT_DIR}/config.yml \
-		&& poetry run python ${ROOT_DIR}/fix_auto_generated.py \
-		&& cd sdk_client/ivcap_client && mkdir client && mv *.py client \
-		&& cd ${ROOT_DIR}
-	rm -fr ${SRC_DIR}/api ${SRC_DIR}/models ${SRC_DIR}/client \
-		&& mkdir -p ${SRC_DIR}/api ${SRC_DIR}/models ${SRC_DIR}/client \
-		&& mv ${ROOT_DIR}/build/sdk_client/ivcap_client/* ${SRC_DIR} \
-		&& mv ${SRC_DIR}/client/errors.py ${SRC_DIR}/client/types.py ${SRC_DIR} \
-		&& sed -i '' '1s/^/#\n#### DO NOT EDIT ####\n#\n/' ${SRC_DIR}/types.py ${SRC_DIR}/errors.py
+	@echo "Downloading OpenAPI spec..."
+	@mkdir -p ${ROOT_DIR}/build
+	@curl -s ${OPENAPI_URL} > ${ROOT_DIR}/build/openapi3.json.new
+	@if [ -f "${OPENAPI_CACHED}" ] && diff -q "${OPENAPI_CACHED}" "${ROOT_DIR}/build/openapi3.json.new" > /dev/null 2>&1; then \
+		echo "OpenAPI spec unchanged — skipping code generation."; \
+		rm ${ROOT_DIR}/build/openapi3.json.new; \
+	else \
+		echo "OpenAPI spec changed (or not yet cached) — regenerating client..."; \
+		cp ${ROOT_DIR}/build/openapi3.json.new ${OPENAPI_CACHED}; \
+		rm -rf ${ROOT_DIR}/build/sdk_client; \
+		cp ${OPENAPI_CACHED} ${ROOT_DIR}/build/openapi3.json; \
+		cd ${ROOT_DIR}/build \
+		  && poetry run python ${ROOT_DIR}/patch_openapi.py openapi3.json \
+			&& poetry run openapi-python-client generate --path openapi3.json --config ${ROOT_DIR}/config.yml \
+			&& poetry run python ${ROOT_DIR}/fix_auto_generated.py \
+			&& cd sdk_client/ivcap_client && mkdir client && mv *.py client \
+			&& cd ${ROOT_DIR}; \
+		rm -fr ${SRC_DIR}/api ${SRC_DIR}/models ${SRC_DIR}/client \
+			&& mkdir -p ${SRC_DIR}/api ${SRC_DIR}/models ${SRC_DIR}/client \
+			&& mv ${ROOT_DIR}/build/sdk_client/ivcap_client/* ${SRC_DIR} \
+			&& mv ${SRC_DIR}/client/errors.py ${SRC_DIR}/client/types.py ${SRC_DIR} \
+			&& sed -i '' '1s/^/#\n#### DO NOT EDIT ####\n#\n/' ${SRC_DIR}/types.py ${SRC_DIR}/errors.py; \
+	fi
 
 #	rm -r ${ROOT_DIR}/build
 #	  && curl ${OPENAPI_URL} | jsonpatch - ${ROOT_DIR}/openapi-patch.json > openapi3.json \

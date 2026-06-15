@@ -9,6 +9,7 @@ import base64
 import datetime
 import hashlib
 import io
+import json
 import logging
 import mimetypes
 import os
@@ -17,7 +18,7 @@ import tempfile
 import uuid
 from collections.abc import Iterator
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from sys import maxsize as MAXSIZE
 from typing import IO, TYPE_CHECKING, BinaryIO
@@ -34,6 +35,7 @@ from tusclient.client import TusClient
 
 from ivcap_client.api.artifact import artifact_list, artifact_read, artifact_upload
 from ivcap_client.aspect import Aspect
+from ivcap_client.exception import MissingParameterValue, ResourceNotFound
 from ivcap_client.models.artifact_list_item import ArtifactListItem
 from ivcap_client.models.artifact_list_rt import ArtifactListRT
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
@@ -132,8 +134,26 @@ class Artifact:
             for chunk in response.iter_bytes(chunk_size=chunk_size):
                 yield chunk
 
-    def as_local_file(self) -> Path:
-        """Download the artifact data to a local temporary file and return the Path"""
+    def as_local_file(self, path: Path | None = None) -> Path:
+        """Download the artifact data to a local file and return the Path.
+
+        Args:
+            path: Optional destination path. If provided the content is written
+                to that file (parent directories are created automatically) and
+                a plain :class:`~pathlib.Path` is returned.  If omitted, a
+                temporary file is created and a :class:`CMPath` (context-manager
+                aware path that deletes itself on exit) is returned instead.
+
+        Returns:
+            Path: The path to the written file.
+        """
+        if path is not None:
+            path = Path(path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with open(path, "wb") as f:
+                for chunk in self.as_stream():
+                    f.write(chunk)
+            return path
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         with temp_file as f:
             for chunk in self.as_stream():
@@ -239,6 +259,53 @@ class LocalFileArtifact:
         return f"<LocalFileArtifact id={self.id}>"
 
 
+class LocalAspect:
+    """A filesystem-backed aspect record returned by :class:`LocalIVCAP`.
+
+    Provides the same key properties as :class:`~ivcap_client.aspect.Aspect`
+    so that callers do not need to branch between local and platform mode.
+
+    Instances are created by :meth:`LocalIVCAP.add_aspect` /
+    :meth:`LocalIVCAP.update_aspect` and retrieved by
+    :meth:`LocalIVCAP.get_aspect`.  On disk each aspect is a single JSON
+    file stored under ``<base_dir>/aspects/<uuid>.json``.
+    """
+
+    def __init__(
+        self,
+        id: str,
+        entity: str,
+        schema: str,
+        content: dict,
+        *,
+        valid_from: datetime | None = None,
+    ):
+        self.id = id
+        self.entity = entity
+        self.schema = schema
+        self._content = content
+        self.valid_from = valid_from
+        self.valid_to = None
+
+    @property
+    def urn(self) -> str:
+        """URN of this aspect record (``urn:ivcap:aspect:<uuid>``)."""
+        return self.id
+
+    @property
+    def aspect(self) -> dict:
+        """The JSON content body of the aspect."""
+        return self._content
+
+    @property
+    def content(self) -> dict:
+        """Alias for :attr:`aspect`."""
+        return self._content
+
+    def __repr__(self) -> str:
+        return f"<LocalAspect id={self.id}, entity={self.entity}, schema={self.schema}>"
+
+
 class LocalIVCAP:
     """A filesystem-backed implementation of the IVCAP client interface for use
     in local development and testing.  All artifacts are written under ``base_dir``.
@@ -325,7 +392,7 @@ class LocalIVCAP:
             suffix = Path(file_path).suffix if file_path else ""
             name = f"{uuid.uuid4()}{suffix}"
 
-        dest = self._base_dir / name
+        dest = self._base_dir / "artifacts" / name
         dest.parent.mkdir(parents=True, exist_ok=True)
 
         if file_path:
@@ -351,6 +418,133 @@ class LocalIVCAP:
             LocalFileArtifact: The local file artifact.
         """
         return LocalFileArtifact(id)
+
+    # ---- Aspect support ----
+
+    @property
+    def _aspects_dir(self) -> Path:
+        """Subdirectory used for local aspect storage."""
+        return self._base_dir / "aspects"
+
+    def add_aspect(
+        self,
+        entity: str,
+        aspect: dict,
+        *,
+        schema: str | None = None,
+        policy: URN | None = None,
+    ) -> LocalAspect:
+        """Store an aspect as a JSON file and return a :class:`LocalAspect`.
+
+        The aspect is written to ``<base_dir>/aspects/<uuid>.json``.
+        Each call creates a *new* aspect record (independent of any prior
+        records for the same entity/schema pair), matching the additive
+        semantics of the platform's ``add_aspect``.
+
+        Args:
+            entity: URN of the entity to attach the aspect to.
+            aspect: The aspect content dict.  If ``schema`` is ``None``, the
+                schema is read from ``aspect["$schema"]``.
+            schema: Schema URN.  Defaults to ``aspect["$schema"]``.
+            policy: Accepted for interface compatibility; silently ignored.
+
+        Returns:
+            LocalAspect: The newly created local aspect record.
+
+        Raises:
+            MissingParameterValue: If ``entity`` or schema are missing.
+        """
+        if not entity:
+            raise MissingParameterValue("Missing entity")
+        b = dict(aspect) if isinstance(aspect, dict) else aspect.to_dict()
+        if not schema:
+            schema = b.get("$schema")
+        if not schema:
+            raise MissingParameterValue("Missing schema (also not in aspect '$schema')")
+
+        aspect_uuid = str(uuid.uuid4())
+        aspect_id = f"urn:ivcap:aspect:{aspect_uuid}"
+        now = datetime.now(timezone.utc)
+
+        record = {
+            "id": aspect_id,
+            "entity": entity,
+            "schema": schema,
+            "content": b,
+            "valid_from": now.isoformat(),
+            "valid_to": None,
+        }
+
+        self._aspects_dir.mkdir(parents=True, exist_ok=True)
+        (self._aspects_dir / f"{aspect_uuid}.json").write_text(
+            json.dumps(record, indent=2)
+        )
+        logger.info(
+            "LocalIVCAP: written aspect '%s' for entity '%s'", aspect_id, entity
+        )
+        return LocalAspect(aspect_id, entity, schema, b, valid_from=now)
+
+    def update_aspect(
+        self,
+        entity: str,
+        aspect: dict,
+        *,
+        schema: str | None = None,
+        policy: URN | None = None,
+    ) -> LocalAspect:
+        """Store an aspect as a JSON file (same as :meth:`add_aspect` locally).
+
+        On the platform ``update_aspect`` retracts any prior aspect with the
+        same ``(entity, schema)`` pair before creating the new one.  In local
+        mode there is no retraction mechanism, so this method is an alias for
+        :meth:`add_aspect`.
+
+        Args:
+            entity: URN of the entity to attach the aspect to.
+            aspect: The aspect content dict.
+            schema: Schema URN.  Defaults to ``aspect["$schema"]``.
+            policy: Accepted for interface compatibility; silently ignored.
+
+        Returns:
+            LocalAspect: The newly created local aspect record.
+        """
+        return self.add_aspect(entity, aspect, schema=schema, policy=policy)
+
+    def get_aspect(self, aspect_id: str) -> LocalAspect:
+        """Return a :class:`LocalAspect` for the given aspect URN or UUID.
+
+        Args:
+            aspect_id: Either a full ``urn:ivcap:aspect:<uuid>`` URN or a
+                bare UUID string.
+
+        Returns:
+            LocalAspect: The stored aspect record.
+
+        Raises:
+            ResourceNotFound: If no aspect with the given ID exists on disk.
+        """
+        prefix = "urn:ivcap:aspect:"
+        aspect_uuid = (
+            aspect_id[len(prefix) :] if aspect_id.startswith(prefix) else aspect_id
+        )
+
+        path = self._aspects_dir / f"{aspect_uuid}.json"
+        if not path.exists():
+            raise ResourceNotFound(aspect_id)
+
+        record = json.loads(path.read_text())
+        valid_from = (
+            datetime.fromisoformat(record["valid_from"])
+            if record.get("valid_from")
+            else None
+        )
+        return LocalAspect(
+            record["id"],
+            record["entity"],
+            record["schema"],
+            record["content"],
+            valid_from=valid_from,
+        )
 
     def __repr__(self) -> str:
         return f"<LocalIVCAP base_dir={self._base_dir}>"

@@ -69,7 +69,7 @@ def test_upload_artifact_file_path_creates_file(tmp_path):
     artifact = ivcap.upload_artifact(name="result.txt", file_path=str(src))
 
     assert isinstance(artifact, LocalFileArtifact)
-    dest = tmp_path / "out" / "result.txt"
+    dest = tmp_path / "out" / "artifacts" / "result.txt"
     assert dest.exists()
     assert dest.read_text() == "hello"
 
@@ -82,8 +82,8 @@ def test_upload_artifact_file_path_urn_is_absolute(tmp_path):
     artifact = ivcap.upload_artifact(name="f.txt", file_path=str(src))
 
     assert artifact.id.startswith("urn:file://")
-    # The id must encode an absolute path
-    assert str(tmp_path) in artifact.id
+    # The id must encode an absolute path inside the artifacts/ subdir
+    assert str(tmp_path / "out" / "artifacts") in artifact.id
 
 
 def test_upload_artifact_creates_nested_dirs(tmp_path):
@@ -93,7 +93,7 @@ def test_upload_artifact_creates_nested_dirs(tmp_path):
 
     ivcap.upload_artifact(name="deep/nested/data.csv", file_path=str(src))
 
-    assert (tmp_path / "out" / "deep" / "nested" / "data.csv").exists()
+    assert (tmp_path / "out" / "artifacts" / "deep" / "nested" / "data.csv").exists()
 
 
 # ---------------------------------------------------------------------------
@@ -111,7 +111,7 @@ def test_upload_artifact_bytes_stream(tmp_path):
         content_type="application/octet-stream",
     )
 
-    dest = tmp_path / "out" / "blob.bin"
+    dest = tmp_path / "out" / "artifacts" / "blob.bin"
     assert dest.exists()
     assert dest.read_bytes() == data
     assert isinstance(artifact, LocalFileArtifact)
@@ -126,7 +126,7 @@ def test_upload_artifact_text_stream(tmp_path):
         content_type="text/plain",
     )
 
-    dest = tmp_path / "out" / "notes.txt"
+    dest = tmp_path / "out" / "artifacts" / "notes.txt"
     assert dest.exists()
     assert "line1" in dest.read_text()
 
@@ -145,8 +145,8 @@ def test_upload_artifact_auto_name_when_none(tmp_path):
 
     # Extension should be preserved
     assert artifact.id.endswith(".py")
-    # File should exist under base_dir
-    p = tmp_path / "out"
+    # File should exist under base_dir/artifacts/
+    p = tmp_path / "out" / "artifacts"
     files = list(p.glob("*.py"))
     assert len(files) == 1
 

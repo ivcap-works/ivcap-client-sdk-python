@@ -232,6 +232,8 @@ The `base_dir` defaults to `./ivcap-artifacts` and can be set via the
 
 #### What `LocalIVCAP` supports
 
+**Artifacts:**
+
 | Method | Behaviour in local mode |
 |---|---|
 | `upload_artifact(name, file_path, ...)` | Copies source file to `base_dir/name` |
@@ -239,8 +241,35 @@ The `base_dir` defaults to `./ivcap-artifacts` and can be set via the
 | `get_artifact("file://..." or "urn:file://...")` | Returns a `LocalFileArtifact` for an existing file |
 | `collection`, `policy` arguments | Accepted, silently ignored |
 
-`LocalIVCAP` does **not** implement `list_artifacts`, `list_services`, or other
-platform-only methods.  It is scoped exclusively to artifact read/write.
+**Aspects** (stored as JSON files under `base_dir/aspects/`):
+
+| Method | Behaviour in local mode |
+|---|---|
+| `add_aspect(entity, aspect, *, schema, policy)` | Writes a `<uuid>.json` file; returns a `LocalAspect` |
+| `update_aspect(entity, aspect, *, schema, policy)` | Same as `add_aspect` (no retraction in local mode) |
+| `get_aspect(aspect_id)` | Reads the JSON file by URN (`urn:ivcap:aspect:<uuid>`) or bare UUID |
+
+```python
+from ivcap_client import IVCAP, LocalAspect
+
+ivcap = IVCAP.local(base_dir="./my-artifacts")
+
+# Create an aspect
+aspect = ivcap.add_aspect(
+    entity="urn:ivcap:artifact:some-uuid",
+    aspect={"$schema": "urn:my:schema:tag.1", "tags": ["marine", "coral"]},
+)
+print(aspect.id)    # urn:ivcap:aspect:<uuid>
+print(aspect.content)
+
+# Retrieve it later
+retrieved = ivcap.get_aspect(aspect.id)
+assert isinstance(retrieved, LocalAspect)
+```
+
+`LocalIVCAP` does **not** implement `list_artifacts`, `list_services`,
+`list_aspects`, or other platform-only methods.  Aspect *search* is not
+supported in local mode.
 
 #### Local-file artifact URNs
 

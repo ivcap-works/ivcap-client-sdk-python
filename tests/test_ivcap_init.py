@@ -163,7 +163,7 @@ def test_ivcap_auto_detect_local_can_upload(monkeypatch, tmp_path):
 
     monkeypatch.delenv("IVCAP_URL", raising=False)
     monkeypatch.delenv("IVCAP_BASE_URL", raising=False)
-    monkeypatch.setenv("IVCAP_LOCAL_DIR", str(tmp_path / "artifacts"))
+    monkeypatch.setenv("IVCAP_LOCAL_DIR", str(tmp_path / "local-store"))
 
     src = tmp_path / "input.txt"
     src.write_text("auto-detect content")
@@ -171,7 +171,10 @@ def test_ivcap_auto_detect_local_can_upload(monkeypatch, tmp_path):
     ivcap = IVCAP()
     artifact = ivcap.upload_artifact(name="output.txt", file_path=str(src))
     assert isinstance(artifact, LocalFileArtifact)
-    assert (tmp_path / "artifacts" / "output.txt").read_text() == "auto-detect content"
+    # artifacts are written under base_dir/artifacts/
+    assert (
+        tmp_path / "local-store" / "artifacts" / "output.txt"
+    ).read_text() == "auto-detect content"
 
 
 def test_ivcap_with_explicit_token_and_no_url_still_raises(monkeypatch):

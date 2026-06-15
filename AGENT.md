@@ -327,6 +327,61 @@ When a service runs *inside* IVCAP (e.g., as a container job), the platform inje
 ivcap = IVCAP()
 ```
 
+### Local mode (no platform available)
+
+When neither `IVCAP_URL` nor `IVCAP_BASE_URL` is set and no explicit `token` is
+passed, `IVCAP()` **automatically returns a `LocalIVCAP` instance** — a
+filesystem-backed drop-in replacement that stores artifacts under a local directory.
+No network calls are made.
+
+```python
+from ivcap_client import IVCAP, LocalIVCAP
+
+ivcap = IVCAP()  # → LocalIVCAP when no URL env var is set
+artifact = ivcap.upload_artifact(name="result.csv", file_path="/tmp/result.csv")
+print(artifact.id)  # urn:file:///abs/path/to/ivcap-artifacts/result.csv
+```
+
+Auto-detection decision (in order):
+
+| Condition | Result |
+|---|---|
+| `IVCAP_URL` or `IVCAP_BASE_URL` env var is set | Platform `IVCAP` instance |
+| `url` argument is provided | Platform `IVCAP` instance |
+| `token` argument provided without a URL | `ValueError` — signals misconfiguration |
+| None of the above | `LocalIVCAP` using `IVCAP_LOCAL_DIR` (default: `./ivcap-artifacts`) |
+
+**Force local mode explicitly** (useful in tests):
+
+```python
+ivcap = IVCAP.local(base_dir="./my-artifacts")  # always LocalIVCAP
+# or directly:
+from ivcap_client import LocalIVCAP
+ivcap = LocalIVCAP(base_dir="./my-artifacts")
+```
+
+**Detect which mode is active at runtime:**
+
+```python
+if isinstance(ivcap, LocalIVCAP):
+    print("Local mode — artifacts at:", ivcap.base_dir)
+else:
+    print("Platform mode — connected to:", ivcap.url)
+```
+
+> **Scope:** `LocalIVCAP` supports artifact read/write (`upload_artifact`,
+> `get_artifact`) and limited aspect operations (`add_aspect`, `update_aspect`,
+> `get_aspect`).  The directory layout under `base_dir` is:
+>
+> ```
+> <base_dir>/
+>   artifacts/   ← artifact files written by upload_artifact
+>   aspects/     ← aspect JSON files written by add_aspect / update_aspect
+> ```
+>
+> Methods such as `list_services`, `list_artifacts`, and `list_aspects` are
+> platform-only and are not available in local mode.
+
 ### Common pattern in examples
 
 ```python
@@ -977,10 +1032,19 @@ async def run():
 
 | Variable | Description | Used by |
 |---|---|---|
-| `IVCAP_URL` | External URL of IVCAP deployment | `IVCAP()` |
-| `IVCAP_BASE_URL` | Internal URL (set by platform inside a job) | `IVCAP()` |
-| `IVCAP_JWT` | JWT bearer token for authentication | `IVCAP()` |
+| `IVCAP_URL` | External URL of IVCAP deployment — triggers platform mode | `IVCAP()` |
+| `IVCAP_BASE_URL` | Internal URL injected by the platform inside a job container — no JWT needed | `IVCAP()` |
+| `IVCAP_JWT` | JWT bearer token for authentication (external access only) | `IVCAP()` |
 | `IVCAP_ACCOUNT_ID` | Account URN for artifact/aspect ownership | Application code |
+| `IVCAP_LOCAL_DIR` | Root directory for local artifact storage in **local mode** (default: `./ivcap-artifacts`) | `IVCAP()`, `IVCAP.local()`, `LocalIVCAP` |
+
+**Mode selection summary:**
+
+| Environment | `IVCAP()` returns |
+|---|---|
+| `IVCAP_URL` set + `IVCAP_JWT` set | Platform `IVCAP` (external) |
+| `IVCAP_BASE_URL` set (inside container) | Platform `IVCAP` (no token needed) |
+| Neither URL set, no explicit token | `LocalIVCAP` (filesystem, no network) |
 
 ---
 

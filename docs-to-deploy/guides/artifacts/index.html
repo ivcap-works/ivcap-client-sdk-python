@@ -2661,7 +2661,7 @@ no code changes needed between local development and deployed operation:</p>
 </tr>
 <tr>
 <td>None of the above</td>
-<td><code>LocalIVCAP</code> using <code>IVCAP_LOCAL_DIR</code> (default: <code>./ivcap-artifacts</code>)</td>
+<td><code>LocalIVCAP</code> using <code>IVCAP_LOCAL_DIR</code> (default: <code>ivcap-artifacts</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -2691,7 +2691,7 @@ local mode regardless of environment variables — for example in unit tests:</p
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">LocalIVCAP</span><span class="p">(</span><span class="n">base_dir</span><span class="o">=</span><span class="s2">&quot;./my-artifacts&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>The <code>base_dir</code> defaults to <code>./ivcap-artifacts</code> and can be set via the
+<p>The <code>base_dir</code> defaults to <code>ivcap-artifacts</code> and can be set via the
 <code>IVCAP_LOCAL_DIR</code> environment variable.</p>
 <h4 id="what-localivcap-supports">What <code>LocalIVCAP</code> supports<a class="headerlink" href="#what-localivcap-supports" title="Permanent link">&para;</a></h4>
 <p><strong>Artifacts:</strong></p>
@@ -2742,6 +2742,10 @@ local mode regardless of environment variables — for example in unit tests:</p
 <td><code>get_aspect(aspect_id)</code></td>
 <td>Reads the JSON file by URN (<code>urn:ivcap:aspect:&lt;uuid&gt;</code>) or bare UUID</td>
 </tr>
+<tr>
+<td><code>list_aspects(entity, schema, limit)</code></td>
+<td>Scans <code>aspects/</code> directory; supports <code>entity</code>, <code>schema</code>, and <code>limit</code> filters</td>
+</tr>
 </tbody>
 </table>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="n">LocalAspect</span>
@@ -2761,8 +2765,9 @@ local mode regardless of environment variables — for example in unit tests:</p
 <a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">retrieved</span><span class="p">,</span> <span class="n">LocalAspect</span><span class="p">)</span>
 </code></pre></div>
 <p><code>LocalIVCAP</code> does <strong>not</strong> implement <code>list_artifacts</code>, <code>list_services</code>,
-<code>list_aspects</code>, or other platform-only methods.  Aspect <em>search</em> is not
-supported in local mode.</p>
+<code>list_orders</code>, <code>search</code>, or other methods that require a live platform
+connection.  See the <a href="../local-mode/#what-localIVCAP-supports">Local Mode guide</a>
+for the full capability table.</p>
 <h4 id="local-file-artifact-urns">Local-file artifact URNs<a class="headerlink" href="#local-file-artifact-urns" title="Permanent link">&para;</a></h4>
 <p>Artifacts written by <code>LocalIVCAP</code> have URNs of the form <code>urn:file:///absolute/path</code>.
 These URNs can be passed back to <code>LocalIVCAP.get_artifact()</code> or to <code>IVCAP.get_artifact()</code>

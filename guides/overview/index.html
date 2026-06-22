@@ -812,6 +812,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#local-mode-mode-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Mode &amp; Mode Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#agent-integration" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2056,6 +2067,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#local-mode-mode-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Mode &amp; Mode Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#agent-integration" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2179,6 +2201,16 @@
 - Job failure vs. platform error (<code>FAILED</code> vs. <code>ERROR</code>)
 - Retry patterns</p>
 <p><strong>Read this if:</strong> You need production-grade error handling.</p>
+<h3 id="local-mode-mode-selection"><a href="../local-mode/">Local Mode &amp; Mode Selection</a><a class="headerlink" href="#local-mode-mode-selection" title="Permanent link">&para;</a></h3>
+<p>Understand the three ways to obtain an <code>IVCAP</code> instance and how to test service logic
+locally without a platform:
+- The three operating modes (external platform, in-container, local)
+- ENV-variable-driven auto-detection — <code>IVCAP()</code> picks the right mode automatically
+- Using <code>LocalIVCAP</code> to run and test services before deployment
+- Forcing local mode in unit tests with <code>IVCAP.local()</code>
+- What <code>LocalIVCAP</code> supports vs. platform-only operations</p>
+<p><strong>Read this if:</strong> You are developing or testing an IVCAP service locally, or want to
+understand how the same <code>IVCAP()</code> call works in every environment.</p>
 <h3 id="agent-integration"><a href="../agents/">Agent Integration</a><a class="headerlink" href="#agent-integration" title="Permanent link">&para;</a></h3>
 <p>Use IVCAP services inside AI agents:
 - The <code>Agent</code> wrapper class
@@ -2201,11 +2233,12 @@
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Running Jobs
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    ├→ Working with Artifacts (if your workflow uses data files)
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    ├→ The Datafabric &amp; Aspects (if you need metadata)
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    └→ Async Usage (if you need parallel execution)
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    ↓
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>Error Handling
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    ↓
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>Agent Integration (optional, for AI agents)
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    ├→ Local Mode &amp; Mode Selection (if you are building/testing a service)
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    └→ Async Usage (if you need parallel execution)
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    ↓
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>Error Handling
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    ↓
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>Agent Integration (optional, for AI agents)
 </code></pre></div>
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>

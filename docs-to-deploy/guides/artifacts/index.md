@@ -188,7 +188,7 @@ Decision logic (in order):
 | `IVCAP_URL` or `IVCAP_BASE_URL` env var is set | Platform `IVCAP` instance |
 | `url` arg is provided | Platform `IVCAP` instance |
 | `token` arg is provided (no URL) | `ValueError` — signals misconfiguration |
-| None of the above | `LocalIVCAP` using `IVCAP_LOCAL_DIR` (default: `./ivcap-artifacts`) |
+| None of the above | `LocalIVCAP` using `IVCAP_LOCAL_DIR` (default: `ivcap-artifacts`) |
 
 ### Platform mode
 
@@ -227,7 +227,7 @@ from ivcap_client import LocalIVCAP
 ivcap = LocalIVCAP(base_dir="./my-artifacts")
 ```
 
-The `base_dir` defaults to `./ivcap-artifacts` and can be set via the
+The `base_dir` defaults to `ivcap-artifacts` and can be set via the
 `IVCAP_LOCAL_DIR` environment variable.
 
 #### What `LocalIVCAP` supports
@@ -248,6 +248,7 @@ The `base_dir` defaults to `./ivcap-artifacts` and can be set via the
 | `add_aspect(entity, aspect, *, schema, policy)` | Writes a `<uuid>.json` file; returns a `LocalAspect` |
 | `update_aspect(entity, aspect, *, schema, policy)` | Same as `add_aspect` (no retraction in local mode) |
 | `get_aspect(aspect_id)` | Reads the JSON file by URN (`urn:ivcap:aspect:<uuid>`) or bare UUID |
+| `list_aspects(entity, schema, limit)` | Scans `aspects/` directory; supports `entity`, `schema`, and `limit` filters |
 
 ```python
 from ivcap_client import IVCAP, LocalAspect
@@ -268,8 +269,9 @@ assert isinstance(retrieved, LocalAspect)
 ```
 
 `LocalIVCAP` does **not** implement `list_artifacts`, `list_services`,
-`list_aspects`, or other platform-only methods.  Aspect *search* is not
-supported in local mode.
+`list_orders`, `search`, or other methods that require a live platform
+connection.  See the [Local Mode guide](local-mode.md#what-localIVCAP-supports)
+for the full capability table.
 
 #### Local-file artifact URNs
 

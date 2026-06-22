@@ -2195,7 +2195,7 @@
 <ul>
 <li><strong>Type</strong>: String (filesystem path)</li>
 <li><strong>Required</strong>: No</li>
-<li><strong>Default</strong>: <code>./ivcap-artifacts</code></li>
+<li><strong>Default</strong>: <code>ivcap-artifacts</code></li>
 <li><strong>Description</strong>: Root directory for local artifact storage when running in <strong>local mode</strong>
   (i.e. when <code>IVCAP_URL</code> / <code>IVCAP_BASE_URL</code> are not set and <code>IVCAP.local()</code> /
   <code>LocalIVCAP</code> is used).  All artifacts written via <code>upload_artifact()</code> are stored
@@ -2207,8 +2207,7 @@
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>          <span class="c1"># base_dir → ./output/artifacts</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="o">.</span><span class="n">local</span><span class="p">(</span><span class="s2">&quot;./other&quot;</span><span class="p">)</span> <span class="c1"># base_dir → ./other  (explicit arg wins)</span>
 </code></pre></div>
-<p>See <a href="../../guides/artifacts/#local-mode-vs-platform-mode">Local Mode vs Platform Mode</a>
-for full usage details.</p>
+<p>See the <a href="../../guides/local-mode/">Local Mode guide</a> for full usage details.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <h3 id="in-a-env-dbg-env-file-recommended-for-development">In a <code>.env</code> / <code>.dbg-env</code> file (recommended for development)<a class="headerlink" href="#in-a-env-dbg-env-file-recommended-for-development" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>IVCAP_URL=https://api.your-ivcap-deployment.net

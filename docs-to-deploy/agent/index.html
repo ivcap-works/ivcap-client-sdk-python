@@ -2107,44 +2107,83 @@ environment variables before running your script:</p>
 </code></pre></div>
 <hr />
 <h2 id="3-creating-an-ivcap-connection">3. Creating an IVCAP Connection<a class="headerlink" href="#3-creating-an-ivcap-connection" title="Permanent link">&para;</a></h2>
-<p>The <code>IVCAP</code> class is the single entry point for all operations.</p>
-<h3 id="from-environment-variables-recommended">From environment variables (recommended)<a class="headerlink" href="#from-environment-variables-recommended" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.ivcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># Reads IVCAP_URL and IVCAP_JWT from the environment automatically</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
-</code></pre></div>
+<p>The <code>IVCAP</code> class is the single entry point for all operations.  The same
+<code>ivcap = IVCAP()</code> line works in every environment — the right implementation is
+selected automatically from environment variables.</p>
+<h3 id="the-three-operating-modes-at-a-glance">The three operating modes at a glance<a class="headerlink" href="#the-three-operating-modes-at-a-glance" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>When to use</th>
+<th>ENV vars needed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Platform (external)</strong></td>
+<td>Apps, scripts, notebooks, and AI agents that access a live platform deployment over HTTPS — the primary use case for this library</td>
+<td><code>IVCAP_URL</code> + <code>IVCAP_JWT</code></td>
+</tr>
+<tr>
+<td><strong>Platform (in-container)</strong></td>
+<td>Service code that runs <em>inside</em> an IVCAP job container — the sidecar handles auth transparently</td>
+<td><code>IVCAP_BASE_URL</code> (injected by platform)</td>
+</tr>
+<tr>
+<td><strong>Local</strong></td>
+<td>Developing and testing a service locally before deployment to IVCAP — reads/writes the local filesystem, no network calls</td>
+<td><em>(none)</em></td>
+</tr>
+</tbody>
+</table>
 <blockquote>
-<p>The <code>IVCAP</code> object is a lightweight Python client — it does not run inside the
-platform. It communicates with the IVCAP API Gateway over HTTPS using your JWT token.
-When code <em>runs inside</em> a Job container (on the platform itself), the sidecar handles
-auth and <code>IVCAP_BASE_URL</code> is injected automatically — no token is needed.</p>
+<p><strong>Scope of the two use cases:</strong>
+- <strong>Mode 1 (external platform)</strong> is the bread-and-butter of this library: write scripts
+  and applications that submit jobs, manage data, and query the Datafabric on a running
+  IVCAP deployment.
+- <strong>Mode 3 (local)</strong> is for service developers who want to exercise their service code
+  locally with real input files before deploying to the platform.</p>
 </blockquote>
-<h3 id="with-explicit-credentials">With explicit credentials<a class="headerlink" href="#with-explicit-credentials" title="Permanent link">&para;</a></h3>
+<h3 id="mode-1-platform-external-access">Mode 1 — Platform (External Access)<a class="headerlink" href="#mode-1-platform-external-access" title="Permanent link">&para;</a></h3>
+<p>Connect to a running IVCAP deployment with a JWT token:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">load_dotenv</span><span class="p">(</span><span class="s2">&quot;.dbg-env&quot;</span><span class="p">)</span>  <span class="c1"># loads IVCAP_URL and IVCAP_JWT from a local file</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>          <span class="c1"># → full platform IVCAP instance</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="k">for</span> <span class="n">svc</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_services</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">svc</span><span class="p">)</span>
+</code></pre></div>
+<p>With explicit credentials:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">(</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://api.your-ivcap-deployment.net&quot;</span><span class="p">,</span>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">token</span><span class="o">=</span><span class="s2">&quot;&lt;jwt-token&gt;&quot;</span><span class="p">,</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">account_id</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:account:&lt;uuid&gt;&quot;</span><span class="p">,</span>  <span class="c1"># optional</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">)</span>
 </code></pre></div>
-<h3 id="inside-the-ivcap-platform">Inside the IVCAP platform<a class="headerlink" href="#inside-the-ivcap-platform" title="Permanent link">&para;</a></h3>
-<p>When a service runs <em>inside</em> IVCAP (e.g., as a container job), the platform injects
-<code>IVCAP_BASE_URL</code>. In this case no JWT token is needed:</p>
+<h3 id="mode-2-platform-inside-a-container">Mode 2 — Platform (Inside a Container)<a class="headerlink" href="#mode-2-platform-inside-a-container" title="Permanent link">&para;</a></h3>
+<p>When a service runs <em>inside</em> IVCAP the platform injects <code>IVCAP_BASE_URL</code>. No JWT
+token is needed — the Service Sidecar handles authentication on behalf of the container:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># IVCAP_BASE_URL is set by the platform; no token required</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
 </code></pre></div>
-<h3 id="local-mode-no-platform-available">Local mode (no platform available)<a class="headerlink" href="#local-mode-no-platform-available" title="Permanent link">&para;</a></h3>
+<h3 id="mode-3-local-mode-no-platform-required">Mode 3 — Local Mode (No Platform Required)<a class="headerlink" href="#mode-3-local-mode-no-platform-required" title="Permanent link">&para;</a></h3>
 <p>When neither <code>IVCAP_URL</code> nor <code>IVCAP_BASE_URL</code> is set and no explicit <code>token</code> is
 passed, <code>IVCAP()</code> <strong>automatically returns a <code>LocalIVCAP</code> instance</strong> — a
-filesystem-backed drop-in replacement that stores artifacts under a local directory.
-No network calls are made.</p>
+filesystem-backed <em>subclass</em> of <code>IVCAP</code> that stores artifacts and aspects under a
+local directory.  No network calls are made.</p>
+<p>This mode is primarily for <strong>testing a service locally before deployment</strong>: run your
+service code against real input files, inspect the outputs under <code>ivcap-artifacts/</code>,
+and only deploy to the platform once everything looks correct.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="n">LocalIVCAP</span>
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>  <span class="c1"># → LocalIVCAP when no URL env var is set</span>
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;result.csv&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/result.csv&quot;</span><span class="p">)</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># urn:file:///abs/path/to/ivcap-artifacts/result.csv</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># urn:file:///abs/path/to/ivcap-artifacts/artifacts/result.csv</span>
 </code></pre></div>
-<p>Auto-detection decision (in order):</p>
+<p><strong>Auto-detection decision (in order):</strong></p>
 <table>
 <thead>
 <tr>
@@ -2167,7 +2206,7 @@ No network calls are made.</p>
 </tr>
 <tr>
 <td>None of the above</td>
-<td><code>LocalIVCAP</code> using <code>IVCAP_LOCAL_DIR</code> (default: <code>./ivcap-artifacts</code>)</td>
+<td><code>LocalIVCAP</code> using <code>IVCAP_LOCAL_DIR</code> (default: <code>ivcap-artifacts</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -2184,15 +2223,45 @@ No network calls are made.</p>
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Platform mode — connected to:&quot;</span><span class="p">,</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
 </code></pre></div>
 <blockquote>
-<p><strong>Scope:</strong> <code>LocalIVCAP</code> supports artifact read/write (<code>upload_artifact</code>,
-<code>get_artifact</code>) and limited aspect operations (<code>add_aspect</code>, <code>update_aspect</code>,
-<code>get_aspect</code>).  The directory layout under <code>base_dir</code> is:</p>
+<p><strong><code>LocalIVCAP</code> is a subclass of <code>IVCAP</code></strong> — it overrides only the methods that
+differ in local mode.  The directory layout under <code>base_dir</code> is:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>&lt;base_dir&gt;/
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>  artifacts/   ← artifact files written by upload_artifact
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>  aspects/     ← aspect JSON files written by add_aspect / update_aspect
 </code></pre></div>
-<p>Methods such as <code>list_services</code>, <code>list_artifacts</code>, and <code>list_aspects</code> are
-platform-only and are not available in local mode.</p>
+<p>Supported operations:</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Supported locally?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>upload_artifact</code>, <code>get_artifact</code></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>add_aspect</code>, <code>update_aspect</code>, <code>get_aspect</code></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>list_aspects(entity, schema, limit)</code></td>
+<td>✓ (filesystem scan)</td>
+</tr>
+<tr>
+<td><code>list_services</code>, <code>list_orders</code>, <code>list_artifacts</code></td>
+<td>✗ (platform-only)</td>
+</tr>
+<tr>
+<td><code>search</code>, <code>create_collection</code>, <code>list_secrets</code></td>
+<td>✗ (platform-only)</td>
+</tr>
+</tbody>
+</table>
+<p>See the full <a href="https://ivcap-works.github.io/ivcap-client-sdk-python/guides/local-mode/">Local Mode guide</a>
+for detailed examples and configuration.</p>
 </blockquote>
 <h3 id="common-pattern-in-examples">Common pattern in examples<a class="headerlink" href="#common-pattern-in-examples" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
@@ -2915,7 +2984,7 @@ produced by jobs that used this particular service version".</p>
 </tr>
 <tr>
 <td><code>IVCAP_LOCAL_DIR</code></td>
-<td>Root directory for local artifact storage in <strong>local mode</strong> (default: <code>./ivcap-artifacts</code>)</td>
+<td>Root directory for local artifact storage in <strong>local mode</strong> (default: <code>ivcap-artifacts</code>)</td>
 <td><code>IVCAP()</code>, <code>IVCAP.local()</code>, <code>LocalIVCAP</code></td>
 </tr>
 </tbody>

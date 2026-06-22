@@ -291,23 +291,41 @@ IVCAP_ACCOUNT_ID=urn:ivcap:account:<uuid>
 
 ## 3. Creating an IVCAP Connection
 
-The `IVCAP` class is the single entry point for all operations.
+The `IVCAP` class is the single entry point for all operations.  The same
+`ivcap = IVCAP()` line works in every environment — the right implementation is
+selected automatically from environment variables.
 
-### From environment variables (recommended)
+### The three operating modes at a glance
+
+| Mode | When to use | ENV vars needed |
+|---|---|---|
+| **Platform (external)** | Apps, scripts, notebooks, and AI agents that access a live platform deployment over HTTPS — the primary use case for this library | `IVCAP_URL` + `IVCAP_JWT` |
+| **Platform (in-container)** | Service code that runs *inside* an IVCAP job container — the sidecar handles auth transparently | `IVCAP_BASE_URL` (injected by platform) |
+| **Local** | Developing and testing a service locally before deployment to IVCAP — reads/writes the local filesystem, no network calls | *(none)* |
+
+> **Scope of the two use cases:**
+> - **Mode 1 (external platform)** is the bread-and-butter of this library: write scripts
+>   and applications that submit jobs, manage data, and query the Datafabric on a running
+>   IVCAP deployment.
+> - **Mode 3 (local)** is for service developers who want to exercise their service code
+>   locally with real input files before deploying to the platform.
+
+### Mode 1 — Platform (External Access)
+
+Connect to a running IVCAP deployment with a JWT token:
 
 ```python
-from ivcap_client.ivcap import IVCAP
+from dotenv import load_dotenv
+from ivcap_client import IVCAP
 
-# Reads IVCAP_URL and IVCAP_JWT from the environment automatically
-ivcap = IVCAP()
+load_dotenv(".dbg-env")  # loads IVCAP_URL and IVCAP_JWT from a local file
+ivcap = IVCAP()          # → full platform IVCAP instance
+
+for svc in ivcap.list_services(limit=10):
+    print(svc)
 ```
 
-> The `IVCAP` object is a lightweight Python client — it does not run inside the
-> platform. It communicates with the IVCAP API Gateway over HTTPS using your JWT token.
-> When code *runs inside* a Job container (on the platform itself), the sidecar handles
-> auth and `IVCAP_BASE_URL` is injected automatically — no token is needed.
-
-### With explicit credentials
+With explicit credentials:
 
 ```python
 ivcap = IVCAP(
@@ -317,39 +335,43 @@ ivcap = IVCAP(
 )
 ```
 
-### Inside the IVCAP platform
+### Mode 2 — Platform (Inside a Container)
 
-When a service runs *inside* IVCAP (e.g., as a container job), the platform injects
-`IVCAP_BASE_URL`. In this case no JWT token is needed:
+When a service runs *inside* IVCAP the platform injects `IVCAP_BASE_URL`. No JWT
+token is needed — the Service Sidecar handles authentication on behalf of the container:
 
 ```python
 # IVCAP_BASE_URL is set by the platform; no token required
 ivcap = IVCAP()
 ```
 
-### Local mode (no platform available)
+### Mode 3 — Local Mode (No Platform Required)
 
 When neither `IVCAP_URL` nor `IVCAP_BASE_URL` is set and no explicit `token` is
 passed, `IVCAP()` **automatically returns a `LocalIVCAP` instance** — a
-filesystem-backed drop-in replacement that stores artifacts under a local directory.
-No network calls are made.
+filesystem-backed *subclass* of `IVCAP` that stores artifacts and aspects under a
+local directory.  No network calls are made.
+
+This mode is primarily for **testing a service locally before deployment**: run your
+service code against real input files, inspect the outputs under `ivcap-artifacts/`,
+and only deploy to the platform once everything looks correct.
 
 ```python
 from ivcap_client import IVCAP, LocalIVCAP
 
 ivcap = IVCAP()  # → LocalIVCAP when no URL env var is set
 artifact = ivcap.upload_artifact(name="result.csv", file_path="/tmp/result.csv")
-print(artifact.id)  # urn:file:///abs/path/to/ivcap-artifacts/result.csv
+print(artifact.id)  # urn:file:///abs/path/to/ivcap-artifacts/artifacts/result.csv
 ```
 
-Auto-detection decision (in order):
+**Auto-detection decision (in order):**
 
 | Condition | Result |
 |---|---|
 | `IVCAP_URL` or `IVCAP_BASE_URL` env var is set | Platform `IVCAP` instance |
 | `url` argument is provided | Platform `IVCAP` instance |
 | `token` argument provided without a URL | `ValueError` — signals misconfiguration |
-| None of the above | `LocalIVCAP` using `IVCAP_LOCAL_DIR` (default: `./ivcap-artifacts`) |
+| None of the above | `LocalIVCAP` using `IVCAP_LOCAL_DIR` (default: `ivcap-artifacts`) |
 
 **Force local mode explicitly** (useful in tests):
 
@@ -369,9 +391,8 @@ else:
     print("Platform mode — connected to:", ivcap.url)
 ```
 
-> **Scope:** `LocalIVCAP` supports artifact read/write (`upload_artifact`,
-> `get_artifact`) and limited aspect operations (`add_aspect`, `update_aspect`,
-> `get_aspect`).  The directory layout under `base_dir` is:
+> **`LocalIVCAP` is a subclass of `IVCAP`** — it overrides only the methods that
+> differ in local mode.  The directory layout under `base_dir` is:
 >
 > ```
 > <base_dir>/
@@ -379,8 +400,18 @@ else:
 >   aspects/     ← aspect JSON files written by add_aspect / update_aspect
 > ```
 >
-> Methods such as `list_services`, `list_artifacts`, and `list_aspects` are
-> platform-only and are not available in local mode.
+> Supported operations:
+>
+> | Operation | Supported locally? |
+> |---|---|
+> | `upload_artifact`, `get_artifact` | ✓ |
+> | `add_aspect`, `update_aspect`, `get_aspect` | ✓ |
+> | `list_aspects(entity, schema, limit)` | ✓ (filesystem scan) |
+> | `list_services`, `list_orders`, `list_artifacts` | ✗ (platform-only) |
+> | `search`, `create_collection`, `list_secrets` | ✗ (platform-only) |
+>
+> See the full [Local Mode guide](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/local-mode/)
+> for detailed examples and configuration.
 
 ### Common pattern in examples
 
@@ -1036,7 +1067,7 @@ async def run():
 | `IVCAP_BASE_URL` | Internal URL injected by the platform inside a job container — no JWT needed | `IVCAP()` |
 | `IVCAP_JWT` | JWT bearer token for authentication (external access only) | `IVCAP()` |
 | `IVCAP_ACCOUNT_ID` | Account URN for artifact/aspect ownership | Application code |
-| `IVCAP_LOCAL_DIR` | Root directory for local artifact storage in **local mode** (default: `./ivcap-artifacts`) | `IVCAP()`, `IVCAP.local()`, `LocalIVCAP` |
+| `IVCAP_LOCAL_DIR` | Root directory for local artifact storage in **local mode** (default: `ivcap-artifacts`) | `IVCAP()`, `IVCAP.local()`, `LocalIVCAP` |
 
 **Mode selection summary:**
 

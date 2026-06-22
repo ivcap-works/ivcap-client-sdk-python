@@ -34,7 +34,7 @@ Complete reference of all environment variables used by the IVCAP Client SDK.
 ### IVCAP_LOCAL_DIR
 - **Type**: String (filesystem path)
 - **Required**: No
-- **Default**: `./ivcap-artifacts`
+- **Default**: `ivcap-artifacts`
 - **Description**: Root directory for local artifact storage when running in **local mode**
   (i.e. when `IVCAP_URL` / `IVCAP_BASE_URL` are not set and `IVCAP.local()` /
   `LocalIVCAP` is used).  All artifacts written via `upload_artifact()` are stored
@@ -49,8 +49,7 @@ ivcap = IVCAP.local()          # base_dir → ./output/artifacts
 ivcap = IVCAP.local("./other") # base_dir → ./other  (explicit arg wins)
 ```
 
-See [Local Mode vs Platform Mode](../guides/artifacts.md#local-mode-vs-platform-mode)
-for full usage details.
+See the [Local Mode guide](../guides/local-mode.md) for full usage details.
 
 ## Usage
 

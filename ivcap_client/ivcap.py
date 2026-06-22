@@ -6,10 +6,15 @@
 
 from __future__ import annotations  # postpone evaluation of annotations
 
+import json
 import logging
+import mimetypes
 import os
+import shutil
+import uuid
 from collections.abc import Iterator
-from datetime import datetime
+from datetime import UTC, datetime
+from pathlib import Path
 from sys import maxsize as MAXSIZE
 from typing import IO, Any
 
@@ -20,8 +25,8 @@ from ivcap_client.api.search import search_search
 from ivcap_client.artifact import (
     Artifact,
     ArtifactIter,
+    LocalAspect,
     LocalFileArtifact,
-    LocalIVCAP,
     check_file_already_uploaded,
 )
 from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
@@ -37,7 +42,11 @@ from ivcap_client.collection import (
     remove_item_from_collection,
     retract_collection,
 )
-from ivcap_client.exception import AmbiguousRequest, ResourceNotFound
+from ivcap_client.exception import (
+    AmbiguousRequest,
+    MissingParameterValue,
+    ResourceNotFound,
+)
 from ivcap_client.order import Order, OrderIter
 from ivcap_client.secret import Secret, SecretIter
 from ivcap_client.service import Service, ServiceIter
@@ -64,7 +73,7 @@ class IVCAP:
         artifact = ivcap.upload_artifact(name="result.csv", file_path="/tmp/result.csv")
 
     The local artifact root directory is controlled by the ``IVCAP_LOCAL_DIR``
-    environment variable (default: ``./ivcap-artifacts``).
+    environment variable (default: ``./data``).
     """
 
     def __new__(
@@ -85,7 +94,7 @@ class IVCAP:
            ``IVCAP`` instance.
         3. If no URL and no explicit token — the environment is unambiguously
            local.  Return a :class:`~ivcap_client.artifact.LocalIVCAP` backed
-           by ``IVCAP_LOCAL_DIR`` (default: ``./ivcap-artifacts``).
+           by ``IVCAP_LOCAL_DIR`` (default: ``./data``).
         """
         # Explicit token ⇒ platform intent; let __init__ handle validation.
         if token is not None:
@@ -95,7 +104,7 @@ class IVCAP:
             url or os.environ.get("IVCAP_URL") or os.environ.get("IVCAP_BASE_URL")
         )
         if not effective_url:
-            base_dir = os.environ.get("IVCAP_LOCAL_DIR", "./ivcap-artifacts")
+            base_dir = os.environ.get("IVCAP_LOCAL_DIR", "ivcap-artifacts")
             logger.info(
                 "No IVCAP platform URL found — using local artifact storage at %r",
                 base_dir,
@@ -767,19 +776,19 @@ class IVCAP:
 
         1. The ``base_dir`` argument to this method.
         2. The ``IVCAP_LOCAL_DIR`` environment variable.
-        3. The default ``"./ivcap-artifacts"``.
+        3. The default ``"./data"``.
 
         Args:
             base_dir: Root directory for artifact storage.  Created on
                 demand.  Defaults to ``IVCAP_LOCAL_DIR`` env var, or
-                ``"./ivcap-artifacts"`` if neither is set.
+                ``"./data"`` if neither is set.
 
         Returns:
             LocalIVCAP: A filesystem-backed client with the same
             ``upload_artifact`` / ``get_artifact`` interface as :class:`IVCAP`.
         """
         if base_dir is None:
-            base_dir = os.environ.get("IVCAP_LOCAL_DIR", "./ivcap-artifacts")
+            base_dir = os.environ.get("IVCAP_LOCAL_DIR", "ivcap-artifacts")
         return LocalIVCAP(base_dir=base_dir)
 
     @property
@@ -793,3 +802,331 @@ class IVCAP:
 
     def __repr__(self):
         return f"<IVCAP url={self._url}>"
+
+
+class LocalIVCAP(IVCAP):
+    """A filesystem-backed subclass of :class:`IVCAP` for local development
+    and testing.  All artifacts are written under ``base_dir``.
+    No network calls are made.
+
+    This is the drop-in replacement for :class:`IVCAP` when no IVCAP platform
+    URL is available — for example when running a service locally with a test
+    JSON file.
+
+    Which implementation is used depends entirely on environment variables:
+    ``IVCAP()`` transparently returns a :class:`LocalIVCAP` instance when
+    neither ``IVCAP_URL`` nor ``IVCAP_BASE_URL`` is set in the environment,
+    and a real :class:`IVCAP` otherwise.
+
+    .. code-block:: python
+
+        from ivcap_client import IVCAP
+
+        ivcap = IVCAP()  # → LocalIVCAP locally, IVCAP on the platform
+        artifact = ivcap.upload_artifact(name="report.txt", file_path="/tmp/report.txt")
+        print(artifact.id)  # urn:file:///abs/path/to/ivcap-artifacts/report.txt
+
+    The root directory for local artifact storage can also be configured via
+    the ``IVCAP_LOCAL_DIR`` environment variable (default: ``ivcap-artifacts``).
+    """
+
+    _DEFAULT_BASE_DIR: str = "ivcap-artifacts"
+
+    def __new__(cls, base_dir: str | Path | None = None, **kwargs):
+        # Bypass IVCAP.__new__ which performs URL-based dispatch and would
+        # otherwise recurse back into LocalIVCAP creation.
+        return object.__new__(cls)
+
+    def __init__(self, base_dir: str | Path | None = None):
+        """Create a new LocalIVCAP instance.
+
+        Args:
+            base_dir: Root directory under which all artifacts and aspects are
+                stored.  Relative paths are resolved from the current working
+                directory at the time of the first upload.  The directory is
+                created on demand.  Defaults to the ``IVCAP_LOCAL_DIR``
+                environment variable, or ``"ivcap-artifacts"`` if unset.
+        """
+        if base_dir is None:
+            base_dir = os.environ.get("IVCAP_LOCAL_DIR", self._DEFAULT_BASE_DIR)
+        self._base_dir = Path(base_dir)
+
+    # ---- Properties --------------------------------------------------------
+
+    @property
+    def base_dir(self) -> Path:
+        """The root directory for local artifact and aspect storage."""
+        return self._base_dir
+
+    @property
+    def _aspects_dir(self) -> Path:
+        """Subdirectory used for local aspect storage."""
+        return self._base_dir / "aspects"
+
+    @property
+    def url(self) -> str:
+        """Return a ``file://`` URL pointing at the local base directory."""
+        return f"file://{self._base_dir.resolve()}"
+
+    # ---- Artifacts ---------------------------------------------------------
+
+    def upload_artifact(
+        self,
+        *,
+        name: str | None = None,
+        file_path: str | None = None,
+        io_stream: IO | None = None,
+        content_type: str | None = None,
+        content_size: int | None = -1,
+        collection: URN | None = None,
+        policy: URN | None = None,
+        **kwargs,
+    ) -> LocalFileArtifact:
+        """Write content to the local filesystem and return a :class:`~ivcap_client.artifact.LocalFileArtifact`.
+
+        The content is written to ``<base_dir>/artifacts/<name>``.  Parent
+        directories are created automatically (``mkdir -p`` semantics).
+
+        Args:
+            name: Relative path under ``base_dir/artifacts/`` for the saved
+                artifact.  May contain subdirectory components
+                (e.g. ``"results/output.csv"``).  If ``None``, a UUID-based
+                filename is generated (preserving the source file extension
+                when ``file_path`` is given).
+            file_path: Local source file to copy into ``base_dir``.
+            io_stream: Byte-stream (or text-stream) to write into ``base_dir``.
+                Provide either ``file_path`` or ``io_stream`` — not both.
+            content_type: Accepted for interface compatibility; ignored locally.
+            content_size: Accepted for interface compatibility; ignored locally.
+            collection: Accepted for interface compatibility; silently ignored.
+            policy: Accepted for interface compatibility; silently ignored.
+            **kwargs: Any additional keyword arguments (e.g. ``chunk_size``,
+                ``retries``) are silently ignored so that callers can pass
+                platform-specific options without branching.
+
+        Returns:
+            LocalFileArtifact: A local-file artifact whose ``.id`` is
+            ``urn:file://<absolute_path>``.
+
+        Raises:
+            ValueError: If neither ``file_path`` nor ``io_stream`` is provided.
+        """
+        if not (file_path or io_stream):
+            raise ValueError("require either 'file_path' or 'io_stream'")
+
+        if name is None:
+            suffix = Path(file_path).suffix if file_path else ""
+            name = f"{uuid.uuid4()}{suffix}"
+
+        dest = self._base_dir / "artifacts" / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+
+        if file_path:
+            shutil.copy2(file_path, dest)
+        else:
+            raw = io_stream.read()
+            if isinstance(raw, str):
+                dest.write_text(raw)
+            else:
+                dest.write_bytes(raw)
+
+        urn = f"urn:file://{dest.resolve()}"
+        logger.info("LocalIVCAP: written artifact '%s' → %s", name, dest)
+        return LocalFileArtifact(urn)
+
+    def get_artifact(self, id: str) -> LocalFileArtifact:
+        """Return a :class:`~ivcap_client.artifact.LocalFileArtifact` for the given local-file URN.
+
+        Args:
+            id: A ``file://`` or ``urn:file://`` URN pointing to a local file.
+
+        Returns:
+            LocalFileArtifact: The local file artifact.
+        """
+        return LocalFileArtifact(id)
+
+    # ---- Aspects -----------------------------------------------------------
+
+    def add_aspect(
+        self,
+        entity: str,
+        aspect: dict,
+        *,
+        schema: str | None = None,
+        policy: URN | None = None,
+    ) -> LocalAspect:
+        """Store an aspect as a JSON file and return a :class:`~ivcap_client.artifact.LocalAspect`.
+
+        The aspect is written to ``<base_dir>/aspects/<uuid>.json``.
+        Each call creates a *new* aspect record (independent of any prior
+        records for the same entity/schema pair), matching the additive
+        semantics of the platform's ``add_aspect``.
+
+        Args:
+            entity: URN of the entity to attach the aspect to.
+            aspect: The aspect content dict.  If ``schema`` is ``None``, the
+                schema is read from ``aspect["$schema"]``.
+            schema: Schema URN.  Defaults to ``aspect["$schema"]``.
+            policy: Accepted for interface compatibility; silently ignored.
+
+        Returns:
+            LocalAspect: The newly created local aspect record.
+
+        Raises:
+            MissingParameterValue: If ``entity`` or schema are missing.
+        """
+        if not entity:
+            raise MissingParameterValue("Missing entity")
+        b = dict(aspect) if isinstance(aspect, dict) else aspect.to_dict()
+        if not schema:
+            schema = b.get("$schema")
+        if not schema:
+            raise MissingParameterValue("Missing schema (also not in aspect '$schema')")
+
+        aspect_uuid = str(uuid.uuid4())
+        aspect_id = f"urn:ivcap:aspect:{aspect_uuid}"
+        now = datetime.now(UTC)
+
+        record = {
+            "id": aspect_id,
+            "entity": entity,
+            "schema": schema,
+            "content": b,
+            "valid_from": now.isoformat(),
+            "valid_to": None,
+        }
+
+        self._aspects_dir.mkdir(parents=True, exist_ok=True)
+        (self._aspects_dir / f"{aspect_uuid}.json").write_text(
+            json.dumps(record, indent=2)
+        )
+        logger.info(
+            "LocalIVCAP: written aspect '%s' for entity '%s'", aspect_id, entity
+        )
+        return LocalAspect(aspect_id, entity, schema, b, valid_from=now)
+
+    def update_aspect(
+        self,
+        entity: str,
+        aspect: dict,
+        *,
+        schema: str | None = None,
+        policy: URN | None = None,
+    ) -> LocalAspect:
+        """Store an aspect as a JSON file (same as :meth:`add_aspect` locally).
+
+        On the platform ``update_aspect`` retracts any prior aspect with the
+        same ``(entity, schema)`` pair before creating the new one.  In local
+        mode there is no retraction mechanism, so this method delegates to
+        :meth:`add_aspect`.
+
+        Args:
+            entity: URN of the entity to attach the aspect to.
+            aspect: The aspect content dict.
+            schema: Schema URN.  Defaults to ``aspect["$schema"]``.
+            policy: Accepted for interface compatibility; silently ignored.
+
+        Returns:
+            LocalAspect: The newly created local aspect record.
+        """
+        return self.add_aspect(entity, aspect, schema=schema, policy=policy)
+
+    def get_aspect(self, aspect_id: str) -> LocalAspect:
+        """Return a :class:`~ivcap_client.artifact.LocalAspect` for the given aspect URN or UUID.
+
+        Args:
+            aspect_id: Either a full ``urn:ivcap:aspect:<uuid>`` URN or a
+                bare UUID string.
+
+        Returns:
+            LocalAspect: The stored aspect record.
+
+        Raises:
+            ResourceNotFound: If no aspect with the given ID exists on disk.
+        """
+        prefix = "urn:ivcap:aspect:"
+        aspect_uuid = (
+            aspect_id[len(prefix) :] if aspect_id.startswith(prefix) else aspect_id
+        )
+
+        path = self._aspects_dir / f"{aspect_uuid}.json"
+        if not path.exists():
+            raise ResourceNotFound(aspect_id)
+
+        record = json.loads(path.read_text())
+        valid_from = (
+            datetime.fromisoformat(record["valid_from"])
+            if record.get("valid_from")
+            else None
+        )
+        return LocalAspect(
+            record["id"],
+            record["entity"],
+            record["schema"],
+            record["content"],
+            valid_from=valid_from,
+        )
+
+    def list_aspects(
+        self,
+        *,
+        entity: str | None = None,
+        schema: str | None = None,
+        content_path: str | None = None,
+        at_time: datetime | None = None,
+        limit: int | None = 10,
+        filter: str | None = None,
+        order_by: str | None = "valid_from",
+        order_direction: str | None = "DESC",
+        include_content: bool | None = True,
+    ) -> Iterator[LocalAspect]:
+        """Return an iterator over locally stored aspect records.
+
+        Only ``entity``, ``schema``, and ``limit`` filters are applied in
+        local mode; all other parameters are accepted for interface
+        compatibility but silently ignored.
+
+        Args:
+            entity: Filter by entity URN.
+            schema: Filter by schema URN.
+            limit: Maximum number of results to return (default: 10).
+            content_path, at_time, filter, order_by, order_direction,
+                include_content: Accepted for interface compatibility;
+                silently ignored locally.
+
+        Yields:
+            LocalAspect: Matching aspect records from the local aspects dir.
+        """
+        if not self._aspects_dir.exists():
+            return iter([])
+
+        results = []
+        for path in sorted(self._aspects_dir.glob("*.json")):
+            if limit is not None and len(results) >= limit:
+                break
+            try:
+                record = json.loads(path.read_text())
+            except (json.JSONDecodeError, OSError):
+                continue
+            if entity and record.get("entity") != entity:
+                continue
+            if schema and record.get("schema") != schema:
+                continue
+            valid_from = (
+                datetime.fromisoformat(record["valid_from"])
+                if record.get("valid_from")
+                else None
+            )
+            results.append(
+                LocalAspect(
+                    record["id"],
+                    record["entity"],
+                    record["schema"],
+                    record["content"],
+                    valid_from=valid_from,
+                )
+            )
+        return iter(results)
+
+    def __repr__(self) -> str:
+        return f"<LocalIVCAP base_dir={self._base_dir}>"

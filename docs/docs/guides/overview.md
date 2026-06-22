@@ -76,6 +76,19 @@ Build robust code with proper exception handling:
 
 **Read this if:** You need production-grade error handling.
 
+### [Local Mode & Mode Selection](local-mode.md)
+
+Understand the three ways to obtain an `IVCAP` instance and how to test service logic
+locally without a platform:
+- The three operating modes (external platform, in-container, local)
+- ENV-variable-driven auto-detection — `IVCAP()` picks the right mode automatically
+- Using `LocalIVCAP` to run and test services before deployment
+- Forcing local mode in unit tests with `IVCAP.local()`
+- What `LocalIVCAP` supports vs. platform-only operations
+
+**Read this if:** You are developing or testing an IVCAP service locally, or want to
+understand how the same `IVCAP()` call works in every environment.
+
 ### [Agent Integration](agents.md)
 
 Use IVCAP services inside AI agents:
@@ -106,6 +119,7 @@ Discovering Services
 Running Jobs
     ├→ Working with Artifacts (if your workflow uses data files)
     ├→ The Datafabric & Aspects (if you need metadata)
+    ├→ Local Mode & Mode Selection (if you are building/testing a service)
     └→ Async Usage (if you need parallel execution)
     ↓
 Error Handling

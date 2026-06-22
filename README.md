@@ -30,6 +30,7 @@ Use it to:
 - [Quick Start](#quick-start)
 - [Core Concepts](#core-concepts)
 - [Common Patterns](#common-patterns)
+- [Local Mode — Testing Services Without a Platform](#local-mode--testing-services-without-a-platform)
 - [Examples](#examples)
 - [Going Deeper](#going-deeper)
 - [Related Projects](#related-projects)
@@ -167,6 +168,45 @@ async def run():
 
 asyncio.run(run())
 ```
+
+---
+
+## Local Mode — Testing Services Without a Platform
+
+`ivcap-client` supports three operating modes, all selected automatically from
+environment variables with the same `ivcap = IVCAP()` call:
+
+| Mode | When to use | ENV vars |
+|---|---|---|
+| **Platform (external)** | Scripts, notebooks, and agents that access a live deployment | `IVCAP_URL` + `IVCAP_JWT` |
+| **Platform (in-container)** | Service code running inside an IVCAP job container | `IVCAP_BASE_URL` (injected by platform) |
+| **Local** | Developing and testing a service before deployment — no platform needed | *(none)* |
+
+When neither `IVCAP_URL` nor `IVCAP_BASE_URL` is set, `IVCAP()` automatically returns a
+**`LocalIVCAP`** instance — a filesystem-backed subclass that stores artifacts and aspects
+on disk. This is the recommended way to test a service locally before deploying it:
+
+```python
+from ivcap_client import IVCAP
+
+ivcap = IVCAP()   # → LocalIVCAP when no IVCAP_URL is set
+
+artifact = ivcap.upload_artifact(name="result.csv", file_path="/tmp/result.csv")
+print(artifact.id)
+# urn:file:///abs/path/to/ivcap-artifacts/artifacts/result.csv
+
+ivcap.add_aspect(
+    entity=artifact.id,
+    aspect={"$schema": "urn:my:schema:result.1", "rows": 42},
+)
+```
+
+Artifacts land in `ivcap-artifacts/artifacts/` and aspects in `ivcap-artifacts/aspects/`
+(configurable via `IVCAP_LOCAL_DIR` or the `base_dir` argument to `IVCAP.local()`).
+
+For the full picture — mode detection logic, unit-test patterns, and the
+`LocalIVCAP` capability table — see the
+[Local Mode guide](https://ivcap-works.github.io/ivcap-client-sdk-python/guides/local-mode/).
 
 ---
 

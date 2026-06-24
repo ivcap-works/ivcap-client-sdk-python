@@ -15,7 +15,7 @@ lint = "ruff check ."
 format = "ruff format ."
 typecheck = "pyright"
 docs = { help = "Build documentation", shell = "cd docs && mkdocs build" }
-docs-serve = { help = "Serve documentation locally", shell = "cd docs && mkdocs serve" }
+docs-serve = { help = "Serve documentation locally", shell = "cd docs && PORT=$(python3 -c \"import socket; s=socket.socket(); s.bind(('',0)); p=s.getsockname()[1]; s.close(); print(p)\") && echo \"Serving docs at http://localhost:$PORT\" && mkdocs serve --dev-addr localhost:$PORT" }
 docs-clean = { help = "Clean built documentation", shell = "cd docs && rm -rf site .mkdocs_cache" }
 
 [tool.poetry.dependencies]
@@ -58,6 +58,9 @@ sqlalchemy = "^2.0.46"
 gevent = "^25.5.1"
 respx = "^0.21.0"
 mkdocs = "^1.5.0"
+mkdocs-material = ">=9.5.0"
+mkdocs-llmstxt-md = ">=0.1.0"
+pymdown-extensions = ">=10.0"
 mkdocstrings = {version = "^0.25.0", extras = ["python"]}
 mkdocs-autorefs = "^0.5.0"
 griffe = "^0.45.0"

@@ -114,6 +114,11 @@ docs: docs-build
 docs-mkdocs: docs-build
 
 docs-serve:
+	@$(eval PORT := $(shell python3 -c "import socket; s=socket.socket(); s.bind(('',0)); p=s.getsockname()[1]; s.close(); print(p)"))
+	@echo "Serving documentation at http://localhost:$(PORT)"
+	cd docs && poetry run mkdocs serve --dev-addr localhost:$(PORT)
+
+docs-serve-docker:
 	@echo "Serving MkDocs documentation at http://localhost:8000 (via Docker)..."
 	docker run --rm -it -p 8000:8000 \
 	  -v "$(ROOT_DIR):/project" \

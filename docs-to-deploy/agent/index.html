@@ -1768,15 +1768,15 @@
 <p>This page is the machine-readable quick-reference for <code>ivcap-client</code>, designed for
 AI coding assistants (Copilot, Cursor, Claude, Cline, …).</p>
 <p>It is also available at the project root as
-<a href="https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENT.md"><code>AGENT.md</code></a>
+<a href="https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENTS.md"><code>AGENTS.md</code></a>
 for agents that scan repository metadata before writing code.</p>
 <hr />
-<h1 id="agentmd-ivcap-client">AGENT.md — ivcap-client<a class="headerlink" href="#agentmd-ivcap-client" title="Permanent link">&para;</a></h1>
+<h1 id="agentsmd-ivcap-client">AGENTS.md — ivcap-client<a class="headerlink" href="#agentsmd-ivcap-client" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p><strong>For AI coding assistants (Copilot, Cursor, Claude, Cline, …).</strong> This file is the
 authoritative quick-reference for using the <code>ivcap-client</code> Python SDK.
 Full docs: <a href="https://ivcap-works.github.io/ivcap-client-sdk-python/">https://ivcap-works.github.io/ivcap-client-sdk-python/</a>
-Also available as <a href="https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENT.md"><code>AGENT.md</code></a>
+Also available as <a href="https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENTS.md"><code>AGENTS.md</code></a>
 at the repository root.</p>
 </blockquote>
 <p>This document teaches AI agents how to use the <code>ivcap_client</code> Python library to interact
@@ -2659,22 +2659,37 @@ Override with <code>force_upload=True</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">)</span>
 <a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="download-stream-artifact-content">Download / stream artifact content<a class="headerlink" href="#download-stream-artifact-content" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1"># Stream to a file</span>
-<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/tmp/output.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_stream</span><span class="p">():</span>
-<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
-<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>
-<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="c1"># Open as a file-like object (loads into memory)</span>
-<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a>
-<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="c1"># Download to a temp file (auto-deleted on context exit)</span>
-<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
-<a id="__codelineno-32-12" name="__codelineno-32-12" href="#__codelineno-32-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-32-13" name="__codelineno-32-13" href="#__codelineno-32-13"></a>    <span class="c1"># process path here...</span>
-<a id="__codelineno-32-14" name="__codelineno-32-14" href="#__codelineno-32-14"></a>    <span class="c1"># file is deleted when &#39;with&#39; block exits</span>
+<h3 id="download-artifact-content">Download artifact content<a class="headerlink" href="#download-artifact-content" title="Permanent link">&para;</a></h3>
+<p>Three methods are available, from most convenient to most low-level:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1"># ── Recommended: download to a local file ────────────────────────────────────</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="c1"># Temporary file (auto-deleted when the &#39;with&#39; block exits)</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="c1"># temp file deleted here</span>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a>
+<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a><span class="c1"># Explicit path (file is kept)</span>
+<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="n">path</span> <span class="o">=</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">(</span><span class="s2">&quot;/tmp/output.jpg&quot;</span><span class="p">)</span>
+<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-32-12" name="__codelineno-32-12" href="#__codelineno-32-12"></a>
+<a id="__codelineno-32-13" name="__codelineno-32-13" href="#__codelineno-32-13"></a><span class="c1"># ── Load entirely into memory (suitable for small files) ─────────────────────</span>
+<a id="__codelineno-32-14" name="__codelineno-32-14" href="#__codelineno-32-14"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-32-15" name="__codelineno-32-15" href="#__codelineno-32-15"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>           <span class="c1"># bytes</span>
+<a id="__codelineno-32-16" name="__codelineno-32-16" href="#__codelineno-32-16"></a>
+<a id="__codelineno-32-17" name="__codelineno-32-17" href="#__codelineno-32-17"></a><span class="c1"># ── Stream in chunks (advanced: progress, piping, incremental processing) ────</span>
+<a id="__codelineno-32-18" name="__codelineno-32-18" href="#__codelineno-32-18"></a><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-32-19" name="__codelineno-32-19" href="#__codelineno-32-19"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/tmp/output.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-32-20" name="__codelineno-32-20" href="#__codelineno-32-20"></a>    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_stream</span><span class="p">():</span>
+<a id="__codelineno-32-21" name="__codelineno-32-21" href="#__codelineno-32-21"></a>        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+<a id="__codelineno-32-22" name="__codelineno-32-22" href="#__codelineno-32-22"></a>        <span class="n">total</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+<a id="__codelineno-32-23" name="__codelineno-32-23" href="#__codelineno-32-23"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2"> bytes&quot;</span><span class="p">)</span>
 </code></pre></div>
+<blockquote>
+<p><strong>When running in local mode</strong> (<code>LocalFileArtifact</code>), <code>as_local_file()</code>
+returns a <code>SafePath</code> to the pre-existing local file.  The file is
+<strong>never deleted</strong> on context exit.</p>
+</blockquote>
 <h3 id="list-artifacts">List artifacts<a class="headerlink" href="#list-artifacts" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_artifacts</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
 <a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>

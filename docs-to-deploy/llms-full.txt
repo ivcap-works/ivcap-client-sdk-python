@@ -806,29 +806,68 @@ print(artifact.name, artifact.size, artifact.mime_type)
 
 ## Downloading Artifact Content
 
-### Stream to a file
+Three methods are available, each suited to a different use case:
+
+| Method | Best for |
+|---|---|
+| `as_local_file()` | **Recommended** — saves to disk with minimal code |
+| `open()` | Loading small artifacts entirely into memory |
+| `as_stream()` | Custom chunk processing, progress bars, piping into external APIs |
+
+### Download to a local file (recommended)
+
+`as_local_file()` handles all the streaming internals for you.  It supports
+two patterns:
+
+**Temporary file** (auto-deleted when the `with` block exits):
 
 ```python
-with open("/tmp/output.jpg", "wb") as f:
-    for chunk in artifact.as_stream():
-        f.write(chunk)
+with artifact.as_local_file() as path:
+    print(f"Downloaded to: {path}")
+    data = path.read_bytes()
+# temp file is deleted here
 ```
 
-### Open as a file-like object
+**Explicit path** (file is kept):
+
+```python
+path = artifact.as_local_file("/tmp/output.jpg")
+print(f"Saved to: {path}")
+```
+
+> **`LocalFileArtifact` note:** When running in local mode, `as_local_file()`
+> returns a :class:`~ivcap_client.artifact.SafePath` pointing to the
+> pre-existing local file.  The file is **never deleted** on context exit,
+> even when used inside a `with` statement.
+
+### Open as a file-like object (in-memory)
 
 ```python
 with artifact.open() as f:
-    data = f.read()
+    data = f.read()           # bytes
+    text = data.decode("utf-8")
 ```
 
-### Download to a temporary file
+> **Warning:** `open()` loads the entire blob into memory.  For large
+> artifacts (hundreds of MB+) prefer `as_local_file()` or `as_stream()`.
+
+### Stream in chunks (advanced)
+
+Use `as_stream()` when you need low-level control: custom progress reporting,
+piping bytes into a third-party API, or incremental processing.
 
 ```python
-# Auto-deleted when the 'with' block exits
-with artifact.as_local_file() as path:
-    print(f"Downloaded to: {path}")
-    # process the file here...
+# Example: download with progress reporting
+total = 0
+with open("/tmp/output.jpg", "wb") as f:
+    for chunk in artifact.as_stream():
+        f.write(chunk)
+        total += len(chunk)
+print(f"Downloaded {total} bytes")
 ```
+
+For simply saving to disk, `as_local_file()` is more ergonomic than writing
+your own chunk loop.
 
 ## Listing Artifacts
 
@@ -1004,7 +1043,9 @@ print(artifact.id)
 ### Upload data → run service → download result
 
 ```python
-import io, json
+import io, json, time
+from ivcap_client import IVCAP
+
 ivcap = IVCAP()
 
 # Upload input
@@ -1015,15 +1056,19 @@ service = ivcap.get_service_by_name("my-image-processor")
 job = service.request_job(io.StringIO(json.dumps({"image": artifact.id, "threshold": 0.8})))
 
 # Wait for result
-import time
 while not job.finished:
     time.sleep(5)
     job.refresh()
 
-# Download output
+# Download output artifact to a temp file (auto-deleted on exit)
 output = ivcap.get_artifact(job.result["output_artifact"])
 with output.as_local_file() as path:
     print(f"Result saved at: {path}")
+    data = path.read_bytes()
+
+# Or keep the file at a specific path
+path = output.as_local_file("/tmp/result.jpg")
+print(f"Result kept at: {path}")
 ```
 
 ## See Also

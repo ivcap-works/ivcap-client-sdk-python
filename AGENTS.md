@@ -1,9 +1,9 @@
-# AGENT.md — ivcap-client
+# AGENTS.md — ivcap-client
 
 > **For AI coding assistants (Copilot, Cursor, Claude, Cline, …).** This file is the
 > authoritative quick-reference for using the `ivcap-client` Python SDK.
 > Full docs: <https://ivcap-works.github.io/ivcap-client-sdk-python/>
-> Also available as [`AGENT.md`](https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENT.md)
+> Also available as [`AGENTS.md`](https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENTS.md)
 > at the repository root.
 
 This document teaches AI agents how to use the `ivcap_client` Python library to interact
@@ -724,24 +724,39 @@ artifact = ivcap.get_artifact("urn:ivcap:artifact:<uuid>")
 print(artifact.name, artifact.size, artifact.mime_type)
 ```
 
-### Download / stream artifact content
+### Download artifact content
+
+Three methods are available, from most convenient to most low-level:
 
 ```python
-# Stream to a file
+# ── Recommended: download to a local file ────────────────────────────────────
+
+# Temporary file (auto-deleted when the 'with' block exits)
+with artifact.as_local_file() as path:
+    print(f"Downloaded to {path}")
+    data = path.read_bytes()
+# temp file deleted here
+
+# Explicit path (file is kept)
+path = artifact.as_local_file("/tmp/output.jpg")
+print(f"Saved to {path}")
+
+# ── Load entirely into memory (suitable for small files) ─────────────────────
+with artifact.open() as f:
+    data = f.read()           # bytes
+
+# ── Stream in chunks (advanced: progress, piping, incremental processing) ────
+total = 0
 with open("/tmp/output.jpg", "wb") as f:
     for chunk in artifact.as_stream():
         f.write(chunk)
-
-# Open as a file-like object (loads into memory)
-with artifact.open() as f:
-    data = f.read()
-
-# Download to a temp file (auto-deleted on context exit)
-with artifact.as_local_file() as path:
-    print(f"Downloaded to {path}")
-    # process path here...
-    # file is deleted when 'with' block exits
+        total += len(chunk)
+print(f"Downloaded {total} bytes")
 ```
+
+> **When running in local mode** (`LocalFileArtifact`), `as_local_file()`
+> returns a `SafePath` to the pre-existing local file.  The file is
+> **never deleted** on context exit.
 
 ### List artifacts
 

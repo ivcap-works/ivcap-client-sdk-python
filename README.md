@@ -235,7 +235,7 @@ All examples read credentials from a `.env` file (or environment variables). See
 
 ## Going Deeper
 
-**[`AGENT.md`](./AGENT.md)** is a comprehensive reference guide — written primarily for
+**[`AGENTS.md`](./AGENTS.md)** is a comprehensive reference guide — written primarily for
 AI agents, but equally useful for developers who want the full picture. It covers:
 
 - A detailed explanation of every platform concept (Services, Jobs, Artifacts, Aspects,
@@ -247,7 +247,7 @@ AI agents, but equally useful for developers who want the full picture. It cover
 - Environment variable reference
 
 If you want to understand *why* the API works the way it does, or need exhaustive
-parameter documentation, start with `AGENT.md`.
+parameter documentation, start with `AGENTS.md`.
 
 ---
 

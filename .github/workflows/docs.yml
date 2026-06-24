@@ -30,7 +30,7 @@ jobs:
         # Mirror the Makefile's DOCS_DOCKER pattern exactly:
         # mount the whole repo at /project, set workdir to /project/docs so that
         # pymdownx.snippets base_path: [".."] resolves to /project (the repo root)
-        # and can find AGENT.md and any other root-level files included via --8<--.
+        # and can find AGENTS.md and any other root-level files included via --8<--.
         # PYTHONPATH=/project lets mkdocstrings/griffe find the ivcap_client package
         # without needing to install it into the Docker image.
         run: |

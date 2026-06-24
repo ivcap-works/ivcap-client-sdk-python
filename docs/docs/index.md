@@ -93,7 +93,7 @@ See the **[Examples section](examples/overview.md)** for annotated walkthroughs.
 ## Where to Find Help
 
 - **[API Reference](api/overview.md)** — Complete class and method documentation
-- **[AGENT.md](https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENT.md)** — Machine-readable quick-reference for AI agents; also available as the [Agent Guide](agent.md) doc page
+- **[AGENTS.md](https://github.com/ivcap-works/ivcap-client-sdk-python/blob/main/AGENTS.md)** — Machine-readable quick-reference for AI agents; also available as the [Agent Guide](agent.md) doc page
 - **GitHub Issues** — [Report bugs or ask questions](https://github.com/ivcap-works/ivcap-client-sdk-python/issues)
 - **[Contributing](community/contributing.md)** — Contributions welcome!
 

@@ -119,7 +119,7 @@ docs/
     ├── reference/
     │   ├── environment-variables.md
     │   └── glossary.md
-    ├── agent.md                   # Machine-readable quick-reference (embeds root AGENT.md via --8<--)
+    ├── agent.md                   # Machine-readable quick-reference (embeds root AGENTS.md via --8<--)
     ├── css/
     │   └── extra.css          # Custom overrides (see Styling section)
     ├── js/
@@ -174,7 +174,7 @@ After any non-trivial change to the library, run through the checklist below.
 | Pagination behaviour changed | Update `docs/docs/guides/` and `docs/docs/api/` type pages |
 | `IVCAP` constructor or top-level API changed | Update `docs/docs/api/ivcap.md` and `docs/docs/getting-started/quick-start.md` |
 | Package name, entry-point, or export map changed | Update `docs/docs/getting-started/installation.md` and `docs/docs/index.md` |
-| `AGENT.md` at repo root changed | The `docs/docs/agent.md` page embeds root `AGENT.md` via `--8<-- "AGENT.md"` (pymdownx snippets). No other action needed — the docs build picks it up automatically. |
+| `AGENTS.md` at repo root changed | The `docs/docs/agent.md` page embeds root `AGENTS.md` via `--8<-- "AGENTS.md"` (pymdownx snippets). No other action needed — the docs build picks it up automatically. |
 
 ### Syncing the API reference pages
 

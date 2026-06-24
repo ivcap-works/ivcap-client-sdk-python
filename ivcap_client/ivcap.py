@@ -57,13 +57,12 @@ URN = str
 
 
 class IVCAP:
-    """A class to represent a particular IVCAP deployment and it's capabilities.
+    """Entry point for all interactions with an IVCAP deployment.
 
-    When no platform URL is available (neither ``url`` argument nor ``IVCAP_URL``/
-    ``IVCAP_BASE_URL`` environment variables are set), ``IVCAP()`` transparently
-    returns a :class:`~ivcap_client.artifact.LocalIVCAP` instance instead.  This
-    means your code does not need to change between local development and deployed
-    operation — simply write ``ivcap = IVCAP()`` everywhere:
+    ``IVCAP()`` is the single constructor for all three operating modes.  The
+    correct implementation is selected **automatically** from environment
+    variables — no code changes are needed between local development and
+    deployed operation:
 
     .. code-block:: python
 
@@ -72,8 +71,17 @@ class IVCAP:
         ivcap = IVCAP()  # → LocalIVCAP locally, IVCAP on the platform
         artifact = ivcap.upload_artifact(name="result.csv", file_path="/tmp/result.csv")
 
-    The local artifact root directory is controlled by the ``IVCAP_LOCAL_DIR``
-    environment variable (default: ``./data``).
+    **Auto-detection logic (in order):**
+
+    1. ``IVCAP_URL`` or ``IVCAP_BASE_URL`` env var is set → platform
+       :class:`IVCAP` instance.
+    2. ``url`` argument is provided → platform :class:`IVCAP` instance.
+    3. ``token`` argument provided without a URL → ``ValueError``.
+    4. None of the above → :class:`LocalIVCAP` backed by ``IVCAP_LOCAL_DIR``
+       (default: ``ivcap-artifacts``).
+
+    For the full operating-mode reference see
+    :doc:`/guides/local-mode`.
     """
 
     def __new__(
@@ -82,19 +90,19 @@ class IVCAP:
         token: str | None = None,
         account_id: str | None = None,
     ):
-        """Auto-detect platform vs local mode.
+        """Auto-detect platform vs local mode and return the right instance type.
 
         The decision logic is:
 
         1. If an explicit ``token`` is passed the caller clearly intends to
-           connect to a platform — return a normal ``IVCAP`` instance and let
-           ``__init__`` raise if the URL is also missing.
+           connect to a platform — return a normal :class:`IVCAP` instance and
+           let ``__init__`` raise if the URL is also missing.
         2. Otherwise, check for a platform URL (``url`` arg or ``IVCAP_URL`` /
            ``IVCAP_BASE_URL`` env vars).  If one is found, return a normal
-           ``IVCAP`` instance.
+           :class:`IVCAP` instance.
         3. If no URL and no explicit token — the environment is unambiguously
-           local.  Return a :class:`~ivcap_client.artifact.LocalIVCAP` backed
-           by ``IVCAP_LOCAL_DIR`` (default: ``./data``).
+           local.  Return a :class:`LocalIVCAP` backed by ``IVCAP_LOCAL_DIR``
+           (default: ``ivcap-artifacts``).
         """
         # Explicit token ⇒ platform intent; let __init__ handle validation.
         if token is not None:
@@ -119,14 +127,31 @@ class IVCAP:
         token: str | None = None,
         account_id: str | None = None,
     ):
-        """Create a new IVCAP instance through which to interact with
-        a specific IVCAP deployment identified by 'url'. Access is authorized
-        by 'token'.
+        """Initialise a platform-connected IVCAP client.
+
+        In normal usage you do not need to call this directly — use ``IVCAP()``
+        and let mode auto-detection choose the right implementation.
 
         Args:
-            url (Optional[str], optional): _description_. Defaults to [env: IVCAP_URL].
-            token (Optional[str], optional): _description_. Defaults to [env: IVCAP_JWT].
-            account_id (Optional[str], optional): _description_. Defaults to [env: IVCAP_ACCOUNT_ID].
+            url (Optional[str]): Base URL of the IVCAP deployment
+                (e.g. ``https://api.your-ivcap-deployment.net``).
+                Defaults to the ``IVCAP_URL`` environment variable.
+                When running inside a platform container, ``IVCAP_BASE_URL``
+                is used automatically (no token required in that case).
+            token (Optional[str]): JWT bearer token for authentication.
+                Required for external (non-container) access.
+                Defaults to the ``IVCAP_JWT`` environment variable.
+            account_id (Optional[str]): Account URN
+                (``urn:ivcap:account:<uuid>``).  Optional — some operations
+                (e.g. listing secrets) require it.
+                Defaults to the ``IVCAP_ACCOUNT_ID`` environment variable.
+
+        Raises:
+            ValueError: If no URL can be determined (neither ``url`` argument
+                nor ``IVCAP_URL`` / ``IVCAP_BASE_URL`` env vars are set).
+            ValueError: If a URL is set for external access but no JWT token
+                can be found (neither ``token`` argument nor ``IVCAP_JWT``
+                env var).
         """
         inside_platform = False
         if not url:
@@ -293,13 +318,13 @@ class IVCAP:
         return OrderIter(self, **kwargs)
 
     def get_order(self, order_id: URN) -> Order:
-        """Returns a Service instance for service 'service_id'
+        """Return an Order instance for the given order URN.
 
         Args:
-            order_id (URN): URN of order
+            order_id (URN): URN of the order (``urn:ivcap:job:<uuid>``).
 
         Returns:
-            Order: Returns an Order instance if order exists
+            Order: The Order instance for the requested order.
         """
         return Order(self, id=order_id)
 
@@ -486,20 +511,68 @@ class IVCAP:
         retry_delay: int | None = 30,
         force_upload: bool | None = False,
     ) -> Artifact:
-        """Uploads content which is either identified as a `file_path` or `io_stream`. In the
-        latter case, content type need to be provided.
+        """Upload a file or byte stream to IVCAP as a new artifact.
+
+        Either ``file_path`` or ``io_stream`` must be provided (not both).
+        When using ``io_stream``, ``content_type`` must be supplied explicitly.
+
+        **Deduplication:** When ``file_path`` is given, the SDK stores a hidden
+        ``.ivcap-<filename>.txt`` sidecar file next to the source file
+        containing an MD5 hash.  On subsequent calls for the same unchanged
+        file the existing artifact is returned immediately without re-uploading.
+        Override with ``force_upload=True``.
 
         Args:
-            file_path (Optional[str]): File to upload
-            io_stream (Optional[IO]): Content as IO stream.
-            content_type (Optional[str]): Content type - needs to be declared for `io_stream`.
-            content_size (Optional[int]): Overall size of content to be uploaded. Defaults to -1 (don't know).
-            collection: Optional[URN]: Additionally adds artifact to named collection ('urn:...').
-            policy: Optional[URN]: Set specific policy controlling access ('urn:ivcap:policy:...').
-            chunk_size (Optional[int]): Chunk size to use for each individual upload. Defaults to MAXSIZE.
-            retries (Optional[int]): The number of attempts should be made in the case of a failed upload. Defaults to 0.
-            retry_delay (Optional[int], optional): How long (in seconds) should we wait before retrying a failed upload attempt. Defaults to 30.
-            force_upload (Optional[bool], optional): Upload file even if it has been uploaded before.
+            name (Optional[str]): Human-readable display name for the artifact.
+            file_path (Optional[str]): Path to the local file to upload.
+                The MIME type is auto-detected from the file extension if
+                ``content_type`` is not given.
+            io_stream (Optional[IO]): In-memory byte stream to upload.
+                ``content_type`` must be provided when using this argument.
+            content_type (Optional[str]): MIME type of the content.  Required
+                when using ``io_stream``; auto-detected from ``file_path``
+                extension otherwise.
+            content_size (Optional[int]): Size of the content in bytes.
+                Defaults to -1 (unknown); auto-determined from ``file_path``
+                when possible.
+            collection (Optional[URN]): Add the artifact to a named collection
+                (``urn:ivcap:collection:<uuid>``).
+            policy (Optional[URN]): Access policy URN
+                (``urn:ivcap:policy:<name>``).
+            chunk_size (Optional[int]): TUS upload chunk size in bytes.
+                Defaults to ``sys.maxsize`` (single-chunk upload).
+            retries (Optional[int]): Number of retry attempts on upload
+                failure.  Defaults to 0 (no retries).
+            retry_delay (Optional[int]): Seconds to wait between retries.
+                Defaults to 30.
+            force_upload (Optional[bool]): Re-upload even if a sidecar file
+                indicates the file was already uploaded.  Defaults to False.
+
+        Returns:
+            Artifact: The newly created (or previously uploaded) artifact.
+
+        Raises:
+            ValueError: If neither ``file_path`` nor ``io_stream`` is
+                provided, if the file does not exist or is not readable, or
+                if ``content_type`` cannot be determined.
+
+        Example::
+
+            # Upload a local file
+            artifact = ivcap.upload_artifact(
+                name="my-image",
+                file_path="/path/to/image.jpg",
+            )
+
+            # Upload from an in-memory stream
+            import io
+            data = b"col1,col2\\n1,2\\n3,4\\n"
+            artifact = ivcap.upload_artifact(
+                name="my-data.csv",
+                io_stream=io.BytesIO(data),
+                content_type="text/csv",
+                content_size=len(data),
+            )
         """
         from ivcap_client.artifact import upload_artifact as upload
 
@@ -758,11 +831,11 @@ class IVCAP:
 
     @classmethod
     def local(cls, base_dir: str | None = None) -> LocalIVCAP:
-        """Return a :class:`~ivcap_client.artifact.LocalIVCAP` instance for
-        filesystem-only (no-network) development and testing.
+        """Return a :class:`LocalIVCAP` instance for filesystem-only
+        (no-network) development and testing.
 
-        This is the preferred way to get a local-mode client when you do not
-        want to (or cannot) connect to an IVCAP platform deployment:
+        This is the preferred way to force local mode regardless of which
+        environment variables are set — for example in unit tests:
 
         .. code-block:: python
 
@@ -776,16 +849,17 @@ class IVCAP:
 
         1. The ``base_dir`` argument to this method.
         2. The ``IVCAP_LOCAL_DIR`` environment variable.
-        3. The default ``"./data"``.
+        3. The default ``"ivcap-artifacts"``.
 
         Args:
-            base_dir: Root directory for artifact storage.  Created on
-                demand.  Defaults to ``IVCAP_LOCAL_DIR`` env var, or
-                ``"./data"`` if neither is set.
+            base_dir: Root directory for artifact and aspect storage.
+                Created on demand.  Defaults to ``IVCAP_LOCAL_DIR`` env var,
+                or ``"ivcap-artifacts"`` if neither is set.
 
         Returns:
             LocalIVCAP: A filesystem-backed client with the same
-            ``upload_artifact`` / ``get_artifact`` interface as :class:`IVCAP`.
+            ``upload_artifact`` / ``get_artifact`` / ``add_aspect`` interface
+            as :class:`IVCAP`.
         """
         if base_dir is None:
             base_dir = os.environ.get("IVCAP_LOCAL_DIR", "ivcap-artifacts")

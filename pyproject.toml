@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ivcap_client"
-version = "0.47.18"
+version = "0.47.19"
 description = "A client library for accessing an IVCAP cluster"
 
 authors = ["Max Ott <max.ott@csiro.au>",
@@ -8,7 +8,7 @@ authors = ["Max Ott <max.ott@csiro.au>",
 
 readme = "README.md"
 
-include = ["CHANGELOG.md", "AGENT.md", "ivcap_client/py.typed"]
+include = ["CHANGELOG.md", "AGENTS.md", "ivcap_client/py.typed"]
 
 [tool.poe.tasks]    # using poethepoet
 lint = "ruff check ."

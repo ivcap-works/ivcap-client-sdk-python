@@ -741,17 +741,22 @@ with artifact.as_local_file() as path:
 path = artifact.as_local_file("/tmp/output.jpg")
 print(f"Saved to {path}")
 
+# With progress reporting (chunk_size and progress_callback are keyword-only)
+def on_progress(downloaded: int, total: int | None) -> None:
+    if total:
+        print(f"\r{downloaded / total * 100:.1f}%", end="", flush=True)
+    else:
+        print(f"\r{downloaded} bytes", end="", flush=True)
+
+path = artifact.as_local_file("/tmp/output.jpg", progress_callback=on_progress)
+
 # ── Load entirely into memory (suitable for small files) ─────────────────────
 with artifact.open() as f:
     data = f.read()           # bytes
 
-# ── Stream in chunks (advanced: progress, piping, incremental processing) ────
-total = 0
-with open("/tmp/output.jpg", "wb") as f:
-    for chunk in artifact.as_stream():
-        f.write(chunk)
-        total += len(chunk)
-print(f"Downloaded {total} bytes")
+# ── Stream in chunks (advanced: piping into external APIs, incremental processing) ────
+for chunk in artifact.as_stream():
+    external_api.send(chunk)
 ```
 
 > **When running in local mode** (`LocalFileArtifact`), `as_local_file()`

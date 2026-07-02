@@ -131,6 +131,34 @@ path = artifact.as_local_file("/tmp/output.jpg")
 print(f"Saved to: {path}")
 ```
 
+Both `chunk_size` and `progress_callback` are **keyword-only** arguments:
+
+| Argument | Type | Default | Description |
+|---|---|---|---|
+| `path` | `Path \| None` | `None` | Destination path; `None` = temp file (auto-deleted) |
+| `chunk_size` | `int` | `-1` | Bytes per chunk; `-1` = auto-select based on artifact size |
+| `progress_callback` | `Callable[[int, int \| None], None] \| None` | `None` | Called after each chunk with `(bytes_downloaded, total_bytes_or_None)` |
+
+**Progress reporting** with `progress_callback`:
+
+```python
+def on_progress(downloaded: int, total: int | None) -> None:
+    if total:
+        pct = downloaded / total * 100
+        print(f"\r{pct:.1f}%  ({downloaded}/{total} bytes)", end="", flush=True)
+    else:
+        print(f"\r{downloaded} bytes downloaded", end="", flush=True)
+
+path = artifact.as_local_file("/tmp/output.jpg", progress_callback=on_progress)
+print()  # newline after progress output
+```
+
+The callback receives:
+
+- `bytes_downloaded` — cumulative bytes written to disk so far.
+- `total_bytes` — the artifact's known size in bytes, or `None` if the size
+  is not available (e.g. the artifact has not been fully indexed yet).
+
 > **`LocalFileArtifact` note:** When running in local mode, `as_local_file()`
 > returns a :class:`~ivcap_client.artifact.SafePath` pointing to the
 > pre-existing local file.  The file is **never deleted** on context exit,
@@ -149,21 +177,15 @@ with artifact.open() as f:
 
 ### Stream in chunks (advanced)
 
-Use `as_stream()` when you need low-level control: custom progress reporting,
-piping bytes into a third-party API, or incremental processing.
+Use `as_stream()` when you need low-level control: piping bytes into a
+third-party API or incremental processing.  For progress reporting, prefer the
+`progress_callback` argument on `as_local_file()`.
 
 ```python
-# Example: download with progress reporting
-total = 0
-with open("/tmp/output.jpg", "wb") as f:
-    for chunk in artifact.as_stream():
-        f.write(chunk)
-        total += len(chunk)
-print(f"Downloaded {total} bytes")
+# Example: stream bytes into an external API
+for chunk in artifact.as_stream():
+    external_api.send(chunk)
 ```
-
-For simply saving to disk, `as_local_file()` is more ergonomic than writing
-your own chunk loop.
 
 ## Listing Artifacts
 

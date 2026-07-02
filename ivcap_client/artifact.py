@@ -16,7 +16,7 @@ import os
 import shutil
 import tempfile
 import uuid
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from datetime import UTC, datetime, timezone
 from pathlib import Path
@@ -221,7 +221,13 @@ class Artifact:
             for chunk in response.iter_bytes(chunk_size=chunk_size):
                 yield chunk
 
-    def as_local_file(self, path: Path | None = None, chunk_size: int = -1) -> Path:
+    def as_local_file(
+        self,
+        path: Path | None = None,
+        *,
+        chunk_size: int = -1,
+        progress_callback: Callable[[int, int | None], None] | None = None,
+    ) -> Path:
         """Download the artifact to a local file and return the path.
 
         This is the **recommended** method for saving artifact content to disk.
@@ -253,6 +259,23 @@ class Artifact:
             chunk_size (int): Number of bytes to read per chunk.  Pass ``-1``
                 (the default) to let the SDK choose automatically based on the
                 artifact size (see :meth:`as_stream` for the formula).
+            progress_callback: Optional callable invoked after each chunk is
+                written.  Receives two arguments:
+
+                * ``bytes_downloaded`` (int) — cumulative bytes written so far.
+                * ``total_bytes`` (int | None) — total expected size in bytes,
+                  or ``None`` if the artifact size is unknown.
+
+                Example::
+
+                    def on_progress(downloaded: int, total: int | None) -> None:
+                        if total:
+                            pct = downloaded / total * 100
+                            print(f"\\r{pct:.1f}%", end="", flush=True)
+                        else:
+                            print(f"\\r{downloaded} bytes", end="", flush=True)
+
+                    path = artifact.as_local_file(progress_callback=on_progress)
 
         Returns:
             :class:`CMPath` when ``path`` is ``None`` (context-manager, auto-delete).
@@ -263,17 +286,25 @@ class Artifact:
             :class:`~pathlib.Path` subclasses and support all normal path
             operations (``read_bytes()``, ``open()``, etc.).
         """
+        total_bytes = self.size if self.size and self.size > 0 else None
+
+        def _stream_to(f):
+            downloaded = 0
+            for chunk in self.as_stream(chunk_size=chunk_size):
+                f.write(chunk)
+                if progress_callback is not None:
+                    downloaded += len(chunk)
+                    progress_callback(downloaded, total_bytes)
+
         if path is not None:
             path = Path(path)
             path.parent.mkdir(parents=True, exist_ok=True)
             with open(path, "wb") as f:
-                for chunk in self.as_stream(chunk_size=chunk_size):
-                    f.write(chunk)
+                _stream_to(f)
             return path
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         with temp_file as f:
-            for chunk in self.as_stream(chunk_size=chunk_size):
-                f.write(chunk)
+            _stream_to(f)
         return CMPath(temp_file.name)
 
     @property

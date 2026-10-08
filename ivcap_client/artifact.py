@@ -9,38 +9,63 @@ import base64
 import datetime
 import hashlib
 import io
-import json
 import logging
 import mimetypes
 import os
-import shutil
+import tarfile
 import tempfile
-import uuid
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
-from datetime import UTC, datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from sys import maxsize as MAXSIZE
 from typing import IO, TYPE_CHECKING, BinaryIO
 from urllib.parse import urlparse
 
-logger = logging.getLogger(__name__)
+from tusclient.client import TusClient
+
+from ivcap_client.api.artifact import artifact_list, artifact_read, artifact_upload
+from ivcap_client.aspect import (  # noqa: F401 – re-exported for backward compat
+    Aspect,
+    LocalAspect,
+)
+from ivcap_client.models.artifact_list_item import ArtifactListItem
+from ivcap_client.models.artifact_list_rt import ArtifactListRT
+from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
+from ivcap_client.models.artifact_status_rt_status import ArtifactStatusRTStatus
+from ivcap_client.utils import BaseIter, Links, _set_fields, process_error
 
 if TYPE_CHECKING:
     from typing import Self
 
     from ivcap_client.ivcap import IVCAP, URN
 
-from tusclient.client import TusClient
 
-from ivcap_client.api.artifact import artifact_list, artifact_read, artifact_upload
-from ivcap_client.aspect import Aspect
-from ivcap_client.exception import MissingParameterValue, ResourceNotFound
-from ivcap_client.models.artifact_list_item import ArtifactListItem
-from ivcap_client.models.artifact_list_rt import ArtifactListRT
-from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
-from ivcap_client.models.artifact_status_rt_status import ArtifactStatusRTStatus
-from ivcap_client.utils import BaseIter, Links, _set_fields, process_error
+_CHUNK_MIN = 8 * 1024  # 8 KiB
+_CHUNK_MAX = 16 * 1024 * 1024  # 16 MiB
+
+# MIME types and filename suffixes that indicate a tar-based archive.
+_TAR_MIME_TYPES: frozenset[str] = frozenset(
+    {
+        "application/x-tar",
+        "application/gzip",
+        "application/x-gzip",
+        "application/x-bzip2",
+        "application/x-xz",
+        "application/x-compressed-tar",
+        "application/x-gtar",
+    }
+)
+_TAR_SUFFIXES: tuple[str, ...] = (
+    ".tar",
+    ".tgz",
+    ".tar.gz",
+    ".tar.bz2",
+    ".tbz2",
+    ".tar.xz",
+)
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -197,7 +222,7 @@ class Artifact:
         Args:
             chunk_size (int): Number of bytes to read per chunk.  Pass ``-1``
                 (the default) to let the SDK choose a chunk size automatically:
-                ``max(8 KiB, min(artifact_size / 10, 10 MiB))``.  The artifact
+                ``max(8 KiB, min(artifact_size / 10, 16 MiB))``.  The artifact
                 ``size`` attribute is used when available; if it is unknown the
                 fallback is 8 KiB.
 
@@ -306,6 +331,130 @@ class Artifact:
         with temp_file as f:
             _stream_to(f)
         return CMPath(temp_file.name)
+
+    @property
+    def is_tar_file(self) -> bool:
+        """Return ``True`` if this artifact appears to be a tar archive.
+
+        The check consults two sources of evidence in order:
+
+        1. **MIME type** — if :attr:`mime_type` is one of the known tar-related
+           types (``application/x-tar``, ``application/gzip``,
+           ``application/x-bzip2``, etc.) the result is ``True``.
+        2. **File name suffix** — if :attr:`name` ends with a recognised tar
+           extension (``.tar``, ``.tgz``, ``.tar.gz``, ``.tar.bz2``,
+           ``.tbz2``, ``.tar.xz``) the result is ``True``.
+
+        If neither attribute is set, ``False`` is returned.
+
+        Use this property to branch between :meth:`untar` and
+        :meth:`as_local_file` without having to inspect MIME types yourself::
+
+            if artifact.is_tar_file:
+                artifact.untar("/tmp/results")
+            else:
+                artifact.as_local_file("/tmp/result.bin")
+        """
+        if self.mime_type and self.mime_type.lower() in _TAR_MIME_TYPES:
+            return True
+        if self.name:
+            name_lower = self.name.lower()
+            return any(name_lower.endswith(s) for s in _TAR_SUFFIXES)
+        return False
+
+    def untar(
+        self,
+        dest_dir: Path | str,
+        *,
+        chunk_size: int = -1,
+        progress_callback: Callable[[int, int | None], None] | None = None,
+    ) -> Path:
+        """Stream a tar artifact and extract its files into a destination directory.
+
+        The artifact must be a tar archive (``tar``, ``tar.gz``, ``tar.bz2``, etc.).
+        Each file contained in the archive is written under ``dest_dir``,
+        preserving the relative directory structure stored in the archive.
+        Absolute paths in the archive (e.g. ``/etc/passwd``) are made relative
+        to ``dest_dir`` by stripping the leading ``/``, so all extracted files
+        always land inside ``dest_dir`` regardless of how the archive was created.
+
+        The artifact is streamed directly through :meth:`as_stream` — neither the
+        compressed archive nor its contents are ever fully buffered in memory.
+
+        The resolved ``chunk_size`` is used as the buffer size at two independent
+        layers:
+
+        * **HTTP layer** — compressed bytes fetched per network read.
+        * **Disk write layer** — decompressed bytes written per ``f_in.read()``
+          call inside the tar loop.
+
+        For compressed archives (``.tar.gz``, ``.tar.bz2``) these two layers are
+        **decoupled** by tarfile's decompression stage, so a ``chunk_size``-byte
+        compressed network chunk does not correspond to ``chunk_size`` bytes of
+        decompressed output.  Both layers still benefit independently from a
+        larger buffer (fewer syscalls).  An additional 8 KiB ``io.BufferedReader``
+        sits between the network iterator and tarfile, further smoothing any
+        size mismatch.
+
+        The compression format is detected automatically from the stream header
+        (``tarfile`` mode ``"r|*"``), so ``.tar``, ``.tar.gz``, and ``.tar.bz2``
+        artifacts all work without any extra configuration.
+
+        Args:
+            dest_dir: Destination directory.  Created (including any missing
+                parent directories) if it does not already exist.
+            chunk_size (int): Buffer size in bytes used for both HTTP download
+                chunks and per-member disk writes.  Pass ``-1`` (the default) to
+                let the SDK choose automatically (see :meth:`as_stream` for the
+                formula).  For compressed archives the two layers operate on
+                different data domains (compressed vs decompressed bytes) and
+                are therefore independent even when the same value is used.
+            progress_callback: Optional callable invoked after each disk-write
+                chunk is written.  Receives two arguments:
+
+                * ``bytes_written`` (int) — cumulative uncompressed bytes written
+                  so far across all extracted files.
+                * ``total_bytes`` (int | None) — compressed artifact size in bytes,
+                  or ``None`` if unknown.  This is a rough upper-bound indicator
+                  only; actual extracted bytes will differ for compressed archives.
+
+                Example::
+
+                    def on_progress(written: int, total: int | None) -> None:
+                        print(f"\\r{written:,} bytes extracted", end="", flush=True)
+
+                    artifact.untar("/tmp/results", progress_callback=on_progress)
+
+        Returns:
+            :class:`~pathlib.Path`: The resolved ``dest_dir`` path.
+
+        Raises:
+            tarfile.TarError: If the artifact is not a valid tar archive.
+
+        Example::
+
+            dest = artifact.untar("/tmp/results")
+            for p in sorted(dest.rglob("*")):
+                print(p)
+        """
+        if not self.is_tar_file:
+            raise ValueError(
+                f"artifact {self.id!r} does not appear to be a tar archive "
+                f"(mime_type={self.mime_type!r}, name={self.name!r}). "
+                "Use as_local_file() to download it as a plain file, or "
+                "check artifact.is_tar_file before calling untar()."
+            )
+        dest = Path(dest_dir)
+        dest.mkdir(parents=True, exist_ok=True)
+        total_bytes = self.size if self.size and self.size > 0 else None
+        copy_size = _resolve_chunk_size(chunk_size, self.size)
+
+        raw = _IterStream(self.as_stream(chunk_size=copy_size))
+        buf = io.BufferedReader(raw)
+        with tarfile.open(fileobj=buf, mode="r|*") as tar:
+            return _untar_from_tarfile(
+                tar, dest, copy_size, total_bytes, progress_callback
+            )
 
     @property
     def metadata(self) -> Iterator[Aspect]:
@@ -449,55 +598,75 @@ class LocalFileArtifact:
             mime_type = "application/octet-stream"
         return mime_type
 
+    @property
+    def is_tar_file(self) -> bool:
+        """Return ``True`` if this local file appears to be a tar archive.
+
+        Uses the same MIME-type and suffix detection as :attr:`Artifact.is_tar_file`.
+        Because the file is local, the MIME type is inferred from the filename
+        extension via :func:`mimetypes.guess_type`.
+        """
+        if self.mime_type and self.mime_type.lower() in _TAR_MIME_TYPES:
+            return True
+        name_lower = self._fp.name.lower()
+        return any(name_lower.endswith(s) for s in _TAR_SUFFIXES)
+
+    def untar(
+        self,
+        dest_dir: Path | str,
+        *,
+        chunk_size: int = -1,
+        progress_callback: Callable[[int, int | None], None] | None = None,
+    ) -> Path:
+        """Extract the files inside this local tar archive into a destination directory.
+
+        The archive file already exists on the local filesystem — no download is
+        performed.  The extraction logic is identical to :meth:`Artifact.untar`:
+        files are written under ``dest_dir`` preserving relative directory
+        structure, and absolute archive paths are made relative to ``dest_dir``
+        by stripping the leading ``/``.
+
+        Args:
+            dest_dir: Destination directory.  Created (including any missing
+                parent directories) if it does not already exist.
+            chunk_size (int): Bytes read per ``f_in.read()`` call when copying
+                each member to disk.  Pass ``-1`` (the default) to let the SDK
+                choose automatically based on the archive file size.
+            progress_callback: Optional ``(bytes_written, total_bytes)`` callable
+                invoked after each chunk is written.  ``total_bytes`` is the
+                compressed archive file size and serves as a rough progress indicator
+                only.
+
+        Returns:
+            :class:`~pathlib.Path`: The resolved ``dest_dir`` path.
+
+        Raises:
+            ValueError: If :attr:`is_tar_file` is ``False``.
+            tarfile.TarError: If the file is not a valid tar archive.
+
+        Example::
+
+            artifact = ivcap.get_artifact("file:///data/results.tar.gz")
+            dest = artifact.untar("/tmp/results")
+        """
+        if not self.is_tar_file:
+            raise ValueError(
+                f"local file {str(self._fp)!r} does not appear to be a tar archive "
+                f"(mime_type={self.mime_type!r}). "
+                "Check artifact.is_tar_file before calling untar()."
+            )
+        dest = Path(dest_dir)
+        dest.mkdir(parents=True, exist_ok=True)
+        total_bytes = self.size if self.size and self.size > 0 else None
+        copy_size = _resolve_chunk_size(chunk_size, self.size)
+
+        with tarfile.open(self._fp, mode="r:*") as tar:
+            return _untar_from_tarfile(
+                tar, dest, copy_size, total_bytes, progress_callback
+            )
+
     def __repr__(self) -> str:
         return f"<LocalFileArtifact id={self.id}>"
-
-
-class LocalAspect:
-    """A filesystem-backed aspect record returned by :class:`LocalIVCAP`.
-
-    Provides the same key properties as :class:`~ivcap_client.aspect.Aspect`
-    so that callers do not need to branch between local and platform mode.
-
-    Instances are created by :meth:`LocalIVCAP.add_aspect` /
-    :meth:`LocalIVCAP.update_aspect` and retrieved by
-    :meth:`LocalIVCAP.get_aspect`.  On disk each aspect is a single JSON
-    file stored under ``<base_dir>/aspects/<uuid>.json``.
-    """
-
-    def __init__(
-        self,
-        id: str,
-        entity: str,
-        schema: str,
-        content: dict,
-        *,
-        valid_from: datetime | None = None,
-    ):
-        self.id = id
-        self.entity = entity
-        self.schema = schema
-        self._content = content
-        self.valid_from = valid_from
-        self.valid_to = None
-
-    @property
-    def urn(self) -> str:
-        """URN of this aspect record (``urn:ivcap:aspect:<uuid>``)."""
-        return self.id
-
-    @property
-    def aspect(self) -> dict:
-        """The JSON content body of the aspect."""
-        return self._content
-
-    @property
-    def content(self) -> dict:
-        """Alias for :attr:`aspect`."""
-        return self._content
-
-    def __repr__(self) -> str:
-        return f"<LocalAspect id={self.id}, entity={self.entity}, schema={self.schema}>"
 
 
 # ---------------------------------------------------------------------------
@@ -518,8 +687,83 @@ def __getattr__(name: str):
 
 #### HELPER FUNCTIONS ####
 
-_CHUNK_MIN = 8 * 1024  # 8 KiB
-_CHUNK_MAX = 10 * 1024 * 1024  # 10 MiB
+
+class _IterStream(io.RawIOBase):
+    """Wrap a ``bytes`` iterator as a readable :class:`io.RawIOBase` stream.
+
+    Used by :meth:`Artifact.untar` to feed :func:`tarfile.open` directly from
+    :meth:`Artifact.as_stream` without buffering the entire download in memory.
+    """
+
+    def __init__(self, iterator: Iterator[bytes]):
+        self._iter = iterator
+        self._leftover = b""
+
+    def readable(self) -> bool:
+        return True
+
+    def readinto(self, b: bytearray) -> int:
+        try:
+            while not self._leftover:
+                self._leftover = next(self._iter)
+        except StopIteration:
+            return 0
+        n = min(len(self._leftover), len(b))
+        b[:n] = self._leftover[:n]
+        self._leftover = self._leftover[n:]
+        return n
+
+
+def _untar_from_tarfile(
+    tar: tarfile.TarFile,
+    dest: Path,
+    copy_size: int,
+    total_bytes: int | None,
+    progress_callback: Callable[[int, int | None], None] | None,
+) -> Path:
+    """Extract all file members from an open :class:`tarfile.TarFile` into *dest*.
+
+    Shared implementation used by both :meth:`Artifact.untar` (HTTP streaming
+    source) and :meth:`LocalFileArtifact.untar` (local file source).  The caller
+    is responsible for opening/closing *tar* and creating *dest*.
+
+    Absolute member paths are made safe by stripping the leading ``/`` before
+    joining with *dest* (prevents path traversal outside the destination).
+
+    Args:
+        tar: An already-open :class:`tarfile.TarFile` in any read mode.
+        dest: Destination directory (must already exist).
+        copy_size: Bytes to read per ``f_in.read()`` call.
+        total_bytes: Value forwarded as the second argument of *progress_callback*
+            (may be ``None`` if the size is unknown).
+        progress_callback: Optional ``(bytes_written, total_bytes)`` callable
+            invoked after each chunk is written to disk.
+
+    Returns:
+        *dest* (unchanged).
+    """
+    written = 0
+    for member in tar:
+        if not member.isfile():
+            continue
+        f_in = tar.extractfile(member)
+        if f_in is None:
+            continue
+        # Strip leading "/" so absolute archive paths are always
+        # relative to dest (prevents path traversal outside dest).
+        safe_name = member.name.lstrip("/")
+        out_path = dest / safe_name
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(out_path, "wb") as f_out:
+            while True:
+                chunk = f_in.read(copy_size)
+                if not chunk:
+                    break
+                f_out.write(chunk)
+                if progress_callback is not None:
+                    written += len(chunk)
+                    progress_callback(written, total_bytes)
+    return dest
 
 
 def _resolve_chunk_size(chunk_size: int, artifact_size: int | None) -> int:
@@ -528,7 +772,7 @@ def _resolve_chunk_size(chunk_size: int, artifact_size: int | None) -> int:
     If *chunk_size* is ``-1`` (the sentinel "choose for me" value) the chunk
     size is derived from *artifact_size* using the formula::
 
-        max(8 KiB, min(artifact_size / 10, 10 MiB))
+        max(8 KiB, min(artifact_size / 10, 16 MiB))
 
     This keeps small artifacts in a small number of chunks while capping
     memory usage for large ones.  When *artifact_size* is ``None`` or

@@ -25,11 +25,10 @@ from ivcap_client.api.search import search_search
 from ivcap_client.artifact import (
     Artifact,
     ArtifactIter,
-    LocalAspect,
     LocalFileArtifact,
     check_file_already_uploaded,
 )
-from ivcap_client.aspect import Aspect, AspectIter, _add_update_aspect
+from ivcap_client.aspect import Aspect, AspectIter, LocalAspect, _add_update_aspect
 from ivcap_client.client.client import AuthenticatedClient, Client
 from ivcap_client.collection import (
     Collection,

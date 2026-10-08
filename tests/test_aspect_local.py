@@ -4,8 +4,9 @@ import json
 
 import pytest
 
-from ivcap_client.artifact import LocalAspect, LocalIVCAP
+from ivcap_client.aspect import LocalAspect
 from ivcap_client.exception import MissingParameterValue, ResourceNotFound
+from ivcap_client.ivcap import LocalIVCAP
 
 # ---------------------------------------------------------------------------
 # add_aspect — happy path

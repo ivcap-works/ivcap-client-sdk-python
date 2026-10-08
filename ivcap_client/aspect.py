@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 import datetime
 import types
 from dataclasses import dataclass
+from datetime import datetime as _datetime
 
 from ivcap_client.api.aspect import (
     aspect_create,
@@ -195,3 +196,50 @@ def _add_update_aspect(
     d["content"] = aspect
     d["content-type"] = "application/json"
     return Aspect(ivcap, **d)
+
+
+class LocalAspect:
+    """A filesystem-backed aspect record returned by :class:`LocalIVCAP`.
+
+    Provides the same key properties as :class:`~ivcap_client.aspect.Aspect`
+    so that callers do not need to branch between local and platform mode.
+
+    Instances are created by :meth:`LocalIVCAP.add_aspect` /
+    :meth:`LocalIVCAP.update_aspect` and retrieved by
+    :meth:`LocalIVCAP.get_aspect`.  On disk each aspect is a single JSON
+    file stored under ``<base_dir>/aspects/<uuid>.json``.
+    """
+
+    def __init__(
+        self,
+        id: str,
+        entity: str,
+        schema: str,
+        content: dict,
+        *,
+        valid_from: _datetime | None = None,
+    ):
+        self.id = id
+        self.entity = entity
+        self.schema = schema
+        self._content = content
+        self.valid_from = valid_from
+        self.valid_to = None
+
+    @property
+    def urn(self) -> str:
+        """URN of this aspect record (``urn:ivcap:aspect:<uuid>``)."""
+        return self.id
+
+    @property
+    def aspect(self) -> dict:
+        """The JSON content body of the aspect."""
+        return self._content
+
+    @property
+    def content(self) -> dict:
+        """Alias for :attr:`aspect`."""
+        return self._content
+
+    def __repr__(self) -> str:
+        return f"<LocalAspect id={self.id}, entity={self.entity}, schema={self.schema}>"

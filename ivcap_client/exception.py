@@ -89,6 +89,36 @@ class MissingParameterValue(Exception):
     pass
 
 
+@dataclass
+class ArtifactTooLargeForDataUrlError(IvcapError):
+    """Raised by ``Artifact.as_data_url()`` (and its local/data-URL equivalents)
+    when the artifact's content, encoded as a base64 ``data:`` URL, would be
+    longer than the requested ``max_length``.
+
+    Attributes:
+        artifact_id: The ``id``/URN of the artifact that was too large.
+        content_size: Size of the raw (undecoded) artifact content, in bytes.
+        data_url_length: The length (in characters) of the resulting/estimated
+            ``data:`` URL — always larger than ``content_size`` due to the
+            base64 encoding overhead (~33%) plus the ``data:<mime>;base64,``
+            header.
+        max_length: The ``max_length`` threshold that was exceeded.
+    """
+
+    artifact_id: str
+    content_size: int
+    data_url_length: int
+    max_length: int
+
+    def __str__(self) -> str:
+        return (
+            f"artifact '{self.artifact_id}' content ({self.content_size} bytes) "
+            f"encodes to a data URL of {self.data_url_length} characters, which "
+            f"exceeds max_length={self.max_length}. Use a larger max_length, or "
+            "download the content instead (e.g. as_local_file()/as_stream())."
+        )
+
+
 class HttpException(IvcapApiError):
     """Backward compatible alias for :class:`IvcapHttpError`."""
 

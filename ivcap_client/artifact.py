@@ -12,15 +12,17 @@ import io
 import logging
 import mimetypes
 import os
+import re
 import tarfile
 import tempfile
+import uuid
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from sys import maxsize as MAXSIZE
 from typing import IO, TYPE_CHECKING, BinaryIO
-from urllib.parse import urlparse
+from urllib.parse import unquote_to_bytes, urlparse
 
 from tusclient.client import TusClient
 
@@ -29,6 +31,7 @@ from ivcap_client.aspect import (  # noqa: F401 – re-exported for backward com
     Aspect,
     LocalAspect,
 )
+from ivcap_client.exception import ArtifactTooLargeForDataUrlError
 from ivcap_client.models.artifact_list_item import ArtifactListItem
 from ivcap_client.models.artifact_list_rt import ArtifactListRT
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
@@ -204,6 +207,59 @@ class Artifact:
         response.raise_for_status()
         b = io.BytesIO(response.content)
         return ProxyFile(b)
+
+    def as_data_url(self, max_length: int = 512) -> str:
+        """Return this artifact's content as an RFC 2397 ``data:`` URL.
+
+        The full artifact content is downloaded and base64-encoded into a
+        ``data:<mime_type>;base64,<data>`` string — the inverse of
+        :meth:`~ivcap_client.ivcap.IVCAP.get_artifact` accepting a ``data:``
+        URL. This is convenient for embedding small artifacts inline (e.g. in
+        a JSON payload or a service request) instead of passing an artifact
+        URN.
+
+        Because base64 encoding adds roughly 33% overhead on top of the raw
+        content size (plus the ``data:<mime_type>;base64,`` header), this
+        method is only intended for **small** artifacts. To avoid silently
+        producing huge strings, the encoded URL's length is checked against
+        ``max_length`` and a :class:`~ivcap_client.exception.ArtifactTooLargeForDataUrlError`
+        is raised if it would be exceeded — no partial/truncated URL is ever
+        returned.
+
+        Args:
+            max_length: Maximum allowed length, in characters, of the
+                resulting ``data:`` URL. Defaults to 512.
+
+        Returns:
+            str: The ``data:<mime_type>;base64,<data>`` URL.
+
+        Raises:
+            ArtifactTooLargeForDataUrlError: If the artifact's known size (or,
+                failing that, its actual encoded content) would produce a
+                ``data:`` URL longer than ``max_length``.
+
+        Example::
+
+            artifact = ivcap.get_artifact("urn:ivcap:artifact:<uuid>")
+            url = artifact.as_data_url(max_length=2048)
+            # "data:image/png;base64,iVBORw0KGgo..."
+        """
+        # Fail fast without downloading if the known size already guarantees
+        # the encoded URL will exceed max_length.
+        if self.size and self.size > 0:
+            header_len = len(f"data:{self.mime_type or 'application/octet-stream'};base64,")
+            estimated_len = header_len + (-(-self.size * 4 // 3))  # ceil(size * 4/3)
+            if estimated_len > max_length:
+                raise ArtifactTooLargeForDataUrlError(
+                    artifact_id=self.id,
+                    content_size=self.size,
+                    data_url_length=estimated_len,
+                    max_length=max_length,
+                )
+
+        with self.open() as f:
+            content = f.read()
+        return _build_data_url(content, self.mime_type, self.id, max_length)
 
     def as_stream(self, chunk_size: int = -1) -> Iterator[bytes]:
         """Stream the artifact content as a sequence of raw byte chunks.
@@ -555,6 +611,36 @@ class LocalFileArtifact:
         """
         return open(self._fp, encoding="utf-8")
 
+    def as_data_url(self, max_length: int = 512) -> str:
+        """Return this local file's content as an RFC 2397 ``data:`` URL.
+
+        See :meth:`Artifact.as_data_url` for full semantics. The file is read
+        in binary mode (regardless of :meth:`open`'s text-mode behaviour) and
+        base64-encoded into a ``data:<mime_type>;base64,<data>`` string.
+
+        Args:
+            max_length: Maximum allowed length, in characters, of the
+                resulting ``data:`` URL. Defaults to 512.
+
+        Returns:
+            str: The ``data:<mime_type>;base64,<data>`` URL.
+
+        Raises:
+            ArtifactTooLargeForDataUrlError: If the resulting ``data:`` URL
+                would be longer than ``max_length``.
+        """
+        header_len = len(f"data:{self.mime_type or 'application/octet-stream'};base64,")
+        estimated_len = header_len + (-(-self.size * 4 // 3))  # ceil(size * 4/3)
+        if estimated_len > max_length:
+            raise ArtifactTooLargeForDataUrlError(
+                artifact_id=self.id,
+                content_size=self.size,
+                data_url_length=estimated_len,
+                max_length=max_length,
+            )
+        content = self._fp.read_bytes()
+        return _build_data_url(content, self.mime_type, self.id, max_length)
+
     def as_local_file(self) -> Path:
         """Return a :class:`SafePath` to the existing local file.
 
@@ -584,7 +670,9 @@ class LocalFileArtifact:
 
     @property
     def status(self, refresh=True) -> ArtifactStatusRT:
-        return ArtifactStatusRT(status=ArtifactStatusRTStatus.READY)
+        return ArtifactStatusRT(
+            id=self.id, links=[], status=ArtifactStatusRTStatus.READY
+        )
 
     @property
     def etag(self) -> str:
@@ -667,6 +755,291 @@ class LocalFileArtifact:
 
     def __repr__(self) -> str:
         return f"<LocalFileArtifact id={self.id}>"
+
+
+# Matches the RFC 2397 'data:' URL scheme:
+#   data:[<mediatype>][;base64],<data>
+_DATA_URL_RE = re.compile(r"^data:([^,]*),(.*)$", re.DOTALL)
+
+
+def is_data_url(id: str) -> bool:
+    """Return ``True`` if *id* looks like an RFC 2397 ``data:`` URL.
+
+    In addition to the plain ``data:`` form, the ``urn:data:`` form is also
+    recognised for consistency with other IVCAP URN schemes (e.g.
+    ``urn:file://...``), allowing a ``data:`` payload to be embedded as a
+    proper URN where required.
+
+    Args:
+        id: Candidate artifact identifier/URN.
+
+    Returns:
+        ``True`` if *id* starts with ``"data:"`` or ``"urn:data:"``, ``False``
+        otherwise.
+    """
+    return isinstance(id, str) and (
+        id.startswith("data:") or id.startswith("urn:data:")
+    )
+
+
+def _strip_urn_prefix(data_url: str) -> str:
+    """Normalise a ``urn:data:...`` identifier to a plain ``data:...`` URL."""
+    if data_url.startswith("urn:data:"):
+        return data_url[len("urn:") :]
+    return data_url
+
+
+def _parse_data_url(data_url: str) -> tuple[str, str | None, bytes]:
+    """Parse an RFC 2397 ``data:`` URL (optionally ``urn:data:``-prefixed)
+    into ``(mime_type, charset, content)``.
+
+    Args:
+        data_url: A string of the form ``data:[<mediatype>][;base64],<data>``,
+            optionally prefixed with ``urn:`` (i.e. ``urn:data:...``).
+
+    Returns:
+        A tuple of ``mime_type`` (defaulting to ``"text/plain"`` if omitted),
+        ``charset`` (or ``None``), and the decoded payload ``content`` bytes.
+
+    Raises:
+        ValueError: If *data_url* is not a well-formed ``data:`` URL.
+    """
+    m = _DATA_URL_RE.match(_strip_urn_prefix(data_url))
+    if not m:
+        raise ValueError(f"'{data_url[:40]}...' is not a well-formed data URL")
+    header, payload = m.group(1), m.group(2)
+
+    parts = [p for p in header.split(";")] if header else []
+    is_base64 = any(p.strip() == "base64" for p in parts)
+    non_flag_parts = [p for p in parts if p.strip() != "base64"]
+
+    mime_type = "text/plain"
+    charset: str | None = None
+    if non_flag_parts and "/" in non_flag_parts[0]:
+        mime_type = non_flag_parts[0].strip()
+        param_parts = non_flag_parts[1:]
+    else:
+        param_parts = non_flag_parts
+
+    for p in param_parts:
+        if "=" in p:
+            k, v = p.split("=", 1)
+            if k.strip().lower() == "charset":
+                charset = v.strip()
+
+    if is_base64:
+        # Data URLs are sometimes percent-encoded even in base64 form
+        # (e.g. embedded newlines encoded as '%0A'); normalise first.
+        cleaned = unquote_to_bytes(payload).decode("ascii")
+        cleaned += "=" * (-len(cleaned) % 4)  # tolerate missing padding
+        content = base64.b64decode(cleaned)
+    else:
+        content = unquote_to_bytes(payload)
+
+    return mime_type, charset, content
+
+
+class DataUrlArtifact:
+    """An in-memory artifact backed by an RFC 2397 ``data:`` URL.
+
+    Returned by :meth:`~ivcap_client.ivcap.IVCAP.get_artifact` (and
+    :meth:`~ivcap_client.ivcap.LocalIVCAP.get_artifact`) when the supplied
+    ``id`` is a ``data:`` URL (e.g. ``"data:image/png;base64,iVBORw0KGgo..."``)
+    rather than an ``urn:ivcap:artifact:<uuid>`` or ``file://`` URN. The
+    ``urn:data:...`` form (e.g. ``"urn:data:image/png;base64,iVBORw0KGgo..."``)
+    is also accepted, for consistency with other IVCAP URN schemes — both
+    forms are handled identically and ``.id``/``.urn`` preserve whichever
+    form was originally passed in.
+
+    The URL is parsed once at construction time into an internal in-memory
+    byte buffer, after which :meth:`open`, :meth:`as_stream`,
+    :meth:`as_local_file`, and :meth:`untar` all behave exactly as if the
+    content had been downloaded from the platform — no network calls are
+    ever made.
+
+    Example::
+
+        artifact = ivcap.get_artifact("data:text/plain;base64,SGVsbG8h")
+        with artifact.open() as f:
+            print(f.read())  # b"Hello!"
+
+        with artifact.as_local_file() as path:
+            data = path.read_bytes()
+    """
+
+    def __init__(self, data_url: str):
+        mime_type, charset, content = _parse_data_url(data_url)
+        self.id = data_url
+        self._content = content
+        self.mime_type = mime_type
+        self._charset = charset
+        self.size = len(content)
+        now = datetime.now()
+        self.created_at = now
+        self.last_modified_at = now
+
+        ext = mimetypes.guess_extension(mime_type) or ""
+        self.name = f"{uuid.uuid4()}{ext}"
+
+    @property
+    def urn(self) -> str:
+        return self.id
+
+    def refresh(self) -> DataUrlArtifact:
+        return self
+
+    @property
+    def status(self, refresh=True) -> ArtifactStatusRT:
+        return ArtifactStatusRT(
+            id=self.id, links=[], status=ArtifactStatusRTStatus.READY
+        )
+
+    def as_data_url(self, max_length: int = 512) -> str:
+        """Return this artifact's content as an RFC 2397 ``data:`` URL.
+
+        Since a :class:`DataUrlArtifact` is already backed by an in-memory
+        ``data:``/``urn:data:`` URL, this simply re-validates and re-encodes
+        the already-decoded content against ``max_length`` — no download is
+        performed. The returned URL always uses the canonical ``data:`` form
+        (without the ``urn:`` prefix), regardless of which form was used to
+        construct this artifact.
+
+        Args:
+            max_length: Maximum allowed length, in characters, of the
+                resulting ``data:`` URL. Defaults to 512.
+
+        Returns:
+            str: The ``data:<mime_type>;base64,<data>`` URL.
+
+        Raises:
+            ArtifactTooLargeForDataUrlError: If the resulting ``data:`` URL
+                would be longer than ``max_length``.
+        """
+        return _build_data_url(self._content, self.mime_type, self.id, max_length)
+
+    @property
+    def etag(self) -> str:
+        return hashlib.md5(self._content).hexdigest()
+
+    @property
+    def is_tar_file(self) -> bool:
+        """Return ``True`` if this data URL's content appears to be a tar archive."""
+        if self.mime_type and self.mime_type.lower() in _TAR_MIME_TYPES:
+            return True
+        name_lower = self.name.lower()
+        return any(name_lower.endswith(s) for s in _TAR_SUFFIXES)
+
+    def open(self) -> io.IOBase:
+        """Return a file-like object over the decoded in-memory content.
+
+        Returns:
+            ProxyFile: A readable, seekable, context-manager-compatible
+            file-like object wrapping the decoded bytes.
+        """
+        return ProxyFile(io.BytesIO(self._content))
+
+    def as_stream(self, chunk_size: int = -1) -> Iterator[bytes]:
+        """Yield the decoded content as a sequence of ``bytes`` chunks.
+
+        Args:
+            chunk_size: Number of bytes per chunk.  Pass ``-1`` (the default)
+                to let the SDK choose automatically based on content size.
+
+        Yields:
+            bytes: The next chunk of decoded content.
+        """
+        copy_size = _resolve_chunk_size(chunk_size, self.size)
+        buf = self._content
+        if not buf:
+            yield b""
+            return
+        for i in range(0, len(buf), copy_size):
+            yield buf[i : i + copy_size]
+
+    def as_local_file(
+        self,
+        path: Path | None = None,
+        *,
+        chunk_size: int = -1,
+        progress_callback: Callable[[int, int | None], None] | None = None,
+    ) -> Path:
+        """Write the decoded content to a local file and return the path.
+
+        Mirrors :meth:`Artifact.as_local_file` — if ``path`` is omitted a
+        self-deleting temporary file (:class:`CMPath`) is returned; otherwise
+        the content is written to the given path (parent directories are
+        created automatically) and a plain :class:`~pathlib.Path` is returned.
+
+        Args:
+            path: Destination file path, or ``None`` for a temp file.
+            chunk_size: Bytes written per call.  ``-1`` auto-selects.
+            progress_callback: Optional ``(bytes_written, total_bytes)``
+                callable invoked after each chunk is written.
+
+        Returns:
+            :class:`CMPath` (temp file) or plain :class:`~pathlib.Path`.
+        """
+        total_bytes = self.size
+
+        def _stream_to(f):
+            written = 0
+            for chunk in self.as_stream(chunk_size=chunk_size):
+                f.write(chunk)
+                if progress_callback is not None:
+                    written += len(chunk)
+                    progress_callback(written, total_bytes)
+
+        if path is not None:
+            path = Path(path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with open(path, "wb") as f:
+                _stream_to(f)
+            return path
+        temp_file = tempfile.NamedTemporaryFile(delete=False)
+        with temp_file as f:
+            _stream_to(f)
+        return CMPath(temp_file.name)
+
+    def untar(
+        self,
+        dest_dir: Path | str,
+        *,
+        chunk_size: int = -1,
+        progress_callback: Callable[[int, int | None], None] | None = None,
+    ) -> Path:
+        """Extract the files inside this data URL's tar content into *dest_dir*.
+
+        Args:
+            dest_dir: Destination directory (created if missing).
+            chunk_size: Bytes read per disk-write call. ``-1`` auto-selects.
+            progress_callback: Optional ``(bytes_written, total_bytes)``
+                callable invoked after each chunk is written.
+
+        Returns:
+            :class:`~pathlib.Path`: The resolved ``dest_dir`` path.
+
+        Raises:
+            ValueError: If :attr:`is_tar_file` is ``False``.
+            tarfile.TarError: If the content is not a valid tar archive.
+        """
+        if not self.is_tar_file:
+            raise ValueError(
+                f"data URL artifact (mime_type={self.mime_type!r}) does not "
+                "appear to be a tar archive. "
+                "Check artifact.is_tar_file before calling untar()."
+            )
+        dest = Path(dest_dir)
+        dest.mkdir(parents=True, exist_ok=True)
+        total_bytes = self.size if self.size > 0 else None
+        copy_size = _resolve_chunk_size(chunk_size, self.size)
+
+        with tarfile.open(fileobj=io.BytesIO(self._content), mode="r:*") as tar:
+            return _untar_from_tarfile(
+                tar, dest, copy_size, total_bytes, progress_callback
+            )
+
+    def __repr__(self) -> str:
+        return f"<DataUrlArtifact mime_type={self.mime_type}, size={self.size}>"
 
 
 # ---------------------------------------------------------------------------
@@ -792,6 +1165,42 @@ def _resolve_chunk_size(chunk_size: int, artifact_size: int | None) -> int:
     if artifact_size and artifact_size > 0:
         return max(_CHUNK_MIN, min(artifact_size // 10, _CHUNK_MAX))
     return _CHUNK_MIN
+
+
+def _build_data_url(
+    content: bytes,
+    mime_type: str | None,
+    artifact_id: str,
+    max_length: int,
+) -> str:
+    """Encode *content* as an RFC 2397 ``data:`` URL, enforcing *max_length*.
+
+    Args:
+        content: Raw artifact bytes to encode.
+        mime_type: MIME type to embed in the URL header (falls back to
+            ``"application/octet-stream"`` if ``None``/empty).
+        artifact_id: Identifier used in the raised exception's message.
+        max_length: Maximum allowed length (in characters) of the resulting
+            ``data:`` URL.
+
+    Returns:
+        The ``data:<mime_type>;base64,<data>`` URL string.
+
+    Raises:
+        ArtifactTooLargeForDataUrlError: If the resulting URL would be longer
+            than *max_length*.
+    """
+    mt = mime_type or "application/octet-stream"
+    encoded = base64.b64encode(content).decode("ascii")
+    data_url = f"data:{mt};base64,{encoded}"
+    if len(data_url) > max_length:
+        raise ArtifactTooLargeForDataUrlError(
+            artifact_id=artifact_id,
+            content_size=len(content),
+            data_url_length=len(data_url),
+            max_length=max_length,
+        )
+    return data_url
 
 
 def upload_artifact(

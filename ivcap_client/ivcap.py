@@ -25,8 +25,10 @@ from ivcap_client.api.search import search_search
 from ivcap_client.artifact import (
     Artifact,
     ArtifactIter,
+    DataUrlArtifact,
     LocalFileArtifact,
     check_file_already_uploaded,
+    is_data_url,
 )
 from ivcap_client.aspect import Aspect, AspectIter, LocalAspect, _add_update_aspect
 from ivcap_client.client.client import AuthenticatedClient, Client
@@ -606,14 +608,27 @@ class IVCAP:
             return self.get_artifact(aurn)
 
     def get_artifact(self, id: URN) -> Artifact:
-        """Returns an Artifact instance for artifact 'id'
+        """Returns an Artifact instance for artifact 'id'.
+
+        In addition to a "normal" ``urn:ivcap:artifact:<uuid>`` or
+        ``file://``/``urn:file://`` URN, ``id`` may also be an RFC 2397
+        ``data:`` URL (e.g. ``"data:image/png;base64,iVBORw0KGgo..."``), or
+        the equivalent ``urn:data:...`` form for consistency with other
+        IVCAP URN schemes. In that case no network/filesystem access is
+        performed — the payload is decoded in memory and returned as a
+        :class:`~ivcap_client.artifact.DataUrlArtifact`, which supports the
+        same ``open()``/``as_stream()``/``as_local_file()``/``untar()``
+        interface as a regular :class:`Artifact`.
 
         Args:
-            id (URN): URN of artifact
+            id (URN): URN of artifact, a ``file://`` URN, or a ``data:``/
+                ``urn:data:`` URL.
 
         Returns:
             Artifact: Returns an Artifact instance if artifact exists
         """
+        if is_data_url(id):
+            return DataUrlArtifact(id)
         if id.startswith("file://") or id.startswith("urn:file://"):
             return LocalFileArtifact(id)
         return Artifact(self, id=id).refresh()
@@ -1007,15 +1022,20 @@ class LocalIVCAP(IVCAP):
         logger.info("LocalIVCAP: written artifact '%s' → %s", name, dest)
         return LocalFileArtifact(urn)
 
-    def get_artifact(self, id: str) -> LocalFileArtifact:
-        """Return a :class:`~ivcap_client.artifact.LocalFileArtifact` for the given local-file URN.
+    def get_artifact(self, id: str) -> LocalFileArtifact | DataUrlArtifact:
+        """Return a local artifact instance for the given URN.
 
         Args:
-            id: A ``file://`` or ``urn:file://`` URN pointing to a local file.
+            id: A ``file://``/``urn:file://`` URN pointing to a local file,
+                or an RFC 2397 ``data:`` URL (or the equivalent
+                ``urn:data:...`` form) decoded entirely in memory — no
+                filesystem access performed.
 
         Returns:
-            LocalFileArtifact: The local file artifact.
+            LocalFileArtifact | DataUrlArtifact: The local artifact instance.
         """
+        if is_data_url(id):
+            return DataUrlArtifact(id)
         return LocalFileArtifact(id)
 
     # ---- Aspects -----------------------------------------------------------

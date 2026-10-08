@@ -100,6 +100,67 @@ artifact = ivcap.get_artifact("urn:ivcap:artifact:<uuid>")
 print(artifact.name, artifact.size, artifact.mime_type)
 ```
 
+### Getting an Artifact from a Data URL
+
+`get_artifact()` also accepts an [RFC 2397](https://www.rfc-editor.org/rfc/rfc2397)
+`data:` URL — the standard way to embed typed, self-describing data inline in a string
+(`data:[<mediatype>][;base64],<data>`). This is useful when a service result or a
+third-party API embeds small binary content directly rather than returning a separate
+artifact URN.
+
+```python
+artifact = ivcap.get_artifact("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...")
+print(artifact.mime_type, artifact.size)
+# "image/png" 1234
+
+with artifact.as_local_file() as path:
+    data = path.read_bytes()
+```
+
+No network call or filesystem access is performed — the payload is decoded in memory
+on construction into a `DataUrlArtifact`, which supports the same `open()`,
+`as_stream()`, `as_local_file()`, and `untar()` methods as a regular `Artifact`, so
+existing code that works with downloaded artifacts works unchanged. This works both
+for the platform `IVCAP` class and for `LocalIVCAP`.
+
+For consistency with other IVCAP URN schemes (e.g. `urn:file://...`), the
+`urn:data:...` form is also accepted and behaves identically:
+
+```python
+artifact = ivcap.get_artifact("urn:data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...")
+```
+
+### Converting an Artifact to a Data URL
+
+The reverse operation — turning a downloaded artifact's content *back* into a
+`data:` URL — is available via `as_data_url()` on any artifact type (`Artifact`,
+`LocalFileArtifact`, `DataUrlArtifact`). This is handy for embedding small artifacts
+inline in a JSON payload or a service request instead of passing an artifact URN.
+
+```python
+artifact = ivcap.get_artifact("urn:ivcap:artifact:<uuid>")
+url = artifact.as_data_url()
+# "data:image/png;base64,iVBORw0KGgo..."
+```
+
+Because base64 encoding adds roughly 33% size overhead, `as_data_url()` only makes
+sense for small artifacts. To guard against accidentally producing huge strings, it
+takes a `max_length` argument (default `512`) and raises
+`ivcap_client.exception.ArtifactTooLargeForDataUrlError` if the encoded URL would be
+longer:
+
+```python
+from ivcap_client.exception import ArtifactTooLargeForDataUrlError
+
+try:
+    url = artifact.as_data_url(max_length=2048)
+except ArtifactTooLargeForDataUrlError as e:
+    print(f"Artifact too large to inline: {e}")
+    # Fall back to downloading instead
+    with artifact.as_local_file() as path:
+        data = path.read_bytes()
+```
+
 ## Downloading Artifact Content
 
 Three methods are available, each suited to a different use case:

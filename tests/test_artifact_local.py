@@ -53,6 +53,15 @@ def test_local_file_artifact_refresh_returns_self(tmp_path):
     assert art.refresh() is art
 
 
+def test_local_file_artifact_status_is_ready(tmp_path):
+    from ivcap_client.models.artifact_status_rt_status import ArtifactStatusRTStatus
+
+    f = tmp_path / "file.txt"
+    f.write_text("content")
+    art = LocalFileArtifact(f"urn:file://{f}")
+    assert art.status.status == ArtifactStatusRTStatus.READY
+
+
 def test_local_file_artifact_missing_file_raises(tmp_path):
     nonexistent = tmp_path / "ghost.txt"
     with pytest.raises(ValueError, match="does not exist"):
@@ -74,6 +83,35 @@ def test_local_file_artifact_as_local_file_returns_existing_path(tmp_path):
     art = LocalFileArtifact(f"urn:file://{f}")
     p = art.as_local_file()
     assert p.exists()
+
+
+def test_local_file_artifact_as_data_url_returns_expected_url(tmp_path):
+    import base64
+
+    f = tmp_path / "f.txt"
+    content = b"Hello, World!"
+    f.write_bytes(content)
+    art = LocalFileArtifact(f"urn:file://{f}")
+
+    url = art.as_data_url()
+
+    expected = f"data:{art.mime_type};base64,{base64.b64encode(content).decode()}"
+    assert url == expected
+
+
+def test_local_file_artifact_as_data_url_raises_when_too_large(tmp_path):
+    from ivcap_client.exception import ArtifactTooLargeForDataUrlError
+
+    f = tmp_path / "big.bin"
+    f.write_bytes(b"x" * 1000)
+    art = LocalFileArtifact(f"urn:file://{f}")
+
+    with pytest.raises(ArtifactTooLargeForDataUrlError) as exc_info:
+        art.as_data_url(max_length=10)
+
+    err = exc_info.value
+    assert err.content_size == 1000
+    assert err.max_length == 10
 
 
 # ---------------------------------------------------------------------------

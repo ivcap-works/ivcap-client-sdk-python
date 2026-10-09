@@ -65,6 +65,43 @@ artifact = ivcap.upload_artifact(
 | `retry_delay` | `int` | Seconds between retries |
 | `force_upload` | `bool` | Re-upload even if file was previously uploaded |
 
+### Upload a dynamically-built tar.gz archive (streaming)
+
+When you need to package many local files (or in-memory byte buffers) into a single
+archive artifact, `upload_tar_artifact()` builds a gzip-compressed tar archive **on the
+fly** and streams it directly into a chunked, resumable upload — the full archive is
+**never** written to disk or held in memory. This matters when the combined archive
+could be large enough to crash a memory- or disk-constrained process (e.g. a small
+serverless container).
+
+```python
+from ivcap_client.artifact import TarMember
+
+members = [
+    TarMember.from_file("/data/image1.jpg"),
+    TarMember.from_file("/data/image2.jpg", arcname="renamed.jpg"),
+    TarMember.from_bytes(b'{"k": "v"}', arcname="metadata.json"),
+]
+artifact = ivcap.upload_tar_artifact(members, name="dataset.tar.gz")
+print(artifact.id)
+```
+
+Internally, a background thread streams `tarfile`'s `w|gz` output into a small bounded
+queue (providing backpressure), while the calling thread drains that queue and `PATCH`es
+upload-sized chunks to a TUS endpoint created with the *creation-defer-length* extension
+(the final compressed size isn't known upfront). Failed chunks are retried with
+exponential backoff, re-synchronising via `HEAD` to resume from the server's
+authoritative offset rather than assuming a chunk fully succeeded or failed.
+
+Tunable parameters:
+
+| Parameter | Default | Description |
+|---|---|---|
+| `chunk_size` | 4 MiB | Upload chunk size in bytes |
+| `queue_maxsize` | 4 | Max buffered chunks between archive-building and upload threads |
+| `retries` | 3 | Retry attempts per chunk on failure |
+| `retry_delay` | 2.0s | Base delay between retries (doubles each attempt) |
+
 ## Automatic Deduplication
 
 The SDK tracks uploads using a hidden `.ivcap-<filename>.txt` sidecar file containing

@@ -12,11 +12,14 @@ import io
 import logging
 import mimetypes
 import os
+import queue
 import re
 import tarfile
 import tempfile
+import threading
+import time
 import uuid
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -24,6 +27,7 @@ from sys import maxsize as MAXSIZE
 from typing import IO, TYPE_CHECKING, BinaryIO
 from urllib.parse import unquote_to_bytes, urlparse
 
+import httpx
 from tusclient.client import TusClient
 
 from ivcap_client.api.artifact import artifact_list, artifact_read, artifact_upload
@@ -31,7 +35,7 @@ from ivcap_client.aspect import (  # noqa: F401 – re-exported for backward com
     Aspect,
     LocalAspect,
 )
-from ivcap_client.exception import ArtifactTooLargeForDataUrlError
+from ivcap_client.exception import ArtifactTooLargeForDataUrlError, IvcapApiError
 from ivcap_client.models.artifact_list_item import ArtifactListItem
 from ivcap_client.models.artifact_list_rt import ArtifactListRT
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
@@ -1201,6 +1205,533 @@ def _build_data_url(
             max_length=max_length,
         )
     return data_url
+
+
+# ---------------------------------------------------------------------------
+# Streaming tar-archive creation with chunked TUS upload
+#
+# Builds a gzip-compressed tar archive on the fly from local files and/or
+# in-memory byte buffers, and streams it to the server as a single resumable
+# TUS upload — without ever materializing the full archive on disk or in
+# memory.  See the module-level design notes in the class/function
+# docstrings below for the producer/consumer architecture.
+# ---------------------------------------------------------------------------
+
+_DEFAULT_TAR_UPLOAD_CHUNK_SIZE = 4 * 1024 * 1024  # 4 MiB
+_DEFAULT_TAR_QUEUE_MAXSIZE = 4  # bounded queue items for backpressure
+
+
+@dataclass
+class TarMember:
+    """A single entry to add to a streamed tar archive.
+
+    Exactly one of ``file_path`` or ``data`` must be provided:
+
+    * ``file_path`` — a local file read and streamed straight from disk.
+    * ``data`` — an in-memory ``bytes`` buffer (e.g. a dynamically generated
+      report, a serialized object, …), never written to disk.
+
+    Use the :meth:`from_file` / :meth:`from_bytes` convenience constructors
+    rather than calling the constructor directly.
+    """
+
+    arcname: str
+    file_path: str | None = None
+    data: bytes | None = None
+    mtime: float | None = None
+    mode: int | None = None
+
+    def __post_init__(self):
+        if (self.file_path is None) == (self.data is None):
+            raise ValueError(
+                "TarMember requires exactly one of 'file_path' or 'data'"
+            )
+
+    @classmethod
+    def from_file(cls, file_path: str, arcname: str | None = None) -> TarMember:
+        """Create a member backed by a local file on disk.
+
+        Args:
+            file_path: Path to the local file to include.
+            arcname: Name of the entry inside the archive. Defaults to the
+                file's basename.
+
+        Returns:
+            TarMember: A file-backed tar member.
+        """
+        return cls(arcname=arcname or os.path.basename(file_path), file_path=file_path)
+
+    @classmethod
+    def from_bytes(
+        cls,
+        data: bytes,
+        arcname: str,
+        *,
+        mtime: float | None = None,
+        mode: int | None = None,
+    ) -> TarMember:
+        """Create a member backed by an in-memory byte buffer.
+
+        Args:
+            data: Raw bytes to embed as the entry's content.
+            arcname: Name of the entry inside the archive.
+            mtime: Optional modification time (seconds since epoch) recorded
+                in the tar header. Defaults to the time the entry is written.
+            mode: Optional Unix file mode recorded in the tar header.
+
+        Returns:
+            TarMember: An in-memory tar member.
+        """
+        return cls(arcname=arcname, data=data, mtime=mtime, mode=mode)
+
+
+class _TarUploadCancelled(Exception):
+    """Internal signal used to abort the tar-producer thread early when the
+    upload consumer has given up (e.g. retries exhausted)."""
+
+
+class _QueueWriter(io.RawIOBase):
+    """A write-only file-like object that pushes written bytes onto a queue.
+
+    Used as the ``fileobj`` for ``tarfile.open(mode="w|gz", fileobj=...)`` so
+    that the tar+gzip stream is produced incrementally, one small ``write()``
+    call at a time, without ever being buffered in full.
+
+    :meth:`close` enqueues a ``None`` sentinel so the consumer thread knows no
+    more data is coming.  If ``cancel_event`` is set, :meth:`write` raises
+    :class:`_TarUploadCancelled` to unwind ``tarfile``'s write loop promptly.
+    """
+
+    def __init__(self, q: queue.Queue, cancel_event: threading.Event):
+        super().__init__()
+        self._q = q
+        self._cancel_event = cancel_event
+
+    def writable(self) -> bool:
+        return True
+
+    def write(self, data) -> int:
+        b = bytes(data)
+        if b:
+            # Loop with a timeout (rather than a plain blocking put) so a
+            # cancellation can be observed even while the queue is full and
+            # the consumer has stopped pulling from it.
+            while True:
+                if self._cancel_event.is_set():
+                    raise _TarUploadCancelled("tar upload was cancelled")
+                try:
+                    self._q.put(b, timeout=0.5)
+                    break
+                except queue.Full:
+                    continue
+        return len(b)
+
+    def close(self):
+        if not self.closed:
+            self._q.put(None)  # sentinel: no more data
+        super().close()
+
+
+def _tar_stream_producer(
+    members: Iterable[TarMember],
+    q: queue.Queue,
+    cancel_event: threading.Event,
+    error_box: list,
+) -> None:
+    """Archive producer (runs in a background thread).
+
+    Streams a gzip-compressed tar archive built from *members* into *q*, one
+    chunk at a time, via :class:`_QueueWriter`.  Never materializes the full
+    archive on disk or in memory — each member is read/streamed individually.
+
+    Any exception raised while building the archive (missing file, I/O
+    error, …) is captured into ``error_box[0]`` (a 1-element list used as a
+    simple thread-safe box) rather than raised here, so the consumer thread
+    can observe and re-raise it after fully draining the queue.
+    """
+    writer = _QueueWriter(q, cancel_event)
+    try:
+        with tarfile.open(fileobj=writer, mode="w|gz") as tar:
+            for member in members:
+                if cancel_event.is_set():
+                    raise _TarUploadCancelled("tar upload was cancelled")
+                if member.file_path is not None:
+                    tar.add(member.file_path, arcname=member.arcname)
+                else:
+                    info = tarfile.TarInfo(name=member.arcname)
+                    info.size = len(member.data)
+                    info.mtime = (
+                        member.mtime if member.mtime is not None else time.time()
+                    )
+                    if member.mode is not None:
+                        info.mode = member.mode
+                    tar.addfile(info, io.BytesIO(member.data))
+    except _TarUploadCancelled:
+        pass  # consumer already failed/cancelled; nothing further to report
+    except BaseException as e:  # noqa: BLE001 – surfaced to the consumer thread
+        error_box.append(e)
+    finally:
+        writer.close()
+
+
+def _tus_create_deferred_upload(
+    client: httpx.Client,
+    creation_url: str,
+    headers: dict[str, str],
+) -> str:
+    """POST to the TUS creation endpoint with ``Upload-Defer-Length: 1``.
+
+    The final (compressed) size is not known upfront, so the standard
+    ``Upload-Length`` header is replaced with the TUS creation-defer-length
+    extension. Returns the absolute upload URL from the ``Location`` header.
+
+    Raises:
+        IvcapApiError: If the server does not return a ``Location`` header.
+    """
+    h = dict(headers)
+    h["Upload-Defer-Length"] = "1"
+    h["Tus-Resumable"] = "1.0.0"
+    r = client.post(creation_url, headers=h)
+    if r.status_code >= 300:
+        raise IvcapApiError(
+            "upload_tar_artifact.create",
+            r.status_code,
+            content=r.content,
+            url=str(r.request.url) if r.request else None,
+        )
+    location = r.headers.get("location")
+    if not location:
+        raise IvcapApiError(
+            "upload_tar_artifact.create",
+            r.status_code,
+            content="TUS creation response missing 'Location' header",
+            url=str(r.request.url) if r.request else None,
+        )
+    if location.startswith("http"):
+        return location
+    base = urlparse(creation_url)
+    return base._replace(path=urlparse(location).path).geturl()
+
+
+def _tus_head_offset(client: httpx.Client, upload_url: str) -> int:
+    """Return the server's authoritative ``Upload-Offset`` via ``HEAD``."""
+    r = client.head(upload_url, headers={"Tus-Resumable": "1.0.0"})
+    if r.status_code >= 300:
+        raise IvcapApiError(
+            "upload_tar_artifact.head",
+            r.status_code,
+            content=r.content,
+            url=str(r.request.url) if r.request else None,
+        )
+    offset = r.headers.get("upload-offset")
+    if offset is None:
+        raise IvcapApiError(
+            "upload_tar_artifact.head",
+            r.status_code,
+            content="TUS HEAD response missing 'Upload-Offset' header",
+            url=str(r.request.url) if r.request else None,
+        )
+    return int(offset)
+
+
+def _tus_patch_chunk(
+    client: httpx.Client,
+    upload_url: str,
+    chunk: bytes,
+    offset: int,
+    *,
+    final: bool,
+    total_length: int | None,
+) -> int:
+    """PATCH a single chunk at *offset*; return the server's new offset.
+
+    Args:
+        final: Whether this is the last chunk of the upload.
+        total_length: Total upload size — included as ``Upload-Length`` only
+            when ``final`` is True (completes the deferred-length upload).
+    """
+    headers = {
+        "Content-Type": "application/offset+octet-stream",
+        "Upload-Offset": str(offset),
+        "Tus-Resumable": "1.0.0",
+    }
+    if final and total_length is not None:
+        headers["Upload-Length"] = str(total_length)
+    r = client.patch(upload_url, content=chunk, headers=headers)
+    if r.status_code >= 300:
+        raise IvcapApiError(
+            "upload_tar_artifact.patch",
+            r.status_code,
+            content=r.content,
+            url=str(r.request.url) if r.request else None,
+        )
+    new_offset = r.headers.get("upload-offset")
+    return int(new_offset) if new_offset is not None else offset + len(chunk)
+
+
+def _tus_patch_with_retry(
+    client: httpx.Client,
+    upload_url: str,
+    chunk: bytes,
+    offset: int,
+    *,
+    final: bool,
+    total_length: int | None,
+    retries: int,
+    retry_delay: float,
+) -> int:
+    """PATCH *chunk* at *offset*, retrying with exponential backoff.
+
+    On failure, re-synchronises with the server's authoritative offset via
+    ``HEAD`` before each retry (the server may have received part or all of
+    the previous attempt even though the client saw an error), and re-slices
+    the pending chunk accordingly rather than assuming full success/failure.
+    """
+    attempt = 0
+    pending = chunk
+    pending_offset = offset
+    while True:
+        try:
+            return _tus_patch_chunk(
+                client,
+                upload_url,
+                pending,
+                pending_offset,
+                final=final,
+                total_length=total_length,
+            )
+        except (IvcapApiError, httpx.HTTPError) as e:
+            if attempt >= retries:
+                raise
+            attempt += 1
+            time.sleep(retry_delay * (2 ** (attempt - 1)))
+            try:
+                server_offset = _tus_head_offset(client, upload_url)
+            except (IvcapApiError, httpx.HTTPError):
+                continue  # try the PATCH again with our last-known offset
+            advanced = server_offset - offset
+            if advanced < 0 or advanced > len(chunk):
+                # Server offset is inconsistent with what we sent; give up
+                # rather than silently corrupting the upload.
+                raise e
+            pending = chunk[advanced:]
+            pending_offset = server_offset
+
+
+def _drain_queue_into_buffer(
+    q: queue.Queue, buffer: bytearray, target_size: int
+) -> bool:
+    """Pull items from *q* into *buffer* until either *target_size* bytes have
+    accumulated or the sentinel (``None``) is reached.
+
+    Returns:
+        bool: ``True`` if the sentinel was consumed (no more data is coming),
+        ``False`` if the buffer simply reached ``target_size``.
+    """
+    while len(buffer) < target_size:
+        item = q.get()
+        if item is None:
+            return True
+        buffer.extend(item)
+    return False
+
+
+def _stream_tar_members_to_tus(
+    client: httpx.Client,
+    upload_url: str,
+    members: Iterable[TarMember],
+    *,
+    chunk_size: int,
+    queue_maxsize: int,
+    retries: int,
+    retry_delay: float,
+) -> None:
+    """Drive the producer thread + chunked-upload consumer loop.
+
+    Starts :func:`_tar_stream_producer` in a background thread, then drains
+    its output queue in this (the calling) thread, PATCHing upload-sized
+    chunks to *upload_url* until the producer's sentinel is reached and the
+    final chunk (with ``Upload-Length`` set) has been sent.
+
+    If the chunk loop raises, the producer thread is signalled to cancel via
+    a shared :class:`threading.Event` and joined before re-raising, so no
+    background thread is ever left running past this function's return.
+    """
+    q: queue.Queue = queue.Queue(maxsize=queue_maxsize)
+    cancel_event = threading.Event()
+    error_box: list = []
+    producer = threading.Thread(
+        target=_tar_stream_producer,
+        args=(members, q, cancel_event, error_box),
+        daemon=True,
+    )
+    producer.start()
+
+    offset = 0
+    buffer = bytearray()
+    try:
+        while True:
+            finished = _drain_queue_into_buffer(q, buffer, chunk_size)
+            if not finished:
+                to_send = bytes(buffer[:chunk_size])
+                del buffer[:chunk_size]
+                offset = _tus_patch_with_retry(
+                    client,
+                    upload_url,
+                    to_send,
+                    offset,
+                    final=False,
+                    total_length=None,
+                    retries=retries,
+                    retry_delay=retry_delay,
+                )
+            else:
+                # Sentinel reached: send the remainder (possibly empty) as
+                # the final chunk, completing the deferred-length upload.
+                to_send = bytes(buffer)
+                total_length = offset + len(to_send)
+                offset = _tus_patch_with_retry(
+                    client,
+                    upload_url,
+                    to_send,
+                    offset,
+                    final=True,
+                    total_length=total_length,
+                    retries=retries,
+                    retry_delay=retry_delay,
+                )
+                break
+    except BaseException:
+        cancel_event.set()
+        raise
+    finally:
+        producer.join()
+
+    if error_box:
+        raise error_box[0]
+
+
+def upload_tar_artifact(
+    ivcap: IVCAP,
+    members: Iterable[TarMember],
+    *,
+    content_type: str = "application/gzip",
+    name: str | None = None,
+    collection: URN | None = None,
+    policy: URN | None = None,
+    chunk_size: int = _DEFAULT_TAR_UPLOAD_CHUNK_SIZE,
+    queue_maxsize: int = _DEFAULT_TAR_QUEUE_MAXSIZE,
+    retries: int = 3,
+    retry_delay: float = 2.0,
+) -> Artifact:
+    """Build a gzip-compressed tar archive from *members* and upload it via a
+    single chunked, resumable TUS upload — without ever materializing the
+    full archive on disk or in memory.
+
+    See the module design notes above :class:`TarMember` for the full
+    producer/consumer architecture. In short:
+
+    1. A background thread streams ``tarfile`` (``mode="w|gz"``) output into
+       a bounded :class:`queue.Queue`, one small ``write()`` at a time
+       (:func:`_tar_stream_producer`). The bounded queue provides
+       backpressure so archive generation cannot run arbitrarily far ahead
+       of the network.
+    2. This thread (the upload consumer) drains the queue, accumulates
+       upload-sized chunks, and ``PATCH``es them to a TUS endpoint created
+       with the creation-defer-length extension (final size unknown
+       upfront). Each chunk is retried with exponential backoff, re-
+       synchronising via ``HEAD`` on failure.
+    3. Once the tar producer's sentinel is reached, the final chunk is sent
+       together with the now-known ``Upload-Length``, completing the upload.
+
+    Args:
+        ivcap: The owning :class:`IVCAP` instance.
+        members: Iterable of :class:`TarMember` entries to add to the
+            archive, in order. Each is either a local file (streamed
+            straight from disk) or an in-memory ``bytes`` buffer.
+        content_type: MIME type recorded for the resulting artifact.
+            Defaults to ``"application/gzip"``.
+        name: Optional human-readable artifact name.
+        collection: Optional collection URN to add the artifact to.
+        policy: Optional access policy URN.
+        chunk_size: Upload chunk size in bytes. Defaults to 4 MiB.
+        queue_maxsize: Max number of pending chunks buffered between the
+            producer and consumer threads (backpressure bound).
+        retries: Number of retry attempts per chunk on failure.
+        retry_delay: Base delay (seconds) between retries; doubles after
+            each attempt (exponential backoff).
+
+    Returns:
+        Artifact: The newly created artifact.
+
+    Raises:
+        ValueError: If ``collection``/``policy`` are not well-formed URNs.
+        IvcapApiError: If artifact creation or any upload request fails
+            after exhausting retries.
+        Exception: Any exception raised while reading a member's content
+            (e.g. a missing local file) is re-raised here, after the queue
+            has been fully drained and the producer thread has stopped.
+
+    Example::
+
+        from ivcap_client.artifact import TarMember
+
+        members = [
+            TarMember.from_file("/data/image1.jpg"),
+            TarMember.from_file("/data/image2.jpg", arcname="renamed.jpg"),
+            TarMember.from_bytes(b"{...}", arcname="metadata.json"),
+        ]
+        artifact = ivcap.upload_tar_artifact(members, name="dataset.tar.gz")
+    """
+    if collection and not collection.startswith("urn:"):
+        raise ValueError(f"collection '{collection}' is not a URN.")
+    if policy and not policy.startswith("urn:ivcap:policy:"):
+        raise ValueError(f"policy '{policy}' is not a policy URN.")
+
+    # Step 1: create the (initially empty) artifact record with a deferred
+    # content length — the compressed size is not known upfront.
+    kwargs = {
+        "x_content_type": content_type,
+        "x_content_length": -1,
+        "tus_resumable": "1.0.0",
+    }
+    if name:
+        kwargs["x_name"] = base64.b64encode(bytes(name, "utf-8"))
+    if collection:
+        kwargs["x_collection"] = collection
+    if policy:
+        kwargs["x_policy"] = policy
+
+    r = artifact_upload.sync_detailed(client=ivcap._client, **kwargs)
+    if r.status_code >= 300:
+        return process_error("upload_tar_artifact", r)
+    res: ArtifactStatusRT = r.parsed
+
+    headers = {}
+    if ivcap._token:
+        headers["Authorization"] = f"Bearer {ivcap._token}"
+    data_url = ivcap._url + fix_data_ref(res.data_href)
+
+    # Reuse the IVCAP instance's own httpx.Client (same base_url, auth
+    # headers, and — in tests — the same mock transport) rather than
+    # spinning up a brand-new one that would try to hit the real network.
+    client = ivcap._client.get_httpx_client()
+    upload_url = _tus_create_deferred_upload(client, data_url, headers)
+    _stream_tar_members_to_tus(
+        client,
+        upload_url,
+        members,
+        chunk_size=chunk_size,
+        queue_maxsize=queue_maxsize,
+        retries=retries,
+        retry_delay=retry_delay,
+    )
+
+    kwargs = res.to_dict()
+    kwargs["status"] = None
+    a = Artifact(ivcap, **kwargs)
+    a.status  # force status update as it will have changed
+    return a
 
 
 def upload_artifact(

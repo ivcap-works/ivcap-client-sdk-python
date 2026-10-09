@@ -15,7 +15,7 @@ try:
 except Exception:
     __version__ = "???"  # should only happen when running the local examples
 
-from .artifact import Artifact, DataUrlArtifact, LocalFileArtifact
+from .artifact import Artifact, DataUrlArtifact, LocalFileArtifact, TarMember
 from .aspect import LocalAspect
 from .collection import Collection, CollectionItem
 from .ivcap import IVCAP, URN, LocalIVCAP

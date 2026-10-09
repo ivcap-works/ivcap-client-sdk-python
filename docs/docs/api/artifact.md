@@ -57,3 +57,23 @@ artifact = ivcap.get_artifact("urn:data:text/plain;base64,SGVsbG8h")
 ```
 
 ::: ivcap_client.artifact.DataUrlArtifact
+
+## TarMember & upload_tar_artifact
+
+Build a gzip-compressed tar archive on the fly from local files and/or in-memory byte
+buffers, and upload it as a single artifact via a chunked, resumable TUS upload — the
+full archive is never materialized on disk or in memory. See the
+[Working with Artifacts guide](../guides/artifacts.md#upload-a-dynamically-built-targz-archive-streaming)
+for the full usage example.
+
+```python
+from ivcap_client.artifact import TarMember
+
+members = [
+    TarMember.from_file("/data/image1.jpg"),
+    TarMember.from_bytes(b'{"k": "v"}', arcname="metadata.json"),
+]
+artifact = ivcap.upload_tar_artifact(members, name="dataset.tar.gz")
+```
+
+::: ivcap_client.artifact.TarMember

@@ -28,6 +28,7 @@ from ivcap_client.artifact import (
     DataUrlArtifact,
     LocalFileArtifact,
     TarMember,
+    _read_upload_marker,
     check_file_already_uploaded,
     is_data_url,
 )
@@ -1026,6 +1027,14 @@ class LocalIVCAP(IVCAP):
         if base_dir is None:
             base_dir = os.environ.get("IVCAP_LOCAL_DIR", self._DEFAULT_BASE_DIR)
         self._base_dir = Path(base_dir)
+        # In-memory cache mapping a platform artifact URN
+        # (``urn:ivcap:artifact:<uuid>``) to a ``(local_path, mime_type)``
+        # pair. Populated via ``register_artifact()`` and consulted by
+        # ``get_artifact()`` before falling back to scanning for
+        # ``.ivcap-<filename>.txt`` sidecar files. ``mime_type`` is ``None``
+        # when not explicitly known, in which case it is guessed from the
+        # file extension (see ``LocalFileArtifact.mime_type``).
+        self._artifact_urn_cache: dict[str, tuple[Path, str | None]] = {}
 
     # ---- Properties --------------------------------------------------------
 
@@ -1115,16 +1124,109 @@ class LocalIVCAP(IVCAP):
 
         Args:
             id: A ``file://``/``urn:file://`` URN pointing to a local file,
-                or an RFC 2397 ``data:`` URL (or the equivalent
-                ``urn:data:...`` form) decoded entirely in memory — no
-                filesystem access performed.
+                an RFC 2397 ``data:`` URL (or the equivalent
+                ``urn:data:...`` form) decoded entirely in memory, or a
+                *platform* artifact URN (``urn:ivcap:artifact:<uuid>``)
+                previously mapped to a local file — see
+                :meth:`register_artifact`.
 
         Returns:
             LocalFileArtifact | DataUrlArtifact: The local artifact instance.
+
+        Raises:
+            ResourceNotFound: If a platform artifact URN is given but no
+                local file has been registered (or discovered via a
+                ``.ivcap-<filename>.txt`` sidecar) for it.
         """
         if is_data_url(id):
             return DataUrlArtifact(id)
+        if id.startswith("urn:ivcap:artifact:"):
+            resolved = self._resolve_platform_artifact(id)
+            if resolved is None:
+                raise ResourceNotFound(id)
+            path, mime_type = resolved
+            return LocalFileArtifact(
+                f"urn:file://{path.resolve()}", mime_type=mime_type
+            )
         return LocalFileArtifact(id)
+
+    def register_artifact(
+        self,
+        urn: URN,
+        file_path: str | Path,
+        *,
+        mime_type: str | None = None,
+    ) -> None:
+        """Map a *platform* artifact URN to a local file for this session.
+
+        This lets you debug a service locally against the exact artifact
+        that is also available on the platform: run the service there once,
+        note the resulting ``urn:ivcap:artifact:<uuid>`` (and, optionally,
+        its ``mime_type``), download/keep a local copy of its content, and
+        register the mapping here. Any subsequent :meth:`get_artifact` call
+        for that URN — including ones made indirectly by code that doesn't
+        know it's running locally — then resolves to the local file without
+        any network access.
+
+        The mapping is kept purely **in memory** (nothing is written to
+        disk) and is lost when the process exits. For a persistent mapping
+        across runs, rely on the ``.ivcap-<filename>.txt`` sidecar files
+        that :meth:`IVCAP.upload_artifact` already writes next to uploaded
+        files — :meth:`get_artifact` automatically falls back to scanning
+        for those when the URN isn't found in the in-memory cache.
+
+        Args:
+            urn: The platform artifact URN to map, e.g.
+                ``urn:ivcap:artifact:1234...-uuid``.
+            file_path: Local file the URN should resolve to.
+            mime_type: The artifact's real mime type as recorded on the
+                platform. If omitted, :attr:`LocalFileArtifact.mime_type`
+                falls back to guessing from ``file_path``'s extension, which
+                may not match the platform's recorded value (e.g. when the
+                local fixture file was renamed or has no/a misleading
+                extension).
+
+        Raises:
+            ValueError: If ``file_path`` does not exist or is not a file.
+        """
+        fp = Path(file_path)
+        if not fp.is_file():
+            raise ValueError(f"file '{fp}' does not exist")
+        self._artifact_urn_cache[urn] = (fp, mime_type)
+
+    def _resolve_platform_artifact(self, urn: URN) -> tuple[Path, str | None] | None:
+        """Resolve a platform artifact URN to a local file, if known.
+
+        Looks first in the in-memory cache populated by
+        :meth:`register_artifact`, then falls back to scanning
+        ``.ivcap-<filename>.txt`` sidecar files (the same ones written by
+        :meth:`IVCAP.upload_artifact`'s dedup logic) under ``base_dir`` for
+        one that records this URN — these sidecars may also carry the
+        artifact's real mime type (``<md5>|<urn>|<mime-type>`` format).
+
+        Returns:
+            A ``(path, mime_type)`` tuple, or ``None`` if the URN is not
+            known locally. ``mime_type`` may itself be ``None`` if it
+            wasn't recorded.
+        """
+        cached = self._artifact_urn_cache.get(urn)
+        if cached is not None and cached[0].is_file():
+            return cached
+
+        if not self._base_dir.exists():
+            return None
+
+        for sidecar in self._base_dir.rglob(".ivcap-*.txt"):
+            fn = sidecar.name[len(".ivcap-") : -len(".txt")]
+            candidate = sidecar.parent / fn
+            if not candidate.is_file():
+                continue
+            aid, mime_type = _read_upload_marker(str(candidate))
+            if aid != urn:
+                continue
+            self._artifact_urn_cache[urn] = (candidate, mime_type)
+            return candidate, mime_type
+        return None
 
     # ---- Aspects -----------------------------------------------------------
 

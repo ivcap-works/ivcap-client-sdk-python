@@ -137,6 +137,39 @@ def test_data_url_artifact_as_local_file_explicit_path(tmp_path):
     assert dest.read_bytes() == b"Hello, World!"
 
 
+def test_data_url_artifact_as_local_file_reuse_if_exists_skips_matching_size(tmp_path):
+    art = DataUrlArtifact("data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==")
+    dest = tmp_path / "out.txt"
+    dest.write_bytes(b"XXXXXXXXXXXXX")  # same 13-byte size, different content
+    path = art.as_local_file(dest, reuse_if_exists=True)
+    assert path == dest
+    assert dest.read_bytes() == b"XXXXXXXXXXXXX"
+
+
+def test_data_url_artifact_as_local_file_reuse_verifies_size_by_default(tmp_path):
+    art = DataUrlArtifact("data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==")
+    dest = tmp_path / "out.txt"
+    dest.write_bytes(b"cached")  # size mismatch -> re-download
+    art.as_local_file(dest, reuse_if_exists=True)
+    assert dest.read_bytes() == b"Hello, World!"
+
+
+def test_data_url_artifact_as_local_file_reuse_without_verify_skips_download(tmp_path):
+    art = DataUrlArtifact("data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==")
+    dest = tmp_path / "out.txt"
+    dest.write_bytes(b"cached")
+    art.as_local_file(dest, reuse_if_exists=True, verify_if_exists=False)
+    assert dest.read_bytes() == b"cached"
+
+
+def test_data_url_artifact_as_local_file_overwrites_by_default(tmp_path):
+    art = DataUrlArtifact("data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==")
+    dest = tmp_path / "out.txt"
+    dest.write_bytes(b"cached")
+    art.as_local_file(dest)
+    assert dest.read_bytes() == b"Hello, World!"
+
+
 def test_data_url_artifact_etag_is_stable_md5():
     art1 = DataUrlArtifact("data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==")
     art2 = DataUrlArtifact("data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==")

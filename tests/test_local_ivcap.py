@@ -5,6 +5,7 @@ import io
 import pytest
 
 from ivcap_client.artifact import LocalFileArtifact, LocalIVCAP
+from ivcap_client.exception import ResourceNotFound
 from ivcap_client.ivcap import IVCAP
 
 # ---------------------------------------------------------------------------
@@ -247,3 +248,160 @@ def test_upload_then_open_round_trip(tmp_path):
     with artifact.open() as fh:
         result = fh.read()
     assert "round-trip" in result
+
+
+# ---------------------------------------------------------------------------
+# get_artifact / register_artifact — platform artifact URN mapping
+# ---------------------------------------------------------------------------
+
+
+def test_register_artifact_resolves_via_get_artifact(tmp_path):
+    f = tmp_path / "data.bin"
+    f.write_bytes(b"platform content")
+    ivcap = LocalIVCAP(base_dir=tmp_path / "out")
+    urn = "urn:ivcap:artifact:11111111-1111-1111-1111-111111111111"
+
+    ivcap.register_artifact(urn, f)
+    artifact = ivcap.get_artifact(urn)
+
+    assert isinstance(artifact, LocalFileArtifact)
+    assert artifact.name == "data.bin"
+
+
+def test_register_artifact_does_not_write_sidecar_file(tmp_path):
+    f = tmp_path / "data.bin"
+    f.write_bytes(b"content")
+    ivcap = LocalIVCAP(base_dir=tmp_path / "out")
+    urn = "urn:ivcap:artifact:22222222-2222-2222-2222-222222222222"
+
+    ivcap.register_artifact(urn, f)
+
+    # the mapping is purely in-memory — no sidecar file is ever created
+    assert not (tmp_path / ".ivcap-data.bin.txt").exists()
+    # a fresh LocalIVCAP instance (no in-memory cache) can't resolve it
+    fresh = LocalIVCAP(base_dir=tmp_path / "out")
+    with pytest.raises(ResourceNotFound):
+        fresh.get_artifact(urn)
+
+
+def test_register_artifact_raises_for_missing_file(tmp_path):
+    ivcap = LocalIVCAP(base_dir=tmp_path / "out")
+    with pytest.raises(ValueError, match="does not exist"):
+        ivcap.register_artifact("urn:ivcap:artifact:x", tmp_path / "ghost.bin")
+
+
+def test_get_artifact_unknown_platform_urn_raises(tmp_path):
+    ivcap = LocalIVCAP(base_dir=tmp_path / "out")
+    with pytest.raises(ResourceNotFound):
+        ivcap.get_artifact("urn:ivcap:artifact:99999999-9999-9999-9999-999999999999")
+
+
+def test_get_artifact_resolves_via_upload_sidecar(tmp_path):
+    """A file previously uploaded via the *platform* IVCAP.upload_artifact
+    (which writes a ``.ivcap-<name>.txt`` sidecar next to the source file)
+    can be resolved by a LocalIVCAP instance that scans base_dir for it,
+    even without an explicit register_artifact() call."""
+    from ivcap_client.artifact import mark_file_already_uploaded
+
+    base = tmp_path / "out"
+    base.mkdir()
+    f = base / "shared.csv"
+    f.write_text("a,b\n1,2\n")
+    urn = "urn:ivcap:artifact:33333333-3333-3333-3333-333333333333"
+    mark_file_already_uploaded(urn, str(f))
+
+    ivcap = LocalIVCAP(base_dir=base)
+    artifact = ivcap.get_artifact(urn)
+
+    assert isinstance(artifact, LocalFileArtifact)
+    assert artifact.name == "shared.csv"
+
+
+def test_get_artifact_sidecar_scan_rejects_stale_content(tmp_path):
+    """If the file content no longer matches the recorded md5, the sidecar
+    match is ignored (stale/edited fixture)."""
+    from ivcap_client.artifact import mark_file_already_uploaded
+
+    base = tmp_path / "out"
+    base.mkdir()
+    f = base / "stale.csv"
+    f.write_text("original")
+    urn = "urn:ivcap:artifact:44444444-4444-4444-4444-444444444444"
+    mark_file_already_uploaded(urn, str(f))
+
+    # file content changes after being recorded
+    f.write_text("edited")
+
+    ivcap = LocalIVCAP(base_dir=base)
+    with pytest.raises(ResourceNotFound):
+        ivcap.get_artifact(urn)
+
+
+# ---------------------------------------------------------------------------
+# get_artifact / register_artifact — mime-type propagation
+# ---------------------------------------------------------------------------
+
+
+def test_register_artifact_with_explicit_mime_type_overrides_guess(tmp_path):
+    # Extension-less file — mimetypes.guess_type() would return None/octet-stream
+    f = tmp_path / "payload"
+    f.write_bytes(b"{}")
+    ivcap = LocalIVCAP(base_dir=tmp_path / "out")
+    urn = "urn:ivcap:artifact:55555555-5555-5555-5555-555555555555"
+
+    ivcap.register_artifact(urn, f, mime_type="application/json")
+    artifact = ivcap.get_artifact(urn)
+
+    assert artifact.mime_type == "application/json"
+
+
+def test_register_artifact_without_mime_type_falls_back_to_guess(tmp_path):
+    f = tmp_path / "data.csv"
+    f.write_text("a,b\n")
+    ivcap = LocalIVCAP(base_dir=tmp_path / "out")
+    urn = "urn:ivcap:artifact:66666666-6666-6666-6666-666666666666"
+
+    ivcap.register_artifact(urn, f)
+    artifact = ivcap.get_artifact(urn)
+
+    assert artifact.mime_type == "text/csv"
+
+
+def test_get_artifact_sidecar_scan_recovers_mime_type(tmp_path):
+    """mark_file_already_uploaded(..., mime_type=...) records the real
+    mime-type in the sidecar, and the scan-based resolution path in
+    LocalIVCAP picks it up — even for a renamed/extension-less fixture
+    file where guessing from the name would be wrong."""
+    from ivcap_client.artifact import mark_file_already_uploaded
+
+    base = tmp_path / "out"
+    base.mkdir()
+    f = base / "fixture_no_ext"
+    f.write_bytes(b"\x89PNG\r\n")
+    urn = "urn:ivcap:artifact:77777777-7777-7777-7777-777777777777"
+    mark_file_already_uploaded(urn, str(f), mime_type="image/png")
+
+    ivcap = LocalIVCAP(base_dir=base)
+    artifact = ivcap.get_artifact(urn)
+
+    assert artifact.mime_type == "image/png"
+
+
+def test_sidecar_without_mime_type_field_still_works(tmp_path):
+    """Backward compatibility: sidecars written before mime-type support was
+    added (``<md5>|<urn>`` only, no trailing field) continue to resolve."""
+    from ivcap_client.artifact import mark_file_already_uploaded
+
+    base = tmp_path / "out"
+    base.mkdir()
+    f = base / "legacy.csv"
+    f.write_text("a,b\n1,2\n")
+    urn = "urn:ivcap:artifact:88888888-8888-8888-8888-888888888888"
+    mark_file_already_uploaded(urn, str(f))  # no mime_type kwarg → 2-field sidecar
+
+    ivcap = LocalIVCAP(base_dir=base)
+    artifact = ivcap.get_artifact(urn)
+
+    assert artifact.name == "legacy.csv"
+    # falls back to guessing from the extension since none was recorded
+    assert artifact.mime_type == "text/csv"

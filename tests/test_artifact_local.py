@@ -85,6 +85,16 @@ def test_local_file_artifact_as_local_file_returns_existing_path(tmp_path):
     assert p.exists()
 
 
+def test_local_file_artifact_as_local_file_ignores_reuse_arguments(tmp_path):
+    f = tmp_path / "f.txt"
+    f.write_text("data")
+    art = LocalFileArtifact(f"urn:file://{f}")
+    p = art.as_local_file(reuse_if_exists=True, verify_if_exists=True)
+    assert p.read_text() == "data"
+    p = art.as_local_file(reuse_if_exists=False, verify_if_exists=False)
+    assert p.read_text() == "data"
+
+
 def test_local_file_artifact_as_data_url_returns_expected_url(tmp_path):
     import base64
 

@@ -4,6 +4,21 @@ This guide explains how to choose the right `IVCAP` instance for your situation 
 in particular, how to test an IVCAP service locally against real data before deploying
 it to the platform.
 
+## Table of Contents
+
+- [The Three Operating Modes](#the-three-operating-modes)
+- [Mode 1 — Platform (External Access)](#mode-1-platform-external-access)
+- [Mode 2 — Platform (Inside a Container)](#mode-2-platform-inside-a-container)
+- [Mode 3 — Local Mode (No Platform Required)](#mode-3-local-mode-no-platform-required)
+  - [Local directory layout](#local-directory-layout)
+  - [Configuring the base directory](#configuring-the-base-directory)
+  - [Forcing local mode in tests](#forcing-local-mode-in-tests)
+  - [What `LocalIVCAP` supports](#what-localivcap-supports)
+  - [Resolving real platform artifact URNs locally](#resolving-real-platform-artifact-urns-locally)
+  - [Detecting the active mode at runtime](#detecting-the-active-mode-at-runtime)
+- [Writing Code That Works in All Three Modes](#writing-code-that-works-in-all-three-modes)
+- [See Also](#see-also)
+
 ---
 
 ## The Three Operating Modes
@@ -86,23 +101,44 @@ When a service container starts, the IVCAP platform automatically injects:
 IVCAP_BASE_URL=http://ivcap.local   # the Service Sidecar URL
 ```
 
-No JWT token is needed. `IVCAP()` picks this up automatically:
+No JWT token is needed — `IVCAP()` would pick this up automatically. **However, inside
+an actual `ivcap-service-sdk` worker function you should never call `IVCAP()`
+yourself.** The SDK's
+[`JobContext`](https://ivcap-works.github.io/ivcap-service-sdk-python/api/job-context/#ivcap-ivcap)
+— passed as the second argument to every `process_job(req, ctxt)` worker — already
+exposes a lazy-initialized, pre-authenticated client via its `ctxt.ivcap` **property**
+(no parentheses — it's a property, not a method). Use that handle instead:
 
 ```python
-from ivcap_client import IVCAP
+from ivcap_service import JobContext
 
-ivcap = IVCAP()  # → platform IVCAP using the sidecar, no token required
+def process_job(req: MyRequest, ctxt: JobContext) -> MyResult:
+    ivcap = ctxt.ivcap  # property access — pre-authenticated, sidecar-backed
 
-# Reads and writes go through the sidecar, which handles auth and storage
-artifact = ivcap.upload_artifact(name="result.nc", file_path="/tmp/result.nc")
-ivcap.add_aspect(
-    entity=artifact.id,
-    aspect={"$schema": "urn:my:schema:result.1", "quality": 0.95},
-)
+    # Reads and writes go through the sidecar, which handles auth and storage
+    artifact = ivcap.get_artifact(req.input_urn)
+    with artifact.as_local_file() as path:
+        data = path.read_bytes()
+
+    result_artifact = ivcap.upload_artifact(name="result.nc", file_path="/tmp/result.nc")
+    ivcap.add_aspect(
+        entity=result_artifact.id,
+        aspect={"$schema": "urn:my:schema:result.1", "quality": 0.95},
+    )
+    return MyResult(output=result_artifact.id)
 ```
 
-This mode is fully transparent — the same code works in Mode 1 and Mode 2 without any
-conditional logic.
+`ctxt.ivcap` returns the same kind of platform `IVCAP` instance you'd get from calling
+`IVCAP()` directly — so everything else in this guide (artifact/aspect APIs, etc.)
+applies unchanged. The only difference is *who* constructs it: letting `JobContext` do
+it avoids re-deriving `IVCAP_BASE_URL`/auth wiring yourself and keeps your worker
+function testable (you can inject a `LocalIVCAP` via a fake `JobContext` in unit tests
+— see Mode 3 below).
+
+This mode is fully transparent to the rest of this guide — the same artifact/aspect
+code works in Mode 1 and Mode 2 without any conditional logic; only how you *obtain*
+the `IVCAP` instance differs (`IVCAP()` directly outside a service vs. `ctxt.ivcap`
+inside one).
 
 ---
 
@@ -204,7 +240,57 @@ test service logic locally:
 | `upload_artifact(name, file_path, ...)` | Copies source file to `base_dir/artifacts/<name>` |
 | `upload_artifact(name, io_stream, ...)` | Writes stream bytes/text to `base_dir/artifacts/<name>` |
 | `get_artifact("urn:file://..." or "file://...")` | Returns a `LocalFileArtifact` for an existing local file |
+| `get_artifact("urn:ivcap:artifact:<uuid>")` | Resolves to a local file via `register_artifact()` or a `.ivcap-<filename>.txt` sidecar — see below |
+| `register_artifact(urn, file_path, *, mime_type=None)` | In-memory mapping from a real platform artifact URN to a local file |
 | `collection`, `policy`, `chunk_size`, `retries` args | Accepted for API compatibility; silently ignored |
+
+### Resolving real platform artifact URNs locally
+
+Service code often receives artifact references as platform URNs
+(`urn:ivcap:artifact:<uuid>`), not as local file paths — the same code should run
+unmodified whether it's being debugged locally or executing on the platform. By
+default `LocalIVCAP.get_artifact()` raises `ResourceNotFound` for such a URN, since it
+has no network access to resolve it. Two mechanisms let you bridge this gap, both of
+which rely on the same `.ivcap-<filename>.txt` sidecar format used for upload
+deduplication (`<md5>|<artifact-urn>[|<mime-type>]`):
+
+1. **`register_artifact()`** — an explicit, in-memory-only mapping for the current
+   process. Nothing is written to disk.
+
+   ```python
+   ivcap = IVCAP.local()
+
+   # Run the service on the platform once, note the artifact URN it
+   # produced/consumed, download a local copy of its content, then:
+   ivcap.register_artifact(
+       "urn:ivcap:artifact:1234...-uuid",
+       "/tmp/fixtures/input.csv",
+       mime_type="text/csv",   # optional — overrides extension guessing
+   )
+
+   artifact = ivcap.get_artifact("urn:ivcap:artifact:1234...-uuid")
+   # → LocalFileArtifact wrapping /tmp/fixtures/input.csv, no network call
+   ```
+
+2. **Automatic sidecar scan** — if a file under `base_dir` was previously uploaded
+   via the *platform* `IVCAP.upload_artifact()` (which writes a
+   `.ivcap-<filename>.txt` sidecar recording its real artifact URN and md5), a
+   `LocalIVCAP` instance will find it automatically — no `register_artifact()` call
+   needed:
+
+   ```python
+   artifact = ivcap.get_artifact("urn:ivcap:artifact:1234...-uuid")
+   # → scans base_dir for a matching .ivcap-*.txt sidecar and resolves it
+   ```
+
+   The content's md5 is re-verified on every lookup; if the local file was edited
+   since the sidecar was written, the match is rejected and `ResourceNotFound` is
+   raised rather than silently serving stale content.
+
+Both paths also restore the artifact's real `mime_type` when it was recorded (via
+`register_artifact(..., mime_type=...)` or `mark_file_already_uploaded(..., mime_type=...)`),
+instead of falling back to guessing it from the local filename's extension — useful
+for extension-less or renamed fixture files.
 
 **Aspects** (stored as JSON files under `base_dir/aspects/`)
 
@@ -237,15 +323,28 @@ else:
 
 ## Writing Code That Works in All Three Modes
 
-The central design goal is that **your service code needs zero conditional logic**.
-Use `IVCAP()` everywhere and the right implementation is injected by environment:
+The central design goal is that **your core logic needs zero conditional logic** around
+how it obtains an `IVCAP` handle. The pattern differs slightly depending on *what* is
+calling it:
+
+- **Standalone scripts / notebooks / CLI tools / library code** (i.e. anything *not*
+  packaged as an `ivcap-service-sdk` worker function) — call `IVCAP()` directly, as
+  shown below. The right implementation (`LocalIVCAP` vs. platform `IVCAP`) is injected
+  automatically from environment variables.
+- **`ivcap-service-sdk` worker functions** (`def process_job(req, ctxt: JobContext)`)
+  — as covered in [Mode 2](#mode-2--platform-inside-a-container), use `ctxt.ivcap`
+  instead of calling `IVCAP()` yourself; the SDK already constructs and injects a
+  correctly configured handle (platform-connected when deployed, and whatever you
+  configure your test `JobContext` fixture to return — typically a `LocalIVCAP` — when
+  unit testing locally).
 
 ```python
-# my_service.py — works locally AND on the platform unchanged
+# my_script.py — a standalone script/tool, NOT an ivcap-service-sdk worker function.
+# Works locally AND against a live platform unchanged.
 from ivcap_client import IVCAP
 
 def run(input_file: str) -> None:
-    ivcap = IVCAP()  # LocalIVCAP locally, platform IVCAP when deployed
+    ivcap = IVCAP()  # LocalIVCAP locally, platform IVCAP when IVCAP_URL/JWT are set
 
     # Upload result
     artifact = ivcap.upload_artifact(name="output.nc", file_path=input_file)
@@ -266,17 +365,23 @@ def run(input_file: str) -> None:
 
 ```bash
 # No IVCAP_URL set → LocalIVCAP
-python my_service.py input.csv
+python my_script.py input.csv
 # Result artifact: urn:file:///abs/path/to/ivcap-artifacts/artifacts/output.nc
 ```
 
-**To run on the platform:**
+**To run against a live platform (e.g. a standalone orchestration script, not an
+`ivcap-service-sdk` worker):**
 
 ```bash
-# IVCAP_BASE_URL injected by sidecar → platform IVCAP
-python my_service.py input.csv
+export IVCAP_URL=https://api.your-ivcap-deployment.net
+export IVCAP_JWT=<token from: ivcap context get access-token>
+python my_script.py input.csv
 # Result artifact: urn:ivcap:artifact:<uuid>
 ```
+
+> If this logic instead lives inside an `ivcap-service-sdk` `process_job` worker, don't
+> call `IVCAP()` at all — pass/use `ctxt.ivcap` as described in
+> [Mode 2](#mode-2--platform-inside-a-container).
 
 ---
 

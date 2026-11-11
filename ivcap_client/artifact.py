@@ -312,6 +312,8 @@ class Artifact:
         *,
         chunk_size: int = -1,
         progress_callback: Callable[[int, int | None], None] | None = None,
+        reuse_if_exists: bool = False,
+        verify_if_exists: bool = True,
     ) -> Path:
         """Download the artifact to a local file and return the path.
 
@@ -341,6 +343,14 @@ class Artifact:
                 is created and wrapped in a self-deleting :class:`CMPath`.
                 If a path is provided, the file is written there and a plain
                 :class:`~pathlib.Path` is returned.
+            reuse_if_exists: If ``True`` and ``path`` already exists, return it
+                without downloading the artifact again.  Defaults to ``False``,
+                which overwrites the existing file.
+            verify_if_exists: Only used with ``reuse_if_exists``.  If ``True``
+                (default), an existing file is reused only when its size matches
+                the artifact size; otherwise it is downloaded again.  If the size
+                is unknown, the file is downloaded again.  Set to ``False`` to
+                reuse the file without any check.
             chunk_size (int): Number of bytes to read per chunk.  Pass ``-1``
                 (the default) to let the SDK choose automatically based on the
                 artifact size (see :meth:`as_stream` for the formula).
@@ -383,6 +393,9 @@ class Artifact:
 
         if path is not None:
             path = Path(path)
+            if reuse_if_exists and path.exists():
+                if not verify_if_exists or path.stat().st_size == self.size:
+                    return path
             path.parent.mkdir(parents=True, exist_ok=True)
             with open(path, "wb") as f:
                 _stream_to(f)
@@ -582,7 +595,7 @@ class LocalFileArtifact:
       Use :meth:`open` or :meth:`as_local_file` instead.
     """
 
-    def __init__(self, id: str):
+    def __init__(self, id: str, *, mime_type: str | None = None):
         if id.startswith("file://"):
             id = f"urn:${id}"
         self.id = id
@@ -597,6 +610,11 @@ class LocalFileArtifact:
         self.size = stats.st_size
         self.last_modified_at = datetime.fromtimestamp(stats.st_mtime)
         self.created_at = self.last_modified_at  # keep it simple
+        # When resolved from a platform artifact URN (see
+        # LocalIVCAP.register_artifact / the `.ivcap-*.txt` sidecar scan) the
+        # real, platform-recorded mime type may be known and should take
+        # precedence over guessing from the filename extension.
+        self._mime_type_override = mime_type
 
     def open(self) -> io.IOBase:
         """Open the local file for reading and return a file-like object.
@@ -645,11 +663,22 @@ class LocalFileArtifact:
         content = self._fp.read_bytes()
         return _build_data_url(content, self.mime_type, self.id, max_length)
 
-    def as_local_file(self) -> Path:
+    def as_local_file(
+        self,
+        path: Path | None = None,
+        *,
+        chunk_size: int = -1,
+        progress_callback: Callable[[int, int | None], None] | None = None,
+        reuse_if_exists: bool = False,
+        verify_if_exists: bool = True,
+    ) -> Path:
         """Return a :class:`SafePath` to the existing local file.
 
         Unlike :meth:`Artifact.as_local_file`, no download is performed — the
-        file already exists on disk.  The returned :class:`SafePath` supports
+        file already exists on disk.  The ``path``, ``chunk_size``,
+        ``progress_callback``, ``reuse_if_exists`` and ``verify_if_exists``
+        arguments are accepted for interface compatibility and ignored, so the
+        existing file is always returned as is.  The returned :class:`SafePath` supports
         use in a ``with`` statement, but **the file is never deleted on exit**
         (it is a pre-existing local source file, not a temporary download).
 
@@ -684,6 +713,8 @@ class LocalFileArtifact:
 
     @property
     def mime_type(self) -> str:
+        if self._mime_type_override:
+            return self._mime_type_override
         mime_type, _ = mimetypes.guess_type(self._fp.name)
         # Fallback if mimetypes can't guess from the extension
         if not mime_type:
@@ -966,6 +997,8 @@ class DataUrlArtifact:
         *,
         chunk_size: int = -1,
         progress_callback: Callable[[int, int | None], None] | None = None,
+        reuse_if_exists: bool = False,
+        verify_if_exists: bool = True,
     ) -> Path:
         """Write the decoded content to a local file and return the path.
 
@@ -979,6 +1012,12 @@ class DataUrlArtifact:
             chunk_size: Bytes written per call.  ``-1`` auto-selects.
             progress_callback: Optional ``(bytes_written, total_bytes)``
                 callable invoked after each chunk is written.
+            reuse_if_exists: If ``True`` and ``path`` already exists, return it
+                without rewriting the content.  Defaults to ``False``.
+            verify_if_exists: Only used with ``reuse_if_exists``.  If ``True``
+                (default), an existing file is reused only when its size matches
+                the content size; otherwise it is rewritten.  Set to ``False`` to
+                reuse the file without any check.
 
         Returns:
             :class:`CMPath` (temp file) or plain :class:`~pathlib.Path`.
@@ -995,6 +1034,9 @@ class DataUrlArtifact:
 
         if path is not None:
             path = Path(path)
+            if reuse_if_exists and path.exists():
+                if not verify_if_exists or path.stat().st_size == self.size:
+                    return path
             path.parent.mkdir(parents=True, exist_ok=True)
             with open(path, "wb") as f:
                 _stream_to(f)
@@ -1856,7 +1898,7 @@ def upload_artifact(
 
     kwargs = res.to_dict()
     if file_path:
-        mark_file_already_uploaded(res.id, file_path)
+        mark_file_already_uploaded(res.id, file_path, mime_type=content_type)
     kwargs["status"] = None
     a = Artifact(ivcap, **kwargs)
     a.status  # force status update as it will have change
@@ -1864,24 +1906,47 @@ def upload_artifact(
 
 
 def check_file_already_uploaded(file_path: str) -> str | None:
+    aid, _mime_type = _read_upload_marker(file_path)
+    return aid
+
+
+def _read_upload_marker(file_path: str) -> tuple[str | None, str | None]:
+    """Read the ``.ivcap-<filename>.txt`` sidecar for ``file_path``, if any.
+
+    The sidecar format is ``<md5>|<artifact-urn>[|<mime-type>]`` — the
+    trailing mime-type field is optional so that older, pre-existing sidecar
+    files (written with only ``<md5>|<artifact-urn>``) continue to work.
+
+    Returns:
+        A ``(artifact_urn, mime_type)`` tuple. Either or both may be
+        ``None`` if the sidecar is missing, unreadable, stale (md5
+        mismatch), or doesn't record a mime-type.
+    """
     df = _upload_marker(file_path)
 
     if os.path.isfile(df) and os.access(df, os.R_OK):
         with open(df) as f:
-            l = f.readlines()
-            oh5, aid = l[0].split("|") if len(l) > 0 else [None, None]
+            lines = f.readlines()
+        if lines:
+            parts = lines[0].strip().split("|")
+            oh5 = parts[0] if len(parts) > 0 else None
+            aid = parts[1] if len(parts) > 1 else None
+            mime_type = parts[2] if len(parts) > 2 else None
             if oh5 and aid:
                 h5 = md5sum(file_path)
                 if oh5 == h5:
-                    return aid.strip()
-    return None
+                    return aid.strip(), (mime_type.strip() if mime_type else None)
+    return None, None
 
 
-def mark_file_already_uploaded(id: str, file_path: str):
+def mark_file_already_uploaded(id: str, file_path: str, *, mime_type: str | None = None):
     df = _upload_marker(file_path)
     h5 = md5sum(file_path)
+    line = f"{h5}|{id}"
+    if mime_type:
+        line += f"|{mime_type}"
     with open(df, "w") as f:
-        f.write(f"{h5}|{id}\n")
+        f.write(f"{line}\n")
 
 
 def _upload_marker(file_path: str):

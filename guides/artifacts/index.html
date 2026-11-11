@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -33,10 +33,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -196,7 +196,7 @@
     ivcap-client-sdk-python
     <ul class="md-source__facts">
       <li class="md-source__fact md-source__fact--version">
-        v0.47.19
+        v0.47.23
       </li>
     </ul>
   </div>
@@ -422,7 +422,7 @@
     ivcap-client-sdk-python
     <ul class="md-source__facts">
       <li class="md-source__fact md-source__fact--version">
-        v0.47.19
+        v0.47.23
       </li>
     </ul>
   </div>
@@ -865,6 +865,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#upload-a-dynamically-built-targz-archive-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upload a dynamically-built tar.gz archive (streaming)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -906,6 +917,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Getting an Artifact by URN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getting-an-artifact-from-a-data-url" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting an Artifact from a Data URL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#converting-an-artifact-to-a-data-url" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Converting an Artifact to a Data URL
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2181,6 +2220,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#upload-a-dynamically-built-targz-archive-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upload a dynamically-built tar.gz archive (streaming)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2222,6 +2272,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Getting an Artifact by URN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getting-an-artifact-from-a-data-url" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting an Artifact from a Data URL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#converting-an-artifact-to-a-data-url" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Converting an Artifact to a Data URL
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2479,9 +2557,9 @@ you pass the artifact's URN (<code>urn:ivcap:artifact:&lt;uuid&gt;</code>) as th
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-image&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/path/to/image.jpg&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">policy</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:policy:ivcap.open.artifact&quot;</span><span class="p">,</span>  <span class="c1"># optional, makes it public</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">"my-image"</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">file_path</span><span class="o">=</span><span class="s2">"/path/to/image.jpg"</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">policy</span><span class="o">=</span><span class="s2">"urn:ivcap:policy:ivcap.open.artifact"</span><span class="p">,</span>  <span class="c1"># optional, makes it public</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># &lt;Artifact id=urn:ivcap:artifact:&lt;uuid&gt;, status=ready&gt;</span>
@@ -2489,11 +2567,11 @@ you pass the artifact's URN (<code>urn:ivcap:artifact:&lt;uuid&gt;</code>) as th
 <h3 id="upload-from-an-in-memory-stream">Upload from an in-memory stream<a class="headerlink" href="#upload-from-an-in-memory-stream" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;col1,col2</span><span class="se">\n</span><span class="s2">1,2</span><span class="se">\n</span><span class="s2">3,4</span><span class="se">\n</span><span class="s2">&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">"col1,col2</span><span class="se">\n</span><span class="s2">1,2</span><span class="se">\n</span><span class="s2">3,4</span><span class="se">\n</span><span class="s2">"</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-data.csv&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">"my-data.csv"</span><span class="p">,</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">io_stream</span><span class="o">=</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;text/csv&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">content_type</span><span class="o">=</span><span class="s2">"text/csv"</span><span class="p">,</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">content_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">)</span>
 </code></pre></div>
@@ -2564,29 +2642,130 @@ you pass the artifact's URN (<code>urn:ivcap:artifact:&lt;uuid&gt;</code>) as th
 </tr>
 </tbody>
 </table>
+<h3 id="upload-a-dynamically-built-targz-archive-streaming">Upload a dynamically-built tar.gz archive (streaming)<a class="headerlink" href="#upload-a-dynamically-built-targz-archive-streaming" title="Permanent link">&para;</a></h3>
+<p>When you need to package many local files (or in-memory byte buffers) into a single
+archive artifact, <code>upload_tar_artifact()</code> builds a gzip-compressed tar archive <strong>on the
+fly</strong> and streams it directly into a chunked, resumable upload — the full archive is
+<strong>never</strong> written to disk or held in memory. This matters when the combined archive
+could be large enough to crash a memory- or disk-constrained process (e.g. a small
+serverless container).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.artifact</span><span class="w"> </span><span class="kn">import</span> <span class="n">TarMember</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">members</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">TarMember</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">"/data/image1.jpg"</span><span class="p">),</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">TarMember</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">"/data/image2.jpg"</span><span class="p">,</span> <span class="n">arcname</span><span class="o">=</span><span class="s2">"renamed.jpg"</span><span class="p">),</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">TarMember</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="sa">b</span><span class="s1">'{"k": "v"}'</span><span class="p">,</span> <span class="n">arcname</span><span class="o">=</span><span class="s2">"metadata.json"</span><span class="p">),</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">]</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_tar_artifact</span><span class="p">(</span><span class="n">members</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"dataset.tar.gz"</span><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</code></pre></div>
+<p>Internally, a background thread streams <code>tarfile</code>'s <code>w|gz</code> output into a small bounded
+queue (providing backpressure), while the calling thread drains that queue and <code>PATCH</code>es
+upload-sized chunks to a TUS endpoint created with the <em>creation-defer-length</em> extension
+(the final compressed size isn't known upfront). Failed chunks are retried with
+exponential backoff, re-synchronising via <code>HEAD</code> to resume from the server's
+authoritative offset rather than assuming a chunk fully succeeded or failed.</p>
+<p>Tunable parameters:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>chunk_size</code></td>
+<td>4 MiB</td>
+<td>Upload chunk size in bytes</td>
+</tr>
+<tr>
+<td><code>queue_maxsize</code></td>
+<td>4</td>
+<td>Max buffered chunks between archive-building and upload threads</td>
+</tr>
+<tr>
+<td><code>retries</code></td>
+<td>3</td>
+<td>Retry attempts per chunk on failure</td>
+</tr>
+<tr>
+<td><code>retry_delay</code></td>
+<td>2.0s</td>
+<td>Base delay between retries (doubles each attempt)</td>
+</tr>
+</tbody>
+</table>
 <h2 id="automatic-deduplication">Automatic Deduplication<a class="headerlink" href="#automatic-deduplication" title="Permanent link">&para;</a></h2>
 <p>The SDK tracks uploads using a hidden <code>.ivcap-&lt;filename&gt;.txt</code> sidecar file containing
 an MD5 hash of the source file. If you call <code>upload_artifact</code> again for the same
 unchanged file, it returns the existing artifact immediately without re-uploading.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># First call — uploads the file</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">artifact1</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/data/file.csv&quot;</span><span class="p">)</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Second call — returns immediately (file hasn&#39;t changed)</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">artifact2</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/data/file.csv&quot;</span><span class="p">)</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact1</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">artifact2</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># True</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># First call — uploads the file</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">artifact1</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">"/data/file.csv"</span><span class="p">)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Second call — returns immediately (file hasn't changed)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">artifact2</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">"/data/file.csv"</span><span class="p">)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact1</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">artifact2</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># True</span>
 </code></pre></div>
 <p>Use <code>force_upload=True</code> to bypass deduplication.</p>
 <h3 id="check-if-a-file-was-already-uploaded">Check if a file was already uploaded<a class="headerlink" href="#check-if-a-file-was-already-uploaded" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">artifact_for_file</span><span class="p">(</span><span class="s2">&quot;/path/to/file.jpg&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">if</span> <span class="n">artifact</span><span class="p">:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Already uploaded as </span><span class="si">{</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/path/to/file.jpg&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">artifact_for_file</span><span class="p">(</span><span class="s2">"/path/to/file.jpg"</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">if</span> <span class="n">artifact</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Already uploaded as </span><span class="si">{</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"file"</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">"/path/to/file.jpg"</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="getting-an-artifact-by-urn">Getting an Artifact by URN<a class="headerlink" href="#getting-an-artifact-by-urn" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">)</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">"urn:ivcap:artifact:&lt;uuid&gt;"</span><span class="p">)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="getting-an-artifact-from-a-data-url">Getting an Artifact from a Data URL<a class="headerlink" href="#getting-an-artifact-from-a-data-url" title="Permanent link">&para;</a></h3>
+<p><code>get_artifact()</code> also accepts an <a href="https://www.rfc-editor.org/rfc/rfc2397">RFC 2397</a>
+<code>data:</code> URL — the standard way to embed typed, self-describing data inline in a string
+(<code>data:[&lt;mediatype&gt;][;base64],&lt;data&gt;</code>). This is useful when a service result or a
+third-party API embeds small binary content directly rather than returning a separate
+artifact URN.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># "image/png" 1234</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+</code></pre></div>
+<p>No network call or filesystem access is performed — the payload is decoded in memory
+on construction into a <code>DataUrlArtifact</code>, which supports the same <code>open()</code>,
+<code>as_stream()</code>, <code>as_local_file()</code>, and <code>untar()</code> methods as a regular <code>Artifact</code>, so
+existing code that works with downloaded artifacts works unchanged. This works both
+for the platform <code>IVCAP</code> class and for <code>LocalIVCAP</code>.</p>
+<p>For consistency with other IVCAP URN schemes (e.g. <code>urn:file://...</code>), the
+<code>urn:data:...</code> form is also accepted and behaves identically:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">"urn:data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="converting-an-artifact-to-a-data-url">Converting an Artifact to a Data URL<a class="headerlink" href="#converting-an-artifact-to-a-data-url" title="Permanent link">&para;</a></h3>
+<p>The reverse operation — turning a downloaded artifact's content <em>back</em> into a
+<code>data:</code> URL — is available via <code>as_data_url()</code> on any artifact type (<code>Artifact</code>,
+<code>LocalFileArtifact</code>, <code>DataUrlArtifact</code>). This is handy for embedding small artifacts
+inline in a JSON payload or a service request instead of passing an artifact URN.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">"urn:ivcap:artifact:&lt;uuid&gt;"</span><span class="p">)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">url</span> <span class="o">=</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_data_url</span><span class="p">()</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># "data:image/png;base64,iVBORw0KGgo..."</span>
+</code></pre></div>
+<p>Because base64 encoding adds roughly 33% size overhead, <code>as_data_url()</code> only makes
+sense for small artifacts. To guard against accidentally producing huge strings, it
+takes a <code>max_length</code> argument (default <code>512</code>) and raises
+<code>ivcap_client.exception.ArtifactTooLargeForDataUrlError</code> if the encoded URL would be
+longer:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client.exception</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArtifactTooLargeForDataUrlError</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_data_url</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">2048</span><span class="p">)</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="k">except</span> <span class="n">ArtifactTooLargeForDataUrlError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Artifact too large to inline: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>    <span class="c1"># Fall back to downloading instead</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>        <span class="n">data</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
 </code></pre></div>
 <h2 id="downloading-artifact-content">Downloading Artifact Content<a class="headerlink" href="#downloading-artifact-content" title="Permanent link">&para;</a></h2>
 <p>Three methods are available, each suited to a different use case:</p>
@@ -2616,15 +2795,63 @@ unchanged file, it returns the existing artifact immediately without re-uploadin
 <p><code>as_local_file()</code> handles all the streaming internals for you.  It supports
 two patterns:</p>
 <p><strong>Temporary file</strong> (auto-deleted when the <code>with</code> block exits):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded to: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># temp file is deleted here</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Downloaded to: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># temp file is deleted here</span>
 </code></pre></div>
 <p><strong>Explicit path</strong> (file is kept):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">path</span> <span class="o">=</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">(</span><span class="s2">&quot;/tmp/output.jpg&quot;</span><span class="p">)</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved to: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">path</span> <span class="o">=</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">(</span><span class="s2">"/tmp/output.jpg"</span><span class="p">)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Saved to: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
+<p>Both <code>chunk_size</code> and <code>progress_callback</code> are <strong>keyword-only</strong> arguments:</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path</code></td>
+<td><code>Path \| None</code></td>
+<td><code>None</code></td>
+<td>Destination path; <code>None</code> = temp file (auto-deleted)</td>
+</tr>
+<tr>
+<td><code>chunk_size</code></td>
+<td><code>int</code></td>
+<td><code>-1</code></td>
+<td>Bytes per chunk; <code>-1</code> = auto-select based on artifact size</td>
+</tr>
+<tr>
+<td><code>progress_callback</code></td>
+<td><code>Callable[[int, int \| None], None] \| None</code></td>
+<td><code>None</code></td>
+<td>Called after each chunk with <code>(bytes_downloaded, total_bytes_or_None)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Progress reporting</strong> with <code>progress_callback</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">on_progress</span><span class="p">(</span><span class="n">downloaded</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="k">if</span> <span class="n">total</span><span class="p">:</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>        <span class="n">pct</span> <span class="o">=</span> <span class="n">downloaded</span> <span class="o">/</span> <span class="n">total</span> <span class="o">*</span> <span class="mi">100</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\r</span><span class="si">{</span><span class="n">pct</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%  (</span><span class="si">{</span><span class="n">downloaded</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2"> bytes)"</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\r</span><span class="si">{</span><span class="n">downloaded</span><span class="si">}</span><span class="s2"> bytes downloaded"</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="n">path</span> <span class="o">=</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">(</span><span class="s2">"/tmp/output.jpg"</span><span class="p">,</span> <span class="n">progress_callback</span><span class="o">=</span><span class="n">on_progress</span><span class="p">)</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="nb">print</span><span class="p">()</span>  <span class="c1"># newline after progress output</span>
+</code></pre></div>
+<p>The callback receives:</p>
+<ul>
+<li><code>bytes_downloaded</code> — cumulative bytes written to disk so far.</li>
+<li><code>total_bytes</code> — the artifact's known size in bytes, or <code>None</code> if the size
+  is not available (e.g. the artifact has not been fully indexed yet).</li>
+</ul>
 <blockquote>
 <p><strong><code>LocalFileArtifact</code> note:</strong> When running in local mode, <code>as_local_file()</code>
 returns a :class:<code>~ivcap_client.artifact.SafePath</code> pointing to the
@@ -2632,32 +2859,27 @@ pre-existing local file.  The file is <strong>never deleted</strong> on context 
 even when used inside a <code>with</code> statement.</p>
 </blockquote>
 <h3 id="open-as-a-file-like-object-in-memory">Open as a file-like object (in-memory)<a class="headerlink" href="#open-as-a-file-like-object-in-memory" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>           <span class="c1"># bytes</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">text</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">with</span> <span class="n">artifact</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>           <span class="c1"># bytes</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="n">text</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
 </code></pre></div>
 <blockquote>
 <p><strong>Warning:</strong> <code>open()</code> loads the entire blob into memory.  For large
 artifacts (hundreds of MB+) prefer <code>as_local_file()</code> or <code>as_stream()</code>.</p>
 </blockquote>
 <h3 id="stream-in-chunks-advanced">Stream in chunks (advanced)<a class="headerlink" href="#stream-in-chunks-advanced" title="Permanent link">&para;</a></h3>
-<p>Use <code>as_stream()</code> when you need low-level control: custom progress reporting,
-piping bytes into a third-party API, or incremental processing.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Example: download with progress reporting</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/tmp/output.jpg&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_stream</span><span class="p">():</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>        <span class="n">total</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2"> bytes&quot;</span><span class="p">)</span>
+<p>Use <code>as_stream()</code> when you need low-level control: piping bytes into a
+third-party API or incremental processing.  For progress reporting, prefer the
+<code>progress_callback</code> argument on <code>as_local_file()</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Example: stream bytes into an external API</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_stream</span><span class="p">():</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="n">external_api</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
 </code></pre></div>
-<p>For simply saving to disk, <code>as_local_file()</code> is more ergonomic than writing
-your own chunk loop.</p>
 <h2 id="listing-artifacts">Listing Artifacts<a class="headerlink" href="#listing-artifacts" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_artifacts</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  schema: </span><span class="si">{</span><span class="n">meta</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_artifacts</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  schema: </span><span class="si">{</span><span class="n">meta</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="artifact-provenance">Artifact Provenance<a class="headerlink" href="#artifact-provenance" title="Permanent link">&para;</a></h2>
 <p>Every upload and every artifact produced by a job is automatically recorded in the
@@ -2685,15 +2907,15 @@ Datafabric with provenance aspects:</p>
 </tbody>
 </table>
 <p>Query provenance:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="p">,</span> <span class="n">aspect</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="p">,</span> <span class="n">aspect</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="adding-metadata-to-artifacts">Adding Metadata to Artifacts<a class="headerlink" href="#adding-metadata-to-artifacts" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">)</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">artifact</span><span class="o">.</span><span class="n">add_metadata</span><span class="p">({</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my:schema:tag.1&quot;</span><span class="p">,</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;marine&quot;</span><span class="p">,</span> <span class="s2">&quot;coral&quot;</span><span class="p">],</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">})</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">"urn:ivcap:artifact:&lt;uuid&gt;"</span><span class="p">)</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">artifact</span><span class="o">.</span><span class="n">add_metadata</span><span class="p">({</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>    <span class="s2">"$schema"</span><span class="p">:</span> <span class="s2">"urn:my:schema:tag.1"</span><span class="p">,</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>    <span class="s2">"tags"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"marine"</span><span class="p">,</span> <span class="s2">"coral"</span><span class="p">],</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="p">})</span>
 </code></pre></div>
 <h2 id="local-mode-vs-platform-mode">Local Mode vs Platform Mode<a class="headerlink" href="#local-mode-vs-platform-mode" title="Permanent link">&para;</a></h2>
 <p>IVCAP supports two distinct operating modes for working with artifacts.  The same
@@ -2702,10 +2924,10 @@ branching in your service code is needed.</p>
 <h3 id="auto-detection-recommended">Auto-detection (recommended)<a class="headerlink" href="#auto-detection-recommended" title="Permanent link">&para;</a></h3>
 <p><code>IVCAP()</code> <strong>automatically selects the right mode</strong> based on environment variables —
 no code changes needed between local development and deployed operation:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>  <span class="c1"># LocalIVCAP locally, platform IVCAP when deployed</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;result.csv&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/result.csv&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>  <span class="c1"># LocalIVCAP locally, platform IVCAP when deployed</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"result.csv"</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">"/tmp/result.csv"</span><span class="p">)</span>
 </code></pre></div>
 <p>Decision logic (in order):</p>
 <table>
@@ -2738,27 +2960,27 @@ no code changes needed between local development and deployed operation:</p>
 <p>Connect to a running IVCAP deployment.  Requires <code>IVCAP_URL</code> + <code>IVCAP_JWT</code> (external
 access), or <code>IVCAP_BASE_URL</code> (injected automatically when running inside a platform
 container).</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="c1"># Reads credentials from environment variables</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;result.csv&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/result.csv&quot;</span><span class="p">)</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># urn:ivcap:artifact:&lt;uuid&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="c1"># Reads credentials from environment variables</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"result.csv"</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">"/tmp/result.csv"</span><span class="p">)</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># urn:ivcap:artifact:&lt;uuid&gt;</span>
 </code></pre></div>
 <h3 id="explicit-local-mode">Explicit local mode<a class="headerlink" href="#explicit-local-mode" title="Permanent link">&para;</a></h3>
 <p>Use <code>IVCAP.local()</code> (or construct <code>LocalIVCAP</code> directly) when you want to <strong>force</strong>
 local mode regardless of environment variables — for example in unit tests:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="o">.</span><span class="n">local</span><span class="p">(</span><span class="n">base_dir</span><span class="o">=</span><span class="s2">&quot;./my-artifacts&quot;</span><span class="p">)</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;result.csv&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/result.csv&quot;</span><span class="p">)</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="c1"># urn:file:///abs/path/to/my-artifacts/result.csv</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="o">.</span><span class="n">local</span><span class="p">(</span><span class="n">base_dir</span><span class="o">=</span><span class="s2">"./my-artifacts"</span><span class="p">)</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"result.csv"</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">"/tmp/result.csv"</span><span class="p">)</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="c1"># urn:file:///abs/path/to/my-artifacts/result.csv</span>
 </code></pre></div>
 <p>You can also construct <code>LocalIVCAP</code> directly:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalIVCAP</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">LocalIVCAP</span><span class="p">(</span><span class="n">base_dir</span><span class="o">=</span><span class="s2">&quot;./my-artifacts&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalIVCAP</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">LocalIVCAP</span><span class="p">(</span><span class="n">base_dir</span><span class="o">=</span><span class="s2">"./my-artifacts"</span><span class="p">)</span>
 </code></pre></div>
 <p>The <code>base_dir</code> defaults to <code>ivcap-artifacts</code> and can be set via the
 <code>IVCAP_LOCAL_DIR</code> environment variable.</p>
@@ -2817,21 +3039,21 @@ local mode regardless of environment variables — for example in unit tests:</p
 </tr>
 </tbody>
 </table>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="n">LocalAspect</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="o">.</span><span class="n">local</span><span class="p">(</span><span class="n">base_dir</span><span class="o">=</span><span class="s2">&quot;./my-artifacts&quot;</span><span class="p">)</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="c1"># Create an aspect</span>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="n">aspect</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">add_aspect</span><span class="p">(</span>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:some-uuid&quot;</span><span class="p">,</span>
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    <span class="n">aspect</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my:schema:tag.1&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;marine&quot;</span><span class="p">,</span> <span class="s2">&quot;coral&quot;</span><span class="p">]},</span>
-<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="p">)</span>
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>    <span class="c1"># urn:ivcap:aspect:&lt;uuid&gt;</span>
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>
-<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="c1"># Retrieve it later</span>
-<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="n">retrieved</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_aspect</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">retrieved</span><span class="p">,</span> <span class="n">LocalAspect</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="n">LocalAspect</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="o">.</span><span class="n">local</span><span class="p">(</span><span class="n">base_dir</span><span class="o">=</span><span class="s2">"./my-artifacts"</span><span class="p">)</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="c1"># Create an aspect</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="n">aspect</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">add_aspect</span><span class="p">(</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">"urn:ivcap:artifact:some-uuid"</span><span class="p">,</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>    <span class="n">aspect</span><span class="o">=</span><span class="p">{</span><span class="s2">"$schema"</span><span class="p">:</span> <span class="s2">"urn:my:schema:tag.1"</span><span class="p">,</span> <span class="s2">"tags"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"marine"</span><span class="p">,</span> <span class="s2">"coral"</span><span class="p">]},</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="p">)</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>    <span class="c1"># urn:ivcap:aspect:&lt;uuid&gt;</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a><span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a><span class="c1"># Retrieve it later</span>
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a><span class="n">retrieved</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_aspect</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">retrieved</span><span class="p">,</span> <span class="n">LocalAspect</span><span class="p">)</span>
 </code></pre></div>
 <p><code>LocalIVCAP</code> does <strong>not</strong> implement <code>list_artifacts</code>, <code>list_services</code>,
 <code>list_orders</code>, <code>search</code>, or other methods that require a live platform
@@ -2841,44 +3063,44 @@ for the full capability table.</p>
 <p>Artifacts written by <code>LocalIVCAP</code> have URNs of the form <code>urn:file:///absolute/path</code>.
 These URNs can be passed back to <code>LocalIVCAP.get_artifact()</code> or to <code>IVCAP.get_artifact()</code>
 (on the platform, which also supports <code>file://</code> URNs for locally-mounted inputs):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">&quot;file:///data/input.csv&quot;</span><span class="p">)</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="c1"># Returns a LocalFileArtifact — open()/as_local_file() work without network calls</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">"file:///data/input.csv"</span><span class="p">)</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="c1"># Returns a LocalFileArtifact — open()/as_local_file() work without network calls</span>
 </code></pre></div>
 <h4 id="auto-naming">Auto-naming<a class="headerlink" href="#auto-naming" title="Permanent link">&para;</a></h4>
 <p>When <code>name</code> is omitted, <code>upload_artifact</code> generates a UUID-based filename, preserving
 the source file extension if one can be inferred:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/tmp/model.pkl&quot;</span><span class="p">)</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="c1"># urn:file:///abs/path/to/ivcap-artifacts/3f4a...UUID....pkl</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s2">"/tmp/model.pkl"</span><span class="p">)</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="c1"># urn:file:///abs/path/to/ivcap-artifacts/3f4a...UUID....pkl</span>
 </code></pre></div>
 <h2 id="common-patterns">Common Patterns<a class="headerlink" href="#common-patterns" title="Permanent link">&para;</a></h2>
 <h3 id="upload-data-run-service-download-result">Upload data → run service → download result<a class="headerlink" href="#upload-data-run-service-download-result" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io</span><span class="o">,</span><span class="w"> </span><span class="nn">json</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>
-<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="c1"># Upload input</span>
-<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;input-image&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;/data/photo.jpg&quot;</span><span class="p">)</span>
-<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>
-<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="c1"># Submit job</span>
-<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">&quot;my-image-processor&quot;</span><span class="p">)</span>
-<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="n">job</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">})))</span>
-<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>
-<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="c1"># Wait for result</span>
-<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
-<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>    <span class="n">job</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a>
-<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="c1"># Download output artifact to a temp file (auto-deleted on exit)</span>
-<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="n">output</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;output_artifact&quot;</span><span class="p">])</span>
-<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a><span class="k">with</span> <span class="n">output</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
-<a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result saved at: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
-<a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a>
-<a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a><span class="c1"># Or keep the file at a specific path</span>
-<a id="__codelineno-19-25" name="__codelineno-19-25" href="#__codelineno-19-25"></a><span class="n">path</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">(</span><span class="s2">&quot;/tmp/result.jpg&quot;</span><span class="p">)</span>
-<a id="__codelineno-19-26" name="__codelineno-19-26" href="#__codelineno-19-26"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result kept at: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io</span><span class="o">,</span><span class="w"> </span><span class="nn">json</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ivcap_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">IVCAP</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="n">ivcap</span> <span class="o">=</span> <span class="n">IVCAP</span><span class="p">()</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="c1"># Upload input</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">upload_artifact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"input-image"</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="s2">"/data/photo.jpg"</span><span class="p">)</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="c1"># Submit job</span>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="n">service</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_service_by_name</span><span class="p">(</span><span class="s2">"my-image-processor"</span><span class="p">)</span>
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="n">job</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">request_job</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">"image"</span><span class="p">:</span> <span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">"threshold"</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">})))</span>
+<a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a>
+<a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a><span class="c1"># Wait for result</span>
+<a id="__codelineno-25-14" name="__codelineno-25-14" href="#__codelineno-25-14"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">finished</span><span class="p">:</span>
+<a id="__codelineno-25-15" name="__codelineno-25-15" href="#__codelineno-25-15"></a>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a id="__codelineno-25-16" name="__codelineno-25-16" href="#__codelineno-25-16"></a>    <span class="n">job</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<a id="__codelineno-25-17" name="__codelineno-25-17" href="#__codelineno-25-17"></a>
+<a id="__codelineno-25-18" name="__codelineno-25-18" href="#__codelineno-25-18"></a><span class="c1"># Download output artifact to a temp file (auto-deleted on exit)</span>
+<a id="__codelineno-25-19" name="__codelineno-25-19" href="#__codelineno-25-19"></a><span class="n">output</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">[</span><span class="s2">"output_artifact"</span><span class="p">])</span>
+<a id="__codelineno-25-20" name="__codelineno-25-20" href="#__codelineno-25-20"></a><span class="k">with</span> <span class="n">output</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
+<a id="__codelineno-25-21" name="__codelineno-25-21" href="#__codelineno-25-21"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Result saved at: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-25-22" name="__codelineno-25-22" href="#__codelineno-25-22"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+<a id="__codelineno-25-23" name="__codelineno-25-23" href="#__codelineno-25-23"></a>
+<a id="__codelineno-25-24" name="__codelineno-25-24" href="#__codelineno-25-24"></a><span class="c1"># Or keep the file at a specific path</span>
+<a id="__codelineno-25-25" name="__codelineno-25-25" href="#__codelineno-25-25"></a><span class="n">path</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">(</span><span class="s2">"/tmp/result.jpg"</span><span class="p">)</span>
+<a id="__codelineno-25-26" name="__codelineno-25-26" href="#__codelineno-25-26"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Result kept at: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
@@ -2978,10 +3200,10 @@ the source file extension if one can be inferred:</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
         <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
       

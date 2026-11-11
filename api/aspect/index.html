@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -33,10 +33,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -196,7 +196,7 @@
     ivcap-client-sdk-python
     <ul class="md-source__facts">
       <li class="md-source__fact md-source__fact--version">
-        v0.47.19
+        v0.47.23
       </li>
     </ul>
   </div>
@@ -422,7 +422,7 @@
     ivcap-client-sdk-python
     <ul class="md-source__facts">
       <li class="md-source__fact md-source__fact--version">
-        v0.47.19
+        v0.47.23
       </li>
     </ul>
   </div>
@@ -1944,16 +1944,16 @@ Datafabric. Aspects are the building blocks of IVCAP's knowledge graph.</p>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Add an aspect</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">aspect</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">add_aspect</span><span class="p">(</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">entity</span><span class="o">=</span><span class="s2">"urn:ivcap:artifact:&lt;uuid&gt;"</span><span class="p">,</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">aspect</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;urn:my-project:schema:annotation.1&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;coral&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="mf">0.97</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="s2">"$schema"</span><span class="p">:</span> <span class="s2">"urn:my-project:schema:annotation.1"</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        <span class="s2">"label"</span><span class="p">:</span> <span class="s2">"coral"</span><span class="p">,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        <span class="s2">"confidence"</span><span class="p">:</span> <span class="mf">0.97</span><span class="p">,</span>
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="p">},</span>
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">)</span>
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="c1"># List aspects for an entity</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s2">&quot;urn:ivcap:artifact:&lt;uuid&gt;&quot;</span><span class="p">):</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_aspects</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s2">"urn:ivcap:artifact:&lt;uuid&gt;"</span><span class="p">):</span>
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">schema</span><span class="p">,</span> <span class="n">aspect</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">aspect</span><span class="p">)</span>   <span class="c1"># JSON content</span>
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
@@ -1994,171 +1994,171 @@ stored at a particular IVCAP deployment</p>
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>ivcap_client/aspect.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-33"> 33</a></span>
-<span class="normal"><a href="#__codelineno-0-34"> 34</a></span>
-<span class="normal"><a href="#__codelineno-0-35"> 35</a></span>
-<span class="normal"><a href="#__codelineno-0-36"> 36</a></span>
-<span class="normal"><a href="#__codelineno-0-37"> 37</a></span>
-<span class="normal"><a href="#__codelineno-0-38"> 38</a></span>
-<span class="normal"><a href="#__codelineno-0-39"> 39</a></span>
-<span class="normal"><a href="#__codelineno-0-40"> 40</a></span>
-<span class="normal"><a href="#__codelineno-0-41"> 41</a></span>
-<span class="normal"><a href="#__codelineno-0-42"> 42</a></span>
-<span class="normal"><a href="#__codelineno-0-43"> 43</a></span>
-<span class="normal"><a href="#__codelineno-0-44"> 44</a></span>
-<span class="normal"><a href="#__codelineno-0-45"> 45</a></span>
-<span class="normal"><a href="#__codelineno-0-46"> 46</a></span>
-<span class="normal"><a href="#__codelineno-0-47"> 47</a></span>
-<span class="normal"><a href="#__codelineno-0-48"> 48</a></span>
-<span class="normal"><a href="#__codelineno-0-49"> 49</a></span>
-<span class="normal"><a href="#__codelineno-0-50"> 50</a></span>
-<span class="normal"><a href="#__codelineno-0-51"> 51</a></span>
-<span class="normal"><a href="#__codelineno-0-52"> 52</a></span>
-<span class="normal"><a href="#__codelineno-0-53"> 53</a></span>
-<span class="normal"><a href="#__codelineno-0-54"> 54</a></span>
-<span class="normal"><a href="#__codelineno-0-55"> 55</a></span>
-<span class="normal"><a href="#__codelineno-0-56"> 56</a></span>
-<span class="normal"><a href="#__codelineno-0-57"> 57</a></span>
-<span class="normal"><a href="#__codelineno-0-58"> 58</a></span>
-<span class="normal"><a href="#__codelineno-0-59"> 59</a></span>
-<span class="normal"><a href="#__codelineno-0-60"> 60</a></span>
-<span class="normal"><a href="#__codelineno-0-61"> 61</a></span>
-<span class="normal"><a href="#__codelineno-0-62"> 62</a></span>
-<span class="normal"><a href="#__codelineno-0-63"> 63</a></span>
-<span class="normal"><a href="#__codelineno-0-64"> 64</a></span>
-<span class="normal"><a href="#__codelineno-0-65"> 65</a></span>
-<span class="normal"><a href="#__codelineno-0-66"> 66</a></span>
-<span class="normal"><a href="#__codelineno-0-67"> 67</a></span>
-<span class="normal"><a href="#__codelineno-0-68"> 68</a></span>
-<span class="normal"><a href="#__codelineno-0-69"> 69</a></span>
-<span class="normal"><a href="#__codelineno-0-70"> 70</a></span>
-<span class="normal"><a href="#__codelineno-0-71"> 71</a></span>
-<span class="normal"><a href="#__codelineno-0-72"> 72</a></span>
-<span class="normal"><a href="#__codelineno-0-73"> 73</a></span>
-<span class="normal"><a href="#__codelineno-0-74"> 74</a></span>
-<span class="normal"><a href="#__codelineno-0-75"> 75</a></span>
-<span class="normal"><a href="#__codelineno-0-76"> 76</a></span>
-<span class="normal"><a href="#__codelineno-0-77"> 77</a></span>
-<span class="normal"><a href="#__codelineno-0-78"> 78</a></span>
-<span class="normal"><a href="#__codelineno-0-79"> 79</a></span>
-<span class="normal"><a href="#__codelineno-0-80"> 80</a></span>
-<span class="normal"><a href="#__codelineno-0-81"> 81</a></span>
-<span class="normal"><a href="#__codelineno-0-82"> 82</a></span>
-<span class="normal"><a href="#__codelineno-0-83"> 83</a></span>
-<span class="normal"><a href="#__codelineno-0-84"> 84</a></span>
-<span class="normal"><a href="#__codelineno-0-85"> 85</a></span>
-<span class="normal"><a href="#__codelineno-0-86"> 86</a></span>
-<span class="normal"><a href="#__codelineno-0-87"> 87</a></span>
-<span class="normal"><a href="#__codelineno-0-88"> 88</a></span>
-<span class="normal"><a href="#__codelineno-0-89"> 89</a></span>
-<span class="normal"><a href="#__codelineno-0-90"> 90</a></span>
-<span class="normal"><a href="#__codelineno-0-91"> 91</a></span>
-<span class="normal"><a href="#__codelineno-0-92"> 92</a></span>
-<span class="normal"><a href="#__codelineno-0-93"> 93</a></span>
-<span class="normal"><a href="#__codelineno-0-94"> 94</a></span>
-<span class="normal"><a href="#__codelineno-0-95"> 95</a></span>
-<span class="normal"><a href="#__codelineno-0-96"> 96</a></span>
-<span class="normal"><a href="#__codelineno-0-97"> 97</a></span>
-<span class="normal"><a href="#__codelineno-0-98"> 98</a></span>
-<span class="normal"><a href="#__codelineno-0-99"> 99</a></span>
-<span class="normal"><a href="#__codelineno-0-100">100</a></span>
-<span class="normal"><a href="#__codelineno-0-101">101</a></span>
-<span class="normal"><a href="#__codelineno-0-102">102</a></span>
-<span class="normal"><a href="#__codelineno-0-103">103</a></span>
-<span class="normal"><a href="#__codelineno-0-104">104</a></span>
-<span class="normal"><a href="#__codelineno-0-105">105</a></span>
-<span class="normal"><a href="#__codelineno-0-106">106</a></span>
-<span class="normal"><a href="#__codelineno-0-107">107</a></span>
-<span class="normal"><a href="#__codelineno-0-108">108</a></span>
-<span class="normal"><a href="#__codelineno-0-109">109</a></span>
-<span class="normal"><a href="#__codelineno-0-110">110</a></span>
-<span class="normal"><a href="#__codelineno-0-111">111</a></span>
-<span class="normal"><a href="#__codelineno-0-112">112</a></span>
-<span class="normal"><a href="#__codelineno-0-113">113</a></span>
-<span class="normal"><a href="#__codelineno-0-114">114</a></span>
-<span class="normal"><a href="#__codelineno-0-115">115</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="nd">@dataclass</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="k">class</span><span class="w"> </span><span class="nc">Aspect</span><span class="p">:</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This class represents a aspect record</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="sd">    stored at a particular IVCAP deployment&quot;&quot;&quot;</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a>
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
-<a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="n">entity</span><span class="p">:</span> <span class="nb">str</span>
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a>    <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span>
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a>
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a>    <span class="c1"># content: Optional[any] = None</span>
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a>    <span class="n">content_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<a id="__codelineno-0-44" name="__codelineno-0-44"></a>
-<a id="__codelineno-0-45" name="__codelineno-0-45"></a>    <span class="n">valid_from</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<a id="__codelineno-0-46" name="__codelineno-0-46"></a>    <span class="n">valid_to</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<a id="__codelineno-0-47" name="__codelineno-0-47"></a>
-<a id="__codelineno-0-48" name="__codelineno-0-48"></a>    <span class="n">asserter</span><span class="p">:</span> <span class="n">URN</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<a id="__codelineno-0-49" name="__codelineno-0-49"></a>    <span class="n">retracter</span><span class="p">:</span> <span class="n">URN</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<a id="__codelineno-0-50" name="__codelineno-0-50"></a>
-<a id="__codelineno-0-51" name="__codelineno-0-51"></a>    <span class="nd">@classmethod</span>
-<a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_from_list_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">AspectListItemRT</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">):</span>
-<a id="__codelineno-0-53" name="__codelineno-0-53"></a>        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-<a id="__codelineno-0-54" name="__codelineno-0-54"></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">ivcap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<a id="__codelineno-0-55" name="__codelineno-0-55"></a>
-<a id="__codelineno-0-56" name="__codelineno-0-56"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<a id="__codelineno-0-57" name="__codelineno-0-57"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">ivcap</span><span class="p">:</span>
-<a id="__codelineno-0-58" name="__codelineno-0-58"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;missing &#39;ivcap&#39; argument&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-59" name="__codelineno-0-59"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span> <span class="o">=</span> <span class="n">ivcap</span>
-<a id="__codelineno-0-60" name="__codelineno-0-60"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<a id="__codelineno-0-61" name="__codelineno-0-61"></a>
-<a id="__codelineno-0-62" name="__codelineno-0-62"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__update__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<a id="__codelineno-0-63" name="__codelineno-0-63"></a>        <span class="n">p</span> <span class="o">=</span> <span class="p">[</span>
-<a id="__codelineno-0-64" name="__codelineno-0-64"></a>            <span class="s2">&quot;id&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-65" name="__codelineno-0-65"></a>            <span class="s2">&quot;entity&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-66" name="__codelineno-0-66"></a>            <span class="s2">&quot;schema&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-67" name="__codelineno-0-67"></a>            <span class="s2">&quot;content-type&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-68" name="__codelineno-0-68"></a>            <span class="s2">&quot;valid-from&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-69" name="__codelineno-0-69"></a>            <span class="s2">&quot;valid-to&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-70" name="__codelineno-0-70"></a>            <span class="s2">&quot;asserter&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-71" name="__codelineno-0-71"></a>            <span class="s2">&quot;retracter&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-72" name="__codelineno-0-72"></a>        <span class="p">]</span>
-<a id="__codelineno-0-73" name="__codelineno-0-73"></a>        <span class="n">hp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
-<a id="__codelineno-0-74" name="__codelineno-0-74"></a>        <span class="n">_set_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">hp</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
-<a id="__codelineno-0-75" name="__codelineno-0-75"></a>
-<a id="__codelineno-0-76" name="__codelineno-0-76"></a>        <span class="n">c</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-77" name="__codelineno-0-77"></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-<a id="__codelineno-0-78" name="__codelineno-0-78"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="n">c</span>
-<a id="__codelineno-0-79" name="__codelineno-0-79"></a>        <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-80" name="__codelineno-0-80"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="kc">None</span>
-<a id="__codelineno-0-81" name="__codelineno-0-81"></a>
-<a id="__codelineno-0-82" name="__codelineno-0-82"></a>    <span class="nd">@property</span>
-<a id="__codelineno-0-83" name="__codelineno-0-83"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">urn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<a id="__codelineno-0-84" name="__codelineno-0-84"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
-<a id="__codelineno-0-85" name="__codelineno-0-85"></a>
-<a id="__codelineno-0-86" name="__codelineno-0-86"></a>    <span class="nd">@property</span>
-<a id="__codelineno-0-87" name="__codelineno-0-87"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<a id="__codelineno-0-88" name="__codelineno-0-88"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-89" name="__codelineno-0-89"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-<a id="__codelineno-0-90" name="__codelineno-0-90"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span>
-<a id="__codelineno-0-91" name="__codelineno-0-91"></a>
-<a id="__codelineno-0-92" name="__codelineno-0-92"></a>    <span class="nd">@property</span>
-<a id="__codelineno-0-93" name="__codelineno-0-93"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<a id="__codelineno-0-94" name="__codelineno-0-94"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span>
-<a id="__codelineno-0-95" name="__codelineno-0-95"></a>
-<a id="__codelineno-0-96" name="__codelineno-0-96"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Aspect</span><span class="p">:</span>
-<a id="__codelineno-0-97" name="__codelineno-0-97"></a>        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_read</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
-<a id="__codelineno-0-98" name="__codelineno-0-98"></a>        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
-<a id="__codelineno-0-99" name="__codelineno-0-99"></a>            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;aspect&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-<a id="__codelineno-0-100" name="__codelineno-0-100"></a>        <span class="n">res</span><span class="p">:</span> <span class="n">AspectRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
-<a id="__codelineno-0-101" name="__codelineno-0-101"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">res</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
-<a id="__codelineno-0-102" name="__codelineno-0-102"></a>        <span class="k">return</span> <span class="bp">self</span>
-<a id="__codelineno-0-103" name="__codelineno-0-103"></a>
-<a id="__codelineno-0-104" name="__codelineno-0-104"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">retract</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Aspect</span><span class="p">:</span>
-<a id="__codelineno-0-105" name="__codelineno-0-105"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Retract this aspect&quot;&quot;&quot;</span>
-<a id="__codelineno-0-106" name="__codelineno-0-106"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_to</span><span class="p">:</span>
-<a id="__codelineno-0-107" name="__codelineno-0-107"></a>            <span class="c1"># already retracted</span>
-<a id="__codelineno-0-108" name="__codelineno-0-108"></a>            <span class="k">return</span> <span class="bp">self</span>
-<a id="__codelineno-0-109" name="__codelineno-0-109"></a>        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_retract</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
-<a id="__codelineno-0-110" name="__codelineno-0-110"></a>        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
-<a id="__codelineno-0-111" name="__codelineno-0-111"></a>            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;aspect&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-<a id="__codelineno-0-112" name="__codelineno-0-112"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-<a id="__codelineno-0-113" name="__codelineno-0-113"></a>
-<a id="__codelineno-0-114" name="__codelineno-0-114"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<a id="__codelineno-0-115" name="__codelineno-0-115"></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Aspect id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">, entity=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="si">}</span><span class="s2"> schema=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-34"> 34</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-35"> 35</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-36"> 36</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-37"> 37</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-38"> 38</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-39"> 39</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-40"> 40</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-41"> 41</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-42"> 42</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-43"> 43</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-44"> 44</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-45"> 45</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-46"> 46</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-47"> 47</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-48"> 48</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-49"> 49</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-50"> 50</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-51"> 51</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-52"> 52</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-53"> 53</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-54"> 54</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-55"> 55</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-56"> 56</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-57"> 57</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-58"> 58</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-59"> 59</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-60"> 60</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-61"> 61</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-62"> 62</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-63"> 63</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-64"> 64</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-65"> 65</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-66"> 66</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-67"> 67</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-68"> 68</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-69"> 69</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-70"> 70</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-71"> 71</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-72"> 72</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-73"> 73</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-74"> 74</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-75"> 75</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-76"> 76</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-77"> 77</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-78"> 78</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-79"> 79</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-80"> 80</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-81"> 81</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-82"> 82</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-83"> 83</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-84"> 84</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-85"> 85</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-86"> 86</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-87"> 87</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-88"> 88</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-89"> 89</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-90"> 90</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-91"> 91</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-92"> 92</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-93"> 93</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-94"> 94</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-95"> 95</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-96"> 96</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-97"> 97</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-98"> 98</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-99"> 99</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-100">100</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-101">101</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-102">102</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-103">103</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-104">104</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-105">105</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-106">106</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-107">107</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-108">108</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-109">109</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-110">110</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-111">111</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-112">112</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-113">113</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-114">114</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-115">115</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect--source--__codelineno-0-116">116</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="ivcap_client.aspect.Aspect--source--__codelineno-0-34" name="ivcap_client.aspect.Aspect--source--__codelineno-0-34"></a><span class="nd">@dataclass</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-35" name="ivcap_client.aspect.Aspect--source--__codelineno-0-35"></a><span class="k">class</span><span class="w"> </span><span class="nc">Aspect</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-36" name="ivcap_client.aspect.Aspect--source--__codelineno-0-36"></a><span class="w">    </span><span class="sd">"""This class represents a aspect record</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-37" name="ivcap_client.aspect.Aspect--source--__codelineno-0-37"></a><span class="sd">    stored at a particular IVCAP deployment"""</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-38" name="ivcap_client.aspect.Aspect--source--__codelineno-0-38"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-39" name="ivcap_client.aspect.Aspect--source--__codelineno-0-39"></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-40" name="ivcap_client.aspect.Aspect--source--__codelineno-0-40"></a>    <span class="n">entity</span><span class="p">:</span> <span class="nb">str</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-41" name="ivcap_client.aspect.Aspect--source--__codelineno-0-41"></a>    <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-42" name="ivcap_client.aspect.Aspect--source--__codelineno-0-42"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-43" name="ivcap_client.aspect.Aspect--source--__codelineno-0-43"></a>    <span class="c1"># content: Optional[any] = None</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-44" name="ivcap_client.aspect.Aspect--source--__codelineno-0-44"></a>    <span class="n">content_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-45" name="ivcap_client.aspect.Aspect--source--__codelineno-0-45"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-46" name="ivcap_client.aspect.Aspect--source--__codelineno-0-46"></a>    <span class="n">valid_from</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-47" name="ivcap_client.aspect.Aspect--source--__codelineno-0-47"></a>    <span class="n">valid_to</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-48" name="ivcap_client.aspect.Aspect--source--__codelineno-0-48"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-49" name="ivcap_client.aspect.Aspect--source--__codelineno-0-49"></a>    <span class="n">asserter</span><span class="p">:</span> <span class="n">URN</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-50" name="ivcap_client.aspect.Aspect--source--__codelineno-0-50"></a>    <span class="n">retracter</span><span class="p">:</span> <span class="n">URN</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-51" name="ivcap_client.aspect.Aspect--source--__codelineno-0-51"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-52" name="ivcap_client.aspect.Aspect--source--__codelineno-0-52"></a>    <span class="nd">@classmethod</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-53" name="ivcap_client.aspect.Aspect--source--__codelineno-0-53"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_from_list_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">AspectListItemRT</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">):</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-54" name="ivcap_client.aspect.Aspect--source--__codelineno-0-54"></a>        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-55" name="ivcap_client.aspect.Aspect--source--__codelineno-0-55"></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">ivcap</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-56" name="ivcap_client.aspect.Aspect--source--__codelineno-0-56"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-57" name="ivcap_client.aspect.Aspect--source--__codelineno-0-57"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ivcap</span><span class="p">:</span> <span class="n">IVCAP</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-58" name="ivcap_client.aspect.Aspect--source--__codelineno-0-58"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">ivcap</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-59" name="ivcap_client.aspect.Aspect--source--__codelineno-0-59"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"missing 'ivcap' argument"</span><span class="p">)</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-60" name="ivcap_client.aspect.Aspect--source--__codelineno-0-60"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span> <span class="o">=</span> <span class="n">ivcap</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-61" name="ivcap_client.aspect.Aspect--source--__codelineno-0-61"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-62" name="ivcap_client.aspect.Aspect--source--__codelineno-0-62"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-63" name="ivcap_client.aspect.Aspect--source--__codelineno-0-63"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__update__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-64" name="ivcap_client.aspect.Aspect--source--__codelineno-0-64"></a>        <span class="n">p</span> <span class="o">=</span> <span class="p">[</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-65" name="ivcap_client.aspect.Aspect--source--__codelineno-0-65"></a>            <span class="s2">"id"</span><span class="p">,</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-66" name="ivcap_client.aspect.Aspect--source--__codelineno-0-66"></a>            <span class="s2">"entity"</span><span class="p">,</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-67" name="ivcap_client.aspect.Aspect--source--__codelineno-0-67"></a>            <span class="s2">"schema"</span><span class="p">,</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-68" name="ivcap_client.aspect.Aspect--source--__codelineno-0-68"></a>            <span class="s2">"content-type"</span><span class="p">,</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-69" name="ivcap_client.aspect.Aspect--source--__codelineno-0-69"></a>            <span class="s2">"valid-from"</span><span class="p">,</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-70" name="ivcap_client.aspect.Aspect--source--__codelineno-0-70"></a>            <span class="s2">"valid-to"</span><span class="p">,</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-71" name="ivcap_client.aspect.Aspect--source--__codelineno-0-71"></a>            <span class="s2">"asserter"</span><span class="p">,</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-72" name="ivcap_client.aspect.Aspect--source--__codelineno-0-72"></a>            <span class="s2">"retracter"</span><span class="p">,</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-73" name="ivcap_client.aspect.Aspect--source--__codelineno-0-73"></a>        <span class="p">]</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-74" name="ivcap_client.aspect.Aspect--source--__codelineno-0-74"></a>        <span class="n">hp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"content"</span><span class="p">]</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-75" name="ivcap_client.aspect.Aspect--source--__codelineno-0-75"></a>        <span class="n">_set_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">hp</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-76" name="ivcap_client.aspect.Aspect--source--__codelineno-0-76"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-77" name="ivcap_client.aspect.Aspect--source--__codelineno-0-77"></a>        <span class="n">c</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"content"</span><span class="p">)</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-78" name="ivcap_client.aspect.Aspect--source--__codelineno-0-78"></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-79" name="ivcap_client.aspect.Aspect--source--__codelineno-0-79"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="n">c</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-80" name="ivcap_client.aspect.Aspect--source--__codelineno-0-80"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-81" name="ivcap_client.aspect.Aspect--source--__codelineno-0-81"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-82" name="ivcap_client.aspect.Aspect--source--__codelineno-0-82"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-83" name="ivcap_client.aspect.Aspect--source--__codelineno-0-83"></a>    <span class="nd">@property</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-84" name="ivcap_client.aspect.Aspect--source--__codelineno-0-84"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">urn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-85" name="ivcap_client.aspect.Aspect--source--__codelineno-0-85"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-86" name="ivcap_client.aspect.Aspect--source--__codelineno-0-86"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-87" name="ivcap_client.aspect.Aspect--source--__codelineno-0-87"></a>    <span class="nd">@property</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-88" name="ivcap_client.aspect.Aspect--source--__codelineno-0-88"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-89" name="ivcap_client.aspect.Aspect--source--__codelineno-0-89"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-90" name="ivcap_client.aspect.Aspect--source--__codelineno-0-90"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-91" name="ivcap_client.aspect.Aspect--source--__codelineno-0-91"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-92" name="ivcap_client.aspect.Aspect--source--__codelineno-0-92"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-93" name="ivcap_client.aspect.Aspect--source--__codelineno-0-93"></a>    <span class="nd">@property</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-94" name="ivcap_client.aspect.Aspect--source--__codelineno-0-94"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-95" name="ivcap_client.aspect.Aspect--source--__codelineno-0-95"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-96" name="ivcap_client.aspect.Aspect--source--__codelineno-0-96"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-97" name="ivcap_client.aspect.Aspect--source--__codelineno-0-97"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Aspect</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-98" name="ivcap_client.aspect.Aspect--source--__codelineno-0-98"></a>        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_read</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-99" name="ivcap_client.aspect.Aspect--source--__codelineno-0-99"></a>        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-100" name="ivcap_client.aspect.Aspect--source--__codelineno-0-100"></a>            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">"aspect"</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-101" name="ivcap_client.aspect.Aspect--source--__codelineno-0-101"></a>        <span class="n">res</span><span class="p">:</span> <span class="n">AspectRT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">parsed</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-102" name="ivcap_client.aspect.Aspect--source--__codelineno-0-102"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">__update__</span><span class="p">(</span><span class="o">**</span><span class="n">res</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-103" name="ivcap_client.aspect.Aspect--source--__codelineno-0-103"></a>        <span class="k">return</span> <span class="bp">self</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-104" name="ivcap_client.aspect.Aspect--source--__codelineno-0-104"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-105" name="ivcap_client.aspect.Aspect--source--__codelineno-0-105"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">retract</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Aspect</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-106" name="ivcap_client.aspect.Aspect--source--__codelineno-0-106"></a><span class="w">        </span><span class="sd">"""Retract this aspect"""</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-107" name="ivcap_client.aspect.Aspect--source--__codelineno-0-107"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_to</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-108" name="ivcap_client.aspect.Aspect--source--__codelineno-0-108"></a>            <span class="c1"># already retracted</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-109" name="ivcap_client.aspect.Aspect--source--__codelineno-0-109"></a>            <span class="k">return</span> <span class="bp">self</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-110" name="ivcap_client.aspect.Aspect--source--__codelineno-0-110"></a>        <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_retract</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-111" name="ivcap_client.aspect.Aspect--source--__codelineno-0-111"></a>        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-112" name="ivcap_client.aspect.Aspect--source--__codelineno-0-112"></a>            <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">"aspect"</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-113" name="ivcap_client.aspect.Aspect--source--__codelineno-0-113"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-114" name="ivcap_client.aspect.Aspect--source--__codelineno-0-114"></a>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-115" name="ivcap_client.aspect.Aspect--source--__codelineno-0-115"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="ivcap_client.aspect.Aspect--source--__codelineno-0-116" name="ivcap_client.aspect.Aspect--source--__codelineno-0-116"></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">"&lt;Aspect id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">, entity=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="si">}</span><span class="s2"> schema=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&gt;"</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2191,23 +2191,23 @@ stored at a particular IVCAP deployment</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>ivcap_client/aspect.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-104">104</a></span>
-<span class="normal"><a href="#__codelineno-0-105">105</a></span>
-<span class="normal"><a href="#__codelineno-0-106">106</a></span>
-<span class="normal"><a href="#__codelineno-0-107">107</a></span>
-<span class="normal"><a href="#__codelineno-0-108">108</a></span>
-<span class="normal"><a href="#__codelineno-0-109">109</a></span>
-<span class="normal"><a href="#__codelineno-0-110">110</a></span>
-<span class="normal"><a href="#__codelineno-0-111">111</a></span>
-<span class="normal"><a href="#__codelineno-0-112">112</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-104" name="__codelineno-0-104"></a><span class="k">def</span><span class="w"> </span><span class="nf">retract</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Aspect</span><span class="p">:</span>
-<a id="__codelineno-0-105" name="__codelineno-0-105"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Retract this aspect&quot;&quot;&quot;</span>
-<a id="__codelineno-0-106" name="__codelineno-0-106"></a>    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_to</span><span class="p">:</span>
-<a id="__codelineno-0-107" name="__codelineno-0-107"></a>        <span class="c1"># already retracted</span>
-<a id="__codelineno-0-108" name="__codelineno-0-108"></a>        <span class="k">return</span> <span class="bp">self</span>
-<a id="__codelineno-0-109" name="__codelineno-0-109"></a>    <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_retract</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
-<a id="__codelineno-0-110" name="__codelineno-0-110"></a>    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
-<a id="__codelineno-0-111" name="__codelineno-0-111"></a>        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">&quot;aspect&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-<a id="__codelineno-0-112" name="__codelineno-0-112"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#ivcap_client.aspect.Aspect.retract--source--__codelineno-0-105">105</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect.retract--source--__codelineno-0-106">106</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect.retract--source--__codelineno-0-107">107</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect.retract--source--__codelineno-0-108">108</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect.retract--source--__codelineno-0-109">109</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect.retract--source--__codelineno-0-110">110</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect.retract--source--__codelineno-0-111">111</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect.retract--source--__codelineno-0-112">112</a></span>
+<span class="normal"><a href="#ivcap_client.aspect.Aspect.retract--source--__codelineno-0-113">113</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-105" name="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-105"></a><span class="k">def</span><span class="w"> </span><span class="nf">retract</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Aspect</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-106" name="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-106"></a><span class="w">    </span><span class="sd">"""Retract this aspect"""</span>
+<a id="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-107" name="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-107"></a>    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_to</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-108" name="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-108"></a>        <span class="c1"># already retracted</span>
+<a id="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-109" name="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-109"></a>        <span class="k">return</span> <span class="bp">self</span>
+<a id="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-110" name="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-110"></a>    <span class="n">r</span> <span class="o">=</span> <span class="n">aspect_retract</span><span class="o">.</span><span class="n">sync_detailed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ivcap</span><span class="o">.</span><span class="n">_client</span><span class="p">)</span>
+<a id="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-111" name="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-111"></a>    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">300</span><span class="p">:</span>
+<a id="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-112" name="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-112"></a>        <span class="k">return</span> <span class="n">process_error</span><span class="p">(</span><span class="s2">"aspect"</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<a id="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-113" name="ivcap_client.aspect.Aspect.retract--source--__codelineno-0-113"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2312,10 +2312,10 @@ stored at a particular IVCAP deployment</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
         <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
       

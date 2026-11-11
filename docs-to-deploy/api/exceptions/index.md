@@ -7,12 +7,13 @@ All exceptions raised by the IVCAP Client SDK. Import them from
 
 ```python
 from ivcap_client.exception import (
-    IvcapError,               # base class
-    IvcapApiError,            # HTTP errors (.status_code, .operation)
-    NotAuthorizedException,   # 401/403
-    ResourceNotFound,         # 404
-    AmbiguousRequest,         # multiple matches for get_service_by_name
-    MissingParameterValue,    # missing required parameter
+    IvcapError,                       # base class
+    IvcapApiError,                    # HTTP errors (.status_code, .operation)
+    NotAuthorizedException,           # 401/403
+    ResourceNotFound,                 # 404
+    AmbiguousRequest,                 # multiple matches for get_service_by_name
+    MissingParameterValue,            # missing required parameter
+    ArtifactTooLargeForDataUrlError,  # Artifact.as_data_url() exceeded max_length
 )
 ```
 
@@ -21,9 +22,10 @@ from ivcap_client.exception import (
 ```
 Exception
 ├── IvcapError
-│   └── IvcapApiError
-│       ├── NotAuthorizedException
-│       └── HttpException            (backward-compat alias)
+│   ├── IvcapApiError
+│   │   ├── NotAuthorizedException
+│   │   └── HttpException            (backward-compat alias)
+│   └── ArtifactTooLargeForDataUrlError
 ├── ResourceNotFound
 ├── AmbiguousRequest
 └── MissingParameterValue

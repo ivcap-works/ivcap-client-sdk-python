@@ -65,6 +65,43 @@ artifact = ivcap.upload_artifact(
 | `retry_delay` | `int` | Seconds between retries |
 | `force_upload` | `bool` | Re-upload even if file was previously uploaded |
 
+### Upload a dynamically-built tar.gz archive (streaming)
+
+When you need to package many local files (or in-memory byte buffers) into a single
+archive artifact, `upload_tar_artifact()` builds a gzip-compressed tar archive **on the
+fly** and streams it directly into a chunked, resumable upload — the full archive is
+**never** written to disk or held in memory. This matters when the combined archive
+could be large enough to crash a memory- or disk-constrained process (e.g. a small
+serverless container).
+
+```python
+from ivcap_client.artifact import TarMember
+
+members = [
+    TarMember.from_file("/data/image1.jpg"),
+    TarMember.from_file("/data/image2.jpg", arcname="renamed.jpg"),
+    TarMember.from_bytes(b'{"k": "v"}', arcname="metadata.json"),
+]
+artifact = ivcap.upload_tar_artifact(members, name="dataset.tar.gz")
+print(artifact.id)
+```
+
+Internally, a background thread streams `tarfile`'s `w|gz` output into a small bounded
+queue (providing backpressure), while the calling thread drains that queue and `PATCH`es
+upload-sized chunks to a TUS endpoint created with the *creation-defer-length* extension
+(the final compressed size isn't known upfront). Failed chunks are retried with
+exponential backoff, re-synchronising via `HEAD` to resume from the server's
+authoritative offset rather than assuming a chunk fully succeeded or failed.
+
+Tunable parameters:
+
+| Parameter | Default | Description |
+|---|---|---|
+| `chunk_size` | 4 MiB | Upload chunk size in bytes |
+| `queue_maxsize` | 4 | Max buffered chunks between archive-building and upload threads |
+| `retries` | 3 | Retry attempts per chunk on failure |
+| `retry_delay` | 2.0s | Base delay between retries (doubles each attempt) |
+
 ## Automatic Deduplication
 
 The SDK tracks uploads using a hidden `.ivcap-<filename>.txt` sidecar file containing
@@ -100,6 +137,67 @@ artifact = ivcap.get_artifact("urn:ivcap:artifact:<uuid>")
 print(artifact.name, artifact.size, artifact.mime_type)
 ```
 
+### Getting an Artifact from a Data URL
+
+`get_artifact()` also accepts an [RFC 2397](https://www.rfc-editor.org/rfc/rfc2397)
+`data:` URL — the standard way to embed typed, self-describing data inline in a string
+(`data:[<mediatype>][;base64],<data>`). This is useful when a service result or a
+third-party API embeds small binary content directly rather than returning a separate
+artifact URN.
+
+```python
+artifact = ivcap.get_artifact("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...")
+print(artifact.mime_type, artifact.size)
+# "image/png" 1234
+
+with artifact.as_local_file() as path:
+    data = path.read_bytes()
+```
+
+No network call or filesystem access is performed — the payload is decoded in memory
+on construction into a `DataUrlArtifact`, which supports the same `open()`,
+`as_stream()`, `as_local_file()`, and `untar()` methods as a regular `Artifact`, so
+existing code that works with downloaded artifacts works unchanged. This works both
+for the platform `IVCAP` class and for `LocalIVCAP`.
+
+For consistency with other IVCAP URN schemes (e.g. `urn:file://...`), the
+`urn:data:...` form is also accepted and behaves identically:
+
+```python
+artifact = ivcap.get_artifact("urn:data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...")
+```
+
+### Converting an Artifact to a Data URL
+
+The reverse operation — turning a downloaded artifact's content *back* into a
+`data:` URL — is available via `as_data_url()` on any artifact type (`Artifact`,
+`LocalFileArtifact`, `DataUrlArtifact`). This is handy for embedding small artifacts
+inline in a JSON payload or a service request instead of passing an artifact URN.
+
+```python
+artifact = ivcap.get_artifact("urn:ivcap:artifact:<uuid>")
+url = artifact.as_data_url()
+# "data:image/png;base64,iVBORw0KGgo..."
+```
+
+Because base64 encoding adds roughly 33% size overhead, `as_data_url()` only makes
+sense for small artifacts. To guard against accidentally producing huge strings, it
+takes a `max_length` argument (default `512`) and raises
+`ivcap_client.exception.ArtifactTooLargeForDataUrlError` if the encoded URL would be
+longer:
+
+```python
+from ivcap_client.exception import ArtifactTooLargeForDataUrlError
+
+try:
+    url = artifact.as_data_url(max_length=2048)
+except ArtifactTooLargeForDataUrlError as e:
+    print(f"Artifact too large to inline: {e}")
+    # Fall back to downloading instead
+    with artifact.as_local_file() as path:
+        data = path.read_bytes()
+```
+
 ## Downloading Artifact Content
 
 Three methods are available, each suited to a different use case:
@@ -131,6 +229,34 @@ path = artifact.as_local_file("/tmp/output.jpg")
 print(f"Saved to: {path}")
 ```
 
+Both `chunk_size` and `progress_callback` are **keyword-only** arguments:
+
+| Argument | Type | Default | Description |
+|---|---|---|---|
+| `path` | `Path \| None` | `None` | Destination path; `None` = temp file (auto-deleted) |
+| `chunk_size` | `int` | `-1` | Bytes per chunk; `-1` = auto-select based on artifact size |
+| `progress_callback` | `Callable[[int, int \| None], None] \| None` | `None` | Called after each chunk with `(bytes_downloaded, total_bytes_or_None)` |
+
+**Progress reporting** with `progress_callback`:
+
+```python
+def on_progress(downloaded: int, total: int | None) -> None:
+    if total:
+        pct = downloaded / total * 100
+        print(f"\r{pct:.1f}%  ({downloaded}/{total} bytes)", end="", flush=True)
+    else:
+        print(f"\r{downloaded} bytes downloaded", end="", flush=True)
+
+path = artifact.as_local_file("/tmp/output.jpg", progress_callback=on_progress)
+print()  # newline after progress output
+```
+
+The callback receives:
+
+- `bytes_downloaded` — cumulative bytes written to disk so far.
+- `total_bytes` — the artifact's known size in bytes, or `None` if the size
+  is not available (e.g. the artifact has not been fully indexed yet).
+
 > **`LocalFileArtifact` note:** When running in local mode, `as_local_file()`
 > returns a :class:`~ivcap_client.artifact.SafePath` pointing to the
 > pre-existing local file.  The file is **never deleted** on context exit,
@@ -149,21 +275,15 @@ with artifact.open() as f:
 
 ### Stream in chunks (advanced)
 
-Use `as_stream()` when you need low-level control: custom progress reporting,
-piping bytes into a third-party API, or incremental processing.
+Use `as_stream()` when you need low-level control: piping bytes into a
+third-party API or incremental processing.  For progress reporting, prefer the
+`progress_callback` argument on `as_local_file()`.
 
 ```python
-# Example: download with progress reporting
-total = 0
-with open("/tmp/output.jpg", "wb") as f:
-    for chunk in artifact.as_stream():
-        f.write(chunk)
-        total += len(chunk)
-print(f"Downloaded {total} bytes")
+# Example: stream bytes into an external API
+for chunk in artifact.as_stream():
+    external_api.send(chunk)
 ```
-
-For simply saving to disk, `as_local_file()` is more ergonomic than writing
-your own chunk loop.
 
 ## Listing Artifacts
 

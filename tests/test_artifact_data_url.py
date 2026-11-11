@@ -170,6 +170,15 @@ def test_data_url_artifact_as_local_file_overwrites_by_default(tmp_path):
     assert dest.read_bytes() == b"Hello, World!"
 
 
+def test_data_url_artifact_as_local_file_explicit_path_context_manager_keeps_file(tmp_path):
+    art = DataUrlArtifact("data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==")
+    dest = tmp_path / "keep.txt"
+    with art.as_local_file(dest) as path:
+        assert path.read_bytes() == b"Hello, World!"
+    assert dest.exists()
+    assert dest.read_bytes() == b"Hello, World!"
+
+
 def test_data_url_artifact_etag_is_stable_md5():
     art1 = DataUrlArtifact("data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==")
     art2 = DataUrlArtifact("data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==")

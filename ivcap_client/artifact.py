@@ -395,11 +395,11 @@ class Artifact:
             path = Path(path)
             if reuse_if_exists and path.exists():
                 if not verify_if_exists or path.stat().st_size == self.size:
-                    return path
+                    return KeepFilePath(path)
             path.parent.mkdir(parents=True, exist_ok=True)
             with open(path, "wb") as f:
                 _stream_to(f)
-            return path
+            return KeepFilePath(path)
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         with temp_file as f:
             _stream_to(f)
@@ -1036,11 +1036,11 @@ class DataUrlArtifact:
             path = Path(path)
             if reuse_if_exists and path.exists():
                 if not verify_if_exists or path.stat().st_size == self.size:
-                    return path
+                    return KeepFilePath(path)
             path.parent.mkdir(parents=True, exist_ok=True)
             with open(path, "wb") as f:
                 _stream_to(f)
-            return path
+            return KeepFilePath(path)
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         with temp_file as f:
             _stream_to(f)
@@ -2003,6 +2003,28 @@ class SafePath(_CONCRETE_PATH):
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         """No-op — local source files are never deleted on context exit."""
+
+
+class KeepFilePath(_CONCRETE_PATH):
+    """
+    A pathlib.Path subclass for a file the caller chose to keep.
+
+    Returned by :meth:`Artifact.as_local_file` and :meth:`DataUrlArtifact.as_local_file`
+    when an explicit ``path`` is given.  Supports the context manager protocol so that
+    ``with artifact.as_local_file(path=...) as p:`` works, but never deletes the file
+    on exit.
+    """
+
+    def __new__(cls, *pathsegments) -> Self:
+        # Path subclasses must implement __new__; delegate to the concrete path type.
+        return super().__new__(cls, *pathsegments)
+
+    def __enter__(self) -> Self:
+        """Return self for use in ``with`` statements."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """No-op — the file is kept after the ``with`` block."""
 
 
 class ProxyFile:

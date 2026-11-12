@@ -784,7 +784,12 @@ artifact = ivcap.get_artifact("urn:data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA
 
 ### Download artifact content
 
-Three methods are available, from most convenient to most low-level:
+Three methods are available, from most convenient to most low-level. Downloads
+resume automatically after a dropped connection (HTTP `Range`, with the ETag
+checked on every resumed response). Tune with the keyword-only `max_retries`
+(default 5) and `retry_delay` (default 1.0 s) arguments on `as_local_file()` and
+`as_stream()`. A returned local file is read-only: `open()` defaults to `"rb"`,
+and text reading must be requested, e.g. `open("r", encoding="utf-8")`.
 
 ```python
 # ── Recommended: download to a local file ────────────────────────────────────

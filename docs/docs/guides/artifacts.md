@@ -229,13 +229,29 @@ path = artifact.as_local_file("/tmp/output.jpg")
 print(f"Saved to: {path}")
 ```
 
-Both `chunk_size` and `progress_callback` are **keyword-only** arguments:
+The `chunk_size`, `progress_callback`, `max_retries` and `retry_delay` arguments are
+**keyword-only**:
 
 | Argument | Type | Default | Description |
 |---|---|---|---|
 | `path` | `Path \| None` | `None` | Destination path; `None` = temp file (auto-deleted) |
 | `chunk_size` | `int` | `-1` | Bytes per chunk; `-1` = auto-select based on artifact size |
 | `progress_callback` | `Callable[[int, int \| None], None] \| None` | `None` | Called after each chunk with `(bytes_downloaded, total_bytes_or_None)` |
+| `max_retries` | `int` | `5` | Consecutive reconnect attempts after a dropped connection; the counter resets whenever data arrives |
+| `retry_delay` | `float` | `1.0` | Base delay in seconds before a retry; doubles with each consecutive failure |
+
+**Resuming interrupted downloads.** Large downloads can be cut off by the server
+or the network. When that happens the SDK reconnects and asks only for the
+missing bytes, using an HTTP `Range` request, so it never restarts from zero and
+the caller sees one continuous stream. Each resumed response must carry the same
+ETag as the first one. If the server ignores `Range`, returns a different
+`Content-Range`, or the ETag changes, the download fails with an `IvcapError`
+rather than writing mixed content. The same retry options apply to `as_stream()`.
+
+The downloaded file is returned read-only. Its `open()` method reads bytes by
+default (`"rb"`). Text reading is available on request, for example
+`path.open("r", encoding="utf-8")` or `path.read_text(encoding="utf-8")`. Write
+modes (`"w"`, `"a"`, `"x"`, `"+"`) raise `ValueError`.
 
 **Progress reporting** with `progress_callback`:
 
@@ -284,6 +300,9 @@ third-party API or incremental processing.  For progress reporting, prefer the
 for chunk in artifact.as_stream():
     external_api.send(chunk)
 ```
+
+`as_stream()` accepts `max_retries` and `retry_delay` as keyword-only arguments
+and resumes a dropped connection in the same way as `as_local_file()`.
 
 ## Listing Artifacts
 

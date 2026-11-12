@@ -35,7 +35,11 @@ from ivcap_client.aspect import (  # noqa: F401 – re-exported for backward com
     Aspect,
     LocalAspect,
 )
-from ivcap_client.exception import ArtifactTooLargeForDataUrlError, IvcapApiError
+from ivcap_client.exception import (
+    ArtifactTooLargeForDataUrlError,
+    IvcapApiError,
+    IvcapError,
+)
 from ivcap_client.models.artifact_list_item import ArtifactListItem
 from ivcap_client.models.artifact_list_rt import ArtifactListRT
 from ivcap_client.models.artifact_status_rt import ArtifactStatusRT
@@ -251,7 +255,9 @@ class Artifact:
         # Fail fast without downloading if the known size already guarantees
         # the encoded URL will exceed max_length.
         if self.size and self.size > 0:
-            header_len = len(f"data:{self.mime_type or 'application/octet-stream'};base64,")
+            header_len = len(
+                f"data:{self.mime_type or 'application/octet-stream'};base64,"
+            )
             estimated_len = header_len + (-(-self.size * 4 // 3))  # ceil(size * 4/3)
             if estimated_len > max_length:
                 raise ArtifactTooLargeForDataUrlError(
@@ -265,7 +271,13 @@ class Artifact:
             content = f.read()
         return _build_data_url(content, self.mime_type, self.id, max_length)
 
-    def as_stream(self, chunk_size: int = -1) -> Iterator[bytes]:
+    def as_stream(
+        self,
+        chunk_size: int = -1,
+        *,
+        max_retries: int = 5,
+        retry_delay: float = 1.0,
+    ) -> Iterator[bytes]:
         """Stream the artifact content as a sequence of raw byte chunks.
 
         Uses an HTTP streaming GET so that only ``chunk_size`` bytes are buffered
@@ -285,9 +297,19 @@ class Artifact:
                 ``max(8 KiB, min(artifact_size / 10, 16 MiB))``.  The artifact
                 ``size`` attribute is used when available; if it is unknown the
                 fallback is 8 KiB.
+            max_retries (int): Consecutive reconnect attempts allowed after the
+                connection drops mid-transfer.  The counter resets whenever data
+                arrives.  Each retry sends ``Range: bytes=<offset>-`` and
+                ``If-Range`` with the ETag of the first response.
+            retry_delay (float): Base delay in seconds before a retry; it doubles
+                with each consecutive failure.
 
         Yields:
             bytes: The next chunk of raw artifact bytes.
+
+        Raises:
+            IvcapError: If the server ignores ``Range`` or resumes with a
+                different content range, or if the body grows past ``size``.
 
         Example::
 
@@ -301,10 +323,64 @@ class Artifact:
         """
         chunk_size = _resolve_chunk_size(chunk_size, self.size)
         client = self._ivcap._client.get_httpx_client()
-        with client.stream("GET", self._data_href) as response:
-            response.raise_for_status()
-            for chunk in response.iter_bytes(chunk_size=chunk_size):
-                yield chunk
+        offset = 0  # bytes already yielded to the caller
+        failures = 0  # consecutive failed connection attempts
+        etag: str | None = None  # validator of the first response
+        while True:
+            headers: dict[str, str] = {}
+            if offset > 0:
+                headers["Range"] = f"bytes={offset}-"
+            try:
+                with client.stream("GET", self._data_href, headers=headers) as response:
+                    if offset == 0:
+                        response.raise_for_status()
+                        etag = response.headers.get("etag")
+                        if not etag:
+                            logger.warning(
+                                "no ETag returned for %s; resume will not be validated",
+                                self.id,
+                            )
+                    elif response.status_code == 416:
+                        # Nothing left to read; the size check below decides if that is valid.
+                        if self.size and offset < self.size:
+                            raise IvcapError(
+                                f"server reports no data past byte {offset} of {self.id}"
+                            )
+                    else:
+                        _check_resume_response(response, offset, etag)
+                    for chunk in response.iter_bytes(chunk_size=chunk_size):
+                        offset += len(chunk)
+                        failures = 0
+                        yield chunk
+                if self.size and offset > self.size:
+                    raise IvcapError(
+                        f"artifact {self.id} returned {offset} bytes, expected {self.size}"
+                    )
+                if self.size and offset < self.size:
+                    raise httpx.RemoteProtocolError(
+                        f"incomplete body: received {offset} of {self.size} bytes"
+                    )
+                break
+            except (
+                httpx.RemoteProtocolError,
+                httpx.ReadError,
+                httpx.ReadTimeout,
+                httpx.ConnectError,
+            ) as e:
+                failures += 1
+                if failures > max_retries:
+                    raise
+                delay = retry_delay * 2 ** (failures - 1)
+                logger.warning(
+                    "download of %s interrupted at byte %d (%s); retry %d/%d in %.1fs",
+                    self.id,
+                    offset,
+                    e,
+                    failures,
+                    max_retries,
+                    delay,
+                )
+                time.sleep(delay)
 
     def as_local_file(
         self,
@@ -314,6 +390,8 @@ class Artifact:
         progress_callback: Callable[[int, int | None], None] | None = None,
         reuse_if_exists: bool = False,
         verify_if_exists: bool = True,
+        max_retries: int = 5,
+        retry_delay: float = 1.0,
     ) -> Path:
         """Download the artifact to a local file and return the path.
 
@@ -385,7 +463,9 @@ class Artifact:
 
         def _stream_to(f):
             downloaded = 0
-            for chunk in self.as_stream(chunk_size=chunk_size):
+            for chunk in self.as_stream(
+                chunk_size=chunk_size, max_retries=max_retries, retry_delay=retry_delay
+            ):
                 f.write(chunk)
                 if progress_callback is not None:
                     downloaded += len(chunk)
@@ -1185,6 +1265,31 @@ def _untar_from_tarfile(
     return dest
 
 
+def _check_resume_response(
+    response: httpx.Response, offset: int, etag: str | None
+) -> None:
+    """Validate a ``Range`` response before its body is appended to a partial download.
+
+    Only ``206 Partial Content`` is accepted, with a ``Content-Range`` starting at
+    *offset*. When *etag* (from the first response) is known, the resumed response
+    must carry the same ETag, otherwise the blob changed and the parts would mix.
+    """
+    if response.status_code != 206:
+        raise IvcapError(
+            f"server did not honour Range request at byte {offset} (HTTP {response.status_code})"
+        )
+    m = re.match(r"bytes (\d+)-(\d+)/", response.headers.get("content-range", ""))
+    if not m or int(m.group(1)) != offset:
+        raise IvcapError(
+            f"unexpected Content-Range {response.headers.get('content-range')!r} for offset {offset}"
+        )
+    resumed_etag = response.headers.get("etag")
+    if etag and resumed_etag != etag:
+        raise IvcapError(
+            f"ETag changed during download at byte {offset}: {etag!r} -> {resumed_etag!r}"
+        )
+
+
 def _resolve_chunk_size(chunk_size: int, artifact_size: int | None) -> int:
     """Return an effective chunk size for streaming downloads.
 
@@ -1285,9 +1390,7 @@ class TarMember:
 
     def __post_init__(self):
         if (self.file_path is None) == (self.data is None):
-            raise ValueError(
-                "TarMember requires exactly one of 'file_path' or 'data'"
-            )
+            raise ValueError("TarMember requires exactly one of 'file_path' or 'data'")
 
     @classmethod
     def from_file(cls, file_path: str, arcname: str | None = None) -> TarMember:
@@ -1939,7 +2042,9 @@ def _read_upload_marker(file_path: str) -> tuple[str | None, str | None]:
     return None, None
 
 
-def mark_file_already_uploaded(id: str, file_path: str, *, mime_type: str | None = None):
+def mark_file_already_uploaded(
+    id: str, file_path: str, *, mime_type: str | None = None
+):
     df = _upload_marker(file_path)
     h5 = md5sum(file_path)
     line = f"{h5}|{id}"
@@ -2022,6 +2127,17 @@ class KeepFilePath(_CONCRETE_PATH):
     def __enter__(self) -> Self:
         """Return self for use in ``with`` statements."""
         return self
+
+    def open(self, mode: str = "rb", *args, **kwargs):
+        """Open the downloaded file read-only; defaults to binary ``'rb'``.
+
+        Write modes are refused, because a downloaded artifact must not be modified.
+        """
+        if any(c in mode for c in "wax+"):
+            raise ValueError(
+                f"downloaded artifact is read-only; mode {mode!r} is not allowed"
+            )
+        return super().open(mode, *args, **kwargs)
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         """No-op — the file is kept after the ``with`` block."""
@@ -2109,6 +2225,17 @@ class CMPath(_CONCRETE_PATH):
     def __enter__(self) -> Self:
         """Returns the fully initialized CMPath instance."""
         return self
+
+    def open(self, mode: str = "rb", *args, **kwargs):
+        """Open the temporary file read-only; defaults to binary ``'rb'``.
+
+        Write modes are refused, because a downloaded artifact must not be modified.
+        """
+        if any(c in mode for c in "wax+"):
+            raise ValueError(
+                f"downloaded artifact is read-only; mode {mode!r} is not allowed"
+            )
+        return super().open(mode, *args, **kwargs)
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         """Cleans up the file."""

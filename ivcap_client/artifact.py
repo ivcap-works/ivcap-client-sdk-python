@@ -6,9 +6,11 @@
 from __future__ import annotations  # postpone evaluation of annotations
 
 import base64
+import contextlib
 import datetime
 import hashlib
 import io
+import json
 import logging
 import mimetypes
 import os
@@ -277,6 +279,7 @@ class Artifact:
         *,
         max_retries: int = 5,
         retry_delay: float = 1.0,
+        etag_callback: Callable[[str | None], None] | None = None,
     ) -> Iterator[bytes]:
         """Stream the artifact content as a sequence of raw byte chunks.
 
@@ -299,10 +302,16 @@ class Artifact:
                 fallback is 8 KiB.
             max_retries (int): Consecutive reconnect attempts allowed after the
                 connection drops mid-transfer.  The counter resets whenever data
-                arrives.  Each retry sends ``Range: bytes=<offset>-`` and
-                ``If-Range`` with the ETag of the first response.
+                arrives.  Each retry sends ``Range: bytes=<offset>-``; the
+                response must be ``206`` with a matching ``Content-Range`` and
+                the same ETag as the first response (``If-Range`` is not sent,
+                because the server ignores it).
             retry_delay (float): Base delay in seconds before a retry; it doubles
                 with each consecutive failure.
+            etag_callback: Optional callable invoked once the first response has
+                arrived, with the HTTP ``ETag`` header value (``None`` if the
+                server sent none).  Used by :meth:`as_local_file` to record the
+                ETag in the download marker.
 
         Yields:
             bytes: The next chunk of raw artifact bytes.
@@ -335,6 +344,8 @@ class Artifact:
                     if offset == 0:
                         response.raise_for_status()
                         etag = response.headers.get("etag")
+                        if etag_callback is not None:
+                            etag_callback(etag)
                         if not etag:
                             logger.warning(
                                 "no ETag returned for %s; resume will not be validated",
@@ -416,19 +427,45 @@ class Artifact:
             path = artifact.as_local_file("/tmp/output.jpg")
             # file remains at /tmp/output.jpg
 
+        **Crash and concurrency safety (explicit path only)** — the content is
+        first written to a uniquely named ``<name>.<pid>.<random>.part`` file in
+        the same directory, flushed to disk and then atomically renamed onto
+        ``path``.  ``path`` therefore never holds a partial download, even if the
+        process crashes.  After the rename a small marker file
+        ``.<name>.ivcap`` is written next to it recording which artifact (URN,
+        size, ETag) the file contains; ``reuse_if_exists`` relies on it.  A
+        ``.part`` file left behind by a crash is never resumed (it may hold
+        data that never reached the disk); it is simply ignored and can be
+        deleted.
+
+        Threads of the same process that call this method for the same path
+        with ``reuse_if_exists=True`` share a single download: one thread
+        downloads, the others wait and report the same progress through their
+        ``progress_callback``.  This does **not** coordinate separate
+        processes; they each download into their own ``.part`` file and the
+        last rename wins (the content is identical, so the result is still
+        correct).
+
         Args:
             path: Destination file path.  If ``None`` (default), a temporary file
                 is created and wrapped in a self-deleting :class:`CMPath`.
                 If a path is provided, the file is written there and a plain
                 :class:`~pathlib.Path` is returned.
-            reuse_if_exists: If ``True`` and ``path`` already exists, return it
-                without downloading the artifact again.  Defaults to ``False``,
-                which overwrites the existing file.
+            reuse_if_exists: If ``True`` and ``path`` already holds this
+                artifact, return it without downloading again; concurrent calls
+                from several threads share one download.  Defaults to ``False``,
+                which always downloads from scratch and overwrites the existing
+                file.  Combining ``False`` with another download to the same
+                path running in this process makes little sense and logs a
+                warning.
             verify_if_exists: Only used with ``reuse_if_exists``.  If ``True``
-                (default), an existing file is reused only when its size matches
-                the artifact size; otherwise it is downloaded again.  If the size
-                is unknown, the file is downloaded again.  Set to ``False`` to
-                reuse the file without any check.
+                (default), an existing file is reused only if the marker written
+                by a previous download matches this artifact (URN, size and, when
+                both are known, ETag).  A file without a marker (for example one
+                downloaded by an older SDK version) is reused only if its size
+                matches the artifact size; if the size is unknown it is
+                downloaded again.  Set to ``False`` to reuse any existing file
+                without any check.
             chunk_size (int): Number of bytes to read per chunk.  Pass ``-1``
                 (the default) to let the SDK choose automatically based on the
                 artifact size (see :meth:`as_stream` for the formula).
@@ -472,14 +509,21 @@ class Artifact:
                     progress_callback(downloaded, total_bytes)
 
         if path is not None:
-            path = Path(path)
-            if reuse_if_exists and path.exists():
-                if not verify_if_exists or path.stat().st_size == self.size:
-                    return KeepFilePath(path)
-            path.parent.mkdir(parents=True, exist_ok=True)
-            with open(path, "wb") as f:
-                _stream_to(f)
-            return KeepFilePath(path)
+            return _download_to_path(
+                Path(path),
+                urn=self.id,
+                size=total_bytes,
+                etag=self.etag,
+                open_stream=lambda on_etag: self.as_stream(
+                    chunk_size=chunk_size,
+                    max_retries=max_retries,
+                    retry_delay=retry_delay,
+                    etag_callback=on_etag,
+                ),
+                progress_callback=progress_callback,
+                reuse_if_exists=reuse_if_exists,
+                verify_if_exists=verify_if_exists,
+            )
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         with temp_file as f:
             _stream_to(f)
@@ -1092,12 +1136,14 @@ class DataUrlArtifact:
             chunk_size: Bytes written per call.  ``-1`` auto-selects.
             progress_callback: Optional ``(bytes_written, total_bytes)``
                 callable invoked after each chunk is written.
-            reuse_if_exists: If ``True`` and ``path`` already exists, return it
-                without rewriting the content.  Defaults to ``False``.
+            reuse_if_exists: If ``True`` and ``path`` already holds this
+                content, return it without rewriting.  Defaults to ``False``.
+                See :meth:`Artifact.as_local_file` for the crash-safe write
+                (``.part`` file + marker) and the thread coordination.
             verify_if_exists: Only used with ``reuse_if_exists``.  If ``True``
-                (default), an existing file is reused only when its size matches
-                the content size; otherwise it is rewritten.  Set to ``False`` to
-                reuse the file without any check.
+                (default), an existing file is reused only if its marker matches
+                this content (or, without a marker, its size matches).  Set to
+                ``False`` to reuse the file without any check.
 
         Returns:
             :class:`CMPath` (temp file) or plain :class:`~pathlib.Path`.
@@ -1113,14 +1159,16 @@ class DataUrlArtifact:
                     progress_callback(written, total_bytes)
 
         if path is not None:
-            path = Path(path)
-            if reuse_if_exists and path.exists():
-                if not verify_if_exists or path.stat().st_size == self.size:
-                    return KeepFilePath(path)
-            path.parent.mkdir(parents=True, exist_ok=True)
-            with open(path, "wb") as f:
-                _stream_to(f)
-            return KeepFilePath(path)
+            return _download_to_path(
+                Path(path),
+                urn=self.urn,
+                size=total_bytes,
+                etag=self.etag,
+                open_stream=lambda _on_etag: self.as_stream(chunk_size=chunk_size),
+                progress_callback=progress_callback,
+                reuse_if_exists=reuse_if_exists,
+                verify_if_exists=verify_if_exists,
+            )
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         with temp_file as f:
             _stream_to(f)
@@ -1288,6 +1336,286 @@ def _check_resume_response(
         raise IvcapError(
             f"ETag changed during download at byte {offset}: {etag!r} -> {resumed_etag!r}"
         )
+
+
+### CRASH-SAFE, THREAD-COORDINATED DOWNLOADS TO A FIXED PATH ####
+#
+# Downloads to an explicit path are written to a uniquely named ``*.part`` file
+# and atomically renamed onto the destination, so the destination never holds a
+# partial file.  A marker file (``.<name>.ivcap``) written after the rename
+# records which artifact the file contains.  A ``.part`` file is never resumed:
+# after a crash we cannot know how much of it actually reached the disk.
+#
+# Threads of one process asking for the same path with ``reuse_if_exists=True``
+# share a single download (one leader, any number of followers).  Separate
+# processes are NOT coordinated; see ``Artifact.as_local_file``.
+
+_MARKER_VERSION = 1
+
+
+class _SharedDownload:
+    """State of one in-flight download that other threads can wait on."""
+
+    def __init__(self, total: int | None):
+        self.cond = threading.Condition()
+        self.total = total
+        self.downloaded = 0
+        self.done = False
+
+
+_downloads_lock = threading.Lock()
+# resolved destination path -> download that ``reuse_if_exists=True`` callers share
+_shared_downloads: dict[str, _SharedDownload] = {}
+# resolved destination path -> number of downloads in flight (shared or not)
+_inflight_downloads: dict[str, int] = {}
+
+
+def _marker_path(path: Path) -> Path:
+    return path.with_name(f".{path.name}.ivcap")
+
+
+def _read_marker(path: Path) -> dict | None:
+    try:
+        with open(_marker_path(path), encoding="utf-8") as f:
+            marker = json.load(f)
+    except (OSError, ValueError):
+        return None
+    if isinstance(marker, dict) and marker.get("version") == _MARKER_VERSION:
+        return marker
+    return None
+
+
+def _write_marker(
+    path: Path,
+    *,
+    urn: str,
+    size: int,
+    artifact_etag: str | None,
+    http_etag: str | None,
+) -> None:
+    marker = _marker_path(path)
+    tmp = marker.with_name(f"{marker.name}.{os.getpid()}.{uuid.uuid4().hex[:8]}.tmp")
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(
+                {
+                    "version": _MARKER_VERSION,
+                    "urn": urn,
+                    "size": size,
+                    "artifact_etag": artifact_etag,
+                    "http_etag": http_etag,
+                    "completed_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                },
+                f,
+            )
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, marker)
+    except OSError as e:
+        # The data file is complete; without a marker it is merely treated like
+        # a file from an older SDK version (size check only).
+        logger.warning("could not write download marker %s: %s", marker, e)
+        with contextlib.suppress(OSError):
+            tmp.unlink()
+
+
+def _fsync_dir(directory: Path) -> None:
+    """Best effort: make a rename in *directory* durable (no-op where unsupported)."""
+    try:
+        fd = os.open(directory, os.O_RDONLY)
+    except OSError:
+        return
+    try:
+        os.fsync(fd)
+    except OSError:
+        pass
+    finally:
+        os.close(fd)
+
+
+def _is_reusable(
+    path: Path, *, urn: str, size: int | None, etag: str | None, verify: bool
+) -> bool:
+    """Return ``True`` if the file at *path* may be returned instead of downloading."""
+    try:
+        st = path.stat()
+    except OSError:
+        return False
+    if not path.is_file():
+        return False
+    if not verify:
+        return True
+    marker = _read_marker(path)
+    if marker is None:
+        # No marker (e.g. downloaded by an older SDK version): size is all we have.
+        return size is not None and st.st_size == size
+    if marker.get("urn") != urn or marker.get("size") != st.st_size:
+        return False
+    if size is not None and st.st_size != size:
+        return False
+    recorded = marker.get("artifact_etag")
+    if etag and recorded and etag != recorded:
+        return False
+    return True
+
+
+def _download_once(
+    path: Path,
+    *,
+    urn: str,
+    artifact_etag: str | None,
+    open_stream: Callable[[Callable[[str | None], None]], Iterable[bytes]],
+    on_progress: Callable[[int], None],
+) -> None:
+    """Download into a fresh ``.part`` file, then atomically move it onto *path*."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    part = path.with_name(f"{path.name}.{os.getpid()}.{uuid.uuid4().hex[:8]}.part")
+    http_etag: str | None = None
+
+    def _on_etag(value: str | None) -> None:
+        nonlocal http_etag
+        http_etag = value
+
+    written = 0
+    try:
+        with open(part, "wb") as f:
+            for chunk in open_stream(_on_etag):
+                f.write(chunk)
+                written += len(chunk)
+                on_progress(written)
+            f.flush()
+            os.fsync(f.fileno())
+        # Drop the old marker first, so a crash between the rename and the new
+        # marker can never pair the new file with the previous download's marker.
+        with contextlib.suppress(OSError):
+            _marker_path(path).unlink()
+        os.replace(part, path)
+    except BaseException:
+        with contextlib.suppress(OSError):
+            part.unlink()
+        raise
+    _fsync_dir(path.parent)
+    _write_marker(
+        path, urn=urn, size=written, artifact_etag=artifact_etag, http_etag=http_etag
+    )
+
+
+def _wait_for_download(
+    shared: _SharedDownload,
+    progress_callback: Callable[[int, int | None], None] | None,
+    total: int | None,
+) -> None:
+    """Block until the leader finishes (successfully or not), relaying its progress."""
+    seen = 0
+    while True:
+        with shared.cond:
+            while not shared.done and shared.downloaded == seen:
+                shared.cond.wait()
+            done, current = shared.done, shared.downloaded
+        if progress_callback is not None and current != seen:
+            progress_callback(current, total)
+        seen = current
+        if done:
+            return
+
+
+def _download_to_path(
+    path: Path,
+    *,
+    urn: str,
+    size: int | None,
+    etag: str | None,
+    open_stream: Callable[[Callable[[str | None], None]], Iterable[bytes]],
+    progress_callback: Callable[[int, int | None], None] | None,
+    reuse_if_exists: bool,
+    verify_if_exists: bool,
+) -> Path:
+    """Download an artifact's bytes to *path*; see ``Artifact.as_local_file``.
+
+    Args:
+        path: Destination file.
+        urn: Identity recorded in (and checked against) the marker.
+        size: Expected size in bytes, or ``None`` if unknown.
+        etag: The artifact's metadata ETag, or ``None``.
+        open_stream: Called with a callback for the HTTP ETag; returns the bytes.
+        progress_callback: Optional ``(bytes_so_far, total)`` callable.
+        reuse_if_exists: Reuse a matching file and share concurrent downloads.
+        verify_if_exists: How strictly an existing file is checked.
+    """
+    etag = etag if isinstance(etag, str) and etag else None
+    key = str(path.resolve())
+
+    def _run(shared: _SharedDownload | None) -> None:
+        def on_progress(n: int) -> None:
+            if shared is not None:
+                with shared.cond:
+                    shared.downloaded = n
+                    shared.cond.notify_all()
+            if progress_callback is not None:
+                progress_callback(n, size)
+
+        _download_once(
+            path,
+            urn=urn,
+            artifact_etag=etag,
+            open_stream=open_stream,
+            on_progress=on_progress,
+        )
+
+    if not reuse_if_exists:
+        with _downloads_lock:
+            others = _inflight_downloads.get(key, 0)
+            _inflight_downloads[key] = others + 1
+        if others:
+            logger.warning(
+                "WARNING: %d other download(s) to %s are already in progress in this "
+                "process and reuse_if_exists=False, so %s is being downloaded again "
+                "from scratch. Concurrent downloads to the same path make no sense; "
+                "pass reuse_if_exists=True to share a single download.",
+                others,
+                path,
+                urn,
+            )
+        try:
+            _run(None)
+        finally:
+            _release_inflight(key)
+        return KeepFilePath(path)
+
+    while True:
+        if _is_reusable(path, urn=urn, size=size, etag=etag, verify=verify_if_exists):
+            return KeepFilePath(path)
+        with _downloads_lock:
+            shared = _shared_downloads.get(key)
+            leader = shared is None
+            if leader:
+                shared = _SharedDownload(size)
+                _shared_downloads[key] = shared
+                _inflight_downloads[key] = _inflight_downloads.get(key, 0) + 1
+        if leader:
+            try:
+                _run(shared)
+            finally:
+                with _downloads_lock:
+                    if _shared_downloads.get(key) is shared:
+                        del _shared_downloads[key]
+                _release_inflight(key)
+                with shared.cond:
+                    shared.done = True
+                    shared.cond.notify_all()
+            return KeepFilePath(path)
+        # Follower: wait for the leader, then loop.  If the leader failed there is
+        # no valid file yet and this thread takes over as the new leader.
+        _wait_for_download(shared, progress_callback, size)
+
+
+def _release_inflight(key: str) -> None:
+    with _downloads_lock:
+        n = _inflight_downloads.get(key, 0) - 1
+        if n > 0:
+            _inflight_downloads[key] = n
+        else:
+            _inflight_downloads.pop(key, None)
 
 
 def _resolve_chunk_size(chunk_size: int, artifact_size: int | None) -> int:

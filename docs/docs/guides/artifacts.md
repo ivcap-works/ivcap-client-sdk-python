@@ -248,6 +248,26 @@ ETag as the first one. If the server ignores `Range`, returns a different
 `Content-Range`, or the ETag changes, the download fails with an `IvcapError`
 rather than writing mixed content. The same retry options apply to `as_stream()`.
 
+**Crash-safe writes and reusing downloads.** With an explicit path, the SDK
+writes to a temporary `<name>.<pid>.<random>.part` file in the same directory and
+renames it onto `path` only when the download is complete, so `path` never holds a
+partial file, even if the process crashes. It then writes a small marker file,
+`.<name>.ivcap`, next to it. The marker records which artifact the file holds (URN,
+size and ETag). A `.part` file left behind by a crash is never resumed; delete it.
+
+| Argument | Default | Description |
+|---|---|---|
+| `reuse_if_exists` | `False` | If `True` and `path` already holds this artifact, return it without downloading. `False` always downloads from scratch and overwrites |
+| `verify_if_exists` | `True` | With `reuse_if_exists`: reuse only if the marker matches this artifact. A file without a marker (for example one from an older SDK version) is reused only if its size matches. `False` reuses any existing file unchecked |
+
+Threads in one process that call `as_local_file(path, reuse_if_exists=True)` for the
+same path share a single download: one thread downloads, the others wait and report
+the same progress through their `progress_callback`. Using `reuse_if_exists=False`
+while another download to the same path is running in this process makes little
+sense and logs a warning. Separate processes are **not** coordinated: each
+downloads into its own `.part` file and the last rename wins, which is still
+correct because the content is identical.
+
 The downloaded file is returned read-only. Its `open()` method reads bytes by
 default (`"rb"`). Text reading is available on request, for example
 `path.open("r", encoding="utf-8")` or `path.read_text(encoding="utf-8")`. Write

@@ -103,6 +103,28 @@ def test_watch_events_raises_on_http_error():
         job.watch_events(lambda ev: None)
 
 
+def test_watch_events_reconnects_after_event_timeout_504():
+    calls: list[str | None] = []
+    responses = [
+        httpx.Response(504, json={"name": "event-timeout", "message": "no new events"}),
+        httpx.Response(
+            200, content=_sse_body(("7", {"type": "ivcap.job.succeeded"})).encode()
+        ),
+    ]
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(request.headers.get("Last-Event-ID"))
+        return responses[len(calls) - 1]
+
+    job = Job(_ivcap_with(handler), id=JOB_ID, service=SERVICE_ID)
+    received: list[JobEvent] = []
+
+    job.watch_events(received.append, reconnect_delay=0)
+
+    assert calls == [None, None]
+    assert [e.id for e in received] == ["7"]
+
+
 def test_watch_events_reconnects_after_dropped_connection():
     calls: list[str | None] = []
     body = _sse_body(("5", {"type": "ivcap.job.succeeded"}))

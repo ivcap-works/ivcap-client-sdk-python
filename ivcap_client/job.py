@@ -344,6 +344,11 @@ class Job:
         with self._ivcap._client.get_httpx_client().stream(
             "GET", url, headers=headers, timeout=None
         ) as r:
+            if r.status_code == 504:
+                # event-timeout: no new events arrived within the server's wait
+                # window. Not a failure; the caller reconnects from last_event_id.
+                r.read()
+                return True
             if r.status_code >= 300:
                 r.read()
                 return process_error("job_events", r)

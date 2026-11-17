@@ -18,9 +18,11 @@ artifact = ivcap.upload_artifact(
 )
 print(artifact.id, artifact.mime_type)
 
-# Download
+# Download (resumes automatically after a dropped connection)
 with artifact.as_local_file() as path:
     print(f"Downloaded to: {path}")
+    data = path.read_bytes()             # binary by default
+    text = path.read_text(encoding="utf-8")  # text on request
 
 # Stream to disk
 with open("/tmp/output.csv", "wb") as f:

@@ -196,7 +196,7 @@
     ivcap-client-sdk-python
     <ul class="md-source__facts">
       <li class="md-source__fact md-source__fact--version">
-        v0.47.23
+        v0.47.26
       </li>
     </ul>
   </div>
@@ -422,7 +422,7 @@
     ivcap-client-sdk-python
     <ul class="md-source__facts">
       <li class="md-source__fact md-source__fact--version">
-        v0.47.23
+        v0.47.26
       </li>
     </ul>
   </div>
@@ -2750,7 +2750,12 @@ regular <code>Artifact</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="n">artifact</span> <span class="o">=</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">get_artifact</span><span class="p">(</span><span class="s2">"urn:data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="download-artifact-content">Download artifact content<a class="headerlink" href="#download-artifact-content" title="Permanent link">&para;</a></h3>
-<p>Three methods are available, from most convenient to most low-level:</p>
+<p>Three methods are available, from most convenient to most low-level. Downloads
+resume automatically after a dropped connection (HTTP <code>Range</code>, with the ETag
+checked on every resumed response). Tune with the keyword-only <code>max_retries</code>
+(default 5) and <code>retry_delay</code> (default 1.0 s) arguments on <code>as_local_file()</code> and
+<code>as_stream()</code>. A returned local file is read-only: <code>open()</code> defaults to <code>"rb"</code>,
+and text reading must be requested, e.g. <code>open("r", encoding="utf-8")</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="c1"># ── Recommended: download to a local file ────────────────────────────────────</span>
 <a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>
 <a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="c1"># Temporary file (auto-deleted when the 'with' block exits)</span>

@@ -196,7 +196,7 @@
     ivcap-client-sdk-python
     <ul class="md-source__facts">
       <li class="md-source__fact md-source__fact--version">
-        v0.47.23
+        v0.47.26
       </li>
     </ul>
   </div>
@@ -422,7 +422,7 @@
     ivcap-client-sdk-python
     <ul class="md-source__facts">
       <li class="md-source__fact md-source__fact--version">
-        v0.47.23
+        v0.47.26
       </li>
     </ul>
   </div>
@@ -2804,7 +2804,8 @@ two patterns:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">path</span> <span class="o">=</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_local_file</span><span class="p">(</span><span class="s2">"/tmp/output.jpg"</span><span class="p">)</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Saved to: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
-<p>Both <code>chunk_size</code> and <code>progress_callback</code> are <strong>keyword-only</strong> arguments:</p>
+<p>The <code>chunk_size</code>, <code>progress_callback</code>, <code>max_retries</code> and <code>retry_delay</code> arguments are
+<strong>keyword-only</strong>:</p>
 <table>
 <thead>
 <tr>
@@ -2833,8 +2834,65 @@ two patterns:</p>
 <td><code>None</code></td>
 <td>Called after each chunk with <code>(bytes_downloaded, total_bytes_or_None)</code></td>
 </tr>
+<tr>
+<td><code>max_retries</code></td>
+<td><code>int</code></td>
+<td><code>5</code></td>
+<td>Consecutive reconnect attempts after a dropped connection; the counter resets whenever data arrives</td>
+</tr>
+<tr>
+<td><code>retry_delay</code></td>
+<td><code>float</code></td>
+<td><code>1.0</code></td>
+<td>Base delay in seconds before a retry; doubles with each consecutive failure</td>
+</tr>
 </tbody>
 </table>
+<p><strong>Resuming interrupted downloads.</strong> Large downloads can be cut off by the server
+or the network. When that happens the SDK reconnects and asks only for the
+missing bytes, using an HTTP <code>Range</code> request, so it never restarts from zero and
+the caller sees one continuous stream. Each resumed response must carry the same
+ETag as the first one. If the server ignores <code>Range</code>, returns a different
+<code>Content-Range</code>, or the ETag changes, the download fails with an <code>IvcapError</code>
+rather than writing mixed content. The same retry options apply to <code>as_stream()</code>.</p>
+<p><strong>Crash-safe writes and reusing downloads.</strong> With an explicit path, the SDK
+writes to a temporary <code>&lt;name&gt;.&lt;pid&gt;.&lt;random&gt;.part</code> file in the same directory and
+renames it onto <code>path</code> only when the download is complete, so <code>path</code> never holds a
+partial file, even if the process crashes. It then writes a small marker file,
+<code>.&lt;name&gt;.ivcap</code>, next to it. The marker records which artifact the file holds (URN,
+size and ETag). A <code>.part</code> file left behind by a crash is never resumed; delete it.</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reuse_if_exists</code></td>
+<td><code>False</code></td>
+<td>If <code>True</code> and <code>path</code> already holds this artifact, return it without downloading. <code>False</code> always downloads from scratch and overwrites</td>
+</tr>
+<tr>
+<td><code>verify_if_exists</code></td>
+<td><code>True</code></td>
+<td>With <code>reuse_if_exists</code>: reuse only if the marker matches this artifact. A file without a marker (for example one from an older SDK version) is reused only if its size matches. <code>False</code> reuses any existing file unchecked</td>
+</tr>
+</tbody>
+</table>
+<p>Threads in one process that call <code>as_local_file(path, reuse_if_exists=True)</code> for the
+same path share a single download: one thread downloads, the others wait and report
+the same progress through their <code>progress_callback</code>. Using <code>reuse_if_exists=False</code>
+while another download to the same path is running in this process makes little
+sense and logs a warning. Separate processes are <strong>not</strong> coordinated: each
+downloads into its own <code>.part</code> file and the last rename wins, which is still
+correct because the content is identical.</p>
+<p>The downloaded file is returned read-only. Its <code>open()</code> method reads bytes by
+default (<code>"rb"</code>). Text reading is available on request, for example
+<code>path.open("r", encoding="utf-8")</code> or <code>path.read_text(encoding="utf-8")</code>. Write
+modes (<code>"w"</code>, <code>"a"</code>, <code>"x"</code>, <code>"+"</code>) raise <code>ValueError</code>.</p>
 <p><strong>Progress reporting</strong> with <code>progress_callback</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">on_progress</span><span class="p">(</span><span class="n">downloaded</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="k">if</span> <span class="n">total</span><span class="p">:</span>
@@ -2875,6 +2933,8 @@ third-party API or incremental processing.  For progress reporting, prefer the
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">artifact</span><span class="o">.</span><span class="n">as_stream</span><span class="p">():</span>
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="n">external_api</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
 </code></pre></div>
+<p><code>as_stream()</code> accepts <code>max_retries</code> and <code>retry_delay</code> as keyword-only arguments
+and resumes a dropped connection in the same way as <code>as_local_file()</code>.</p>
 <h2 id="listing-artifacts">Listing Artifacts<a class="headerlink" href="#listing-artifacts" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="n">ivcap</span><span class="o">.</span><span class="n">list_artifacts</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">artifact</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">artifact</span><span class="o">.</span><span class="n">mime_type</span><span class="p">)</span>

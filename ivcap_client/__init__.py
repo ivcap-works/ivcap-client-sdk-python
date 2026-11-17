@@ -19,7 +19,7 @@ from .artifact import Artifact, DataUrlArtifact, LocalFileArtifact, TarMember
 from .aspect import LocalAspect
 from .collection import Collection, CollectionItem
 from .ivcap import IVCAP, URN, LocalIVCAP
-from .job import Job, JobStatus
+from .job import Job, JobEvent, JobStatus
 from .order import Order
 from .secret import Secret
 from .service import Service

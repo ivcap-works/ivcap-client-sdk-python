@@ -5,8 +5,13 @@
 #
 from __future__ import annotations  # postpone evaluation of annotations
 
-from collections.abc import Awaitable
-from typing import TYPE_CHECKING
+import json
+import threading
+import time
+from collections.abc import Awaitable, Callable, Iterable, Iterator
+from typing import TYPE_CHECKING, Any
+
+import httpx
 
 from ivcap_client.service import Service
 from ivcap_client.types import Response
@@ -41,6 +46,63 @@ class JobStatus(Enum):
             return cls(s)
         except ValueError:
             return cls.UNKNOWN
+
+
+_TERMINAL_PHASES = {"Succeeded", "Failed", "Error"}
+_TERMINAL_EVENT_TYPES = {
+    "ivcap.job.completed",
+    "ivcap.job.failed",
+    "ivcap.job.succeeded",
+}
+
+
+@dataclass
+class JobEvent:
+    """An event emitted for a job, as received from the SSE event stream.
+
+    ``data`` is the parsed JSON payload, or the raw string if it is not JSON.
+    """
+
+    id: str | None
+    event: str | None
+    data: Any
+
+
+def _parse_sse(lines: Iterable[str]) -> Iterator[JobEvent]:
+    """Minimal Server-Sent Events parser yielding one JobEvent per block."""
+    event_id: str | None = None
+    event_type: str | None = None
+    data_lines: list[str] = []
+    for line in lines:
+        if line == "":
+            if data_lines:
+                raw = "\n".join(data_lines)
+                try:
+                    data = json.loads(raw)
+                except ValueError:
+                    data = raw
+                yield JobEvent(id=event_id, event=event_type, data=data)
+            event_id, event_type, data_lines = None, None, []
+        elif line.startswith(":"):
+            continue  # comment / keep-alive
+        else:
+            name, _, value = line.partition(":")
+            value = value[1:] if value.startswith(" ") else value
+            if name == "id":
+                event_id = value
+            elif name == "event":
+                event_type = value
+            elif name == "data":
+                data_lines.append(value)
+
+
+def _is_terminal_job_event(ev: JobEvent) -> bool:
+    if not isinstance(ev.data, dict):
+        return False
+    inner = ev.data.get("data")
+    if isinstance(inner, dict) and inner.get("phase") in _TERMINAL_PHASES:
+        return True
+    return ev.data.get("type") in _TERMINAL_EVENT_TYPES
 
 
 @dataclass
@@ -113,7 +175,7 @@ class Job:
         _set_fields(self, p, hp, kwargs)
         self._status = JobStatus.from_string(self._status)
         if self._service_obj == None and self._service != None:
-            self._service_obj = Service(id=self._service)
+            self._service_obj = Service(self._ivcap, id=self._service)
 
     @property
     def urn(self) -> str:
@@ -217,6 +279,78 @@ class Job:
         kwargs = r.parsed.to_dict()
         self.__update__(**kwargs)
         return self
+
+    def watch_events(
+        self,
+        callback: Callable[[JobEvent], bool | None],
+        reconnect_delay: float = 3.0,
+        background: bool = False,
+    ) -> Job | threading.Thread:
+        """Stream this job's events and call ``callback`` for each one.
+
+        The callback returns ``False`` to stop watching. Returning ``True`` or
+        ``None`` keeps watching. Watching also stops after a terminal event
+        (succeeded / failed / error) has been delivered.
+
+        If the server closes the stream, for example after a long period without
+        events, or the connection drops, it is re-opened after ``reconnect_delay``
+        seconds and resumes after the last received event.
+
+        With ``background=True`` the watch runs in a daemon thread, the callback
+        is called from that thread, and the ``threading.Thread`` is returned
+        immediately.
+        """
+        if background:
+            thread = threading.Thread(
+                target=self._watch_events_loop,
+                args=(callback, reconnect_delay),
+                name=f"ivcap-job-events-{self.id}",
+                daemon=True,
+            )
+            thread.start()
+            return thread
+        self._watch_events_loop(callback, reconnect_delay)
+        return self
+
+    def _watch_events_loop(
+        self, callback: Callable[[JobEvent], bool | None], reconnect_delay: float
+    ) -> None:
+        last_id: str | None = None
+
+        def on_event(ev: JobEvent) -> bool:
+            nonlocal last_id
+            if ev.id:
+                last_id = ev.id
+            keep_going = callback(ev) is not False
+            return keep_going and not _is_terminal_job_event(ev)
+
+        while True:
+            try:
+                if not self._stream_events(last_id, on_event):
+                    return
+            except httpx.TransportError:
+                pass  # connection dropped; reconnect below
+            time.sleep(reconnect_delay)
+
+    def _stream_events(
+        self, last_event_id: str | None, on_event: Callable[[JobEvent], bool]
+    ) -> bool:
+        """Read one SSE connection. Returns False if ``on_event`` asked to stop,
+        True if the server closed the stream."""
+        headers = {"Accept": "text/event-stream"}
+        if last_event_id:
+            headers["Last-Event-ID"] = last_event_id
+        url = f"/1/services2/{self._service}/jobs/{self.id}/events"
+        with self._ivcap._client.get_httpx_client().stream(
+            "GET", url, headers=headers, timeout=None
+        ) as r:
+            if r.status_code >= 300:
+                r.read()
+                return process_error("job_events", r)
+            for ev in _parse_sse(r.iter_lines()):
+                if not on_event(ev):
+                    return False
+        return True
 
     def __repr__(self):
         status = self._status if self._status else "???"

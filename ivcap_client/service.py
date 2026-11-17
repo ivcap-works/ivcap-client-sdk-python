@@ -8,7 +8,7 @@ from __future__ import annotations  # postpone evaluation of annotations
 import asyncio
 import io
 import json
-from collections.abc import Awaitable
+from collections.abc import Awaitable, Callable
 from typing import (
     IO,
     TYPE_CHECKING,
@@ -20,7 +20,7 @@ from pydantic import BaseModel
 
 if TYPE_CHECKING:
     from ivcap_client.ivcap import IVCAP, URN
-    from ivcap_client.job import Job
+    from ivcap_client.job import Job, JobEvent
 
 import datetime
 from dataclasses import asdict, dataclass, field, is_dataclass
@@ -134,11 +134,19 @@ class Service:
         return await asyncio.to_thread(self._fetch_request_model)
 
     def request_job(
-        self, data: BaseModel | object | IO[str], timeout: int | None = 0
+        self,
+        data: BaseModel | object | IO[str],
+        timeout: int | None = 0,
+        on_event: Callable[[JobEvent], bool | None] | None = None,
     ) -> Job:
+        """Submit a job. If ``on_event`` is given, block and call it for each job
+        event until the job reaches a terminal state (see ``Job.watch_events``)."""
         kwargs = self._get_request_job_args(data, timeout)
         response = self._ivcap._client.get_httpx_client().request(**kwargs)
-        return self._process_job_reply(response)
+        job = self._process_job_reply(response)
+        if on_event is not None:
+            job.watch_events(on_event)
+        return job
 
     async def request_job_async(
         self,

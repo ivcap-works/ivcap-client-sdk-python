@@ -48,12 +48,18 @@ class JobStatus(Enum):
             return cls.UNKNOWN
 
 
+# HTTP statuses on the events stream that mean "reconnect", not "fail"
+_RECONNECTABLE_STATUS_CODES = {408, 502, 503, 504}
+
 _TERMINAL_PHASES = {"Succeeded", "Failed", "Error"}
 _TERMINAL_EVENT_TYPES = {
     "ivcap.job.completed",
+    "ivcap.job.error",
     "ivcap.job.failed",
     "ivcap.job.succeeded",
 }
+# ``ivcap.job.status`` events carry the job state in ``data.status``
+_TERMINAL_JOB_STATUSES = {"succeeded", "failed", "error"}
 
 
 @dataclass
@@ -61,11 +67,16 @@ class JobEvent:
     """An event emitted for a job, as received from the SSE event stream.
 
     ``data`` is the parsed JSON payload, or the raw string if it is not JSON.
+    ``type``, ``schema`` and ``timestamp`` are taken from that JSON envelope,
+    e.g. ``ivcap.job.result`` / ``urn:ivcap:schema:job.result.1``.
     """
 
     id: str | None
     event: str | None
     data: Any
+    type: str | None = None
+    schema: str | None = None
+    timestamp: str | None = None
 
 
 def _parse_sse(lines: Iterable[str]) -> Iterator[JobEvent]:
@@ -81,7 +92,15 @@ def _parse_sse(lines: Iterable[str]) -> Iterator[JobEvent]:
                     data = json.loads(raw)
                 except ValueError:
                     data = raw
-                yield JobEvent(id=event_id, event=event_type, data=data)
+                envelope = data if isinstance(data, dict) else {}
+                yield JobEvent(
+                    id=event_id,
+                    event=event_type,
+                    data=data,
+                    type=envelope.get("type"),
+                    schema=envelope.get("schema"),
+                    timestamp=envelope.get("timestamp"),
+                )
             event_id, event_type, data_lines = None, None, []
         elif line.startswith(":"):
             continue  # comment / keep-alive
@@ -100,8 +119,14 @@ def _is_terminal_job_event(ev: JobEvent) -> bool:
     if not isinstance(ev.data, dict):
         return False
     inner = ev.data.get("data")
-    if isinstance(inner, dict) and inner.get("phase") in _TERMINAL_PHASES:
-        return True
+    if isinstance(inner, dict):
+        if inner.get("phase") in _TERMINAL_PHASES:
+            return True
+        if (
+            ev.data.get("type") == "ivcap.job.status"
+            and inner.get("status") in _TERMINAL_JOB_STATUSES
+        ):
+            return True
     return ev.data.get("type") in _TERMINAL_EVENT_TYPES
 
 
@@ -344,9 +369,9 @@ class Job:
         with self._ivcap._client.get_httpx_client().stream(
             "GET", url, headers=headers, timeout=None
         ) as r:
-            if r.status_code == 504:
-                # event-timeout: no new events arrived within the server's wait
-                # window. Not a failure; the caller reconnects from last_event_id.
+            if r.status_code in _RECONNECTABLE_STATUS_CODES:
+                # 504 event-timeout is the ingress closing an idle stream; 502/503/408
+                # are transient gateway or server conditions. Reconnect from last_event_id.
                 r.read()
                 return True
             if r.status_code >= 300:

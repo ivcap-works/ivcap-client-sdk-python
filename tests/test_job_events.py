@@ -46,7 +46,12 @@ def test_parse_sse_yields_events_and_ignores_comments():
     events = list(_parse_sse(lines))
 
     assert events == [
-        JobEvent(id="1", event="message", data={"type": "ivcap.job.executing"}),
+        JobEvent(
+            id="1",
+            event="message",
+            data={"type": "ivcap.job.executing"},
+            type="ivcap.job.executing",
+        ),
         JobEvent(id="2", event=None, data="not-json\nsecond line"),
     ]
 
@@ -93,6 +98,43 @@ def test_watch_events_reconnects_with_last_event_id_until_terminal():
     assert [e.id for e in received] == ["10", "11"]
 
 
+def test_parse_sse_exposes_type_schema_and_timestamp_from_envelope():
+    envelope = {
+        "SeqID": "00184775",
+        "data": {"job-urn": JOB_ID, "status": "error"},
+        "schema": "urn:ivcap:schema:job.result.1",
+        "timestamp": "2026-11-17T22:41:20.507359468Z",
+        "type": "ivcap.job.result",
+    }
+    [ev] = list(_parse_sse(["id: 00184774", f"data: {json.dumps(envelope)}", ""]))
+
+    assert ev.type == "ivcap.job.result"
+    assert ev.schema == "urn:ivcap:schema:job.result.1"
+    assert ev.timestamp == "2026-11-17T22:41:20.507359468Z"
+
+
+@pytest.mark.parametrize("status", ["succeeded", "error"])
+def test_watch_events_stops_on_terminal_job_status(status: str):
+    seen_paths: list[str] = []
+    body = _sse_body(
+        ("1", {"type": "ivcap.job.status", "data": {"status": "executing"}}),
+        ("2", {"type": "ivcap.job.status", "data": {"status": status}}),
+        ("3", {"type": "ivcap.job.event", "data": {"name": "after-terminal"}}),
+    )
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen_paths.append(request.url.path)
+        return httpx.Response(200, content=body.encode())
+
+    job = Job(_ivcap_with(handler), id=JOB_ID, service=SERVICE_ID)
+    received: list[JobEvent] = []
+
+    job.watch_events(received.append, reconnect_delay=0)
+
+    assert seen_paths == [EVENTS_PATH]
+    assert [e.id for e in received] == ["1", "2"]
+
+
 def test_watch_events_raises_on_http_error():
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(404, json={"message": "not found"})
@@ -123,6 +165,29 @@ def test_watch_events_reconnects_after_event_timeout_504():
 
     assert calls == [None, None]
     assert [e.id for e in received] == ["7"]
+
+
+@pytest.mark.parametrize("status", [408, 502, 503])
+def test_watch_events_reconnects_after_transient_status(status: int):
+    calls: list[str | None] = []
+    responses = [
+        httpx.Response(status, json={"message": "transient"}),
+        httpx.Response(
+            200, content=_sse_body(("8", {"type": "ivcap.job.succeeded"})).encode()
+        ),
+    ]
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(request.headers.get("Last-Event-ID"))
+        return responses[len(calls) - 1]
+
+    job = Job(_ivcap_with(handler), id=JOB_ID, service=SERVICE_ID)
+    received: list[JobEvent] = []
+
+    job.watch_events(received.append, reconnect_delay=0)
+
+    assert calls == [None, None]
+    assert [e.id for e in received] == ["8"]
 
 
 def test_watch_events_reconnects_after_dropped_connection():
